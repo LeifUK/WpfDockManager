@@ -1,0 +1,31 @@
+﻿
+Microsoft Visual Studio Solution File, Format Version 12.00
+# Visual Studio Version 16
+VisualStudioVersion = 16.0.29728.190
+MinimumVisualStudioVersion = 10.0.40219.1
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "WpfDockManagerDemo", "WpfDockManagerDemo\WpfDockManagerDemo.csproj", "{9843B6E4-5B93-46FA-96B8-05E423118E9F}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "BetterWpfControls", "BetterWpfControls\BetterWpfControls.csproj", "{E8229630-9896-4536-B6F9-BA8C1738E498}"
+EndProject
+Global
+	GlobalSection(SolutionConfigurationPlatforms) = preSolution
+		Debug|Any CPU = Debug|Any CPU
+		Release|Any CPU = Release|Any CPU
+	EndGlobalSection
+	GlobalSection(ProjectConfigurationPlatforms) = postSolution
+		{9843B6E4-5B93-46FA-96B8-05E423118E9F}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{9843B6E4-5B93-46FA-96B8-05E423118E9F}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{9843B6E4-5B93-46FA-96B8-05E423118E9F}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{9843B6E4-5B93-46FA-96B8-05E423118E9F}.Release|Any CPU.Build.0 = Release|Any CPU
+		{E8229630-9896-4536-B6F9-BA8C1738E498}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{E8229630-9896-4536-B6F9-BA8C1738E498}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{E8229630-9896-4536-B6F9-BA8C1738E498}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{E8229630-9896-4536-B6F9-BA8C1738E498}.Release|Any CPU.Build.0 = Release|Any CPU
+	EndGlobalSection
+	GlobalSection(SolutionProperties) = preSolution
+		HideSolutionNode = FALSE
+	EndGlobalSection
+	GlobalSection(ExtensibilityGlobals) = postSolution
+		SolutionGuid = {D5C58807-4EE1-41A7-8E24-F4899AF32A1F}
+	EndGlobalSection
+EndGlobal
