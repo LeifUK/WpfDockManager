@@ -307,17 +307,17 @@ namespace WpfDockManagerDemo.DockManager
             {
                 for (int i = 0; (i < list_N.Count) && (viewIndex < _views.Count); ++i)
                 {
-                    SplitterPane newGrid = new SplitterPane(isHorizontal);
+                    SplitterPane splitterPane = new SplitterPane(isHorizontal);
 
                     var node = list_N[i];
                     System.Windows.Markup.IAddChild parentElement = (System.Windows.Markup.IAddChild)node.Parent;
                     (node.Parent as Grid).Children.Remove(node);
 
-                    parentElement.AddChild(newGrid);
-                    Grid.SetRow(newGrid, Grid.GetRow(node));
-                    Grid.SetColumn(newGrid, Grid.GetColumn(node));
+                    parentElement.AddChild(splitterPane);
+                    Grid.SetRow(splitterPane, Grid.GetRow(node));
+                    Grid.SetColumn(splitterPane, Grid.GetColumn(node));
 
-                    newGrid.AddChild(node, true);
+                    splitterPane.AddChild(node, true);
 
                     list_N_plus_1.Add(node);
 
@@ -327,7 +327,7 @@ namespace WpfDockManagerDemo.DockManager
 
                     list_N_plus_1.Add(documentPane);
 
-                    newGrid.AddChild(documentPane, false);
+                    splitterPane.AddChild(documentPane, false);
 
                     ++viewIndex;
                 }
