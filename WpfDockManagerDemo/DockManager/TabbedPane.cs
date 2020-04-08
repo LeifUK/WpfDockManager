@@ -8,69 +8,101 @@ using System.Windows.Controls;
 
 namespace WpfDockManagerDemo.DockManager
 {
-    internal class TabbedPane : Grid
+    internal class TabbedPane : DockPane
     {
         public TabbedPane()
         {
-            VerticalAlignment = System.Windows.VerticalAlignment.Stretch;
-            HorizontalAlignment = HorizontalAlignment.Stretch;
-
-            ColumnDefinition columnDefinition = new ColumnDefinition();
-            columnDefinition.Width = new GridLength(1, GridUnitType.Auto);
-            ColumnDefinitions.Add(columnDefinition);
-
-            columnDefinition = new ColumnDefinition();
-            columnDefinition.Width = new GridLength(1, GridUnitType.Star);
-            ColumnDefinitions.Add(columnDefinition);
-
-            columnDefinition = new ColumnDefinition();
-            columnDefinition.Width = new GridLength(1, GridUnitType.Auto);
-            ColumnDefinitions.Add(columnDefinition);
-
-            columnDefinition = new ColumnDefinition();
-            columnDefinition.Width = new GridLength(1, GridUnitType.Auto);
-            ColumnDefinitions.Add(columnDefinition);
-
-            columnDefinition = new ColumnDefinition();
-            columnDefinition.Width = new GridLength(1, GridUnitType.Auto);
-            ColumnDefinitions.Add(columnDefinition);
-
-            RowDefinitions.Add(new RowDefinition());
-            RowDefinitions[0].Height = new GridLength(20, GridUnitType.Pixel);
-            RowDefinitions.Add(new RowDefinition());
-            RowDefinitions[1].Height = new GridLength(1, GridUnitType.Star);
-
-            /*
-             * The tab control fills the entire grid space
-             */
             _tabControl = new System.Windows.Controls.TabControl();
             Children.Add(_tabControl);
-            SetRow(_tabControl, 0);
-            SetRowSpan(_tabControl, 2);
+            SetRow(_tabControl, 1);
+            SetColumn(_tabControl, 0);
+            SetColumnSpan(_tabControl, 5);
 
-            // Warning warning => temporary just for testing
-            Button menuButton = new Button();
-            menuButton.Style = FindResource("styleHeaderMenuButton") as Style;
-            menuButton.Click += MenuButton_Click;
-            Grid.SetRow(menuButton, 0);
-            Grid.SetColumn(menuButton, 2);
-            Children.Add(menuButton);
+            _tabControl.Margin = new Thickness(0);
+            _tabControl.Padding = new Thickness(-2);
+            _tabControl.TabStripPlacement = System.Windows.Controls.Dock.Bottom;
+            _tabControl.SelectionChanged += _tabControl_SelectionChanged;
         }
 
-        private void MenuButton_Click(object sender, RoutedEventArgs e)
+        private void _tabControl_SelectionChanged(object sender, SelectionChangedEventArgs e)
         {
-            throw new NotImplementedException();
+            if (_tabControl.SelectedItem == null)
+            {
+                _titleLabel.Content = null;
+                return;
+            }
+
+            TabItem tabItem = _tabControl.SelectedItem as TabItem;
+            if (tabItem == null)
+            {
+                _titleLabel.Content = null;
+                return;
+            }
+
+            UserControl userControl = tabItem.Content as UserControl;
+            if (userControl == null)
+            {
+                throw new Exception("TabbedPane._tabControl_SelectionChanged(): selected item is not a User Control");
+            }
+
+            IDocument iDocument = userControl.DataContext as IDocument;
+            if (iDocument == null)
+            {
+                throw new Exception("TabbedPane._tabControl_SelectionChanged(): User Control is not a document");
+            }
+
+            _titleLabel.Content = iDocument.Title;
+        }
+
+        public event EventHandler Float;
+        protected override void FireFloatEvent(object sender, EventArgs e)
+        {
+            Float?.Invoke(sender, e);
+        }
+
+        public event EventHandler FloatSelectedDocument;
+
+        protected override void MenuButton_Click(object sender, RoutedEventArgs e)
+        {
+            ContextMenu contextMenu = new ContextMenu();
+            MenuItem menuItem = new MenuItem();
+            menuItem.Header = "Float";
+            menuItem.IsChecked = false;
+            menuItem.Command = new Command(delegate { Float?.Invoke(this, null); }, delegate { return IsDocked; });
+            contextMenu.Items.Add(menuItem);
+
+            menuItem = new MenuItem();
+            menuItem.Header = "Float Selected Tab";
+            menuItem.IsChecked = false;
+            menuItem.Command = new Command(delegate { FloatSelectedDocument?.Invoke(this, null); }, delegate { return IsDocked; });
+            contextMenu.Items.Add(menuItem);
+
+            contextMenu.IsOpen = true;
         }
 
         private readonly System.Windows.Controls.TabControl _tabControl;
 
-        //public IDocument IDocument { get; private set; }
-        //public UserControl View { get; set; }
-
-        public bool AddDocument(UserControl userControl)
+        public void AddUserControl(UserControl userControl)
         {
+            if (userControl == null)
+            {
+                throw new Exception("TabbedPane.AddUserControl(): User Control is null");
+            }
 
-            return true;
+            IDocument iDocument = userControl.DataContext as IDocument;
+            if (iDocument == null)
+            {
+                throw new Exception("TabbedPane.AddUserControl(): User Control is not a document");
+            }
+            
+            _titleLabel.Content = iDocument.Title;
+
+            TabItem tabItem = new TabItem();
+            tabItem.Header = iDocument.Title;
+            
+            tabItem.Content = userControl;
+            _tabControl.Items.Add(tabItem);
+            _tabControl.SelectedIndex = _tabControl.Items.Count - 1;
         }
     }
 }

@@ -89,7 +89,7 @@ namespace WpfDockManagerDemo.DockManager
 
         public List<FloatingPane> FloatingPanes;
 
-        private DocumentPane SelectedPane;
+        private DockPane SelectedPane;
         private List<UserControl> _views;
 
         #region dependency properties 
@@ -293,7 +293,7 @@ namespace WpfDockManagerDemo.DockManager
             List<FrameworkElement> list_N_plus_1 = new List<FrameworkElement>();
 
             DockManager.DocumentPane documentPane = new DocumentPane();
-            documentPane.AddDocument(_views[0]);
+            documentPane.AddUserControl(_views[0]);
 
             Children.Add(documentPane);
 
@@ -323,7 +323,7 @@ namespace WpfDockManagerDemo.DockManager
 
                     node = _views[viewIndex];
                     documentPane = new DocumentPane();
-                    documentPane.AddDocument(node as UserControl);
+                    documentPane.AddUserControl(node as UserControl);
 
                     list_N_plus_1.Add(documentPane);
 
@@ -479,7 +479,7 @@ namespace WpfDockManagerDemo.DockManager
                             {
                                 DocumentPane documentPane = new DocumentPane();
                                 AttachDocumentPane(documentPane);
-                                documentPane.AddDocument(viewsMap[xmlAttribute.Value]);
+                                documentPane.AddUserControl(viewsMap[xmlAttribute.Value]);
 
                                 System.Windows.Markup.IAddChild parentElement = (System.Windows.Markup.IAddChild)parentFrameworkElement;
                                 parentElement.AddChild(documentPane);
@@ -512,7 +512,7 @@ namespace WpfDockManagerDemo.DockManager
             Grid parentGrid = documentPane.Parent as Grid;
             if (parentGrid == null)
             {
-                throw new Exception("Error: DocumentPane_Close - documentPane parent must be a Grid");
+                throw new Exception(System.Reflection.MethodBase.GetCurrentMethod().Name + ": documentPane parent must be a Grid");
             }
 
             if (parentGrid == this)
@@ -529,7 +529,7 @@ namespace WpfDockManagerDemo.DockManager
                 Grid grandparentGrid = parentGrid.Parent as Grid;
                 if (grandparentGrid == null)
                 {
-                    throw new Exception("Error: DocumentPane_Close - Grid parent not a Grid");
+                    throw new Exception(System.Reflection.MethodBase.GetCurrentMethod().Name + ": Grid parent not a Grid");
                 }
                 parentGrid.Children.Remove(documentPane);
 
@@ -594,7 +594,7 @@ namespace WpfDockManagerDemo.DockManager
 
             if (documentPane.Children.Count == 0)
             {
-                throw new Exception("LayoutManager.DocumentPane_Float(): no children");
+                throw new Exception(System.Reflection.MethodBase.GetCurrentMethod().Name + ": no children");
             }
 
             var child = documentPane.View;
@@ -615,22 +615,75 @@ namespace WpfDockManagerDemo.DockManager
             FloatingPanes.Add(floatingPane);
         }
 
+        private void TabbedPane_Float(object sender, EventArgs e)
+        {
+            System.Windows.Input.MouseEventArgs mouseEventArgs = e as System.Windows.Input.MouseEventArgs;
+
+            TabbedPane tabbedPane = sender as TabbedPane;
+
+            if (tabbedPane == null)
+            {
+                return;
+            }
+
+            Point mousePosition;
+            if (mouseEventArgs != null)
+            {
+                mousePosition = mouseEventArgs.GetPosition(App.Current.MainWindow);
+            }
+            else
+            {
+                mousePosition = new Point(App.Current.MainWindow.Left + App.Current.MainWindow.Width / 2, App.Current.MainWindow.Top + App.Current.MainWindow.Height / 2);
+            }
+
+            Point mainWindowLocation = App.Current.MainWindow.PointToScreen(new Point(0, 0));
+
+            //ExtractDocumentPane(tabbedPane);
+
+            //tabbedPane.IsDocked = false;
+
+            //FloatingPane floatingPane = new FloatingPane();
+            //floatingPane.LocationChanged += FloatingWindow_LocationChanged;
+
+            //if (tabbedPane.Children.Count == 0)
+            //{
+            //    throw new Exception(System.Reflection.MethodBase.GetCurrentMethod().Name +  ": no children");
+            //}
+
+            //var child = tabbedPane.View;
+            //tabbedPane.Children.Remove(child);
+            //_views.Remove(tabbedPane.View);
+
+            //floatingPane.AddView(child);
+            //floatingPane.DataContext = new FloatingViewModel();
+            //(floatingPane.DataContext as FloatingViewModel).Title = tabbedPane.IDocument.Title;
+            //floatingPane.Dock += FloatingWindow_Dock;
+            //floatingPane.EndDrag += FloatingView_EndDrag;
+            //// Ensure the window remains on top of the main window
+            //floatingPane.Owner = App.Current.MainWindow;
+            //floatingPane.Show();
+            //floatingPane.Left = mainWindowLocation.X + mousePosition.X;
+            //floatingPane.Top = mainWindowLocation.Y + mousePosition.Y;
+
+            //FloatingPanes.Add(floatingPane);
+        }
+
         private void CancelSelection()
         {
-            SelectedPane.IsHighlighted = false;
-            SelectedPane = null;
-            _insertionIndicatorManager.HideInsertionIndicator();
-            if (_windowLocationPane != null)
+            if (SelectedPane != null)
             {
-                _windowLocationPane.Close();
-                _windowLocationPane = null;
+                SelectedPane.IsHighlighted = false;
+                SelectedPane = null;
             }
+            _insertionIndicatorManager?.HideInsertionIndicator();
+            _windowLocationPane?.Close();
+            _windowLocationPane = null;
         }
 
         private DocumentPane AddDocumentPane(SplitterPane splitterPane, UserControl userControl, bool isFirst)
         {
             DocumentPane documentPane = new DocumentPane();
-            documentPane.AddDocument(userControl);
+            documentPane.AddUserControl(userControl);
 
             splitterPane.AddChild(documentPane, isFirst);
             return documentPane;
@@ -665,6 +718,7 @@ namespace WpfDockManagerDemo.DockManager
                 SplitterPane parentSplitterPane = (SelectedPane.Parent as SplitterPane);
                 UserControl userControl = null;
                 DocumentPane documentPane = null;
+                TabbedPane tabbedPane = null;
 
                 switch (_insertionIndicatorManager.WindowLocation)
                 {
@@ -704,8 +758,37 @@ namespace WpfDockManagerDemo.DockManager
                         newGrid.AddChild(SelectedPane, isTargetFirst);
 
                         documentPane = new DocumentPane();
-                        documentPane.AddDocument(userControl);
+                        documentPane.AddUserControl(userControl);
                         newGrid.AddChild(documentPane, !isTargetFirst);
+                        break;
+
+                    case WindowLocation.Middle:
+                        userControl = ExtractUserControlFromFloatingPane(floatingPane);
+
+                        if (SelectedPane is TabbedPane)
+                        {
+                            (SelectedPane as TabbedPane).AddUserControl(userControl);
+                        }
+                        else
+                        {
+                            parentSplitterPane.Children.Remove(SelectedPane);
+
+                            // replace the document with a tab containing that document and the document from the floating view
+                            tabbedPane = new TabbedPane();
+                            parentSplitterPane.Children.Add(tabbedPane);
+                            Grid.SetRow(tabbedPane, Grid.GetRow(SelectedPane));
+                            Grid.SetColumn(tabbedPane, Grid.GetColumn(SelectedPane));
+
+                            tabbedPane.AddUserControl(userControl);
+                            tabbedPane.AddUserControl((SelectedPane as DocumentPane).ExtractUserControl());
+                            (SelectedPane as DocumentPane).View = null;
+                            SelectedPane = tabbedPane;
+                            //tabbedPane.Close += DocumentPane_Close;
+                            tabbedPane.Float += TabbedPane_Float;
+                            tabbedPane.IsDocked = true;
+                        }
+
+                        CancelSelection();
                         break;
                 }
 
@@ -718,14 +801,14 @@ namespace WpfDockManagerDemo.DockManager
         }
 
         /*
-         * Locates the document pane at the specified point
+         * Locates the dock pane at the specified point
          * 
          *      grid: The current grid to search in.
          *      point: A point relative to the top left corner of the main window. 
          *      left: On success this contains the left coordinate of the target DocumentPane relative to the left of the main window.
          *      top: On success this contains the top coordinate of the target DocumentPane relative to the top of the main window.
          */
-        private DocumentPane FindView(Grid grid, Point point, ref double leftGrid, ref double topGrid)
+        private DockPane FindView(Grid grid, Point point, ref double leftGrid, ref double topGrid)
         {
             if (grid == null)
             {
@@ -772,9 +855,9 @@ namespace WpfDockManagerDemo.DockManager
                         leftGrid += left;
                         topGrid += top;
 
-                        if (uiElement is DocumentPane)
+                        if (uiElement is DockPane)
                         {
-                            return uiElement as DocumentPane;
+                            return uiElement as DockPane;
                         }
 
                         // Recursively navigate down the tree
@@ -811,10 +894,10 @@ namespace WpfDockManagerDemo.DockManager
             Window floatingWindow = sender as Window;
             if (floatingWindow == null)
             {
-                throw new Exception("FloatingWindow_LocationChanged()");
+                throw new Exception("FloatingWindow_LocationChanged(): null floating window");
             }
 
-            DocumentPane previousPane = SelectedPane;
+            DockPane previousPane = SelectedPane;
 
             var source = PresentationSource.FromVisual(this);
             System.Windows.Media.Matrix transformFromDevice = source.CompositionTarget.TransformFromDevice;

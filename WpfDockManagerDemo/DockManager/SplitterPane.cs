@@ -12,10 +12,11 @@ namespace WpfDockManagerDemo.DockManager
 
             VerticalAlignment = VerticalAlignment.Stretch;
             HorizontalAlignment = HorizontalAlignment.Stretch;
+            Margin = new Thickness(0);
 
             var gridSplitter = new GridSplitter();
             gridSplitter.Background = System.Windows.Media.Brushes.Gainsboro;
-            gridSplitter.BorderThickness = new Thickness(1);
+            gridSplitter.BorderThickness = new Thickness(0);
             Children.Add(gridSplitter);
 
             RowDefinitions.Add(new RowDefinition());
@@ -78,9 +79,9 @@ namespace WpfDockManagerDemo.DockManager
             Grid.SetColumn(frameworkElement, column);
         }
 
-        public OldTabbedPane AddTab(DocumentPane targetPane, UserControl userControl, WindowLocation windowLocation)
+        public TabbedPane AddTab(DocumentPane targetPane, UserControl userControl, WindowLocation windowLocation)
         {
-            OldTabbedPane tabbedPane = null;
+            TabbedPane tabbedPane = null;
 
             return tabbedPane;
         }
