@@ -9,6 +9,11 @@ namespace WpfDockManagerDemo.DockManager
     {
         public DocumentPane()
         {
+            _documentContainer = new DocumentContainer();
+            Children.Add(_documentContainer);
+            Grid.SetRow(_documentContainer, 1);
+            Grid.SetColumn(_documentContainer, 0);
+            Grid.SetColumnSpan(_documentContainer, ColumnDefinitions.Count);
 
             Button closeButton = new Button();
             closeButton.Style = FindResource("styleHeaderCloseButton") as Style;
@@ -62,12 +67,17 @@ namespace WpfDockManagerDemo.DockManager
         public IDocument IDocument { get; private set; }
         public UserControl View { get; set; }
 
+        private DocumentContainer _documentContainer;
+
         public void AddUserControl(UserControl userControl)
         {
             if (userControl == null)
             {
                 throw new Exception("DocumentPane.AddUserControl(): User Control is null");
             }
+
+            _documentContainer.AddView(userControl);
+
             View = userControl;
 
             IDocument iDocument = userControl.DataContext as IDocument;
@@ -79,21 +89,18 @@ namespace WpfDockManagerDemo.DockManager
 
             _titleLabel.Content = IDocument.Title;
 
-            Children.Add(userControl);
-            Grid.SetRow(userControl, 1);
-            Grid.SetColumn(userControl, 0);
-            Grid.SetColumnSpan(userControl, ColumnDefinitions.Count);
         }
 
         public UserControl ExtractUserControl()
         {
-            if (View == null)
-            {
-                throw new Exception("DocumentPane.ExtractDocument(): View null");
-            }
+            // Warning warning 
+            //if (View == null)
+            //{
+            //    throw new Exception("DocumentPane.ExtractDocument(): View null");
+            //}
 
-            Children.Remove(View);
-            UserControl userControl = View;
+            UserControl userControl = _documentContainer.ExtractView();
+
             View = null;
             IDocument = null;
             return userControl;

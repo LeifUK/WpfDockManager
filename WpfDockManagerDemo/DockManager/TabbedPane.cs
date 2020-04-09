@@ -1,8 +1,4 @@
 ﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 using System.Windows;
 using System.Windows.Controls;
 
@@ -12,17 +8,17 @@ namespace WpfDockManagerDemo.DockManager
     {
         public TabbedPane()
         {
-            _tabControl = new System.Windows.Controls.TabControl();
-            Children.Add(_tabControl);
-            SetRow(_tabControl, 1);
-            SetColumn(_tabControl, 0);
-            SetColumnSpan(_tabControl, 5);
+            _documentContainer = new DocumentContainer();
 
-            _tabControl.Margin = new Thickness(0);
-            _tabControl.Padding = new Thickness(-2);
-            _tabControl.TabStripPlacement = System.Windows.Controls.Dock.Bottom;
-            _tabControl.SelectionChanged += _tabControl_SelectionChanged;
+            Children.Add(_documentContainer);
+            SetRow(_documentContainer, 1);
+            SetColumn(_documentContainer, 0);
+            SetColumnSpan(_documentContainer, 5);
+
+            _documentContainer.Margin = new Thickness(0);
         }
+
+        protected DocumentContainer _documentContainer;
 
         private void _tabControl_SelectionChanged(object sender, SelectionChangedEventArgs e)
         {
@@ -86,23 +82,18 @@ namespace WpfDockManagerDemo.DockManager
         {
             if (userControl == null)
             {
-                throw new Exception("TabbedPane.AddUserControl(): User Control is null");
+                throw new Exception(System.Reflection.MethodBase.GetCurrentMethod().Name + ": User Control is null");
             }
-
+                        
             IDocument iDocument = userControl.DataContext as IDocument;
             if (iDocument == null)
             {
-                throw new Exception("TabbedPane.AddUserControl(): User Control is not a document");
+                throw new Exception(System.Reflection.MethodBase.GetCurrentMethod().Name + ": User Control is not a document");
             }
-            
-            _titleLabel.Content = iDocument.Title;
 
-            TabItem tabItem = new TabItem();
-            tabItem.Header = iDocument.Title;
-            
-            tabItem.Content = userControl;
-            _tabControl.Items.Add(tabItem);
-            _tabControl.SelectedIndex = _tabControl.Items.Count - 1;
+            _documentContainer.AddView(userControl);
+
+            _titleLabel.Content = iDocument.Title;
         }
     }
 }

@@ -121,19 +121,12 @@ namespace WpfDockManagerDemo.DockManager
 
         public void AddView(UserControl userControl)
         {
-            Grid.Children.Add(userControl);
+            DocumentContainer.AddView(userControl);
         }
 
         public UserControl ExtractView()
         {
-            UserControl userControl = null;
-            if (Grid.Children.Count > 0)
-            {
-                userControl = Grid.Children[0] as UserControl;
-                Grid.Children.RemoveAt(0);
-            }
-
-            return userControl;
+            return DocumentContainer.ExtractView();
         }
     }
 }

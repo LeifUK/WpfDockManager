@@ -110,8 +110,7 @@
                 </StackPanel>
             </Grid>
 
-            <!--This grid owns the user control -->
-            <Grid Grid.Row="1" x:Name="Grid"/>
+            <local:DocumentContainer Grid.Row="1" x:Name="DocumentContainer"/>
 
         </Grid>
     </Border>

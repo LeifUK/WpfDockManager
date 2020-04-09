@@ -59,6 +59,7 @@
     </ApplicationDefinition>
     <Compile Include="DockManager\Command.cs" />
     <Compile Include="DockManager\DockPane.cs" />
+    <Compile Include="DockManager\DocumentContainer.cs" />
     <Compile Include="DockManager\DocumentPane.cs" />
     <Compile Include="DockManager\ExtensionMethods.cs" />
     <Compile Include="DockManager\FloatingPane.xaml.cs">

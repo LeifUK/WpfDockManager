@@ -592,18 +592,23 @@ namespace WpfDockManagerDemo.DockManager
             FloatingPane floatingPane = new FloatingPane();
             floatingPane.LocationChanged += FloatingWindow_LocationChanged;
 
-            if (documentPane.Children.Count == 0)
+            var child = documentPane.View;
+            // Warning warning
+            while (true)
             {
-                throw new Exception(System.Reflection.MethodBase.GetCurrentMethod().Name + ": no children");
+                UserControl userControl = documentPane.ExtractUserControl();
+                if (userControl == null)
+                {
+                    break;
+                }
+
+                _views.Remove(userControl);
+                floatingPane.AddView(userControl);
+
             }
 
-            var child = documentPane.View;
-            documentPane.Children.Remove(child);
-            _views.Remove(documentPane.View);
-
-            floatingPane.AddView(child);
             floatingPane.DataContext = new FloatingViewModel();
-            (floatingPane.DataContext as FloatingViewModel).Title = documentPane.IDocument.Title;
+            (floatingPane.DataContext as FloatingViewModel).Title = floatingPane.Title;
             floatingPane.Dock += FloatingWindow_Dock;
             floatingPane.EndDrag += FloatingView_EndDrag;
             // Ensure the window remains on top of the main window
@@ -689,6 +694,7 @@ namespace WpfDockManagerDemo.DockManager
             return documentPane;
         }
 
+        // Warning warning
         private UserControl ExtractUserControlFromFloatingPane(FloatingPane floatingPane)
         {
             UserControl userControl = floatingPane.ExtractView();
@@ -763,30 +769,45 @@ namespace WpfDockManagerDemo.DockManager
                         break;
 
                     case WindowLocation.Middle:
-                        userControl = ExtractUserControlFromFloatingPane(floatingPane);
 
-                        if (SelectedPane is TabbedPane)
+                        while (true)
                         {
-                            (SelectedPane as TabbedPane).AddUserControl(userControl);
+                            userControl = floatingPane.ExtractView();
+                            if (userControl == null)
+                            {
+                                break;
+                            }
+
+                            (SelectedPane as DocumentPane).AddUserControl(userControl);
                         }
-                        else
+                        FloatingPanes.Remove(floatingPane);
+                        floatingPane.Close();
+
+
+                        //if (SelectedPane is TabbedPane)
+                        //{
+                        //    (SelectedPane as TabbedPane).AddUserControl(userControl);
+                        //}
+                        //else
                         {
-                            parentSplitterPane.Children.Remove(SelectedPane);
+                            //parentSplitterPane.Children.Remove(SelectedPane);
 
-                            // replace the document with a tab containing that document and the document from the floating view
-                            tabbedPane = new TabbedPane();
-                            parentSplitterPane.Children.Add(tabbedPane);
-                            Grid.SetRow(tabbedPane, Grid.GetRow(SelectedPane));
-                            Grid.SetColumn(tabbedPane, Grid.GetColumn(SelectedPane));
+                            //// replace the document with a tab containing that document and the document from the floating view
+                            //tabbedPane = new TabbedPane();
+                            //parentSplitterPane.Children.Add(tabbedPane);
+                            //Grid.SetRow(tabbedPane, Grid.GetRow(SelectedPane));
+                            //Grid.SetColumn(tabbedPane, Grid.GetColumn(SelectedPane));
 
-                            tabbedPane.AddUserControl(userControl);
-                            tabbedPane.AddUserControl((SelectedPane as DocumentPane).ExtractUserControl());
-                            (SelectedPane as DocumentPane).View = null;
-                            SelectedPane = tabbedPane;
-                            //tabbedPane.Close += DocumentPane_Close;
-                            tabbedPane.Float += TabbedPane_Float;
-                            tabbedPane.IsDocked = true;
+                            //tabbedPane.AddUserControl(userControl);
+                            //tabbedPane.AddUserControl((SelectedPane as DocumentPane).ExtractUserControl());
+                            //(SelectedPane as DocumentPane).View = null;
+                            //SelectedPane = tabbedPane;
+                            ////tabbedPane.Close += DocumentPane_Close;
+                            //tabbedPane.Float += TabbedPane_Float;
+                            //tabbedPane.IsDocked = true;
                         }
+
+                        // Warning warning
 
                         CancelSelection();
                         break;
