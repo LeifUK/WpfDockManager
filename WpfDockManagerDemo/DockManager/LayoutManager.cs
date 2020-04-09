@@ -620,59 +620,6 @@ namespace WpfDockManagerDemo.DockManager
             FloatingPanes.Add(floatingPane);
         }
 
-        private void TabbedPane_Float(object sender, EventArgs e)
-        {
-            System.Windows.Input.MouseEventArgs mouseEventArgs = e as System.Windows.Input.MouseEventArgs;
-
-            TabbedPane tabbedPane = sender as TabbedPane;
-
-            if (tabbedPane == null)
-            {
-                return;
-            }
-
-            Point mousePosition;
-            if (mouseEventArgs != null)
-            {
-                mousePosition = mouseEventArgs.GetPosition(App.Current.MainWindow);
-            }
-            else
-            {
-                mousePosition = new Point(App.Current.MainWindow.Left + App.Current.MainWindow.Width / 2, App.Current.MainWindow.Top + App.Current.MainWindow.Height / 2);
-            }
-
-            Point mainWindowLocation = App.Current.MainWindow.PointToScreen(new Point(0, 0));
-
-            //ExtractDocumentPane(tabbedPane);
-
-            //tabbedPane.IsDocked = false;
-
-            //FloatingPane floatingPane = new FloatingPane();
-            //floatingPane.LocationChanged += FloatingWindow_LocationChanged;
-
-            //if (tabbedPane.Children.Count == 0)
-            //{
-            //    throw new Exception(System.Reflection.MethodBase.GetCurrentMethod().Name +  ": no children");
-            //}
-
-            //var child = tabbedPane.View;
-            //tabbedPane.Children.Remove(child);
-            //_views.Remove(tabbedPane.View);
-
-            //floatingPane.AddView(child);
-            //floatingPane.DataContext = new FloatingViewModel();
-            //(floatingPane.DataContext as FloatingViewModel).Title = tabbedPane.IDocument.Title;
-            //floatingPane.Dock += FloatingWindow_Dock;
-            //floatingPane.EndDrag += FloatingView_EndDrag;
-            //// Ensure the window remains on top of the main window
-            //floatingPane.Owner = App.Current.MainWindow;
-            //floatingPane.Show();
-            //floatingPane.Left = mainWindowLocation.X + mousePosition.X;
-            //floatingPane.Top = mainWindowLocation.Y + mousePosition.Y;
-
-            //FloatingPanes.Add(floatingPane);
-        }
-
         private void CancelSelection()
         {
             if (SelectedPane != null)
@@ -724,7 +671,6 @@ namespace WpfDockManagerDemo.DockManager
                 SplitterPane parentSplitterPane = (SelectedPane.Parent as SplitterPane);
                 UserControl userControl = null;
                 DocumentPane documentPane = null;
-                TabbedPane tabbedPane = null;
 
                 switch (_insertionIndicatorManager.WindowLocation)
                 {
@@ -782,30 +728,6 @@ namespace WpfDockManagerDemo.DockManager
                         }
                         FloatingPanes.Remove(floatingPane);
                         floatingPane.Close();
-
-
-                        //if (SelectedPane is TabbedPane)
-                        //{
-                        //    (SelectedPane as TabbedPane).AddUserControl(userControl);
-                        //}
-                        //else
-                        {
-                            //parentSplitterPane.Children.Remove(SelectedPane);
-
-                            //// replace the document with a tab containing that document and the document from the floating view
-                            //tabbedPane = new TabbedPane();
-                            //parentSplitterPane.Children.Add(tabbedPane);
-                            //Grid.SetRow(tabbedPane, Grid.GetRow(SelectedPane));
-                            //Grid.SetColumn(tabbedPane, Grid.GetColumn(SelectedPane));
-
-                            //tabbedPane.AddUserControl(userControl);
-                            //tabbedPane.AddUserControl((SelectedPane as DocumentPane).ExtractUserControl());
-                            //(SelectedPane as DocumentPane).View = null;
-                            //SelectedPane = tabbedPane;
-                            ////tabbedPane.Close += DocumentPane_Close;
-                            //tabbedPane.Float += TabbedPane_Float;
-                            //tabbedPane.IsDocked = true;
-                        }
 
                         // Warning warning
 

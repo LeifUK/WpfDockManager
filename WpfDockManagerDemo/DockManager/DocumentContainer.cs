@@ -118,13 +118,17 @@ namespace WpfDockManagerDemo.DockManager
             else if (Children[0] is TabControl)
             {
                 TabControl tabControl = Children[0] as TabControl;
-                userControl = (tabControl.Items[0] as TabItem).Content as UserControl;
+                TabItem tabItem = (tabControl.Items[0] as TabItem);
+                userControl = tabItem.Content as UserControl;
+                tabItem.Content = null;
                 tabControl.Items.RemoveAt(0);
                 if (tabControl.Items.Count == 1)
                 {
-                    UserControl userControl2 = (tabControl.Items[0] as TabItem).Content as UserControl;
-                    tabControl.Items.RemoveAt(0);
-                    Children.RemoveAt(0);
+                    tabItem = (tabControl.Items[0] as TabItem);
+                    UserControl userControl2 = tabItem.Content as UserControl;
+                    tabItem.Content = null;
+                    tabControl.Items.Remove(tabItem);
+                    Children.Remove(tabControl);
                     Children.Add(userControl2);
                 }
             }

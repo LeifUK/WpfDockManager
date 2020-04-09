@@ -93,12 +93,6 @@ namespace WpfDockManagerDemo.DockManager
 
         public UserControl ExtractUserControl()
         {
-            // Warning warning 
-            //if (View == null)
-            //{
-            //    throw new Exception("DocumentPane.ExtractDocument(): View null");
-            //}
-
             UserControl userControl = _documentContainer.ExtractView();
 
             View = null;

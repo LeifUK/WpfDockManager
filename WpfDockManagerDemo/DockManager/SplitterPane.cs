@@ -78,12 +78,5 @@ namespace WpfDockManagerDemo.DockManager
             Grid.SetRow(frameworkElement, row);
             Grid.SetColumn(frameworkElement, column);
         }
-
-        public TabbedPane AddTab(DocumentPane targetPane, UserControl userControl, WindowLocation windowLocation)
-        {
-            TabbedPane tabbedPane = null;
-
-            return tabbedPane;
-        }
     }
 }

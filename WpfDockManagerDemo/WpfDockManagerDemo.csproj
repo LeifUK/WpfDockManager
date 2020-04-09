@@ -67,7 +67,6 @@
     </Compile>
     <Compile Include="DockManager\IDocument.cs" />
     <Compile Include="DockManager\InsertionIndicatorManager.cs" />
-    <Compile Include="DockManager\TabbedPane.cs" />
     <Compile Include="DockManager\Utilities.cs" />
     <Compile Include="DockManager\WindowLocationPane.xaml.cs">
       <DependentUpon>WindowLocationPane.xaml</DependentUpon>
