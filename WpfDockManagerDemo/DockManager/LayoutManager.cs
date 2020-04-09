@@ -89,7 +89,7 @@ namespace WpfDockManagerDemo.DockManager
 
         public List<FloatingPane> FloatingPanes;
 
-        private DockPane SelectedPane;
+        private DocumentPane SelectedPane;
         private List<UserControl> _views;
 
         #region dependency properties 
@@ -650,6 +650,21 @@ namespace WpfDockManagerDemo.DockManager
             return userControl;
         }
 
+        private void ExtractDocuments(FloatingPane floatingPane, DocumentPane documentPane)
+        {
+            while (true)
+            {
+                UserControl userControl = floatingPane.ExtractView();
+                if (userControl == null)
+                {
+                    break;
+                }
+
+                documentPane.AddUserControl(userControl);
+            }
+            floatingPane.Close();
+        }
+
         private void FloatingView_EndDrag(object sender, EventArgs e)
         {
             FloatingPane floatingPane = sender as FloatingPane;
@@ -669,7 +684,6 @@ namespace WpfDockManagerDemo.DockManager
             App.Current.Dispatcher.Invoke(delegate
             {
                 SplitterPane parentSplitterPane = (SelectedPane.Parent as SplitterPane);
-                UserControl userControl = null;
                 DocumentPane documentPane = null;
 
                 switch (_insertionIndicatorManager.WindowLocation)
@@ -678,10 +692,14 @@ namespace WpfDockManagerDemo.DockManager
                     case WindowLocation.TopEdge:
                     case WindowLocation.LeftEdge:
                     case WindowLocation.RightEdge:
-                        userControl = ExtractUserControlFromFloatingPane(floatingPane);
+
+                        documentPane = new DocumentPane();
+                        ExtractDocuments(floatingPane, SelectedPane as DocumentPane);
+
                         parentSplitterPane = new SplitterPane((_insertionIndicatorManager.WindowLocation == WindowLocation.TopEdge) || (_insertionIndicatorManager.WindowLocation == WindowLocation.BottomEdge));
                         bool isFirst = (_insertionIndicatorManager.WindowLocation == WindowLocation.TopEdge) || (_insertionIndicatorManager.WindowLocation == WindowLocation.LeftEdge);
-                        documentPane = AddDocumentPane(parentSplitterPane, userControl, isFirst);
+                        parentSplitterPane.AddChild(documentPane, isFirst);
+
                         if (Children.Count == 0)
                         {
                             Children.Add(parentSplitterPane);
@@ -689,16 +707,20 @@ namespace WpfDockManagerDemo.DockManager
                         else
                         {
                             SplitterPane rootSplitterPane = Children[0] as SplitterPane;
-                            Children.RemoveAt(0);
+                            Children.Remove(rootSplitterPane);
                             Children.Add(parentSplitterPane);
                             parentSplitterPane.AddChild(rootSplitterPane, !isFirst);
                         }
                         break;
+
                     case WindowLocation.Right:
                     case WindowLocation.Left:
                     case WindowLocation.Top:
                     case WindowLocation.Bottom:
-                        userControl = ExtractUserControlFromFloatingPane(floatingPane);
+
+                        documentPane = new DocumentPane();
+                        ExtractDocuments(floatingPane, documentPane);
+
                         parentSplitterPane.Children.Remove(SelectedPane);
 
                         SplitterPane newGrid = new SplitterPane((_insertionIndicatorManager.WindowLocation == WindowLocation.Top) || (_insertionIndicatorManager.WindowLocation == WindowLocation.Bottom));
@@ -708,29 +730,12 @@ namespace WpfDockManagerDemo.DockManager
 
                         bool isTargetFirst = (_insertionIndicatorManager.WindowLocation == WindowLocation.Right) || (_insertionIndicatorManager.WindowLocation == WindowLocation.Bottom);
                         newGrid.AddChild(SelectedPane, isTargetFirst);
-
-                        documentPane = new DocumentPane();
-                        documentPane.AddUserControl(userControl);
                         newGrid.AddChild(documentPane, !isTargetFirst);
                         break;
 
                     case WindowLocation.Middle:
 
-                        while (true)
-                        {
-                            userControl = floatingPane.ExtractView();
-                            if (userControl == null)
-                            {
-                                break;
-                            }
-
-                            (SelectedPane as DocumentPane).AddUserControl(userControl);
-                        }
-                        FloatingPanes.Remove(floatingPane);
-                        floatingPane.Close();
-
-                        // Warning warning
-
+                        ExtractDocuments(floatingPane, SelectedPane as DocumentPane);
                         CancelSelection();
                         break;
                 }
@@ -751,7 +756,7 @@ namespace WpfDockManagerDemo.DockManager
          *      left: On success this contains the left coordinate of the target DocumentPane relative to the left of the main window.
          *      top: On success this contains the top coordinate of the target DocumentPane relative to the top of the main window.
          */
-        private DockPane FindView(Grid grid, Point point, ref double leftGrid, ref double topGrid)
+        private DocumentPane FindView(Grid grid, Point point, ref double leftGrid, ref double topGrid)
         {
             if (grid == null)
             {
@@ -798,9 +803,9 @@ namespace WpfDockManagerDemo.DockManager
                         leftGrid += left;
                         topGrid += top;
 
-                        if (uiElement is DockPane)
+                        if (uiElement is DocumentPane)
                         {
-                            return uiElement as DockPane;
+                            return uiElement as DocumentPane;
                         }
 
                         // Recursively navigate down the tree
@@ -840,7 +845,7 @@ namespace WpfDockManagerDemo.DockManager
                 throw new Exception("FloatingWindow_LocationChanged(): null floating window");
             }
 
-            DockPane previousPane = SelectedPane;
+            DocumentPane previousPane = SelectedPane;
 
             var source = PresentationSource.FromVisual(this);
             System.Windows.Media.Matrix transformFromDevice = source.CompositionTarget.TransformFromDevice;
