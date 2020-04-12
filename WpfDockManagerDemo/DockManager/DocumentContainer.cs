@@ -13,6 +13,28 @@ namespace WpfDockManagerDemo.DockManager
 
         public event EventHandler TitleChanged;
 
+        public int DocumentCount
+        {
+            get
+            {
+                int count = -1;
+                if (Children.Count == 0)
+                {
+                    count = 0;
+                }
+                if (Children[0] is UserControl)
+                {
+                    count = 1;
+                }
+                if (Children[0] is TabControl)
+                {
+                    count = (Children[0] as TabControl).Items.Count;
+                }
+
+                return count;
+             }
+        }
+
         public string Title
         {
             get
@@ -138,6 +160,53 @@ namespace WpfDockManagerDemo.DockManager
             }
 
             return userControl;
+        }
+
+        public int GetUserControlCount()
+        {
+            if (Children.Count <= 0)
+            {
+                return 0;
+            }
+
+            if (Children[0] is UserControl)
+            {
+                return 1;
+            }
+            else if (Children[0] is TabControl)
+            {
+                TabControl tabControl = Children[0] as TabControl;
+                return (Children[0] as TabControl).Items.Count;
+            }
+
+            throw new Exception(System.Reflection.MethodBase.GetCurrentMethod().Name + ": Children[0] is not an expected type -> " + Children[0].GetType().FullName);
+        }
+
+        public UserControl GetUserControl(int index)
+        {
+            if (Children.Count <= 0)
+            {
+                return null;
+            }
+
+            if (Children[0] is UserControl)
+            {
+                return (index == 0) ? Children[0] as UserControl : null;
+            }
+            else if (Children[0] is TabControl)
+            {
+                TabControl tabControl = Children[0] as TabControl;
+
+                if (index >= tabControl.Items.Count)
+                {
+                    return null;
+                }
+
+                TabItem tabItem = (tabControl.Items[index] as TabItem);
+                return tabItem.Content as UserControl;
+            }
+
+            throw new Exception(System.Reflection.MethodBase.GetCurrentMethod().Name + ": Children[0] is not an expected type -> " + Children[0].GetType().FullName);
         }
     }
 }

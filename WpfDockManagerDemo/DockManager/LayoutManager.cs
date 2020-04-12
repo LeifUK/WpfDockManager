@@ -90,7 +90,6 @@ namespace WpfDockManagerDemo.DockManager
         public List<FloatingPane> FloatingPanes;
 
         private DocumentPane SelectedPane;
-        private List<UserControl> _views;
 
         #region dependency properties 
 
@@ -209,7 +208,7 @@ namespace WpfDockManagerDemo.DockManager
 
         private void Create()
         {
-            _views = new List<UserControl>();
+            List<UserControl> views = new List<UserControl>();
 
             // First load the views and view models
 
@@ -230,14 +229,14 @@ namespace WpfDockManagerDemo.DockManager
                                 view.HorizontalAlignment = HorizontalAlignment.Stretch;
                                 view.VerticalAlignment = VerticalAlignment.Stretch;
 
-                                _views.Add(view);
+                                views.Add(view);
                             }
                         }
                     }
                 }
             }
 
-            if (_views.Count == 0)
+            if (views.Count == 0)
             {
                 return;
             }
@@ -293,7 +292,7 @@ namespace WpfDockManagerDemo.DockManager
             List<FrameworkElement> list_N_plus_1 = new List<FrameworkElement>();
 
             DockManager.DocumentPane documentPane = new DocumentPane();
-            documentPane.AddUserControl(_views[0]);
+            documentPane.AddUserControl(views[0]);
 
             Children.Add(documentPane);
 
@@ -303,9 +302,9 @@ namespace WpfDockManagerDemo.DockManager
 
             int viewIndex = 1;
 
-            while (viewIndex < _views.Count)
+            while (viewIndex < views.Count)
             {
-                for (int i = 0; (i < list_N.Count) && (viewIndex < _views.Count); ++i)
+                for (int i = 0; (i < list_N.Count) && (viewIndex < views.Count); ++i)
                 {
                     SplitterPane splitterPane = new SplitterPane(isHorizontal);
 
@@ -321,7 +320,7 @@ namespace WpfDockManagerDemo.DockManager
 
                     list_N_plus_1.Add(node);
 
-                    node = _views[viewIndex];
+                    node = views[viewIndex];
                     documentPane = new DocumentPane();
                     documentPane.AddUserControl(node as UserControl);
 
@@ -345,11 +344,40 @@ namespace WpfDockManagerDemo.DockManager
             return true;
         }
 
-        private XmlElement CreateElementNode(XmlDocument xmlDocument, XmlNode xmlNode, IDocument iDocument)
+        private XmlElement CreateDocumentGroupNode(XmlDocument xmlDocument, XmlNode xmlNode, DocumentPane documentPane, double width, double height)
+        {
+            if ((xmlDocument == null) || (xmlNode == null))
+            {
+                throw new Exception(System.Reflection.MethodBase.GetCurrentMethod().Name + ": invalid arguments");
+            }
+
+            XmlElement xmlDocumentGroup = xmlDocument.CreateElement("DocumentGroup");
+
+            XmlAttribute xmlAttribute = xmlDocument.CreateAttribute("row");
+            xmlAttribute.Value = Grid.GetRow(documentPane).ToString();
+            xmlDocumentGroup.Attributes.Append(xmlAttribute);
+
+            xmlAttribute = xmlDocument.CreateAttribute("column");
+            xmlAttribute.Value = Grid.GetColumn(documentPane).ToString();
+            xmlDocumentGroup.Attributes.Append(xmlAttribute);
+
+            xmlAttribute = xmlDocument.CreateAttribute("width");
+            xmlAttribute.Value = width.ToString();
+            xmlDocumentGroup.Attributes.Append(xmlAttribute);
+
+            xmlAttribute = xmlDocument.CreateAttribute("height");
+            xmlAttribute.Value = height.ToString();
+            xmlDocumentGroup.Attributes.Append(xmlAttribute);
+
+            xmlNode.AppendChild(xmlDocumentGroup);
+            return xmlDocumentGroup;
+        }
+
+        private XmlElement CreateDocumentNode(XmlDocument xmlDocument, XmlNode xmlNode, IDocument iDocument)
         {
             if ((xmlDocument == null) || (xmlNode == null) || (iDocument == null))
             {
-                return null;
+                throw new Exception(System.Reflection.MethodBase.GetCurrentMethod().Name + ": invalid arguments");
             }
 
             XmlElement xmlElement = xmlDocument.CreateElement("Document");
@@ -365,47 +393,68 @@ namespace WpfDockManagerDemo.DockManager
             return xmlElement;
         }
 
-        private void SaveGrid(XmlDocument xmlDocument, Grid grid, XmlNode xmlParentNode)
+        private void SaveSplitterPane(XmlDocument xmlDocument, Grid splitterPane, XmlNode xmlParentNode)
         {
             System.Diagnostics.Trace.Assert(xmlDocument != null);
-            System.Diagnostics.Trace.Assert(grid != null);
+            System.Diagnostics.Trace.Assert(splitterPane != null);
             System.Diagnostics.Trace.Assert(xmlParentNode != null);
 
-            XmlElement xmlGridElement = xmlDocument.CreateElement("SplitPanel");
-            xmlParentNode.AppendChild(xmlGridElement);
+            XmlElement xmlSplitterPane = xmlDocument.CreateElement("SplitterPane");
+            xmlParentNode.AppendChild(xmlSplitterPane);
 
-            GridSplitter gridSplitter = grid.Children.OfType<GridSplitter>().Single();
+            GridSplitter gridSplitter = splitterPane.Children.OfType<GridSplitter>().Single();
             System.Diagnostics.Trace.Assert(gridSplitter != null);
 
             bool isHorizontal = Grid.GetRow(gridSplitter) == 1;
             var xmlAttribute = xmlDocument.CreateAttribute("Orientation");
             xmlAttribute.Value = isHorizontal ? "Horizontal" : "Vertical";
-            xmlGridElement.Attributes.Append(xmlAttribute);
+            xmlSplitterPane.Attributes.Append(xmlAttribute);
 
             xmlAttribute = xmlDocument.CreateAttribute("row");
-            xmlAttribute.Value = Grid.GetRow(grid).ToString();
-            xmlGridElement.Attributes.Append(xmlAttribute);
+            xmlAttribute.Value = Grid.GetRow(splitterPane).ToString();
+            xmlSplitterPane.Attributes.Append(xmlAttribute);
 
             xmlAttribute = xmlDocument.CreateAttribute("column");
-            xmlAttribute.Value = Grid.GetColumn(grid).ToString();
-            xmlGridElement.Attributes.Append(xmlAttribute);
+            xmlAttribute.Value = Grid.GetColumn(splitterPane).ToString();
+            xmlSplitterPane.Attributes.Append(xmlAttribute);
 
-            List<FrameworkElement> children = grid.Children.OfType<FrameworkElement>().Where(n => !(n is GridSplitter)).OrderBy(n => Grid.GetRow(n) + Grid.GetColumn(n)).ToList();
+            List<FrameworkElement> children = splitterPane.Children.OfType<FrameworkElement>().Where(n => !(n is GridSplitter)).OrderBy(n => Grid.GetRow(n) + Grid.GetColumn(n)).ToList();
             foreach (var childNode in children)
             {
-                SaveNode(xmlDocument, childNode, xmlGridElement);
+                SaveNode(xmlDocument, childNode, xmlSplitterPane);
             }
         }
 
-        private void SaveNode(XmlDocument xmlDocument, Object node, XmlNode xmlGridElement)
+        private void SaveNode(XmlDocument xmlDocument, Object node, XmlNode xmlSplitterPane)
         {
+            System.Diagnostics.Trace.Assert(xmlDocument != null);
+            System.Diagnostics.Trace.Assert(node != null);
+            System.Diagnostics.Trace.Assert(xmlSplitterPane != null);
+
             if (node is DocumentPane)
             {
-                CreateElementNode(xmlDocument, xmlGridElement, (node as DocumentPane).IDocument);
+                DocumentPane documentPane = node as DocumentPane;
+                int count = documentPane.GetUserControlCount();
+                if (count < 1)
+                {
+                    throw new Exception(System.Reflection.MethodBase.GetCurrentMethod().Name + ": no documents");
+                }
+
+                XmlNode xmlNodeParent = CreateDocumentGroupNode(xmlDocument, xmlSplitterPane, documentPane, documentPane.ActualWidth, documentPane.ActualHeight);
+
+                for (int index = 0; index < count; ++index)
+                {
+                    UserControl userControl = documentPane.GetUserControl(index);
+                    if (userControl == null)
+                    {
+                        break;
+                    }
+                    CreateDocumentNode(xmlDocument, xmlNodeParent, userControl.DataContext as IDocument);
+                }
             }
             else if (node is Grid)
             {
-                SaveGrid(xmlDocument, node as Grid, xmlGridElement);
+                SaveSplitterPane(xmlDocument, node as Grid, xmlSplitterPane);
             }
         }
 
@@ -438,12 +487,12 @@ namespace WpfDockManagerDemo.DockManager
                 if (xmlChildNode is XmlElement)
                 {
                     XmlElement xmlElement = xmlChildNode as XmlElement;
-                    if (xmlElement.Name == "SplitPanel")
+                    if (xmlElement.Name == "SplitterPane")
                     {
                         XmlAttribute xmlAttribute = xmlElement.Attributes.GetNamedItem("Orientation") as XmlAttribute;
                         if (xmlAttribute == null)
                         {
-                            throw new Exception("Unable to load layout: a SplitPanel element must have an orientation attribute");
+                            throw new Exception("Unable to load layout: a SplitterPane element must have an orientation attribute");
                         }
 
                         bool isChildHorizontal = xmlAttribute.Value == "Horizontal";
@@ -467,29 +516,41 @@ namespace WpfDockManagerDemo.DockManager
                     }
                     else if (parentFrameworkElement != this)
                     {
-                        if (xmlElement.Name == "Document")
+                        if (xmlElement.Name == "DocumentGroup")
                         {
-                            XmlAttribute xmlAttribute = xmlElement.Attributes.GetNamedItem("ID") as XmlAttribute;
-                            if (xmlAttribute == null)
+                            DocumentPane documentPane = new DocumentPane();
+                            AttachDocumentPane(documentPane);
+
+                            foreach (var xmlNode in xmlElement.ChildNodes)
                             {
-                                throw new Exception("Unable to load layout: a Document element must have an ID attribute");
+                                if (xmlChildNode is XmlElement)
+                                {
+                                    XmlElement xmlCurrentElement = xmlChildNode as XmlElement;
+
+                                    if (xmlCurrentElement.Name == "Document")
+                                    {
+                                        XmlAttribute xmlAttribute = xmlElement.Attributes.GetNamedItem("ID") as XmlAttribute;
+                                        if (xmlAttribute == null)
+                                        {
+                                            throw new Exception("Unable to load layout: a Document element must have an ID attribute");
+                                        }
+
+                                        if (viewsMap.ContainsKey(xmlAttribute.Value))
+                                        {
+                                            documentPane.AddUserControl(viewsMap[xmlAttribute.Value]);
+
+                                            System.Windows.Markup.IAddChild parentElement = (System.Windows.Markup.IAddChild)parentFrameworkElement;
+                                            parentElement.AddChild(documentPane);
+                                            Grid.SetRow(documentPane, row);
+                                            Grid.SetColumn(documentPane, column);
+
+                                            viewsMap.Remove(xmlAttribute.Value);
+                                        }
+                                    }
+                                }
                             }
-
-                            if (viewsMap.ContainsKey(xmlAttribute.Value))
-                            {
-                                DocumentPane documentPane = new DocumentPane();
-                                AttachDocumentPane(documentPane);
-                                documentPane.AddUserControl(viewsMap[xmlAttribute.Value]);
-
-                                System.Windows.Markup.IAddChild parentElement = (System.Windows.Markup.IAddChild)parentFrameworkElement;
-                                parentElement.AddChild(documentPane);
-                                Grid.SetRow(documentPane, row);
-                                Grid.SetColumn(documentPane, column);
-                                row += rowIncrement;
-                                column += columnIncrement;
-
-                                viewsMap.Remove(xmlAttribute.Value);
-                            }
+                            row += rowIncrement;
+                            column += columnIncrement;
                         }
                     }
                 }
@@ -592,7 +653,6 @@ namespace WpfDockManagerDemo.DockManager
             FloatingPane floatingPane = new FloatingPane();
             floatingPane.LocationChanged += FloatingWindow_LocationChanged;
 
-            var child = documentPane.View;
             // Warning warning
             while (true)
             {
@@ -602,14 +662,12 @@ namespace WpfDockManagerDemo.DockManager
                     break;
                 }
 
-                _views.Remove(userControl);
                 floatingPane.AddView(userControl);
 
             }
 
             floatingPane.DataContext = new FloatingViewModel();
             (floatingPane.DataContext as FloatingViewModel).Title = floatingPane.Title;
-            floatingPane.Dock += FloatingWindow_Dock;
             floatingPane.EndDrag += FloatingView_EndDrag;
             // Ensure the window remains on top of the main window
             floatingPane.Owner = App.Current.MainWindow;
@@ -632,24 +690,6 @@ namespace WpfDockManagerDemo.DockManager
             _windowLocationPane = null;
         }
 
-        private DocumentPane AddDocumentPane(SplitterPane splitterPane, UserControl userControl, bool isFirst)
-        {
-            DocumentPane documentPane = new DocumentPane();
-            documentPane.AddUserControl(userControl);
-
-            splitterPane.AddChild(documentPane, isFirst);
-            return documentPane;
-        }
-
-        // Warning warning
-        private UserControl ExtractUserControlFromFloatingPane(FloatingPane floatingPane)
-        {
-            UserControl userControl = floatingPane.ExtractView();
-            FloatingPanes.Remove(floatingPane);
-            floatingPane.Close();
-            return userControl;
-        }
-
         private void ExtractDocuments(FloatingPane floatingPane, DocumentPane documentPane)
         {
             while (true)
@@ -669,24 +709,32 @@ namespace WpfDockManagerDemo.DockManager
         {
             FloatingPane floatingPane = sender as FloatingPane;
 
-            if (
-                    (floatingPane == null) ||
-                    (SelectedPane == null) ||
-                    !(SelectedPane.Parent is SplitterPane) || 
-                    (_windowLocationPane == null) ||
-                    (_insertionIndicatorManager == null) ||
-                    (_insertionIndicatorManager.WindowLocation == WindowLocation.None)
-               )
-            {
-                return;
-            }
-
             App.Current.Dispatcher.Invoke(delegate
             {
+                if (SelectedPane == null)
+                {
+                    return;
+                }
+
+                if (
+                        (floatingPane == null) ||
+                        (SelectedPane == null) ||
+                        (!(SelectedPane.Parent is SplitterPane) && (SelectedPane.Parent != this)) ||
+                        (_windowLocationPane == null) ||
+                        (_insertionIndicatorManager == null) ||
+                        (_insertionIndicatorManager.WindowLocation == WindowLocation.None)
+                   )
+                {
+                    return;
+                }
+
                 SplitterPane parentSplitterPane = (SelectedPane.Parent as SplitterPane);
                 DocumentPane documentPane = null;
+                DocumentPane selectedPane = SelectedPane;
+                WindowLocation windowLocation = _insertionIndicatorManager.WindowLocation;
+                CancelSelection();
 
-                switch (_insertionIndicatorManager.WindowLocation)
+                switch (windowLocation)
                 {
                     case WindowLocation.BottomEdge:
                     case WindowLocation.TopEdge:
@@ -694,10 +742,10 @@ namespace WpfDockManagerDemo.DockManager
                     case WindowLocation.RightEdge:
 
                         documentPane = new DocumentPane();
-                        ExtractDocuments(floatingPane, SelectedPane as DocumentPane);
+                        ExtractDocuments(floatingPane, documentPane);
 
-                        parentSplitterPane = new SplitterPane((_insertionIndicatorManager.WindowLocation == WindowLocation.TopEdge) || (_insertionIndicatorManager.WindowLocation == WindowLocation.BottomEdge));
-                        bool isFirst = (_insertionIndicatorManager.WindowLocation == WindowLocation.TopEdge) || (_insertionIndicatorManager.WindowLocation == WindowLocation.LeftEdge);
+                        parentSplitterPane = new SplitterPane((windowLocation == WindowLocation.TopEdge) || (windowLocation == WindowLocation.BottomEdge));
+                        bool isFirst = (windowLocation == WindowLocation.TopEdge) || (windowLocation == WindowLocation.LeftEdge);
                         parentSplitterPane.AddChild(documentPane, isFirst);
 
                         if (Children.Count == 0)
@@ -721,29 +769,29 @@ namespace WpfDockManagerDemo.DockManager
                         documentPane = new DocumentPane();
                         ExtractDocuments(floatingPane, documentPane);
 
-                        parentSplitterPane.Children.Remove(SelectedPane);
+                        parentSplitterPane.Children.Remove(selectedPane);
 
-                        SplitterPane newGrid = new SplitterPane((_insertionIndicatorManager.WindowLocation == WindowLocation.Top) || (_insertionIndicatorManager.WindowLocation == WindowLocation.Bottom));
+                        SplitterPane newGrid = new SplitterPane((windowLocation == WindowLocation.Top) || (windowLocation == WindowLocation.Bottom));
                         parentSplitterPane.Children.Add(newGrid);
-                        Grid.SetRow(newGrid, Grid.GetRow(SelectedPane));
-                        Grid.SetColumn(newGrid, Grid.GetColumn(SelectedPane));
+                        Grid.SetRow(newGrid, Grid.GetRow(selectedPane));
+                        Grid.SetColumn(newGrid, Grid.GetColumn(selectedPane));
 
-                        bool isTargetFirst = (_insertionIndicatorManager.WindowLocation == WindowLocation.Right) || (_insertionIndicatorManager.WindowLocation == WindowLocation.Bottom);
-                        newGrid.AddChild(SelectedPane, isTargetFirst);
+                        bool isTargetFirst = (windowLocation == WindowLocation.Right) || (windowLocation == WindowLocation.Bottom);
+                        newGrid.AddChild(selectedPane, isTargetFirst);
                         newGrid.AddChild(documentPane, !isTargetFirst);
                         break;
 
                     case WindowLocation.Middle:
 
-                        ExtractDocuments(floatingPane, SelectedPane as DocumentPane);
-                        CancelSelection();
+                        ExtractDocuments(floatingPane, selectedPane as DocumentPane);
                         break;
                 }
+
+                SaveLayout(out System.Xml.XmlDocument xmlDocument, "C:\\Temp\\Layout_3.xml");
 
                 if (documentPane != null)
                 {
                     AttachDocumentPane(documentPane);
-                    CancelSelection();
                 }
             });
         }
@@ -944,11 +992,6 @@ namespace WpfDockManagerDemo.DockManager
             }
         }
 
-        private void FloatingWindow_Dock(object sender, EventArgs e)
-        {
-            // Warning warning
-        }
-
         private void DocumentPane_Close(object sender, EventArgs e)
         {
             DocumentPane documentPane = sender as DocumentPane;
@@ -959,8 +1002,7 @@ namespace WpfDockManagerDemo.DockManager
             }
 
             ExtractDocumentPane(documentPane);
-            _views.Remove(documentPane.View);
-        }
+         }
 
         public bool LoadLayout(out XmlDocument xmlDocument, string fileNameAndPath)
         {

@@ -77,20 +77,32 @@ namespace WpfDockManagerDemo.DockManager
 
         }
 
-        public event EventHandler Dock;
+        public event EventHandler UndockCurrent;
+        public event EventHandler UndockAll;
         public event EventHandler EndDrag;
 
         private void _buttonMenu_Click(object sender, RoutedEventArgs e)
         {
             ContextMenu contextMenu = new ContextMenu();
-            MenuItem menuItem = new MenuItem();
+            MenuItem menuItem = null;
 
-            menuItem = new MenuItem();
-            menuItem.Header = "Dock";
-            menuItem.IsChecked = false;
-            menuItem.Command = new Command(delegate { Dock?.Invoke(this, null); }, delegate { return true; });
-            contextMenu.Items.Add(menuItem);
-            
+            bool singleDocument = DocumentContainer.DocumentCount == 1;
+
+            if (!singleDocument)
+            {
+                menuItem = new MenuItem();
+                menuItem.Header = "Undock Current Document";
+                menuItem.IsChecked = false;
+                menuItem.Command = new Command(delegate { UndockCurrent?.Invoke(this, null); }, delegate { return true; });
+                contextMenu.Items.Add(menuItem);
+
+                menuItem = new MenuItem();
+                menuItem.Header = "Undock All Documents";
+                menuItem.IsChecked = false;
+                menuItem.Command = new Command(delegate { UndockAll?.Invoke(this, null); }, delegate { return true; });
+                contextMenu.Items.Add(menuItem);
+            }
+
             menuItem = new MenuItem();
             menuItem.Header = "Freeze Aspect Ratio";
             menuItem.IsChecked = false;

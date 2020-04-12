@@ -80,10 +80,11 @@ namespace WpfDockManagerDemo.DockManager
             Children.Add(closeButton);
             closeButton.Click += delegate
             {
-                if (IDocument != null)
-                {
-                    IDocument.Closing();
-                }
+                // Warning warning => BS
+                //if (IDocument != null)
+                //{
+                //    IDocument.Closing();
+                //}
                 Close?.Invoke(this, null);
             };
 
@@ -97,21 +98,7 @@ namespace WpfDockManagerDemo.DockManager
         protected Label _titleLabel;
 
         public event EventHandler Close;
-        public event EventHandler Dock;
         public event EventHandler Float;
-
-        private ICommand _floatCommand;
-        public ICommand FloatCommand
-        {
-            get
-            {
-                if (_floatCommand == null)
-                {
-                    _floatCommand = new Command(call => Float?.Invoke(this, null));
-                }
-                return _floatCommand;
-            }
-        }
 
         protected void MenuButton_Click(object sender, RoutedEventArgs e)
         {
@@ -175,10 +162,17 @@ namespace WpfDockManagerDemo.DockManager
             }
         }
 
-        public IDocument IDocument { get; private set; }
-        public UserControl View { get; set; }
-
         private DocumentContainer _documentContainer;
+
+        public UserControl GetUserControl(int index)
+        {
+            return _documentContainer.GetUserControl(index);
+        }
+
+        public int GetUserControlCount()
+        {
+            return _documentContainer.GetUserControlCount();
+        }
 
         public void AddUserControl(UserControl userControl)
         {
@@ -189,26 +183,18 @@ namespace WpfDockManagerDemo.DockManager
 
             _documentContainer.AddView(userControl);
 
-            View = userControl;
-
             IDocument iDocument = userControl.DataContext as IDocument;
             if (iDocument == null)
             {
                 throw new Exception("DocumentPane.AddUserControl(): User Control is not a document");
             }
-            IDocument = iDocument;
 
-            _titleLabel.Content = IDocument.Title;
-
+            _titleLabel.Content = iDocument.Title;
         }
 
         public UserControl ExtractUserControl()
         {
-            UserControl userControl = _documentContainer.ExtractView();
-
-            View = null;
-            IDocument = null;
-            return userControl;
+            return _documentContainer.ExtractView();
         }
     }
 }

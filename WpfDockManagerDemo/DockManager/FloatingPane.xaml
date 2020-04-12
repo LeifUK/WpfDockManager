@@ -90,13 +90,13 @@
                     <ColumnDefinition Width="Auto"/>
                 </Grid.ColumnDefinitions>
                     
-                <TextBlock Grid.Row="0" Grid.Column="0" Text="{Binding Title}" Foreground="Black" FontFamily="Arial" Margin="4 3 0 0" WindowChrome.IsHitTestVisibleInChrome="False"/>
+                <TextBlock Grid.Row="0" Grid.Column="0" Text="{Binding Title}" Foreground="Black" FontFamily="Arial" Margin="4 0 0 0" VerticalAlignment="Center" WindowChrome.IsHitTestVisibleInChrome="False"/>
 
                 <!--Caption buttons-->
                 <StackPanel Grid.Row="0" Grid.Column="0" Orientation="Horizontal" HorizontalAlignment="Right" >
                     <Button Name="_buttonMenu" Style="{StaticResource MenuButtonStyle}" WindowChrome.IsHitTestVisibleInChrome="True" VerticalAlignment="Center" Background="LightSteelBlue" Foreground="Black" Click="_buttonMenu_Click">
                         <Button.RenderTransform>
-                            <ScaleTransform ScaleX="1.2" ScaleY="1.2"/>
+                            <ScaleTransform ScaleX="1." ScaleY="1."/>
                         </Button.RenderTransform>
                     </Button>
                     <Button Style="{StaticResource MinimizeButtonStyle}" WindowChrome.IsHitTestVisibleInChrome="True" ToolTip="Minimize"
