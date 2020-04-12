@@ -437,6 +437,7 @@ namespace WpfDockManagerDemo.DockManager
                 int count = documentPane.GetUserControlCount();
                 if (count < 1)
                 {
+                    return;
                     throw new Exception(System.Reflection.MethodBase.GetCurrentMethod().Name + ": no documents");
                 }
 
@@ -486,10 +487,11 @@ namespace WpfDockManagerDemo.DockManager
             {
                 if (xmlChildNode is XmlElement)
                 {
-                    XmlElement xmlElement = xmlChildNode as XmlElement;
-                    if (xmlElement.Name == "SplitterPane")
+                    if ((xmlChildNode as XmlElement).Name == "SplitterPane")
                     {
-                        XmlAttribute xmlAttribute = xmlElement.Attributes.GetNamedItem("Orientation") as XmlAttribute;
+                        XmlElement xmlSplitterPane = xmlChildNode as XmlElement;
+
+                        XmlAttribute xmlAttribute = xmlSplitterPane.Attributes.GetNamedItem("Orientation") as XmlAttribute;
                         if (xmlAttribute == null)
                         {
                             throw new Exception("Unable to load layout: a SplitterPane element must have an orientation attribute");
@@ -506,7 +508,7 @@ namespace WpfDockManagerDemo.DockManager
                         System.Windows.Markup.IAddChild parentElement = (System.Windows.Markup.IAddChild)parentFrameworkElement;
                         parentElement.AddChild(newGrid);
 
-                        LoadNode(viewsMap, newGrid, xmlElement, isChildHorizontal);
+                        LoadNode(viewsMap, newGrid, xmlSplitterPane, isChildHorizontal);
 
                         if (parentFrameworkElement == this)
                         {
@@ -514,44 +516,44 @@ namespace WpfDockManagerDemo.DockManager
                             break;
                         }
                     }
-                    else if (parentFrameworkElement != this)
+                    if ((xmlChildNode as XmlElement).Name == "DocumentGroup")
                     {
-                        if (xmlElement.Name == "DocumentGroup")
+                        DocumentPane documentPane = new DocumentPane();
+                        AttachDocumentPane(documentPane);
+
+                        System.Windows.Markup.IAddChild parentElement = (System.Windows.Markup.IAddChild)parentFrameworkElement;
+                        parentElement.AddChild(documentPane);
+
+                        XmlElement xmlDocumentGroup = xmlChildNode as XmlElement;
+
+                        foreach (var xmlDocumentGroupNode in xmlDocumentGroup.ChildNodes)
                         {
-                            DocumentPane documentPane = new DocumentPane();
-                            AttachDocumentPane(documentPane);
-
-                            foreach (var xmlNode in xmlElement.ChildNodes)
+                            if (xmlDocumentGroupNode is XmlElement)
                             {
-                                if (xmlChildNode is XmlElement)
+                                if ((xmlDocumentGroupNode as XmlElement).Name == "Document")
                                 {
-                                    XmlElement xmlCurrentElement = xmlChildNode as XmlElement;
+                                    XmlElement xmlDocumentElement = xmlDocumentGroupNode as XmlElement;
 
-                                    if (xmlCurrentElement.Name == "Document")
+                                    XmlAttribute xmlAttribute = xmlDocumentElement.Attributes.GetNamedItem("ID") as XmlAttribute;
+                                    if (xmlAttribute == null)
                                     {
-                                        XmlAttribute xmlAttribute = xmlElement.Attributes.GetNamedItem("ID") as XmlAttribute;
-                                        if (xmlAttribute == null)
-                                        {
-                                            throw new Exception("Unable to load layout: a Document element must have an ID attribute");
-                                        }
+                                        throw new Exception("Unable to load layout: a Document element must have an ID attribute");
+                                    }
 
-                                        if (viewsMap.ContainsKey(xmlAttribute.Value))
-                                        {
-                                            documentPane.AddUserControl(viewsMap[xmlAttribute.Value]);
+                                    if (viewsMap.ContainsKey(xmlAttribute.Value))
+                                    {
+                                        documentPane.AddUserControl(viewsMap[xmlAttribute.Value]);
 
-                                            System.Windows.Markup.IAddChild parentElement = (System.Windows.Markup.IAddChild)parentFrameworkElement;
-                                            parentElement.AddChild(documentPane);
-                                            Grid.SetRow(documentPane, row);
-                                            Grid.SetColumn(documentPane, column);
+                                        Grid.SetRow(documentPane, row);
+                                        Grid.SetColumn(documentPane, column);
 
-                                            viewsMap.Remove(xmlAttribute.Value);
-                                        }
+                                        viewsMap.Remove(xmlAttribute.Value);
                                     }
                                 }
                             }
-                            row += rowIncrement;
-                            column += columnIncrement;
                         }
+                        row += rowIncrement;
+                        column += columnIncrement;
                     }
                 }
 
