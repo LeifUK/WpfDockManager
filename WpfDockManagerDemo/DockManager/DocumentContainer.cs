@@ -84,7 +84,7 @@ namespace WpfDockManagerDemo.DockManager
             }
         }
 
-        public void AddView(UserControl userControl)
+        public void AddUserControl(UserControl userControl)
         {
             if (Children.Count == 0)
             {
@@ -124,7 +124,7 @@ namespace WpfDockManagerDemo.DockManager
             }
         }
 
-        public UserControl ExtractView()
+        public UserControl ExtractUserControl(int index)
         {
             if (Children.Count == 0)
             {
@@ -140,10 +140,18 @@ namespace WpfDockManagerDemo.DockManager
             else if (Children[0] is TabControl)
             {
                 TabControl tabControl = Children[0] as TabControl;
-                TabItem tabItem = (tabControl.Items[0] as TabItem);
+                if (index >= tabControl.Items.Count)
+                {
+                    index = tabControl.Items.Count - 1;
+                }
+                if (index < 0)
+                {
+                    index = 0;
+                }
+                TabItem tabItem = (tabControl.Items[index] as TabItem);
                 userControl = tabItem.Content as UserControl;
                 tabItem.Content = null;
-                tabControl.Items.RemoveAt(0);
+                tabControl.Items.RemoveAt(index);
                 if (tabControl.Items.Count == 1)
                 {
                     tabItem = (tabControl.Items[0] as TabItem);
@@ -168,8 +176,7 @@ namespace WpfDockManagerDemo.DockManager
             {
                 return 0;
             }
-
-            if (Children[0] is UserControl)
+            else if (Children[0] is UserControl)
             {
                 return 1;
             }
@@ -177,6 +184,25 @@ namespace WpfDockManagerDemo.DockManager
             {
                 TabControl tabControl = Children[0] as TabControl;
                 return (Children[0] as TabControl).Items.Count;
+            }
+
+            throw new Exception(System.Reflection.MethodBase.GetCurrentMethod().Name + ": Children[0] is not an expected type -> " + Children[0].GetType().FullName);
+        }
+
+        public int GetCurrentTabIndex()
+        {
+            if (Children.Count <= 0)
+            {
+                return -1;
+            }
+            else if (Children[0] is UserControl)
+            {
+                return -1;
+            }
+            else if (Children[0] is TabControl)
+            {
+                TabControl tabControl = Children[0] as TabControl;
+                return tabControl.SelectedIndex;
             }
 
             throw new Exception(System.Reflection.MethodBase.GetCurrentMethod().Name + ": Children[0] is not an expected type -> " + Children[0].GetType().FullName);

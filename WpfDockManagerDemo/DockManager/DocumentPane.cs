@@ -9,7 +9,6 @@ namespace WpfDockManagerDemo.DockManager
     {
         public DocumentPane()
         {
-            IsDocked = true;
             VerticalAlignment = System.Windows.VerticalAlignment.Stretch;
             HorizontalAlignment = HorizontalAlignment.Stretch;
 
@@ -99,6 +98,8 @@ namespace WpfDockManagerDemo.DockManager
 
         public event EventHandler Close;
         public event EventHandler Float;
+        public event EventHandler Untab;
+        public event EventHandler UntabAll;
 
         protected void MenuButton_Click(object sender, RoutedEventArgs e)
         {
@@ -106,8 +107,27 @@ namespace WpfDockManagerDemo.DockManager
             MenuItem menuItem = new MenuItem();
             menuItem.Header = "Float";
             menuItem.IsChecked = false;
-            menuItem.Command = new Command(delegate { Float?.Invoke(this, null); }, delegate { return IsDocked; });
+            menuItem.Command = new Command(delegate { Float?.Invoke(this, null); }, delegate { return true; });
             contextMenu.Items.Add(menuItem);
+
+            int viewCount = GetUserControlCount();
+            if (viewCount > 2)
+            {
+                menuItem = new MenuItem();
+                menuItem.Header = "Untab current view";
+                menuItem.IsChecked = false;
+                menuItem.Command = new Command(delegate { Untab?.Invoke(this, null); }, delegate { return true; });
+                contextMenu.Items.Add(menuItem);
+            }
+
+            if (viewCount > 1)
+            {
+                menuItem = new MenuItem();
+                menuItem.Header = "Untab all views";
+                menuItem.IsChecked = false;
+                menuItem.Command = new Command(delegate { UntabAll?.Invoke(this, null); }, delegate { return true; });
+                contextMenu.Items.Add(menuItem);
+            }
 
             contextMenu.IsOpen = true;
         }
@@ -127,8 +147,6 @@ namespace WpfDockManagerDemo.DockManager
                 Border.Background = IsHighlighted ? System.Windows.Media.Brushes.Red : System.Windows.Media.Brushes.SteelBlue;
             }
         }
-
-        public bool IsDocked { get; set; }
 
         Point _mouseDownPosition;
 
@@ -174,6 +192,11 @@ namespace WpfDockManagerDemo.DockManager
             return _documentContainer.GetUserControlCount();
         }
 
+        public int GetCurrentTabIndex()
+        {
+            return _documentContainer.GetCurrentTabIndex();
+        }
+
         public void AddUserControl(UserControl userControl)
         {
             if (userControl == null)
@@ -181,7 +204,7 @@ namespace WpfDockManagerDemo.DockManager
                 throw new Exception("DocumentPane.AddUserControl(): User Control is null");
             }
 
-            _documentContainer.AddView(userControl);
+            _documentContainer.AddUserControl(userControl);
 
             IDocument iDocument = userControl.DataContext as IDocument;
             if (iDocument == null)
@@ -192,9 +215,9 @@ namespace WpfDockManagerDemo.DockManager
             _titleLabel.Content = iDocument.Title;
         }
 
-        public UserControl ExtractUserControl()
+        public UserControl ExtractUserControl(int index)
         {
-            return _documentContainer.ExtractView();
+            return _documentContainer.ExtractUserControl(index);
         }
     }
 }

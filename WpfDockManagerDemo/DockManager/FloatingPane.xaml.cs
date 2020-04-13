@@ -86,18 +86,21 @@ namespace WpfDockManagerDemo.DockManager
             ContextMenu contextMenu = new ContextMenu();
             MenuItem menuItem = null;
 
-            bool singleDocument = DocumentContainer.DocumentCount == 1;
+            int count = DocumentContainer.DocumentCount;
 
-            if (!singleDocument)
+            if (count > 2)
             {
                 menuItem = new MenuItem();
-                menuItem.Header = "Undock Current Document";
+                menuItem.Header = "Undock Current View";
                 menuItem.IsChecked = false;
                 menuItem.Command = new Command(delegate { UndockCurrent?.Invoke(this, null); }, delegate { return true; });
                 contextMenu.Items.Add(menuItem);
+            }
 
+            if (count > 1)
+            { 
                 menuItem = new MenuItem();
-                menuItem.Header = "Undock All Documents";
+                menuItem.Header = "Undock All Views";
                 menuItem.IsChecked = false;
                 menuItem.Command = new Command(delegate { UndockAll?.Invoke(this, null); }, delegate { return true; });
                 contextMenu.Items.Add(menuItem);
@@ -131,14 +134,14 @@ namespace WpfDockManagerDemo.DockManager
             }
         }
 
-        public void AddView(UserControl userControl)
+        public void AddUserControl(UserControl userControl)
         {
-            DocumentContainer.AddView(userControl);
+            DocumentContainer.AddUserControl(userControl);
         }
 
-        public UserControl ExtractView()
+        public UserControl ExtractUserControl(int index)
         {
-            return DocumentContainer.ExtractView();
+            return DocumentContainer.ExtractUserControl(index);
         }
     }
 }

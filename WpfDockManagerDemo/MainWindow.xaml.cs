@@ -44,6 +44,58 @@ namespace WpfDockManagerDemo
             }
         }
 
+        private void LoadLayout()
+        {
+            System.Windows.Forms.OpenFileDialog dialog = new System.Windows.Forms.OpenFileDialog();
+            if (dialog == null)
+            {
+                return;
+            }
+
+            //dialog.FileName = viewModel.FileName;
+            dialog.Filter = "Layout Files (*.xml)|*.xml";
+            dialog.CheckFileExists = true;
+            if (dialog.ShowDialog() != System.Windows.Forms.DialogResult.OK)
+            {
+                return;
+            }
+
+            try
+            {
+                _layoutManager.LoadLayout(out System.Xml.XmlDocument xmlDocument_saved, dialog.FileName);
+            }
+            catch (Exception exception)
+            {
+                System.Windows.Forms.MessageBox.Show("Unable to load layout: " + exception.Message);
+            }
+        }
+
+        private void SaveLayout()
+        {
+            System.Windows.Forms.OpenFileDialog dialog = new System.Windows.Forms.OpenFileDialog();
+            if (dialog == null)
+            {
+                return;
+            }
+
+            //dialog.FileName = viewModel.FileName;
+            dialog.Filter = "Layout Files (*.xml)|*.xml";
+            dialog.CheckFileExists = false;
+            if (dialog.ShowDialog() != System.Windows.Forms.DialogResult.OK)
+            {
+                return;
+            }
+
+            try
+            {
+                _layoutManager.SaveLayout(out System.Xml.XmlDocument xmlDocument_saved, dialog.FileName);
+            }
+            catch (Exception exception)
+            {
+                System.Windows.Forms.MessageBox.Show("Unable to save layout: " + exception.Message);
+            }
+        }
+
         private void _buttonMenu_Click(object sender, RoutedEventArgs e)
         {
             ContextMenu contextMenu = new ContextMenu();
@@ -52,26 +104,13 @@ namespace WpfDockManagerDemo
             menuItem = new MenuItem();
             menuItem.Header = "Save Layout";
             menuItem.IsChecked = false;
-            menuItem.Command = new WpfDockManagerDemo.DockManager.Command(delegate 
-                {
-                    _layoutManager.SaveLayout(out System.Xml.XmlDocument xmlDocument_saved, "C:\\Temp\\Layout_2.xml");
-                }, 
-                delegate 
-                { return true; 
-                });
+            menuItem.Command = new WpfDockManagerDemo.DockManager.Command(delegate { SaveLayout(); }, delegate { return true; });
             contextMenu.Items.Add(menuItem);
 
             menuItem = new MenuItem();
             menuItem.Header = "Load Layout";
             menuItem.IsChecked = false;
-            menuItem.Command = new WpfDockManagerDemo.DockManager.Command(delegate
-            {
-                _layoutManager.LoadLayout(out System.Xml.XmlDocument xmlDocument_saved, "C:\\Temp\\Layout_2.xml");
-            },
-                delegate
-                {
-                    return true;
-                });
+            menuItem.Command = new WpfDockManagerDemo.DockManager.Command(delegate { LoadLayout(); }, delegate { return true; });
             contextMenu.Items.Add(menuItem);
 
             menuItem = new MenuItem();
