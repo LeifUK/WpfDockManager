@@ -31,10 +31,9 @@ namespace WpfDockManagerDemo
         {
             _layoutManager.Initialise();
 
-            _layoutManager.SaveLayout(out System.Xml.XmlDocument xmlDocument, "C:\\Temp\\Layout.xml");
-            _layoutManager.Clear();
-            _layoutManager.LoadLayout(out System.Xml.XmlDocument xmlDocument_Loaded, "C:\\Temp\\Layout.xml");
-            _layoutManager.SaveLayout(out System.Xml.XmlDocument xmlDocument_saved, "C:\\Temp\\Layout_2.xml");
+            //_layoutManager.SaveLayout(out System.Xml.XmlDocument xmlDocument, "C:\\Temp\\Layout.xml");
+            //_layoutManager.LoadLayout(out System.Xml.XmlDocument xmlDocument_Loaded, "C:\\Temp\\Layout.xml");
+            //_layoutManager.SaveLayout(out System.Xml.XmlDocument xmlDocument_saved, "C:\\Temp\\Layout_2.xml");
         }
 
         private void Window_Unloaded(object sender, RoutedEventArgs e)
@@ -43,6 +42,44 @@ namespace WpfDockManagerDemo
             {
                 _layoutManager.Shutdown();
             }
+        }
+
+        private void _buttonMenu_Click(object sender, RoutedEventArgs e)
+        {
+            ContextMenu contextMenu = new ContextMenu();
+            MenuItem menuItem = null;
+
+            menuItem = new MenuItem();
+            menuItem.Header = "Save Layout";
+            menuItem.IsChecked = false;
+            menuItem.Command = new WpfDockManagerDemo.DockManager.Command(delegate 
+                {
+                    _layoutManager.SaveLayout(out System.Xml.XmlDocument xmlDocument_saved, "C:\\Temp\\Layout_2.xml");
+                }, 
+                delegate 
+                { return true; 
+                });
+            contextMenu.Items.Add(menuItem);
+
+            menuItem = new MenuItem();
+            menuItem.Header = "Load Layout";
+            menuItem.IsChecked = false;
+            menuItem.Command = new WpfDockManagerDemo.DockManager.Command(delegate
+            {
+                _layoutManager.LoadLayout(out System.Xml.XmlDocument xmlDocument_saved, "C:\\Temp\\Layout_2.xml");
+            },
+                delegate
+                {
+                    return true;
+                });
+            contextMenu.Items.Add(menuItem);
+
+            menuItem = new MenuItem();
+            menuItem.Header = "Freeze Aspect Ratio";
+            menuItem.IsChecked = false;
+            contextMenu.Items.Add(menuItem);
+
+            contextMenu.IsOpen = true;
         }
     }
 }

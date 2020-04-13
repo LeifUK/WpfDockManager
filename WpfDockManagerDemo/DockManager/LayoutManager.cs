@@ -1008,6 +1008,8 @@ namespace WpfDockManagerDemo.DockManager
 
         public bool LoadLayout(out XmlDocument xmlDocument, string fileNameAndPath)
         {
+            Clear();
+
             xmlDocument = new XmlDocument();
             xmlDocument.Load(fileNameAndPath);
 

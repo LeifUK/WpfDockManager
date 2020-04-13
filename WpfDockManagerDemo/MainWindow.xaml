@@ -11,6 +11,9 @@
         Loaded="Window_Loaded"
         Unloaded="Window_Unloaded"
         Title="MainWindow" Height="450" Width="800">
+    <WindowChrome.WindowChrome>
+        <WindowChrome CaptionHeight="34" />
+    </WindowChrome.WindowChrome>
     <Window.Resources>
         <ResourceDictionary>
             <Style x:Key="styleGridSplitter" TargetType="GridSplitter">
@@ -25,155 +28,75 @@
                 <Setter Property="VerticalAlignment" Value="Stretch"/>
                 <Setter Property="Width" Value="4"/>
             </Style>
+            <ResourceDictionary.MergedDictionaries>
+                <ResourceDictionary Source="./DockManager/Dictionary.xaml"/>
+            </ResourceDictionary.MergedDictionaries>
         </ResourceDictionary>
     </Window.Resources>
-    <Grid>
-        <Grid.RowDefinitions>
-            <RowDefinition/>
-            <!--<RowDefinition Height="Auto"/>
-            <RowDefinition/>-->
-        </Grid.RowDefinitions>
-        <Grid.ColumnDefinitions>
-            <ColumnDefinition Width="*"/>
-        </Grid.ColumnDefinitions>
-        
-        <dockManager:LayoutManager x:Name="_layoutManager" Grid.Row="0" Grid.Column="0" DocumentItems="{Binding Documents}" ToolItems="{Binding Tools}" VerticalAlignment="Stretch" HorizontalAlignment="Stretch">
-            <dockManager:LayoutManager.Resources>
-                <DataTemplate DataType="{x:Type viewModel:DemoOneViewModel}">
-                    <view:DemoOneView x:Name="_demoOneView"/>
-                </DataTemplate>
-                <DataTemplate DataType="{x:Type viewModel:DemoTwoViewModel}">
-                    <view:DemoTwoView x:Name="_demoTwoView"/>
-                </DataTemplate>
-            </dockManager:LayoutManager.Resources>
-            <dockManager:LayoutManager.CloseControlTemplate>
-                <ControlTemplate TargetType="Button">
-                    <Grid>
-                        <Ellipse Fill="{TemplateBinding Background}"/>
-                        <ContentPresenter HorizontalAlignment="Center"
-                            VerticalAlignment="Center"/>
-                    </Grid>
-                </ControlTemplate>
-            </dockManager:LayoutManager.CloseControlTemplate>
-        </dockManager:LayoutManager>
+    <!--Title bar button commands-->
+    <!--<Window.CommandBindings>
+        <CommandBinding Command="{x:Static SystemCommands.CloseWindowCommand}" CanExecute="CommandBinding_CanExecute" Executed="CommandBinding_Executed_Close" />
+        <CommandBinding Command="{x:Static SystemCommands.MaximizeWindowCommand}" CanExecute="CommandBinding_CanExecute" Executed="CommandBinding_Executed_Maximize" />
+        <CommandBinding Command="{x:Static SystemCommands.MinimizeWindowCommand}" CanExecute="CommandBinding_CanExecute" Executed="CommandBinding_Executed_Minimize" />
+        <CommandBinding Command="{x:Static SystemCommands.RestoreWindowCommand}" CanExecute="CommandBinding_CanExecute" Executed="CommandBinding_Executed_Restore" />
+    </Window.CommandBindings>-->
 
-        <!--<TabControl Grid.Row="0" Grid.Column="0" >
-            <TabItem Header="Document 1"/>
-        </TabControl>-->
+    <Border x:Name="MainWindowBorder" BorderBrush="LightCoral" BorderThickness="0">
+        <Grid x:Name="parentContainer" Background="White">
 
-        <!--<GridSplitter Grid.Row="1" Grid.Column="0" Style="{StaticResource styleHorizontalGridSplitter}"/>-->
-
-        <!--<Grid Grid.Row="2" Name="_gridHardCoded" HorizontalAlignment="Stretch">
             <Grid.RowDefinitions>
-                <RowDefinition Height="*"/>
+                <RowDefinition Height ="Auto"/>
+                <RowDefinition Height ="*"/>
             </Grid.RowDefinitions>
-            <Grid.ColumnDefinitions>
-                <ColumnDefinition/>
-                <ColumnDefinition Width="Auto"/>
-                <ColumnDefinition/>
-            </Grid.ColumnDefinitions>
-            
-            <Grid Grid.Row="0" Grid.Column="0" HorizontalAlignment="Stretch" Background="Transparent" VerticalAlignment="Top">
-                <Grid.ColumnDefinitions>
-                    <ColumnDefinition Width="Auto"/>
-                    <ColumnDefinition Width="*"/>
-                    <ColumnDefinition Width="Auto"/>
-                    <ColumnDefinition Width="Auto"/>
-                    <ColumnDefinition Width="Auto"/>
-                </Grid.ColumnDefinitions>
-                <Rectangle Grid.Row="0" Grid.Column="0" Grid.ColumnSpan="5" Fill="SteelBlue" Stroke="Black" StrokeThickness="1" Height="20" VerticalAlignment="Top" HorizontalAlignment="Stretch"/>
-                <Label Grid.Row="0" Grid.Column="0" Content="Cell 3" Height="Auto" Padding="2" VerticalAlignment="Top" Background="Transparent" Foreground="White"/>
-                <Button Grid.Row="0" Grid.Column="2" Style="{StaticResource styleHeaderMenuButton}"/>
-                <Button Grid.Row="0" Grid.Column="3" Style="{StaticResource styleHeaderPinButton}"/>
-                <Button Grid.Row="0" Grid.Column="4" Style="{StaticResource styleHeaderCloseButton}"/>
-            </Grid>
 
-            <GridSplitter Grid.Row="0" Grid.Column="1" HorizontalAlignment="Center" Style="{StaticResource styleVerticalGridSplitter}"/>
-
-            <Grid Grid.Row="0" Grid.Column="2" Margin="0">
-                <Grid.RowDefinitions>
-                    <RowDefinition/>
-                    <RowDefinition Height="Auto"/>
-                    <RowDefinition/>
-                </Grid.RowDefinitions>
+            <!--Window chrome-->
+            <Grid Grid.Row="0" Height="30" Background="Transparent">
                 <Grid.ColumnDefinitions>
                     <ColumnDefinition Width="*"/>
+                    <ColumnDefinition Width="Auto"/>
                 </Grid.ColumnDefinitions>
 
-                <Grid Grid.Row="0" Grid.Column="0" Margin="0">
-                    <Grid.RowDefinitions>
-                        <RowDefinition/>
-                        <RowDefinition Height="Auto"/>
-                        <RowDefinition/>
-                    </Grid.RowDefinitions>
-                    <Grid.ColumnDefinitions>
-                        <ColumnDefinition Width="*"/>
-                    </Grid.ColumnDefinitions>
+                <TextBlock Grid.Row="0" Grid.Column="0" Text="WPFDockManagerDemo 2020" Foreground="Black" FontFamily="Arial" Margin="4 0 0 0" VerticalAlignment="Center" WindowChrome.IsHitTestVisibleInChrome="False"/>
 
-                    <Rectangle Grid.Row="0" Grid.Column="0" Fill="Orange" VerticalAlignment="Stretch" HorizontalAlignment="Stretch"/>
-                    <Grid Grid.Row="0" Grid.Column="0" HorizontalAlignment="Stretch" Background="Transparent" VerticalAlignment="Top">
-                        <Grid.ColumnDefinitions>
-                            <ColumnDefinition Width="Auto"/>
-                            <ColumnDefinition Width="*"/>
-                            <ColumnDefinition Width="Auto"/>
-                            <ColumnDefinition Width="Auto"/>
-                            <ColumnDefinition Width="Auto"/>
-                        </Grid.ColumnDefinitions>
-                        <Rectangle Grid.Row="0" Grid.Column="0" Grid.ColumnSpan="5" Fill="SteelBlue" Stroke="Black" StrokeThickness="1" Height="20" VerticalAlignment="Top" HorizontalAlignment="Stretch"/>
-                        <Label Grid.Row="0" Grid.Column="0" Content="Cell 4" Height="Auto" Padding="2" VerticalAlignment="Top" Background="Transparent" Foreground="White"/>
-                        <Button Grid.Row="0" Grid.Column="2" Style="{StaticResource styleHeaderMenuButton}"/>
-                        <Button Grid.Row="0" Grid.Column="3" Style="{StaticResource styleHeaderPinButton}"/>
-                        <Button Grid.Row="0" Grid.Column="4" Style="{StaticResource styleHeaderCloseButton}"/>
-                    </Grid>
-
-                    <GridSplitter Grid.Row="1" Grid.Column="0" Style="{StaticResource styleHorizontalGridSplitter}"/>
-
-                    <Grid Grid.Row="2" Grid.Column="0" HorizontalAlignment="Stretch" Background="Transparent" VerticalAlignment="Top">
-                        <Grid.ColumnDefinitions>
-                            <ColumnDefinition Width="Auto"/>
-                            <ColumnDefinition Width="*"/>
-                            <ColumnDefinition Width="Auto"/>
-                            <ColumnDefinition Width="Auto"/>
-                            <ColumnDefinition Width="Auto"/>
-                        </Grid.ColumnDefinitions>
-                        <Rectangle Grid.Row="0" Grid.Column="0" Grid.ColumnSpan="5" Fill="SteelBlue" Stroke="Black" StrokeThickness="1" Height="20" VerticalAlignment="Top" HorizontalAlignment="Stretch"/>
-                        <Label Grid.Row="0" Grid.Column="0" Content="Cell 5" Height="Auto" Padding="2" VerticalAlignment="Top" Background="Transparent" Foreground="White"/>
-                        <Button Grid.Row="0" Grid.Column="2" Style="{StaticResource styleHeaderMenuButton}"/>
-                        <Button Grid.Row="0" Grid.Column="3" Style="{StaticResource styleHeaderPinButton}"/>
-                        <Button Grid.Row="0" Grid.Column="4" Style="{StaticResource styleHeaderCloseButton}"/>
-                    </Grid>
-                </Grid>
-
-                <GridSplitter Grid.Row="1" Grid.Column="0" Style="{StaticResource styleHorizontalGridSplitter}"/>
-
-                <Grid Grid.Row="2" Grid.Column="0" >
-                    <Grid.RowDefinitions>
-                        <RowDefinition Height="Auto"/>
-                        <RowDefinition Height="*"/>
-                    </Grid.RowDefinitions>
-                    
-                    <Grid Grid.Row="0" Grid.Column="0" HorizontalAlignment="Stretch" Background="Transparent" VerticalAlignment="Top">
-                        <Grid.ColumnDefinitions>
-                            <ColumnDefinition Width="Auto"/>
-                            <ColumnDefinition Width="*"/>
-                            <ColumnDefinition Width="Auto"/>
-                            <ColumnDefinition Width="Auto"/>
-                            <ColumnDefinition Width="Auto"/>
-                        </Grid.ColumnDefinitions>
-                        <Rectangle Grid.Row="0" Grid.Column="0" Grid.ColumnSpan="5" Fill="SteelBlue" Stroke="Black" StrokeThickness="1" Height="20" VerticalAlignment="Top" HorizontalAlignment="Stretch"/>
-                        <Label Grid.Row="0" Grid.Column="0" Content="Tab ?" Height="Auto" Padding="2" VerticalAlignment="Top" Background="Transparent" Foreground="White"/>
-                        <Button Grid.Row="0" Grid.Column="2" Style="{StaticResource styleHeaderMenuButton}"/>
-                        <Button Grid.Row="0" Grid.Column="3" Style="{StaticResource styleHeaderPinButton}"/>
-                        <Button Grid.Row="0" Grid.Column="4" Style="{StaticResource styleHeaderCloseButton}"/>
-                    </Grid>
-
-                    <TabControl Grid.Row="1" Grid.Column="0" TabStripPlacement="Bottom" Margin="-1">
-                        <TabItem Header="Tab 1"/>
-                        <TabItem Header="Tab 2"/>
-                        <TabItem Header="Tab 3"/>
-                    </TabControl>
-                </Grid>
+                <!--Caption buttons-->
+                <StackPanel Grid.Row="0" Grid.Column="0" Orientation="Horizontal" HorizontalAlignment="Right" >
+                    <Button Name="_buttonMenu" Style="{StaticResource MenuButtonStyle}" WindowChrome.IsHitTestVisibleInChrome="True" VerticalAlignment="Center" Background="LightSteelBlue" Foreground="Black" Click="_buttonMenu_Click">
+                        <Button.RenderTransform>
+                            <ScaleTransform ScaleX="1." ScaleY="1."/>
+                        </Button.RenderTransform>
+                    </Button>
+                    <Button Style="{StaticResource MinimizeButtonStyle}" WindowChrome.IsHitTestVisibleInChrome="True" ToolTip="Minimize"
+                            Command="{x:Static SystemCommands.MinimizeWindowCommand}"/>
+                    <Button x:Name="RestoreButton" Visibility="Collapsed" Style="{StaticResource RestoreButtonStyle}" 
+                            Command="{x:Static SystemCommands.RestoreWindowCommand}" WindowChrome.IsHitTestVisibleInChrome="True" ToolTip="Restore"/>
+                    <Button x:Name="MaximizeButton" Visibility="Visible" Style="{StaticResource MaximizeButtonStyle}" 
+                            Command="{x:Static SystemCommands.MaximizeWindowCommand}" WindowChrome.IsHitTestVisibleInChrome="True" ToolTip="Maximize" />
+                    <Button Style="{StaticResource CloseButtonStyle}" WindowChrome.IsHitTestVisibleInChrome="True" ToolTip="Close"
+                            Command="{x:Static SystemCommands.CloseWindowCommand}"/>
+                </StackPanel>
             </Grid>
-        </Grid>-->
-    </Grid>
+
+            <dockManager:LayoutManager x:Name="_layoutManager" Grid.Row="1" Grid.Column="0" DocumentItems="{Binding Documents}" ToolItems="{Binding Tools}" VerticalAlignment="Stretch" HorizontalAlignment="Stretch">
+                <dockManager:LayoutManager.Resources>
+                    <DataTemplate DataType="{x:Type viewModel:DemoOneViewModel}">
+                        <view:DemoOneView x:Name="_demoOneView"/>
+                    </DataTemplate>
+                    <DataTemplate DataType="{x:Type viewModel:DemoTwoViewModel}">
+                        <view:DemoTwoView x:Name="_demoTwoView"/>
+                    </DataTemplate>
+                </dockManager:LayoutManager.Resources>
+                <dockManager:LayoutManager.CloseControlTemplate>
+                    <ControlTemplate TargetType="Button">
+                        <Grid>
+                            <Ellipse Fill="{TemplateBinding Background}"/>
+                            <ContentPresenter HorizontalAlignment="Center"
+                            VerticalAlignment="Center"/>
+                        </Grid>
+                    </ControlTemplate>
+                </dockManager:LayoutManager.CloseControlTemplate>
+            </dockManager:LayoutManager>
+
+
+        </Grid>
+    </Border>
 </Window>
