@@ -445,7 +445,6 @@ namespace WpfDockManagerDemo.DockManager
                 int count = documentPane.GetUserControlCount();
                 if (count < 1)
                 {
-                    return;
                     throw new Exception(System.Reflection.MethodBase.GetCurrentMethod().Name + ": no documents");
                 }
 
@@ -477,8 +476,6 @@ namespace WpfDockManagerDemo.DockManager
             }
 
             SaveNode(xmlDocument, Children[0], xmlDocument);
-
-            // Warning warning
             xmlDocument.Save(fileNameAndPath);
 
             return true;
@@ -518,7 +515,6 @@ namespace WpfDockManagerDemo.DockManager
                     }
                 }
             }
-
         }
 
         private void LoadNode(Dictionary<string, UserControl> viewsMap, FrameworkElement parentFrameworkElement, XmlNode parentXmlNode, bool isParentHorizontal)
@@ -671,8 +667,8 @@ namespace WpfDockManagerDemo.DockManager
             DocumentPane documentPane = new DocumentPane();
             documentPane.Close += DocumentPane_Close;
             documentPane.Float += DocumentPane_Float;
-            documentPane.Untab += DocumentPane_Untab;
-            documentPane.UntabAll += DocumentPane_UntabAll;
+            documentPane.UngroupCurrent += DocumentPane_UngroupCurrent;
+            documentPane.Ungroup += DocumentPane_Ungroup;
             return documentPane;
         }
 
@@ -706,7 +702,7 @@ namespace WpfDockManagerDemo.DockManager
             return true;
         }
 
-        private void DocumentPane_UntabAll(object sender, EventArgs e)
+        private void DocumentPane_Ungroup(object sender, EventArgs e)
         {
             DocumentPane documentPane = sender as DocumentPane;
             if (documentPane == null)
@@ -725,7 +721,7 @@ namespace WpfDockManagerDemo.DockManager
             }
         }
 
-        private void DocumentPane_Untab(object sender, EventArgs e)
+        private void DocumentPane_UngroupCurrent(object sender, EventArgs e)
         {
             DocumentPane documentPane = sender as DocumentPane;
             if (documentPane == null)
@@ -738,6 +734,51 @@ namespace WpfDockManagerDemo.DockManager
             {
                 ExtractTab(documentPane, index);
             }
+        }
+
+        private void FloatingPane_Ungroup(object sender, EventArgs e)
+        {
+            FloatingPane floatingPane = sender as FloatingPane;
+            if (floatingPane == null)
+            {
+                throw new Exception(System.Reflection.MethodBase.GetCurrentMethod().Name + ": sender not a FloatingPane");
+            }
+
+            int viewCount = floatingPane.GetUserControlCount();
+
+            double left = floatingPane.Left;
+            double top = floatingPane.Top;
+
+            for (int index = 1; index < viewCount; ++index)
+            {
+                UserControl userControl = floatingPane.ExtractUserControl(1);
+                if (userControl == null)
+                {
+                    return;
+                }
+
+                FloatingPane newfloatingPane = CreateFloatingPane();
+                newfloatingPane.Left = left;
+                newfloatingPane.Top = top;
+                newfloatingPane.AddUserControl(userControl);
+
+                left += 10;
+                top += 10;
+            }
+        }
+
+        private FloatingPane CreateFloatingPane()
+        {
+            FloatingPane floatingPane = new FloatingPane();
+            floatingPane.LocationChanged += FloatingWindow_LocationChanged;
+            floatingPane.Ungroup += FloatingPane_Ungroup;
+            floatingPane.DataContext = new FloatingViewModel();
+            (floatingPane.DataContext as FloatingViewModel).Title = floatingPane.Title;
+            floatingPane.EndDrag += FloatingView_EndDrag;
+            // Ensure the window remains on top of the main window
+            floatingPane.Owner = App.Current.MainWindow;
+            floatingPane.Show();
+            return floatingPane;
         }
 
         private void DocumentPane_Float(object sender, EventArgs e)
@@ -765,8 +806,7 @@ namespace WpfDockManagerDemo.DockManager
 
             ExtractDocumentPane(documentPane);
 
-            FloatingPane floatingPane = new FloatingPane();
-            floatingPane.LocationChanged += FloatingWindow_LocationChanged;
+            FloatingPane floatingPane = CreateFloatingPane();
 
             while (true)
             {
@@ -777,15 +817,8 @@ namespace WpfDockManagerDemo.DockManager
                 }
 
                 floatingPane.AddUserControl(userControl);
-
             }
 
-            floatingPane.DataContext = new FloatingViewModel();
-            (floatingPane.DataContext as FloatingViewModel).Title = floatingPane.Title;
-            floatingPane.EndDrag += FloatingView_EndDrag;
-            // Ensure the window remains on top of the main window
-            floatingPane.Owner = App.Current.MainWindow;
-            floatingPane.Show();
             floatingPane.Left = mainWindowLocation.X + mousePosition.X;
             floatingPane.Top = mainWindowLocation.Y + mousePosition.Y;
 

@@ -98,8 +98,8 @@ namespace WpfDockManagerDemo.DockManager
 
         public event EventHandler Close;
         public event EventHandler Float;
-        public event EventHandler Untab;
-        public event EventHandler UntabAll;
+        public event EventHandler UngroupCurrent;
+        public event EventHandler Ungroup;
 
         protected void MenuButton_Click(object sender, RoutedEventArgs e)
         {
@@ -114,18 +114,18 @@ namespace WpfDockManagerDemo.DockManager
             if (viewCount > 2)
             {
                 menuItem = new MenuItem();
-                menuItem.Header = "Untab current view";
+                menuItem.Header = "Ungroup current view";
                 menuItem.IsChecked = false;
-                menuItem.Command = new Command(delegate { Untab?.Invoke(this, null); }, delegate { return true; });
+                menuItem.Command = new Command(delegate { UngroupCurrent?.Invoke(this, null); }, delegate { return true; });
                 contextMenu.Items.Add(menuItem);
             }
 
             if (viewCount > 1)
             {
                 menuItem = new MenuItem();
-                menuItem.Header = "Untab all views";
+                menuItem.Header = "Ungroup all views";
                 menuItem.IsChecked = false;
-                menuItem.Command = new Command(delegate { UntabAll?.Invoke(this, null); }, delegate { return true; });
+                menuItem.Command = new Command(delegate { Ungroup?.Invoke(this, null); }, delegate { return true; });
                 contextMenu.Items.Add(menuItem);
             }
 

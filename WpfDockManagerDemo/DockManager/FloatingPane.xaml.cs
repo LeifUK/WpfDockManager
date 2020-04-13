@@ -77,8 +77,8 @@ namespace WpfDockManagerDemo.DockManager
 
         }
 
-        public event EventHandler UndockCurrent;
-        public event EventHandler UndockAll;
+        public event EventHandler UngroupCurrent;
+        public event EventHandler Ungroup;
         public event EventHandler EndDrag;
 
         private void _buttonMenu_Click(object sender, RoutedEventArgs e)
@@ -91,18 +91,18 @@ namespace WpfDockManagerDemo.DockManager
             if (count > 2)
             {
                 menuItem = new MenuItem();
-                menuItem.Header = "Undock Current View";
+                menuItem.Header = "Ungroup Current View";
                 menuItem.IsChecked = false;
-                menuItem.Command = new Command(delegate { UndockCurrent?.Invoke(this, null); }, delegate { return true; });
+                menuItem.Command = new Command(delegate { UngroupCurrent?.Invoke(this, null); }, delegate { return true; });
                 contextMenu.Items.Add(menuItem);
             }
 
             if (count > 1)
             { 
                 menuItem = new MenuItem();
-                menuItem.Header = "Undock All Views";
+                menuItem.Header = "Ungroup All Views";
                 menuItem.IsChecked = false;
-                menuItem.Command = new Command(delegate { UndockAll?.Invoke(this, null); }, delegate { return true; });
+                menuItem.Command = new Command(delegate { Ungroup?.Invoke(this, null); }, delegate { return true; });
                 contextMenu.Items.Add(menuItem);
             }
 
@@ -142,6 +142,10 @@ namespace WpfDockManagerDemo.DockManager
         public UserControl ExtractUserControl(int index)
         {
             return DocumentContainer.ExtractUserControl(index);
+        }
+        public int GetUserControlCount()
+        {
+            return DocumentContainer.GetUserControlCount();
         }
     }
 }
