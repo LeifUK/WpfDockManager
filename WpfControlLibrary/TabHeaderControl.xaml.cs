@@ -148,7 +148,7 @@ namespace WpfControlLibrary
 
         #endregion
 
-        #region SelectedTabBackground dependency property
+        #region UnselectedTabBackground dependency property
 
         [Bindable(true)]
         [DesignerSerializationVisibility(DesignerSerializationVisibility.Hidden)]
@@ -174,6 +174,78 @@ namespace WpfControlLibrary
         }
 
         protected virtual void OnUnselectedTabBackgroundChanged(DependencyPropertyChangedEventArgs e)
+        {
+            if (e.NewValue != null)
+            {
+                // Warning warning
+                //TheSelectedTabBackground = (Brush)e.NewValue;
+            }
+        }
+
+        #endregion
+
+        #region SelectedTabForeground dependency property
+
+        [Bindable(true)]
+        [DesignerSerializationVisibility(DesignerSerializationVisibility.Hidden)]
+        public static readonly DependencyProperty SelectedTabForegroundProperty = DependencyProperty.Register("SelectedTabForeground", typeof(Brush), typeof(TabHeaderControl), new FrameworkPropertyMetadata((FrameworkElement)null, new PropertyChangedCallback(OnSelectedTabForegroundChanged)));
+        public Brush SelectedTabForeground
+        {
+            get
+            {
+                return (Brush)GetValue(SelectedTabForegroundProperty);
+            }
+            set
+            {
+                if (value != SelectedTabForeground)
+                {
+                    SetValue(SelectedTabForegroundProperty, value);
+                }
+            }
+        }
+
+        private static void OnSelectedTabForegroundChanged(DependencyObject d, DependencyPropertyChangedEventArgs e)
+        {
+            ((TabHeaderControl)d).OnSelectedTabForegroundChanged(e);
+        }
+
+        protected virtual void OnSelectedTabForegroundChanged(DependencyPropertyChangedEventArgs e)
+        {
+            if (e.NewValue != null)
+            {
+                // Warning warning
+                //TheSelectedTabBackground = (Brush)e.NewValue;
+            }
+        }
+
+        #endregion
+
+        #region UnselectedTabForeground dependency property
+
+        [Bindable(true)]
+        [DesignerSerializationVisibility(DesignerSerializationVisibility.Hidden)]
+        public static readonly DependencyProperty UnselectedTabForegroundProperty = DependencyProperty.Register("UnselectedTabForeground", typeof(Brush), typeof(TabHeaderControl), new FrameworkPropertyMetadata((FrameworkElement)null, new PropertyChangedCallback(OnUnselectedTabForegroundChanged)));
+        public Brush UnselectedTabForeground
+        {
+            get
+            {
+                return (Brush)GetValue(UnselectedTabForegroundProperty);
+            }
+            set
+            {
+                if (value != UnselectedTabForeground)
+                {
+                    SetValue(UnselectedTabForegroundProperty, value);
+                }
+            }
+        }
+
+        private static void OnUnselectedTabForegroundChanged(DependencyObject d, DependencyPropertyChangedEventArgs e)
+        {
+            ((TabHeaderControl)d).OnUnselectedTabForegroundChanged(e);
+        }
+
+        protected virtual void OnUnselectedTabForegroundChanged(DependencyPropertyChangedEventArgs e)
         {
             if (e.NewValue != null)
             {

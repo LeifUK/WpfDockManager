@@ -13,6 +13,8 @@ namespace WpfListboxDemo
             _listBoxItems.Add("A longer item");
             _listBoxItems.Add("A quite long item");
             _listBoxItems.Add("A really quite long Item");
+
+            SelectedTabBackground = Brushes.Khaki;
         }
 
         private System.Collections.ObjectModel.ObservableCollection<string> _listBoxItems;
@@ -29,7 +31,7 @@ namespace WpfListboxDemo
             }
         }
 
-        private Brush _selectedTabBackground = Brushes.GreenYellow;
+        private Brush _selectedTabBackground;
         public Brush SelectedTabBackground
         {
             get
@@ -42,6 +44,7 @@ namespace WpfListboxDemo
                 NotifyPropertyChanged("SelectedTabBackground");
             }
         }
+        
         #region INotifyPropertyChanged
 
         public event PropertyChangedEventHandler PropertyChanged;

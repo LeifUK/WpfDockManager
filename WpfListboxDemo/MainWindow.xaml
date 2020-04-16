@@ -18,9 +18,25 @@
             <RowDefinition Height="Auto"/>
             <RowDefinition Height="10"/>
             <RowDefinition Height="Auto"/>
+            <RowDefinition Height="10"/>
+            <RowDefinition Height="Auto"/>
             <RowDefinition Height="*"/>
         </Grid.RowDefinitions>
-        <wpfcontrollibrary:TabHeaderControl Grid.Row="1" x:Name="_tabHeader" ItemsSource="{Binding ListBoxItems}" SelectedTabBackground="Khaki" UnselectedTabBackground="DarkSlateBlue"/>
+        <wpfcontrollibrary:TabHeaderControl Grid.Row="1" x:Name="_tabHeader" ItemsSource="{Binding ListBoxItems}" >
+            <wpfcontrollibrary:TabHeaderControl.SelectedTabBackground>
+                <Binding Path="SelectedTabBackground"/>
+            </wpfcontrollibrary:TabHeaderControl.SelectedTabBackground>
+            <wpfcontrollibrary:TabHeaderControl.UnselectedTabBackground>DarkSlateBlue</wpfcontrollibrary:TabHeaderControl.UnselectedTabBackground>
+            <wpfcontrollibrary:TabHeaderControl.SelectedTabForeground>Black</wpfcontrollibrary:TabHeaderControl.SelectedTabForeground>
+            <wpfcontrollibrary:TabHeaderControl.UnselectedTabForeground>White</wpfcontrollibrary:TabHeaderControl.UnselectedTabForeground>
+            <wpfcontrollibrary:TabHeaderControl.FontSize>14</wpfcontrollibrary:TabHeaderControl.FontSize>
+            <wpfcontrollibrary:TabHeaderControl.FontFamily>Arial</wpfcontrollibrary:TabHeaderControl.FontFamily>
+        </wpfcontrollibrary:TabHeaderControl>
         <Label Grid.Row="3" Name="_labelSelectedItem"/>
+        <ComboBox Name="_comboBoxBrushes" SelectedItem="{Binding SelectedTabBackground}">
+            <ComboBoxItem Content="Red"/>
+            <ComboBoxItem Content="Green"/>
+            <ComboBoxItem Content="Blue"/>
+        </ComboBox>
     </Grid>
 </Window>

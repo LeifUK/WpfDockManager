@@ -10,7 +10,7 @@
         <Style x:Key="StyleCloseButton" TargetType="Button">
             <Setter Property="Width" Value="20"/>
             <Setter Property="Height" Value="20"/>
-            <Setter Property="VerticalAlignment" Value="Top"/>
+            <Setter Property="VerticalAlignment" Value="Center"/>
             <Setter Property="Background" Value="Transparent"/>
             <Setter Property="BorderThickness" Value="0"/>
             <Setter Property="Template">
@@ -19,8 +19,8 @@
                         <Grid Margin="0,0,0,0">
                             <Border Name="_border" Background="Transparent" Width="18" Height="18" CornerRadius="0" BorderThickness="0" BorderBrush="Gray" HorizontalAlignment="Center">
                             </Border>
-                            <Line Name="_line_1" X1="6" X2="14" Y1="6" Y2="14" Stroke="White" StrokeThickness="1"/>
-                            <Line Name="_line_2" X1="14" X2="6" Y1="6" Y2="14" Stroke="White" StrokeThickness="1"/>
+                            <Line Name="_line_1" X1="6" X2="14" Y1="6" Y2="14" Stroke="{TemplateBinding Foreground}" StrokeThickness="1"/>
+                            <Line Name="_line_2" X1="14" X2="6" Y1="6" Y2="14" Stroke="{TemplateBinding Foreground}" StrokeThickness="1"/>
                         </Grid>
 
                         <ControlTemplate.Triggers>
@@ -129,7 +129,7 @@
                     <Setter Property="Template">
                         <Setter.Value>
                             <ControlTemplate TargetType="ListBoxItem">
-                                <Border Name="Border" Padding="0" SnapsToDevicePixels="true" BorderThickness="0" Background="Green">
+                                <Border Name="Border" Padding="0" SnapsToDevicePixels="true" BorderThickness="0">
                                     <Grid>
                                         <Grid.ColumnDefinitions>
                                             <ColumnDefinition Width="4"/>
@@ -138,8 +138,53 @@
                                             <ColumnDefinition Width="Auto"/>
                                             <ColumnDefinition Width="4"/>
                                         </Grid.ColumnDefinitions>
-                                        <Label Grid.Column="1" x:Name="Label" FontSize="12" Foreground="Black" Width="Auto" Content="{Binding}" Padding="2,0,2,0" Margin="0" VerticalAlignment="Center"/>
-                                        <Button Grid.Column="3" x:Name="Button" Click="Button_Click" Foreground="Gray" BorderThickness="0" Background="Transparent" Style="{StaticResource StyleCloseButton}"/>
+                                        <Label Grid.Column="1" x:Name="Label" FontSize="{Binding Path=FontSize, RelativeSource={RelativeSource AncestorType={x:Type local:TabHeaderControl}}}" FontFamily="{Binding Path=FontFamily, RelativeSource={RelativeSource AncestorType={x:Type local:TabHeaderControl}}}" Foreground="Black" Width="Auto" Content="{Binding}" Padding="2,0,2,0" Margin="0" VerticalAlignment="Center"/>
+                                        <Button Grid.Column="3" x:Name="Button" Click="Button_Click" Foreground="Gray" BorderThickness="0" Background="Transparent" Style="{StaticResource StyleCloseButton}">
+                                            <!--<Button.Style>
+                                                <Style TargetType="Button">
+                                                    <Setter Property="Width" Value="20"/>
+                                                    <Setter Property="Height" Value="20"/>
+                                                    <Setter Property="VerticalAlignment" Value="Center"/>
+                                                    <Setter Property="Background" Value="Transparent"/>
+                                                    <Setter Property="BorderThickness" Value="0"/>
+                                                    <Setter Property="Template">
+                                                        <Setter.Value>
+                                                            <ControlTemplate TargetType="Button">
+                                                                <Grid Margin="0,0,0,0">
+                                                                    <Border Name="_border" Background="Transparent" Width="18" Height="18" CornerRadius="0" BorderThickness="0" BorderBrush="Gray" HorizontalAlignment="Center">
+                                                                    </Border>
+                                                                    <Line Name="_line_1" X1="6" X2="14" Y1="6" Y2="14" Stroke="White" StrokeThickness="1"/>
+                                                                    <Line Name="_line_2" X1="14" X2="6" Y1="6" Y2="14" Stroke="White" StrokeThickness="1"/>
+                                                                </Grid>
+
+                                                                <ControlTemplate.Triggers>
+                                                                    <Trigger Property="IsMouseOver" Value="True">
+                                                                        <Setter TargetName="_border" Property="Background" Value="Gainsboro" />
+                                                                        <Setter TargetName="_border" Property="BorderThickness" Value="1" />
+                                                                        <Setter TargetName="_line_1" Property="Stroke" Value="Black" />
+                                                                        <Setter TargetName="_line_2" Property="Stroke" Value="Black" />
+                                                                    </Trigger>
+                                                                    <Trigger Property="IsPressed" Value="True">
+                                                                        <Setter TargetName="_border" Property="Background" Value="Khaki" />
+                                                                        <Setter TargetName="_border" Property="BorderThickness" Value="1" />
+                                                                        <Setter TargetName="_line_1" Property="Stroke" Value="Black" />
+                                                                        <Setter TargetName="_line_2" Property="Stroke" Value="Black" />
+                                                                    </Trigger>
+                                                                    <Trigger Property="{Binding Path=IsSelected, RelativeSource={RelativeSource AncestorType={x:Type ListBoxItem}}}" Value="True">
+                                                                        <Setter TargetName="_line_1" Property="Stroke" Value="Black" />
+                                                                        <Setter TargetName="_line_2" Property="Stroke" Value="Black" />
+                                                                    </Trigger>
+                                                                    <Trigger Property="{Binding Path=IsSelected, RelativeSource={RelativeSource AncestorType={x:Type ListBoxItem}}}" Value="False">
+                                                                        <Setter TargetName="_line_1" Property="Stroke" Value="White" />
+                                                                        <Setter TargetName="_line_2" Property="Stroke" Value="White" />
+                                                                    </Trigger>
+                                                                </ControlTemplate.Triggers>
+                                                            </ControlTemplate>
+                                                        </Setter.Value>
+                                                    </Setter>
+                                                </Style>
+                                            </Button.Style>-->
+                                        </Button>
                                     </Grid>
                                 </Border>
                                 <ControlTemplate.Triggers>
@@ -148,13 +193,15 @@
                                         <Setter TargetName="Border" Property="Background" Value="{Binding Path=SelectedTabBackground, RelativeSource={RelativeSource AncestorType={x:Type local:TabHeaderControl}}}"/>
                                         <Setter TargetName="Border" Property="BorderThickness" Value="1,1,1,0"/>
                                         <Setter TargetName="Border" Property="BorderBrush" Value="Black"/>
-                                        <Setter TargetName="Label" Property="Foreground" Value="Black"/>
+                                        <Setter TargetName="Label" Property="Foreground" Value="{Binding Path=SelectedTabForeground, RelativeSource={RelativeSource AncestorType={x:Type local:TabHeaderControl}}}"/>
+                                        <Setter TargetName="Button" Property="Foreground" Value="{Binding Path=SelectedTabForeground, RelativeSource={RelativeSource AncestorType={x:Type local:TabHeaderControl}}}"/>
                                     </Trigger>
                                     <Trigger Property="IsSelected" Value="false">
                                         <Setter TargetName="Border" Property="Background" Value="{Binding Path=UnselectedTabBackground, RelativeSource={RelativeSource AncestorType={x:Type local:TabHeaderControl}}}"/>
                                         <Setter TargetName="Border" Property="BorderThickness" Value="1"/>
                                         <Setter TargetName="Border" Property="BorderBrush" Value="Transparent"/>
-                                        <Setter TargetName="Label" Property="Foreground" Value="White"/>
+                                        <Setter TargetName="Label" Property="Foreground" Value="{Binding Path=UnselectedTabForeground, RelativeSource={RelativeSource AncestorType={x:Type local:TabHeaderControl}}}"/>
+                                        <Setter TargetName="Button" Property="Foreground" Value="{Binding Path=UnselectedTabForeground, RelativeSource={RelativeSource AncestorType={x:Type local:TabHeaderControl}}}"/>
                                     </Trigger>
                                 </ControlTemplate.Triggers>
                             </ControlTemplate>
