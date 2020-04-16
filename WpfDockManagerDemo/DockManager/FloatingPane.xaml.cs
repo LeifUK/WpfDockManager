@@ -23,6 +23,7 @@ namespace WpfDockManagerDemo.DockManager
         {
             InitializeComponent();
             StateChanged += MainWindowStateChangeRaised;
+            IDocumentContainer = DocumentContainer;
         }
 
         // Can execute
@@ -86,12 +87,12 @@ namespace WpfDockManagerDemo.DockManager
             ContextMenu contextMenu = new ContextMenu();
             MenuItem menuItem = null;
 
-            int count = DocumentContainer.DocumentCount;
+            int count = DocumentContainer.GetUserControlCount();
 
             if (count > 2)
             {
                 menuItem = new MenuItem();
-                menuItem.Header = "Ungroup Current View";
+                menuItem.Header = "Ungroup Current";
                 menuItem.IsChecked = false;
                 menuItem.Command = new Command(delegate { UngroupCurrent?.Invoke(this, null); }, delegate { return true; });
                 contextMenu.Items.Add(menuItem);
@@ -100,7 +101,7 @@ namespace WpfDockManagerDemo.DockManager
             if (count > 1)
             { 
                 menuItem = new MenuItem();
-                menuItem.Header = "Ungroup All Views";
+                menuItem.Header = "Ungroup";
                 menuItem.IsChecked = false;
                 menuItem.Command = new Command(delegate { Ungroup?.Invoke(this, null); }, delegate { return true; });
                 contextMenu.Items.Add(menuItem);
@@ -134,19 +135,32 @@ namespace WpfDockManagerDemo.DockManager
             }
         }
 
-        public void AddUserControl(UserControl userControl)
-        {
-            DocumentContainer.AddUserControl(userControl);
-        }
+        //public void AddUserControl(UserControl userControl)
+        //{
+        //    DocumentContainer.AddUserControl(userControl);
+        //}
 
-        public UserControl ExtractUserControl(int index)
-        {
-            return DocumentContainer.ExtractUserControl(index);
-        }
-        public int GetUserControlCount()
-        {
-            return DocumentContainer.GetUserControlCount();
-        }
+        //public UserControl ExtractUserControl(int index)
+        //{
+        //    return DocumentContainer.ExtractUserControl(index);
+        //}
+
+        //public int GetUserControlCount()
+        //{
+        //    return DocumentContainer.GetUserControlCount();
+        //}
+
+        //public UserControl GetUserControl(int index)
+        //{
+        //    return DocumentContainer.GetUserControl(index);
+        //}
+
+        //public int GetCurrentTabIndex()
+        //{
+        //    return DocumentContainer.GetCurrentTabIndex();
+        //}
+
+        internal readonly IDocumentContainer IDocumentContainer;
     }
 }
 

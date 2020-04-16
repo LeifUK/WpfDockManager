@@ -4,11 +4,11 @@
   <PropertyGroup>
     <Configuration Condition=" '$(Configuration)' == '' ">Debug</Configuration>
     <Platform Condition=" '$(Platform)' == '' ">AnyCPU</Platform>
-    <ProjectGuid>{9843B6E4-5B93-46FA-96B8-05E423118E9F}</ProjectGuid>
+    <ProjectGuid>{3E0AA70B-C167-4EF1-ACBE-DA0C2662F783}</ProjectGuid>
     <OutputType>WinExe</OutputType>
-    <RootNamespace>WpfDockManagerDemo</RootNamespace>
-    <AssemblyName>WpfDockManagerDemo</AssemblyName>
-    <TargetFrameworkVersion>v4.6.1</TargetFrameworkVersion>
+    <RootNamespace>WpfListboxDemo</RootNamespace>
+    <AssemblyName>WpfListboxDemo</AssemblyName>
+    <TargetFrameworkVersion>v4.7.2</TargetFrameworkVersion>
     <FileAlignment>512</FileAlignment>
     <ProjectTypeGuids>{60dc8134-eba5-43b8-bcc9-bb4bc16c2548};{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}</ProjectTypeGuids>
     <WarningLevel>4</WarningLevel>
@@ -37,8 +37,6 @@
   <ItemGroup>
     <Reference Include="System" />
     <Reference Include="System.Data" />
-    <Reference Include="System.Drawing" />
-    <Reference Include="System.Windows.Forms" />
     <Reference Include="System.Xml" />
     <Reference Include="Microsoft.CSharp" />
     <Reference Include="System.Core" />
@@ -57,46 +55,6 @@
       <Generator>MSBuild:Compile</Generator>
       <SubType>Designer</SubType>
     </ApplicationDefinition>
-    <Compile Include="DockManager\Command.cs" />
-    <Compile Include="DockManager\DocumentContainer.cs" />
-    <Compile Include="DockManager\DocumentPane.cs" />
-    <Compile Include="DockManager\ExtensionMethods.cs" />
-    <Compile Include="DockManager\FloatingPane.xaml.cs">
-      <DependentUpon>FloatingPane.xaml</DependentUpon>
-    </Compile>
-    <Compile Include="DockManager\IDocument.cs" />
-    <Compile Include="DockManager\IDocumentContainer.cs" />
-    <Compile Include="DockManager\InsertionIndicatorManager.cs" />
-    <Compile Include="DockManager\Utilities.cs" />
-    <Compile Include="DockManager\WindowLocationPane.xaml.cs">
-      <DependentUpon>WindowLocationPane.xaml</DependentUpon>
-    </Compile>
-    <Compile Include="DockManager\LayoutManager.cs" />
-    <Compile Include="DockManager\SplitterPane.cs" />
-    <Compile Include="DockManager\User32.cs" />
-    <Compile Include="DockManager\WindowLocation.cs" />
-    <Compile Include="ViewModel\DemoOneViewModel.cs" />
-    <Compile Include="ViewModel\DemoTwoViewModel.cs" />
-    <Compile Include="DockManager\FloatingViewModel.cs" />
-    <Compile Include="ViewModel\MainViewModel.cs" />
-    <Compile Include="View\DemoOneView.xaml.cs">
-      <DependentUpon>DemoOneView.xaml</DependentUpon>
-    </Compile>
-    <Compile Include="View\DemoTwoView.xaml.cs">
-      <DependentUpon>DemoTwoView.xaml</DependentUpon>
-    </Compile>
-    <Page Include="DockManager\Dictionary.xaml">
-      <SubType>Designer</SubType>
-      <Generator>MSBuild:Compile</Generator>
-    </Page>
-    <Page Include="DockManager\FloatingPane.xaml">
-      <SubType>Designer</SubType>
-      <Generator>MSBuild:Compile</Generator>
-    </Page>
-    <Page Include="DockManager\WindowLocationPane.xaml">
-      <SubType>Designer</SubType>
-      <Generator>MSBuild:Compile</Generator>
-    </Page>
     <Page Include="MainWindow.xaml">
       <Generator>MSBuild:Compile</Generator>
       <SubType>Designer</SubType>
@@ -109,16 +67,9 @@
       <DependentUpon>MainWindow.xaml</DependentUpon>
       <SubType>Code</SubType>
     </Compile>
-    <Page Include="View\DemoOneView.xaml">
-      <SubType>Designer</SubType>
-      <Generator>MSBuild:Compile</Generator>
-    </Page>
-    <Page Include="View\DemoTwoView.xaml">
-      <SubType>Designer</SubType>
-      <Generator>MSBuild:Compile</Generator>
-    </Page>
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="MainWindowModel.cs" />
     <Compile Include="Properties\AssemblyInfo.cs">
       <SubType>Code</SubType>
     </Compile>
@@ -145,9 +96,9 @@
     <None Include="App.config" />
   </ItemGroup>
   <ItemGroup>
-    <ProjectReference Include="..\BetterWpfControls\BetterWpfControls.csproj">
-      <Project>{e8229630-9896-4536-b6f9-ba8c1738e498}</Project>
-      <Name>BetterWpfControls</Name>
+    <ProjectReference Include="..\WpfControlLibrary\WpfControlLibrary.csproj">
+      <Project>{460c09de-de0d-4d2b-b1ec-f2bbd72022c6}</Project>
+      <Name>WpfControlLibrary</Name>
     </ProjectReference>
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />

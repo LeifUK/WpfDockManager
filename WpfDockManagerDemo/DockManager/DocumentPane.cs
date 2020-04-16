@@ -87,11 +87,12 @@ namespace WpfDockManagerDemo.DockManager
                 Close?.Invoke(this, null);
             };
 
-            _documentContainer = new DocumentContainer();
-            Children.Add(_documentContainer);
-            Grid.SetRow(_documentContainer, 1);
-            Grid.SetColumn(_documentContainer, 0);
-            Grid.SetColumnSpan(_documentContainer, ColumnDefinitions.Count);
+            DocumentContainer documentContainer = new DocumentContainer();
+            Children.Add(documentContainer);
+            Grid.SetRow(documentContainer, 1);
+            Grid.SetColumn(documentContainer, 0);
+            Grid.SetColumnSpan(documentContainer, ColumnDefinitions.Count);
+            IDocumentContainer = documentContainer;
         }
 
         protected Label _titleLabel;
@@ -110,11 +111,11 @@ namespace WpfDockManagerDemo.DockManager
             menuItem.Command = new Command(delegate { Float?.Invoke(this, null); }, delegate { return true; });
             contextMenu.Items.Add(menuItem);
 
-            int viewCount = GetUserControlCount();
+            int viewCount = IDocumentContainer.GetUserControlCount();
             if (viewCount > 2)
             {
                 menuItem = new MenuItem();
-                menuItem.Header = "Ungroup current view";
+                menuItem.Header = "Ungroup Current";
                 menuItem.IsChecked = false;
                 menuItem.Command = new Command(delegate { UngroupCurrent?.Invoke(this, null); }, delegate { return true; });
                 contextMenu.Items.Add(menuItem);
@@ -123,7 +124,7 @@ namespace WpfDockManagerDemo.DockManager
             if (viewCount > 1)
             {
                 menuItem = new MenuItem();
-                menuItem.Header = "Ungroup all views";
+                menuItem.Header = "Ungroup";
                 menuItem.IsChecked = false;
                 menuItem.Command = new Command(delegate { Ungroup?.Invoke(this, null); }, delegate { return true; });
                 contextMenu.Items.Add(menuItem);
@@ -180,44 +181,6 @@ namespace WpfDockManagerDemo.DockManager
             }
         }
 
-        private DocumentContainer _documentContainer;
-
-        public UserControl GetUserControl(int index)
-        {
-            return _documentContainer.GetUserControl(index);
-        }
-
-        public int GetUserControlCount()
-        {
-            return _documentContainer.GetUserControlCount();
-        }
-
-        public int GetCurrentTabIndex()
-        {
-            return _documentContainer.GetCurrentTabIndex();
-        }
-
-        public void AddUserControl(UserControl userControl)
-        {
-            if (userControl == null)
-            {
-                throw new Exception("DocumentPane.AddUserControl(): User Control is null");
-            }
-
-            _documentContainer.AddUserControl(userControl);
-
-            IDocument iDocument = userControl.DataContext as IDocument;
-            if (iDocument == null)
-            {
-                throw new Exception("DocumentPane.AddUserControl(): User Control is not a document");
-            }
-
-            _titleLabel.Content = iDocument.Title;
-        }
-
-        public UserControl ExtractUserControl(int index)
-        {
-            return _documentContainer.ExtractUserControl(index);
-        }
+        public readonly IDocumentContainer IDocumentContainer;
     }
 }

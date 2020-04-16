@@ -1,10 +1,9 @@
 ﻿using System;
-using System.Collections.Generic;
 using System.Windows.Controls;
 
 namespace WpfDockManagerDemo.DockManager
 {
-    internal class DocumentContainer : Grid
+    internal class DocumentContainer : Grid, IDocumentContainer
     {
         public DocumentContainer()
         {
@@ -12,28 +11,6 @@ namespace WpfDockManagerDemo.DockManager
         }
 
         public event EventHandler TitleChanged;
-
-        public int DocumentCount
-        {
-            get
-            {
-                int count = -1;
-                if (Children.Count == 0)
-                {
-                    count = 0;
-                }
-                if (Children[0] is UserControl)
-                {
-                    count = 1;
-                }
-                if (Children[0] is TabControl)
-                {
-                    count = (Children[0] as TabControl).Items.Count;
-                }
-
-                return count;
-             }
-        }
 
         public string Title
         {
@@ -94,26 +71,27 @@ namespace WpfDockManagerDemo.DockManager
             {
                 UserControl userControl2 = Children[0] as UserControl;
                 Children.RemoveAt(0);
-                TabControl tabControl = new TabControl();
-                tabControl.Padding = new System.Windows.Thickness(-2);
-                tabControl.TabStripPlacement = System.Windows.Controls.Dock.Bottom;
+                TabControl tabControl = new BetterWpfControls.TabControl();
+                tabControl.VerticalAlignment = System.Windows.VerticalAlignment.Stretch;
+                //tabControl.Padding = new System.Windows.Thickness(-2);
+                //tabControl.TabStripPlacement = System.Windows.Controls.Dock.Bottom;
                 tabControl.SelectionChanged += delegate { TitleChanged?.Invoke(this, null); };
                 Children.Add(tabControl);
 
-                TabItem tabItem = new TabItem();
+                BetterWpfControls.TabItem tabItem = new BetterWpfControls.TabItem();
                 tabItem.Content = userControl2;
                 tabItem.Header = (userControl2.DataContext as IDocument).Title;
                 tabControl.Items.Add(tabItem);
 
-                tabItem = new TabItem();
+                tabItem = new BetterWpfControls.TabItem();
                 tabItem.Content = userControl;
                 tabItem.Header = (userControl.DataContext as IDocument).Title;
                 tabControl.Items.Add(tabItem);
             }
-            else if (Children[0] is TabControl)
+            else if (Children[0] is BetterWpfControls.TabControl)
             {
-                TabControl tabControl = Children[0] as TabControl;
-                TabItem tabItem = new TabItem();
+                BetterWpfControls.TabControl tabControl = Children[0] as BetterWpfControls.TabControl;
+                BetterWpfControls.TabItem tabItem = new BetterWpfControls.TabItem();
                 tabItem.Content = userControl;
                 tabItem.Header = (userControl.DataContext as IDocument).Title;
                 tabControl.Items.Add(tabItem);
@@ -137,9 +115,9 @@ namespace WpfDockManagerDemo.DockManager
                 userControl = Children[0] as UserControl;
                 Children.RemoveAt(0);
             }
-            else if (Children[0] is TabControl)
+            else if (Children[0] is BetterWpfControls.TabControl)
             {
-                TabControl tabControl = Children[0] as TabControl;
+                BetterWpfControls.TabControl tabControl = Children[0] as BetterWpfControls.TabControl;
                 if (index >= tabControl.Items.Count)
                 {
                     index = tabControl.Items.Count - 1;
@@ -148,13 +126,13 @@ namespace WpfDockManagerDemo.DockManager
                 {
                     index = 0;
                 }
-                TabItem tabItem = (tabControl.Items[index] as TabItem);
+                BetterWpfControls.TabItem tabItem = (tabControl.Items[index] as BetterWpfControls.TabItem);
                 userControl = tabItem.Content as UserControl;
                 tabItem.Content = null;
                 tabControl.Items.RemoveAt(index);
                 if (tabControl.Items.Count == 1)
                 {
-                    tabItem = (tabControl.Items[0] as TabItem);
+                    tabItem = (tabControl.Items[0] as BetterWpfControls.TabItem);
                     UserControl userControl2 = tabItem.Content as UserControl;
                     tabItem.Content = null;
                     tabControl.Items.Remove(tabItem);
@@ -180,10 +158,9 @@ namespace WpfDockManagerDemo.DockManager
             {
                 return 1;
             }
-            else if (Children[0] is TabControl)
+            else if (Children[0] is BetterWpfControls.TabControl)
             {
-                TabControl tabControl = Children[0] as TabControl;
-                return (Children[0] as TabControl).Items.Count;
+                return (Children[0] as BetterWpfControls.TabControl).Items.Count;
             }
 
             throw new Exception(System.Reflection.MethodBase.GetCurrentMethod().Name + ": Children[0] is not an expected type -> " + Children[0].GetType().FullName);
@@ -201,8 +178,7 @@ namespace WpfDockManagerDemo.DockManager
             }
             else if (Children[0] is TabControl)
             {
-                TabControl tabControl = Children[0] as TabControl;
-                return tabControl.SelectedIndex;
+                return (Children[0] as BetterWpfControls.TabControl).SelectedIndex;
             }
 
             throw new Exception(System.Reflection.MethodBase.GetCurrentMethod().Name + ": Children[0] is not an expected type -> " + Children[0].GetType().FullName);
@@ -221,14 +197,14 @@ namespace WpfDockManagerDemo.DockManager
             }
             else if (Children[0] is TabControl)
             {
-                TabControl tabControl = Children[0] as TabControl;
+                BetterWpfControls.TabControl tabControl = Children[0] as BetterWpfControls.TabControl;
 
                 if (index >= tabControl.Items.Count)
                 {
                     return null;
                 }
 
-                TabItem tabItem = (tabControl.Items[index] as TabItem);
+                BetterWpfControls.TabItem tabItem = (tabControl.Items[index] as BetterWpfControls.TabItem);
                 return tabItem.Content as UserControl;
             }
 

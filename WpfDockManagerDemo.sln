@@ -7,6 +7,10 @@ Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "WpfDockManagerDemo", "WpfDo
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "BetterWpfControls", "BetterWpfControls\BetterWpfControls.csproj", "{E8229630-9896-4536-B6F9-BA8C1738E498}"
 EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "WpfListboxDemo", "WpfListboxDemo\WpfListboxDemo.csproj", "{3E0AA70B-C167-4EF1-ACBE-DA0C2662F783}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "WpfControlLibrary", "WpfControlLibrary\WpfControlLibrary.csproj", "{460C09DE-DE0D-4D2B-B1EC-F2BBD72022C6}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -21,6 +25,14 @@ Global
 		{E8229630-9896-4536-B6F9-BA8C1738E498}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{E8229630-9896-4536-B6F9-BA8C1738E498}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{E8229630-9896-4536-B6F9-BA8C1738E498}.Release|Any CPU.Build.0 = Release|Any CPU
+		{3E0AA70B-C167-4EF1-ACBE-DA0C2662F783}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{3E0AA70B-C167-4EF1-ACBE-DA0C2662F783}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{3E0AA70B-C167-4EF1-ACBE-DA0C2662F783}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{3E0AA70B-C167-4EF1-ACBE-DA0C2662F783}.Release|Any CPU.Build.0 = Release|Any CPU
+		{460C09DE-DE0D-4D2B-B1EC-F2BBD72022C6}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{460C09DE-DE0D-4D2B-B1EC-F2BBD72022C6}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{460C09DE-DE0D-4D2B-B1EC-F2BBD72022C6}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{460C09DE-DE0D-4D2B-B1EC-F2BBD72022C6}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
