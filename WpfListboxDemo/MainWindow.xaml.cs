@@ -34,7 +34,7 @@ namespace WpfListboxDemo
 
         private void myListView_SelectionChanged(object sender, SelectionChangedEventArgs e)
         {
-            _labelSelectedItem.Content = _ListBox.SelectedItem;
+            _labelSelectedItem.Content = _tabHeader.SelectedItem;
         }
     }
 }

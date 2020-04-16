@@ -7,6 +7,11 @@
         xmlns:wpfcontrollibrary="clr-namespace:WpfControlLibrary;assembly=WpfControlLibrary"
         mc:Ignorable="d"
         Title="MainWindow" Height="450" Width="800">
+    <Window.Resources>
+        <Style TargetType="Border" x:Key="SelectedTabBackground">
+            <Setter Property="Background" Value="Red"/>
+        </Style>
+    </Window.Resources>
     <Grid>
         <Grid.RowDefinitions>
             <RowDefinition Height="20"/>
@@ -15,23 +20,7 @@
             <RowDefinition Height="Auto"/>
             <RowDefinition Height="*"/>
         </Grid.RowDefinitions>
-        <wpfcontrollibrary:TabHeaderControl Grid.Row="1" x:Name="_ListBox" ItemsSource="{Binding ListBoxItems}" ></wpfcontrollibrary:TabHeaderControl>
-        <!--<ListBox Grid.Row="1" x:Name="_ListBox" ItemsSource="{Binding ListBoxItems}" ScrollViewer.HorizontalScrollBarVisibility="Hidden" SelectionChanged="myListView_SelectionChanged">
-            <ListBox.ItemsPanel>
-                <ItemsPanelTemplate>
-                    <WrapPanel Orientation="Horizontal"/>
-                </ItemsPanelTemplate>
-            </ListBox.ItemsPanel>
-            <ListBox.ItemTemplate>
-                <DataTemplate>
-                    <StackPanel Orientation="Horizontal">
-                        <Button Click="Button_Click" FontSize="10" Foreground="Salmon"
-                            BorderThickness="0" Style="{StaticResource {x:Static ToolBar.ButtonStyleKey}}" Content="x" Background="Transparent" />
-                        <Label FontSize="10" Foreground="SteelBlue" Width="Auto" Content="{Binding}"/>
-                    </StackPanel>
-                </DataTemplate>
-            </ListBox.ItemTemplate>
-        </ListBox>-->
+        <wpfcontrollibrary:TabHeaderControl Grid.Row="1" x:Name="_tabHeader" ItemsSource="{Binding ListBoxItems}" SelectedTabBackground="Khaki" UnselectedTabBackground="DarkSlateBlue"/>
         <Label Grid.Row="3" Name="_labelSelectedItem"/>
     </Grid>
 </Window>

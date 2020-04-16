@@ -1,5 +1,6 @@
 ﻿using System.Collections.Generic;
 using System.ComponentModel;
+using System.Windows.Media;
 
 namespace WpfListboxDemo
 {
@@ -28,6 +29,19 @@ namespace WpfListboxDemo
             }
         }
 
+        private Brush _selectedTabBackground = Brushes.GreenYellow;
+        public Brush SelectedTabBackground
+        {
+            get
+            {
+                return _selectedTabBackground;
+            }
+            set
+            {
+                _selectedTabBackground = value;
+                NotifyPropertyChanged("SelectedTabBackground");
+            }
+        }
         #region INotifyPropertyChanged
 
         public event PropertyChangedEventHandler PropertyChanged;
