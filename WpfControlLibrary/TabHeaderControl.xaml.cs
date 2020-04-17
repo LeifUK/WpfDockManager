@@ -16,15 +16,14 @@ namespace WpfControlLibrary
         public TabHeaderControl()
         {
             InitializeComponent();
+            SetButtonStates();
         }
+        
+        public event EventHandler CloseTabRequest;
 
         #region Dependency properties
 
         #region SelectedItem dependency property
-
-        /*
-         * The data context of the selected framework element
-         */
 
         [Bindable(true)]
         [DesignerSerializationVisibility(DesignerSerializationVisibility.Hidden)]
@@ -116,7 +115,7 @@ namespace WpfControlLibrary
 
         [Bindable(true)]
         [DesignerSerializationVisibility(DesignerSerializationVisibility.Hidden)]
-        public static readonly DependencyProperty SelectedTabBackgroundProperty = DependencyProperty.Register("SelectedTabBackground", typeof(Brush), typeof(TabHeaderControl), new FrameworkPropertyMetadata((FrameworkElement)null, new PropertyChangedCallback(OnSelectedTabBackgroundChanged)));
+        public static readonly DependencyProperty SelectedTabBackgroundProperty = DependencyProperty.Register("SelectedTabBackground", typeof(Brush), typeof(TabHeaderControl), new FrameworkPropertyMetadata((FrameworkElement)null, null));
         public Brush SelectedTabBackground
         {
             get
@@ -132,27 +131,13 @@ namespace WpfControlLibrary
             }
         }
 
-        private static void OnSelectedTabBackgroundChanged(DependencyObject d, DependencyPropertyChangedEventArgs e)
-        {
-            ((TabHeaderControl)d).OnSelectedTabBackgroundChanged(e);
-        }
-
-        protected virtual void OnSelectedTabBackgroundChanged(DependencyPropertyChangedEventArgs e)
-        {
-            if (e.NewValue != null)
-            {
-                // Warning warning
-                //TheSelectedTabBackground = (Brush)e.NewValue;
-            }
-        }
-
         #endregion
 
         #region UnselectedTabBackground dependency property
 
         [Bindable(true)]
         [DesignerSerializationVisibility(DesignerSerializationVisibility.Hidden)]
-        public static readonly DependencyProperty UnselectedTabBackgroundProperty = DependencyProperty.Register("UnselectedTabBackground", typeof(Brush), typeof(TabHeaderControl), new FrameworkPropertyMetadata((FrameworkElement)null, new PropertyChangedCallback(OnUnselectedTabBackgroundChanged)));
+        public static readonly DependencyProperty UnselectedTabBackgroundProperty = DependencyProperty.Register("UnselectedTabBackground", typeof(Brush), typeof(TabHeaderControl), new FrameworkPropertyMetadata((FrameworkElement)null, null));
         public Brush UnselectedTabBackground
         {
             get
@@ -168,27 +153,13 @@ namespace WpfControlLibrary
             }
         }
 
-        private static void OnUnselectedTabBackgroundChanged(DependencyObject d, DependencyPropertyChangedEventArgs e)
-        {
-            ((TabHeaderControl)d).OnUnselectedTabBackgroundChanged(e);
-        }
-
-        protected virtual void OnUnselectedTabBackgroundChanged(DependencyPropertyChangedEventArgs e)
-        {
-            if (e.NewValue != null)
-            {
-                // Warning warning
-                //TheSelectedTabBackground = (Brush)e.NewValue;
-            }
-        }
-
         #endregion
 
         #region SelectedTabForeground dependency property
 
         [Bindable(true)]
         [DesignerSerializationVisibility(DesignerSerializationVisibility.Hidden)]
-        public static readonly DependencyProperty SelectedTabForegroundProperty = DependencyProperty.Register("SelectedTabForeground", typeof(Brush), typeof(TabHeaderControl), new FrameworkPropertyMetadata((FrameworkElement)null, new PropertyChangedCallback(OnSelectedTabForegroundChanged)));
+        public static readonly DependencyProperty SelectedTabForegroundProperty = DependencyProperty.Register("SelectedTabForeground", typeof(Brush), typeof(TabHeaderControl), new FrameworkPropertyMetadata((FrameworkElement)null, null));
         public Brush SelectedTabForeground
         {
             get
@@ -204,27 +175,13 @@ namespace WpfControlLibrary
             }
         }
 
-        private static void OnSelectedTabForegroundChanged(DependencyObject d, DependencyPropertyChangedEventArgs e)
-        {
-            ((TabHeaderControl)d).OnSelectedTabForegroundChanged(e);
-        }
-
-        protected virtual void OnSelectedTabForegroundChanged(DependencyPropertyChangedEventArgs e)
-        {
-            if (e.NewValue != null)
-            {
-                // Warning warning
-                //TheSelectedTabBackground = (Brush)e.NewValue;
-            }
-        }
-
         #endregion
 
         #region UnselectedTabForeground dependency property
 
         [Bindable(true)]
         [DesignerSerializationVisibility(DesignerSerializationVisibility.Hidden)]
-        public static readonly DependencyProperty UnselectedTabForegroundProperty = DependencyProperty.Register("UnselectedTabForeground", typeof(Brush), typeof(TabHeaderControl), new FrameworkPropertyMetadata((FrameworkElement)null, new PropertyChangedCallback(OnUnselectedTabForegroundChanged)));
+        public static readonly DependencyProperty UnselectedTabForegroundProperty = DependencyProperty.Register("UnselectedTabForeground", typeof(Brush), typeof(TabHeaderControl), new FrameworkPropertyMetadata((FrameworkElement)null, null));
         public Brush UnselectedTabForeground
         {
             get
@@ -240,17 +197,38 @@ namespace WpfControlLibrary
             }
         }
 
-        private static void OnUnselectedTabForegroundChanged(DependencyObject d, DependencyPropertyChangedEventArgs e)
+        #endregion
+
+        #region SelectedTabBorderThickness dependency property
+
+        [Bindable(true)]
+        [DesignerSerializationVisibility(DesignerSerializationVisibility.Hidden)]
+        public static readonly DependencyProperty SelectedTabBorderThicknessProperty = DependencyProperty.Register("SelectedTabBorderThickness", typeof(string), typeof(TabHeaderControl), new FrameworkPropertyMetadata((FrameworkElement)null, new PropertyChangedCallback(OnSelectedTabBorderThicknessChanged)));
+        public Object SelectedTabBorderThickness
         {
-            ((TabHeaderControl)d).OnUnselectedTabForegroundChanged(e);
+            get
+            {
+                return GetValue(SelectedTabBorderThicknessProperty);
+            }
+            set
+            {
+                if (value != SelectedTabBorderThickness)
+                {
+                    SetValue(SelectedTabBorderThicknessProperty, value);
+                }
+            }
         }
 
-        protected virtual void OnUnselectedTabForegroundChanged(DependencyPropertyChangedEventArgs e)
+        private static void OnSelectedTabBorderThicknessChanged(DependencyObject d, DependencyPropertyChangedEventArgs e)
+        {
+            ((TabHeaderControl)d).OnSelectedTabBorderThicknessChanged(e);
+        }
+
+        protected virtual void OnSelectedTabBorderThicknessChanged(DependencyPropertyChangedEventArgs e)
         {
             if (e.NewValue != null)
             {
-                // Warning warning
-                //TheSelectedTabBackground = (Brush)e.NewValue;
+                _listBox.SelectedItem = e.NewValue;
             }
         }
 
@@ -260,26 +238,31 @@ namespace WpfControlLibrary
 
         private void _listBox_SelectionChanged(object sender, SelectionChangedEventArgs e)
         {
-
+            SetButtonStates();
+            SelectedItem = _listBox.SelectedItem;
         }
 
         private void Button_Click(object sender, RoutedEventArgs e)
         {
-
-        }
-
-        // Warning warning
-        private Brush _selectedTabBackground;
-        public Brush TheSelectedTabBackground
-        {
-            get
+            Button button = sender as Button;
+            if ((button == null) || (button.Parent == null))
             {
-                return _selectedTabBackground;
+                return;
             }
-            set
+
+            Grid grid = button.Parent as Grid;
+            if (grid == null)
             {
-                _selectedTabBackground = value;
-                NotifyPropertyChanged("TheSelectedTabBackground");
+                return;
+            }
+
+            foreach (var item in grid.Children)
+            {
+                if (item is Label)
+                {
+                    string text = (string)(item as Label).Content;
+                    CloseTabRequest?.Invoke(text, null);
+                }
             }
         }
 
@@ -296,5 +279,36 @@ namespace WpfControlLibrary
         }
 
         #endregion INotifyPropertyChanged    
+
+        private void SetButtonStates()
+        {
+            _buttonLeft.IsEnabled = true;
+            _buttonRight.IsEnabled = true;
+
+            if (_listBox.SelectedIndex == 0)
+            {
+                _buttonLeft.IsEnabled = false;
+            }
+            else if (_listBox.SelectedIndex == (_listBox.Items.Count - 1))
+            {
+                _buttonRight.IsEnabled = false;
+            }
+        }
+
+        private void _buttonLeft_Click(object sender, RoutedEventArgs e)
+        {
+            if (_listBox.SelectedIndex > 0)
+            {
+                --_listBox.SelectedIndex;
+            }
+        }
+
+        private void _buttonRight_Click(object sender, RoutedEventArgs e)
+        {
+            if (_listBox.SelectedIndex < (_listBox.Items.Count - 1))
+            {
+                ++_listBox.SelectedIndex;
+            }
+        }
     }
 }

@@ -27,14 +27,10 @@
                             <Trigger Property="IsMouseOver" Value="True">
                                 <Setter TargetName="_border" Property="Background" Value="Gainsboro" />
                                 <Setter TargetName="_border" Property="BorderThickness" Value="1" />
-                                <Setter TargetName="_line_1" Property="Stroke" Value="Black" />
-                                <Setter TargetName="_line_2" Property="Stroke" Value="Black" />
                             </Trigger>
                             <Trigger Property="IsPressed" Value="True">
                                 <Setter TargetName="_border" Property="Background" Value="Khaki" />
                                 <Setter TargetName="_border" Property="BorderThickness" Value="1" />
-                                <Setter TargetName="_line_1" Property="Stroke" Value="Black" />
-                                <Setter TargetName="_line_2" Property="Stroke" Value="Black" />
                             </Trigger>
                         </ControlTemplate.Triggers>
                     </ControlTemplate>
@@ -51,10 +47,8 @@
                 <Setter.Value>
                     <ControlTemplate TargetType="Button">
                         <Grid Margin="0,0,0,0">
-                            <Border Name="_border" Background="Transparent" Width="18" Height="18" CornerRadius="0" BorderThickness="0" BorderBrush="Gray" HorizontalAlignment="Center">
-                            </Border>
-
-                            <Path Name="_pathPointer" Fill="Gray" Stroke="Black" StrokeThickness="0" Panel.ZIndex="98">
+                            <Border Name="_border" Background="Transparent" Width="18" Height="18" CornerRadius="0" BorderThickness="0" BorderBrush="Gray" HorizontalAlignment="Center"/>
+                            <Path Name="_pathPointer" Fill="OliveDrab" Stroke="Black" StrokeThickness="0" Panel.ZIndex="98">
                                 <Path.Data>
                                     <PathGeometry>
                                         <PathGeometry.Figures>
@@ -70,26 +64,19 @@
                                                 </PathFigure>
                                             </PathFigureCollection>
                                         </PathGeometry.Figures>
-                                        <!--<PathGeometry.Transform>
-                                            <RotateTransform x:Name="_pointerRotation" Angle="45" CenterX="200" CenterY="220"/>
-                                        </PathGeometry.Transform>-->
                                     </PathGeometry>
                                 </Path.Data>
                             </Path>
                         </Grid>
-
                         <ControlTemplate.Triggers>
+                            <Trigger Property="IsEnabled" Value="False">
+                                <Setter TargetName="_pathPointer" Property="Fill" Value="Gainsboro" />
+                            </Trigger>
                             <Trigger Property="IsMouseOver" Value="True">
-                                <Setter TargetName="_border" Property="Background" Value="AliceBlue" />
-                                <Setter TargetName="_border" Property="BorderThickness" Value="1" />
-                                <!--<Setter TargetName="_line_1" Property="Stroke" Value="Black" />
-                                <Setter TargetName="_line_2" Property="Stroke" Value="Black" />-->
+                                <Setter TargetName="_pathPointer" Property="Fill" Value="Gray" />
                             </Trigger>
                             <Trigger Property="IsPressed" Value="True">
-                                <Setter TargetName="_border" Property="Background" Value="Khaki" />
-                                <Setter TargetName="_border" Property="BorderThickness" Value="1" />
-                                <!--<Setter TargetName="_line_1" Property="Stroke" Value="Black" />
-                                <Setter TargetName="_line_2" Property="Stroke" Value="Black" />-->
+                                <Setter TargetName="_pathPointer" Property="Fill" Value="Gray" />
                             </Trigger>
                         </ControlTemplate.Triggers>
                     </ControlTemplate>
@@ -99,26 +86,24 @@
     </UserControl.Resources>
     <Grid Name="Grid" Background="Transparent">
         <Grid.RowDefinitions>
-            <RowDefinition Height="20"/>
             <RowDefinition Height="Auto"/>
-            <RowDefinition Height="10"/>
-            <RowDefinition Height="Auto"/>
-            <RowDefinition Height="*"/>
         </Grid.RowDefinitions>
         <Grid.ColumnDefinitions>
+            <ColumnDefinition Width="2"/>
             <ColumnDefinition Width="Auto"/>
-            <ColumnDefinition Width="4"/>
+            <ColumnDefinition Width="2"/>
             <ColumnDefinition Width="*"/>
-            <ColumnDefinition Width="4"/>
+            <ColumnDefinition Width="2"/>
             <ColumnDefinition Width="Auto"/>
+            <ColumnDefinition Width="2"/>
         </Grid.ColumnDefinitions>
-        <Button Grid.Row="1" Grid.Column="0" Name="_buttonLeft" Padding="2,0,4,0" Style="{StaticResource LeftArrow}"/>
-        <Button Grid.Row="1" Grid.Column="4" Name="_buttonRight" Padding="4,0,2,0" Style="{StaticResource LeftArrow}">
+        <Button Grid.Row="0" Grid.Column="1" Name="_buttonLeft" Padding="0" Style="{StaticResource LeftArrow}" Click="_buttonLeft_Click"/>
+        <Button Grid.Row="0" Grid.Column="5" Name="_buttonRight" Padding="0" Style="{StaticResource LeftArrow}" Click="_buttonRight_Click">
             <Button.LayoutTransform>
                 <RotateTransform Angle="180" CenterX="0.5" CenterY="0.5"/>
             </Button.LayoutTransform>
         </Button>
-        <ListBox Grid.Row="1" Grid.Column="2" x:Name="_listBox" ScrollViewer.HorizontalScrollBarVisibility="Hidden" SelectionChanged="_listBox_SelectionChanged" Background="Transparent" Padding="0,-2,0,-2" BorderThickness="0">
+        <ListBox Grid.Row="0" Grid.Column="3" x:Name="_listBox" ScrollViewer.HorizontalScrollBarVisibility="Hidden" SelectionChanged="_listBox_SelectionChanged" Background="Transparent" Padding="0,-2,0,-2" BorderThickness="0">
             <ListBox.ItemContainerStyle>
                 <Style TargetType="ListBoxItem">
                     <Setter Property="FrameworkElement.Margin" Value="0"/>
@@ -136,63 +121,18 @@
                                             <ColumnDefinition Width="Auto"/>
                                             <ColumnDefinition Width="6"/>
                                             <ColumnDefinition Width="Auto"/>
-                                            <ColumnDefinition Width="4"/>
+                                            <ColumnDefinition Width="1"/>
                                         </Grid.ColumnDefinitions>
-                                        <Label Grid.Column="1" x:Name="Label" FontSize="{Binding Path=FontSize, RelativeSource={RelativeSource AncestorType={x:Type local:TabHeaderControl}}}" FontFamily="{Binding Path=FontFamily, RelativeSource={RelativeSource AncestorType={x:Type local:TabHeaderControl}}}" Foreground="Black" Width="Auto" Content="{Binding}" Padding="2,0,2,0" Margin="0" VerticalAlignment="Center"/>
-                                        <Button Grid.Column="3" x:Name="Button" Click="Button_Click" Foreground="Gray" BorderThickness="0" Background="Transparent" Style="{StaticResource StyleCloseButton}">
-                                            <!--<Button.Style>
-                                                <Style TargetType="Button">
-                                                    <Setter Property="Width" Value="20"/>
-                                                    <Setter Property="Height" Value="20"/>
-                                                    <Setter Property="VerticalAlignment" Value="Center"/>
-                                                    <Setter Property="Background" Value="Transparent"/>
-                                                    <Setter Property="BorderThickness" Value="0"/>
-                                                    <Setter Property="Template">
-                                                        <Setter.Value>
-                                                            <ControlTemplate TargetType="Button">
-                                                                <Grid Margin="0,0,0,0">
-                                                                    <Border Name="_border" Background="Transparent" Width="18" Height="18" CornerRadius="0" BorderThickness="0" BorderBrush="Gray" HorizontalAlignment="Center">
-                                                                    </Border>
-                                                                    <Line Name="_line_1" X1="6" X2="14" Y1="6" Y2="14" Stroke="White" StrokeThickness="1"/>
-                                                                    <Line Name="_line_2" X1="14" X2="6" Y1="6" Y2="14" Stroke="White" StrokeThickness="1"/>
-                                                                </Grid>
-
-                                                                <ControlTemplate.Triggers>
-                                                                    <Trigger Property="IsMouseOver" Value="True">
-                                                                        <Setter TargetName="_border" Property="Background" Value="Gainsboro" />
-                                                                        <Setter TargetName="_border" Property="BorderThickness" Value="1" />
-                                                                        <Setter TargetName="_line_1" Property="Stroke" Value="Black" />
-                                                                        <Setter TargetName="_line_2" Property="Stroke" Value="Black" />
-                                                                    </Trigger>
-                                                                    <Trigger Property="IsPressed" Value="True">
-                                                                        <Setter TargetName="_border" Property="Background" Value="Khaki" />
-                                                                        <Setter TargetName="_border" Property="BorderThickness" Value="1" />
-                                                                        <Setter TargetName="_line_1" Property="Stroke" Value="Black" />
-                                                                        <Setter TargetName="_line_2" Property="Stroke" Value="Black" />
-                                                                    </Trigger>
-                                                                    <Trigger Property="{Binding Path=IsSelected, RelativeSource={RelativeSource AncestorType={x:Type ListBoxItem}}}" Value="True">
-                                                                        <Setter TargetName="_line_1" Property="Stroke" Value="Black" />
-                                                                        <Setter TargetName="_line_2" Property="Stroke" Value="Black" />
-                                                                    </Trigger>
-                                                                    <Trigger Property="{Binding Path=IsSelected, RelativeSource={RelativeSource AncestorType={x:Type ListBoxItem}}}" Value="False">
-                                                                        <Setter TargetName="_line_1" Property="Stroke" Value="White" />
-                                                                        <Setter TargetName="_line_2" Property="Stroke" Value="White" />
-                                                                    </Trigger>
-                                                                </ControlTemplate.Triggers>
-                                                            </ControlTemplate>
-                                                        </Setter.Value>
-                                                    </Setter>
-                                                </Style>
-                                            </Button.Style>-->
-                                        </Button>
+                                        <Label Grid.Column="1" x:Name="Label" FontSize="{Binding Path=FontSize, RelativeSource={RelativeSource AncestorType={x:Type local:TabHeaderControl}}}" FontFamily="{Binding Path=FontFamily, RelativeSource={RelativeSource AncestorType={x:Type local:TabHeaderControl}}}" FontStyle="{Binding Path=FontStyle, RelativeSource={RelativeSource AncestorType={x:Type local:TabHeaderControl}}}" Foreground="Black" Width="Auto" Content="{Binding}" Padding="2,0,2,0" Margin="0" VerticalAlignment="Center"/>
+                                        <Button Grid.Column="3" x:Name="Button" Click="Button_Click" Foreground="Gray" BorderThickness="0" Background="Transparent" Style="{StaticResource StyleCloseButton}"/>
                                     </Grid>
                                 </Border>
                                 <ControlTemplate.Triggers>
                                     <Trigger Property="IsSelected" Value="true">
                                         <Setter TargetName="Button" Property="Background" Value="Transparent"/>
                                         <Setter TargetName="Border" Property="Background" Value="{Binding Path=SelectedTabBackground, RelativeSource={RelativeSource AncestorType={x:Type local:TabHeaderControl}}}"/>
-                                        <Setter TargetName="Border" Property="BorderThickness" Value="1,1,1,0"/>
-                                        <Setter TargetName="Border" Property="BorderBrush" Value="Black"/>
+                                        <Setter TargetName="Border" Property="BorderThickness" Value="{Binding Path=SelectedTabBorderThickness, RelativeSource={RelativeSource AncestorType={x:Type local:TabHeaderControl}}}"/>
+                                        <Setter TargetName="Border" Property="BorderBrush" Value="Gray"/>
                                         <Setter TargetName="Label" Property="Foreground" Value="{Binding Path=SelectedTabForeground, RelativeSource={RelativeSource AncestorType={x:Type local:TabHeaderControl}}}"/>
                                         <Setter TargetName="Button" Property="Foreground" Value="{Binding Path=SelectedTabForeground, RelativeSource={RelativeSource AncestorType={x:Type local:TabHeaderControl}}}"/>
                                     </Trigger>
@@ -201,7 +141,7 @@
                                         <Setter TargetName="Border" Property="BorderThickness" Value="1"/>
                                         <Setter TargetName="Border" Property="BorderBrush" Value="Transparent"/>
                                         <Setter TargetName="Label" Property="Foreground" Value="{Binding Path=UnselectedTabForeground, RelativeSource={RelativeSource AncestorType={x:Type local:TabHeaderControl}}}"/>
-                                        <Setter TargetName="Button" Property="Foreground" Value="{Binding Path=UnselectedTabForeground, RelativeSource={RelativeSource AncestorType={x:Type local:TabHeaderControl}}}"/>
+                                        <Setter TargetName="Button" Property="Foreground" Value="{Binding Path=UnselectedTabBackground, RelativeSource={RelativeSource AncestorType={x:Type local:TabHeaderControl}}}"/>
                                     </Trigger>
                                 </ControlTemplate.Triggers>
                             </ControlTemplate>
