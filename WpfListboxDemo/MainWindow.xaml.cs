@@ -30,9 +30,9 @@ namespace WpfListboxDemo
 
         private void _tabHeaderBottom_CloseTabRequest(object sender, System.EventArgs e)
         {
-            if ((DataContext as MainWindowModel).ListBoxItems.Contains(sender as string))
+            if ((DataContext as MainWindowModel).ListBoxItems.Contains(sender as TabHeaderItem))
             {
-                int index = (DataContext as MainWindowModel).ListBoxItems.IndexOf(sender as string);
+                int index = (DataContext as MainWindowModel).ListBoxItems.IndexOf(sender as TabHeaderItem);
                 (DataContext as MainWindowModel).ListBoxItems.RemoveAt(index);
                 if (index >= (DataContext as MainWindowModel).ListBoxItems.Count)
                 {
@@ -64,12 +64,12 @@ namespace WpfListboxDemo
             }
 
             ContextMenu contextMenu = new ContextMenu();
-            foreach (var filename in viewModel.ListBoxItems)
+            foreach (var item in viewModel.ListBoxItems)
             {
                 MenuItem menuItem = new MenuItem();
-                menuItem.Header = filename;
-                menuItem.IsChecked = filename == viewModel.SelectedHeader;
-                menuItem.Command = new Command(delegate { viewModel.SelectedHeader = filename; }, delegate { return true; });
+                menuItem.Header = item.Label;
+                menuItem.IsChecked = item == viewModel.SelectedHeader;
+                menuItem.Command = new Command(delegate { viewModel.SelectedHeader = item; }, delegate { return true; });
                 contextMenu.Items.Add(menuItem);
             }
 

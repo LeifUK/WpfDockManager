@@ -1,11 +1,12 @@
 ﻿using System;
 using System.Collections;
+using System.Linq;
 using System.Windows;
 using System.Windows.Controls;
 using System.ComponentModel;
 using System.Windows.Media;
 
-namespace WpfControlLibrary
+namespace WpfDockManagerDemo.DockManager
 {
     /// <summary>
     /// Interaction logic for UserControl1.xaml
@@ -17,8 +18,9 @@ namespace WpfControlLibrary
             InitializeComponent();
             SetButtonStates();
         }
-        
+
         public event EventHandler CloseTabRequest;
+        public event EventHandler SelectionChanged;
 
         #region Dependency properties
 
@@ -344,6 +346,8 @@ namespace WpfControlLibrary
         {
             SetButtonStates();
             SelectedItem = _listBox.SelectedItem;
+            SelectedIndex = _listBox.SelectedIndex;
+            SelectionChanged?.Invoke(sender, null);
         }
 
         private void Button_Click(object sender, RoutedEventArgs e)

@@ -67,6 +67,10 @@
     <Compile Include="DockManager\IDocument.cs" />
     <Compile Include="DockManager\IDocumentContainer.cs" />
     <Compile Include="DockManager\InsertionIndicatorManager.cs" />
+    <Compile Include="DockManager\TabControl.cs" />
+    <Compile Include="DockManager\TabHeaderControl.xaml.cs">
+      <DependentUpon>TabHeaderControl.xaml</DependentUpon>
+    </Compile>
     <Compile Include="DockManager\Utilities.cs" />
     <Compile Include="DockManager\WindowLocationPane.xaml.cs">
       <DependentUpon>WindowLocationPane.xaml</DependentUpon>
@@ -92,6 +96,10 @@
     <Page Include="DockManager\FloatingPane.xaml">
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
+    </Page>
+    <Page Include="DockManager\TabHeaderControl.xaml">
+      <Generator>MSBuild:Compile</Generator>
+      <SubType>Designer</SubType>
     </Page>
     <Page Include="DockManager\WindowLocationPane.xaml">
       <SubType>Designer</SubType>

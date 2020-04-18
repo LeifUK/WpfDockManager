@@ -93,6 +93,7 @@
             </Button.LayoutTransform>
         </Button>
         <wpfcontrollibrary:TabHeaderControl Grid.Row="1" Grid.Column="0" x:Name="_tabHeaderTop" ItemsSource="{Binding ListBoxItems}" SelectedItem="{Binding SelectedHeader, Mode=TwoWay}">
+            <wpfcontrollibrary:TabHeaderControl.DisplayMemberPath>HeaderText</wpfcontrollibrary:TabHeaderControl.DisplayMemberPath>
             <wpfcontrollibrary:TabHeaderControl.SelectedTabBackground>
                 <Binding Path="SelectedTabBackground" Mode="TwoWay"/>
             </wpfcontrollibrary:TabHeaderControl.SelectedTabBackground>
@@ -111,7 +112,7 @@
                 <Binding Path="FontFamily"/>
             </wpfcontrollibrary:TabHeaderControl.FontFamily>
         </wpfcontrollibrary:TabHeaderControl>
-        <Label Grid.Row="3" Grid.Column="0" Grid.ColumnSpan="99" Name="_labelSelectedItem" FontSize="48" Content="{Binding SelectedHeader, Mode=TwoWay}" VerticalAlignment="Stretch" HorizontalAlignment="Stretch" Background="{Binding Path=SelectedTabBackground}"/>
+        <Label Grid.Row="3" Grid.Column="0" Grid.ColumnSpan="99" Name="_labelSelectedItem" FontSize="48" Content="{Binding SelectedHeader.Label, Mode=TwoWay}" VerticalAlignment="Stretch" HorizontalAlignment="Stretch" Background="{Binding Path=SelectedTabBackground}"/>
 
         <Border Grid.Row="4" Grid.RowSpan="3" Grid.Column="0" Grid.ColumnSpan="99" VerticalAlignment="Stretch" HorizontalAlignment="Stretch" Background="LightYellow"/>
         <Button Grid.Row="7" Grid.Column="2" Content="File" Click="_buttonFile_Click" Style="{StaticResource LeftArrow}" Foreground="Black">
@@ -120,6 +121,7 @@
             </Button.LayoutTransform>
         </Button>
         <wpfcontrollibrary:TabHeaderControl Grid.Row="7" Grid.Column="0" x:Name="_tabHeaderBottom" ItemsSource="{Binding ListBoxItems}" SelectedItem="{Binding SelectedHeader, Mode=TwoWay}">
+            <wpfcontrollibrary:TabHeaderControl.DisplayMemberPath>Label</wpfcontrollibrary:TabHeaderControl.DisplayMemberPath>
             <wpfcontrollibrary:TabHeaderControl.SelectedTabBackground>
                 <Binding Path="SelectedTabBackground" Mode="TwoWay"/>
             </wpfcontrollibrary:TabHeaderControl.SelectedTabBackground>
@@ -138,7 +140,7 @@
                 <Binding Path="FontFamily"/>
             </wpfcontrollibrary:TabHeaderControl.FontFamily>
         </wpfcontrollibrary:TabHeaderControl>
-        <Label Grid.Row="5" Grid.Column="0" Grid.ColumnSpan="99" FontSize="48" Content="{Binding SelectedHeader, Mode=TwoWay}" BorderThickness="1" BorderBrush="Gray" VerticalAlignment="Stretch" HorizontalAlignment="Stretch" Background="{Binding Path=SelectedTabBackground}"/>
+        <Label Grid.Row="5" Grid.Column="0" Grid.ColumnSpan="99" FontSize="48" Content="{Binding SelectedHeader.Label, Mode=TwoWay}" BorderThickness="1" BorderBrush="Gray" VerticalAlignment="Stretch" HorizontalAlignment="Stretch" Background="{Binding Path=SelectedTabBackground}"/>
 
         <Grid Grid.Row="9" Grid.Column="0" Grid.ColumnSpan="99" >
             <Grid.RowDefinitions>

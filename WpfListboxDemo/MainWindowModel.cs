@@ -8,11 +8,11 @@ namespace WpfListboxDemo
     {
         public MainWindowModel()
         {
-            _listBoxItems = new System.Collections.ObjectModel.ObservableCollection<string>();
-            _listBoxItems.Add("Short item");
-            _listBoxItems.Add("A longer item");
-            _listBoxItems.Add("A quite long item");
-            _listBoxItems.Add("A really quite long Item");
+            _listBoxItems = new System.Collections.ObjectModel.ObservableCollection<TabHeaderItem>();
+            _listBoxItems.Add(new TabHeaderItem() { Label = "Short item", ID = 0 });
+            _listBoxItems.Add(new TabHeaderItem() { Label = "A longer item", ID = 1 });
+            _listBoxItems.Add(new TabHeaderItem() { Label = "A quite long item", ID = 2 });
+            _listBoxItems.Add(new TabHeaderItem() { Label = "A really quite long Item", ID = 3 });
 
             SelectedTabBackground = Brushes.Khaki;
             UnselectedTabBackground = Brushes.Navy;
@@ -21,8 +21,8 @@ namespace WpfListboxDemo
             ShowTabBorder = true;
         }
 
-        private System.Collections.ObjectModel.ObservableCollection<string> _listBoxItems;
-        public System.Collections.ObjectModel.ObservableCollection<string> ListBoxItems
+        private System.Collections.ObjectModel.ObservableCollection<TabHeaderItem> _listBoxItems;
+        public System.Collections.ObjectModel.ObservableCollection<TabHeaderItem> ListBoxItems
         {
             get
             {
@@ -63,8 +63,8 @@ namespace WpfListboxDemo
             }
         }
 
-        private string _selectedHeader;
-        public string SelectedHeader
+        private TabHeaderItem _selectedHeader;
+        public TabHeaderItem SelectedHeader
         {
             get
             {
