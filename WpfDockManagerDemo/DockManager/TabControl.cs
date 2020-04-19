@@ -90,16 +90,16 @@ namespace WpfDockManagerDemo.DockManager
             {
                 Children.Remove(_selectedUserControl);
                 _selectedUserControl = null;
-            }
 
-            if (_items.Count > 0)
-            {
-                if (index >= _items.Count)
+                if (_items.Count > 0)
                 {
-                    --index;
+                    if (index >= _items.Count)
+                    {
+                        --index;
+                    }
+                    _selectedUserControl = _items[index].Key;
+                    Children.Add(_selectedUserControl);
                 }
-                _selectedUserControl = _items[index].Key;
-                Children.Add(_selectedUserControl);
             }
 
             return userControl;
