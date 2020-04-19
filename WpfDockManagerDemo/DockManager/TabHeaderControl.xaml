@@ -103,7 +103,7 @@
                 <RotateTransform Angle="180" CenterX="0.5" CenterY="0.5"/>
             </Button.LayoutTransform>
         </Button>
-        <ListBox Grid.Row="0" Grid.Column="3" x:Name="_listBox" ScrollViewer.HorizontalScrollBarVisibility="Hidden" SelectionChanged="_listBox_SelectionChanged" Background="Transparent" Padding="0,-2,0,-2" BorderThickness="0">
+        <ListBox Grid.Row="0" Grid.Column="3" x:Name="_listBox" ScrollViewer.HorizontalScrollBarVisibility="Hidden" SelectionChanged="_listBox_SelectionChanged" Background="Transparent" Padding="0,-2,0,-2" BorderThickness="0" HorizontalAlignment="Stretch">
             <ListBox.ItemContainerStyle>
                 <Style TargetType="ListBoxItem">
                     <Setter Property="FrameworkElement.Margin" Value="0"/>

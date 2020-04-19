@@ -159,6 +159,7 @@ namespace WpfDockManagerDemo.DockManager
             if (e.NewValue != null)
             {
                 _listBox.SelectedIndex = (int)e.NewValue;
+                _listBox.ScrollIntoView(_listBox.SelectedItem);
             }
         }
 
@@ -195,7 +196,7 @@ namespace WpfDockManagerDemo.DockManager
             {
                 _listBox.Items.Add(item);
             }
-            _listBox.SelectedIndex = 0;
+            SelectedIndex = 0;
         }
 
         protected virtual void OnItemsSourceChanged(DependencyPropertyChangedEventArgs e)

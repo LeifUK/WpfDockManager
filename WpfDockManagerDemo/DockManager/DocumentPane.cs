@@ -40,7 +40,7 @@ namespace WpfDockManagerDemo.DockManager
             Border = new Border();
             Border.VerticalAlignment = VerticalAlignment.Stretch;
             Border.HorizontalAlignment = HorizontalAlignment.Stretch;
-            Border.Background = System.Windows.Media.Brushes.SteelBlue;
+            Border.Background = System.Windows.Media.Brushes.MidnightBlue;
             Border.BorderBrush = System.Windows.Media.Brushes.Black;
             Border.BorderThickness = new Thickness(1);
             Grid.SetRow(Border, 0);
