@@ -48,7 +48,7 @@
                     <ControlTemplate TargetType="Button">
                         <Grid Margin="0,0,0,0">
                             <Border Name="_border" Background="Transparent" Width="18" Height="18" CornerRadius="0" BorderThickness="0" BorderBrush="Gray" HorizontalAlignment="Center"/>
-                            <Path Name="_pathPointer" Fill="OliveDrab" Stroke="Black" StrokeThickness="0" Panel.ZIndex="98">
+                            <Path Name="_pathPointer" Fill="{TemplateBinding Foreground}" StrokeThickness="0" Panel.ZIndex="98">
                                 <Path.Data>
                                     <PathGeometry>
                                         <PathGeometry.Figures>
@@ -68,7 +68,7 @@
                                 </Path.Data>
                             </Path>
                         </Grid>
-                        <ControlTemplate.Triggers>
+                        <!--<ControlTemplate.Triggers>
                             <Trigger Property="IsEnabled" Value="False">
                                 <Setter TargetName="_pathPointer" Property="Fill" Value="Gainsboro" />
                             </Trigger>
@@ -78,7 +78,7 @@
                             <Trigger Property="IsPressed" Value="True">
                                 <Setter TargetName="_pathPointer" Property="Fill" Value="Gray" />
                             </Trigger>
-                        </ControlTemplate.Triggers>
+                        </ControlTemplate.Triggers>-->
                     </ControlTemplate>
                 </Setter.Value>
             </Setter>
@@ -97,8 +97,8 @@
             <ColumnDefinition Width="Auto"/>
             <ColumnDefinition Width="2"/>
         </Grid.ColumnDefinitions>
-        <Button Grid.Row="0" Grid.Column="1" Name="_buttonLeft" Padding="0" Style="{StaticResource LeftArrow}" Click="_buttonLeft_Click"/>
-        <Button Grid.Row="0" Grid.Column="5" Name="_buttonRight" Padding="0" Style="{StaticResource LeftArrow}" Click="_buttonRight_Click">
+        <Button Grid.Row="0" Grid.Column="1" Name="_buttonLeft" Padding="0" Style="{StaticResource LeftArrow}" Click="_buttonLeft_Click" Foreground="{Binding ActiveArrowBrush}"/>
+        <Button Grid.Row="0" Grid.Column="5" Name="_buttonRight" Padding="0" Style="{StaticResource LeftArrow}" Click="_buttonRight_Click" Foreground="{Binding ActiveArrowBrush}">
             <Button.LayoutTransform>
                 <RotateTransform Angle="180" CenterX="0.5" CenterY="0.5"/>
             </Button.LayoutTransform>

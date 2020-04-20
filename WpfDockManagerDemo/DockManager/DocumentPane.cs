@@ -88,11 +88,17 @@ namespace WpfDockManagerDemo.DockManager
             };
 
             DocumentContainer documentContainer = new DocumentContainer();
+            documentContainer.SelectionChanged += DocumentContainer_SelectionChanged;
             Children.Add(documentContainer);
             Grid.SetRow(documentContainer, 1);
             Grid.SetColumn(documentContainer, 0);
             Grid.SetColumnSpan(documentContainer, ColumnDefinitions.Count);
             IDocumentContainer = documentContainer;
+        }
+
+        private void DocumentContainer_SelectionChanged(object sender, EventArgs e)
+        {
+            _titleLabel.Content = IDocumentContainer.Title;
         }
 
         protected Label _titleLabel;

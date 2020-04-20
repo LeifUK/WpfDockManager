@@ -57,6 +57,7 @@
       <Generator>MSBuild:Compile</Generator>
       <SubType>Designer</SubType>
     </ApplicationDefinition>
+    <Compile Include="DockManager\CloseRequestHandler.cs" />
     <Compile Include="DockManager\Command.cs" />
     <Compile Include="DockManager\DocumentContainer.cs" />
     <Compile Include="DockManager\DocumentPane.cs" />
@@ -67,6 +68,7 @@
     <Compile Include="DockManager\IDocument.cs" />
     <Compile Include="DockManager\IDocumentContainer.cs" />
     <Compile Include="DockManager\InsertionIndicatorManager.cs" />
+    <Compile Include="DockManager\IView.cs" />
     <Compile Include="DockManager\TabControl.cs" />
     <Compile Include="DockManager\TabHeaderControl.xaml.cs">
       <DependentUpon>TabHeaderControl.xaml</DependentUpon>

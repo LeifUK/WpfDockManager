@@ -17,18 +17,18 @@ namespace WpfDockManagerDemo.ViewModel
 
         public string Title { get; set; }
 
-        public event EventHandler Close;
-
-        public void Closing()
-        {
-
-        }
+        public event DockManager.CloseRequestHandler CloseRequest;
 
         public bool CanClose
         {
             get
             {
-                return true;
+                bool canClose = true;
+                if (CloseRequest != null)
+                {
+                    canClose = CloseRequest();
+                }
+                return canClose;
             }
         }
 

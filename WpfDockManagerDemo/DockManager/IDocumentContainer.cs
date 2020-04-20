@@ -4,6 +4,7 @@ namespace WpfDockManagerDemo.DockManager
 {
     internal interface IDocumentContainer
     {
+        string Title { get; }
         void AddUserControl(UserControl userControl);
         UserControl ExtractUserControl(int index);
         int GetUserControlCount();

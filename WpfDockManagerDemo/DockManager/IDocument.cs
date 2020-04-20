@@ -13,9 +13,9 @@ namespace WpfDockManagerDemo.DockManager
         // A user friendly title
         string Title { get; set; }
 
-        void Closing();
-
         bool CanClose { get; }
         bool CanFloat { get; }
+
+        event CloseRequestHandler CloseRequest;
     }
 }

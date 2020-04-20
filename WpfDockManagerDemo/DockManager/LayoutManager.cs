@@ -226,6 +226,12 @@ namespace WpfDockManagerDemo.DockManager
                             UserControl view = (dataTemplate.LoadContent() as UserControl);
                             if (view != null)
                             {
+                                IView iView = (view as IView);
+                                if (iView == null)
+                                {
+                                    throw new Exception(System.Reflection.MethodBase.GetCurrentMethod().Name + ": the UserControl must implement interface IView");
+                                }
+                                iView.IDocument = document;
                                 view.DataContext = document;
                                 view.HorizontalAlignment = HorizontalAlignment.Stretch;
                                 view.VerticalAlignment = VerticalAlignment.Stretch;
@@ -383,6 +389,10 @@ namespace WpfDockManagerDemo.DockManager
 
             xmlAttribute = xmlDocument.CreateAttribute("ID");
             xmlAttribute.Value = iDocument.ID.ToString();
+            xmlElement.Attributes.Append(xmlAttribute);
+
+            xmlAttribute = xmlDocument.CreateAttribute("DataType");
+            xmlAttribute.Value = iDocument.GetType().FullName;
             xmlElement.Attributes.Append(xmlAttribute);
 
             xmlNode.AppendChild(xmlElement);
@@ -573,7 +583,8 @@ namespace WpfDockManagerDemo.DockManager
                         {
                             throw new Exception(System.Reflection.MethodBase.GetCurrentMethod().Name + ": a Document element must have an ID attribute");
                         }
-
+                        
+                        // Warning warning => wrong -> create the view and view model here
                         if (viewsMap.ContainsKey(xmlAttribute.Value))
                         {
                             iDocumentContainer.AddUserControl(viewsMap[xmlAttribute.Value]);
@@ -668,6 +679,9 @@ namespace WpfDockManagerDemo.DockManager
 
             List<UserControl> views = new List<UserControl>();
             Dictionary<string, UserControl> viewsMap = new Dictionary<string, UserControl>();
+            
+            // Warning warning
+            Dictionary<string, DataTemplate> dataTemplates = new Dictionary<string, DataTemplate>();
 
             // The application defines the views that are supported
 
@@ -684,6 +698,12 @@ namespace WpfDockManagerDemo.DockManager
                             UserControl view = (dataTemplate.LoadContent() as UserControl);
                             if (view != null)
                             {
+                                IView iView = (view as IView);
+                                if (iView == null)
+                                {
+                                    throw new Exception(System.Reflection.MethodBase.GetCurrentMethod().Name + ": the UserControl must implement interface IView");
+                                }
+                                iView.IDocument = document;
                                 view.DataContext = document;
                                 view.HorizontalAlignment = HorizontalAlignment.Stretch;
                                 view.VerticalAlignment = VerticalAlignment.Stretch;

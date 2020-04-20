@@ -13,6 +13,7 @@ namespace WpfDockManagerDemo.ViewModel
         {
             long id = 0;
             Documents = new System.Collections.ObjectModel.ObservableCollection<DockManager.IDocument>();
+            // Warning warning => bollocks
             Documents.Add(new ViewModel.DemoOneViewModel() { ID = id++ });
             Documents.Add(new ViewModel.DemoTwoViewModel() { ID = id++ });
             Documents.Add(new ViewModel.DemoOneViewModel() { ID = id++ });

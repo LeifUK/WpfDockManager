@@ -10,7 +10,7 @@ namespace WpfDockManagerDemo.DockManager
 
         }
 
-        public event EventHandler TitleChanged;
+        public event EventHandler SelectionChanged;
 
         public string Title
         {
@@ -61,6 +61,8 @@ namespace WpfDockManagerDemo.DockManager
                 Children.RemoveAt(0);
 
                 TabControl tabControl = new TabControl();
+                tabControl.SelectionChanged += TabControl_SelectionChanged;
+                tabControl.TabClosed += TabControl_TabClosed;
 
                 Children.Add(tabControl);
                 Grid.SetRow(tabControl, 0);
@@ -78,6 +80,32 @@ namespace WpfDockManagerDemo.DockManager
             {
                 throw new Exception(System.Reflection.MethodBase.GetCurrentMethod().Name + ": Children[0] is not an expected type -> " + Children[0].GetType().FullName);
             }
+        }
+
+        private void CheckTabCount()
+        {
+            TabControl tabControl = Children[0] as TabControl;
+            if (tabControl == null)
+            {
+                return;
+            }
+
+            if (tabControl.Count == 1)
+            {
+                UserControl userControl = tabControl.RemoveAt(0);
+                Children.Remove(tabControl);
+                Children.Add(userControl);
+            }
+        }
+
+        private void TabControl_TabClosed(object sender, EventArgs e)
+        {
+            CheckTabCount();
+        }
+
+        private void TabControl_SelectionChanged(object sender, EventArgs e)
+        {
+            SelectionChanged?.Invoke(sender, e);
         }
 
         public UserControl ExtractUserControl(int index)
@@ -106,12 +134,7 @@ namespace WpfDockManagerDemo.DockManager
                 }
 
                 userControl = tabControl.RemoveAt(index);
-                if (tabControl.Count == 1)
-                {
-                    UserControl userControl2 = tabControl.RemoveAt(0);
-                    Children.Remove(tabControl);
-                    Children.Add(userControl2);
-                }
+                CheckTabCount();
             }
             else
             {

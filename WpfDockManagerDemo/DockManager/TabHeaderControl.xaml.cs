@@ -342,6 +342,28 @@ namespace WpfDockManagerDemo.DockManager
 
         #endregion
 
+        #region ActiveArrowBrush dependency property
+
+        [Bindable(true)]
+        [DesignerSerializationVisibility(DesignerSerializationVisibility.Hidden)]
+        public static readonly DependencyProperty ActiveArrowBrushProperty = DependencyProperty.Register("ActiveArrowBrush", typeof(Brush), typeof(TabHeaderControl), new FrameworkPropertyMetadata(Brushes.White, null));
+        public Brush ActiveArrowBrush
+        {
+            get
+            {
+                return (Brush)GetValue(ActiveArrowBrushProperty);
+            }
+            set
+            {
+                if (value != ActiveArrowBrush)
+                {
+                    SetValue(ActiveArrowBrushProperty, value);
+                }
+            }
+        }
+
+        #endregion
+
         #endregion
 
         private void _listBox_SelectionChanged(object sender, SelectionChangedEventArgs e)
@@ -370,8 +392,11 @@ namespace WpfDockManagerDemo.DockManager
             {
                 if (item is Label)
                 {
-                    string text = (string)(item as Label).Content;
-                    CloseTabRequest?.Invoke(text, null);
+                    ContentPresenter contentPresenter = (item as Label).Content as ContentPresenter;
+                    if (contentPresenter != null)
+                    {
+                        CloseTabRequest?.Invoke(contentPresenter.Content, null);
+                    }
                 }
             }
         }

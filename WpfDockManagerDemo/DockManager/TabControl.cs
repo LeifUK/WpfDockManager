@@ -11,9 +11,9 @@ namespace WpfDockManagerDemo.DockManager
             RowDefinitions.Add(new RowDefinition() { Height = new System.Windows.GridLength(4, System.Windows.GridUnitType.Pixel) });
 
             ColumnDefinitions.Add(new ColumnDefinition() { Width = new System.Windows.GridLength(1, System.Windows.GridUnitType.Star) });
+            ColumnDefinitions.Add(new ColumnDefinition() { Width = new System.Windows.GridLength(4, System.Windows.GridUnitType.Pixel) });
             ColumnDefinitions.Add(new ColumnDefinition() { Width = new System.Windows.GridLength(20, System.Windows.GridUnitType.Pixel) });
-            ColumnDefinitions.Add(new ColumnDefinition() { Width = new System.Windows.GridLength(20, System.Windows.GridUnitType.Pixel) });
-            ColumnDefinitions.Add(new ColumnDefinition() { Width = new System.Windows.GridLength(10, System.Windows.GridUnitType.Pixel) });
+            ColumnDefinitions.Add(new ColumnDefinition() { Width = new System.Windows.GridLength(4, System.Windows.GridUnitType.Pixel) });
 
             _tabHeaderControl = new TabHeaderControl();
             Children.Add(_tabHeaderControl);
@@ -31,18 +31,38 @@ namespace WpfDockManagerDemo.DockManager
             Grid.SetZIndex(border, -1);
             border.HorizontalAlignment = System.Windows.HorizontalAlignment.Stretch;
             border.VerticalAlignment = System.Windows.VerticalAlignment.Stretch;
-            border.Background = System.Windows.Media.Brushes.Gray;
+            border.Background = System.Windows.Media.Brushes.Gainsboro;
 
             _items = new System.Collections.ObjectModel.ObservableCollection<System.Collections.Generic.KeyValuePair<UserControl, IDocument>>();
             _tabHeaderControl.ItemsSource = _items;
             _tabHeaderControl.DisplayMemberPath = "Value.Title";
             _tabHeaderControl.SelectionChanged += _tabHeaderControl_SelectionChanged;
+            _tabHeaderControl.CloseTabRequest += _tabHeaderControl_CloseTabRequest;
 
             _button = new Button();
             Children.Add(_button);
             Grid.SetRow(_button, 1);
             Grid.SetColumn(_button, 2);
             _button.Click += _button_Click;
+            System.Windows.ResourceDictionary res = (System.Windows.ResourceDictionary)App.LoadComponent(new System.Uri("/WpfDockManagerDemo;component/DockManager/Dictionary.xaml", System.UriKind.Relative));
+            _button.Style = (System.Windows.Style)res["MenuButtonStyle"];
+        }
+
+        private void _tabHeaderControl_CloseTabRequest(object sender, System.EventArgs e)
+        {
+            if (sender == null)
+            {
+
+                return;
+            }
+
+            System.Collections.Generic.KeyValuePair<UserControl, IDocument> item = (System.Collections.Generic.KeyValuePair<UserControl, IDocument>)sender;
+            if (item.Value.CanClose)
+            {
+                int index = _items.IndexOf(item);
+                RemoveAt(index);
+                TabClosed?.Invoke(null, null);
+            }
         }
 
         private void _button_Click(object sender, System.Windows.RoutedEventArgs e)
@@ -64,6 +84,7 @@ namespace WpfDockManagerDemo.DockManager
         }
 
         public event System.EventHandler SelectionChanged;
+        public event System.EventHandler TabClosed;
 
         private void _tabHeaderControl_SelectionChanged(object sender, System.EventArgs e)
         {
@@ -154,6 +175,6 @@ namespace WpfDockManagerDemo.DockManager
         public int Count { get { return _items.Count; } }
 
         public int SelectedIndex { get { return _tabHeaderControl.SelectedIndex; } }
-        public UserControl SelectedItem { get { return _items[_tabHeaderControl.SelectedIndex].Key; } }
+        public UserControl SelectedItem { get { return SelectedIndex > -1 ? _items[SelectedIndex].Key : null; } }
     }
 }
