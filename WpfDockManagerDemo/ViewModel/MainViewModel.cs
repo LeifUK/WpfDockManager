@@ -12,30 +12,26 @@ namespace WpfDockManagerDemo.ViewModel
         public MainViewModel()
         {
             long id = 0;
-            Documents = new System.Collections.ObjectModel.ObservableCollection<DockManager.IDocument>();
-            // Warning warning => bollocks
-            Documents.Add(new ViewModel.DemoOneViewModel() { ID = id++ });
-            Documents.Add(new ViewModel.DemoTwoViewModel() { ID = id++ });
-            Documents.Add(new ViewModel.DemoOneViewModel() { ID = id++ });
-            Documents.Add(new ViewModel.DemoTwoViewModel() { ID = id++ });
-            Documents.Add(new ViewModel.DemoOneViewModel() { ID = id++ });
-            Documents.Add(new ViewModel.DemoTwoViewModel() { ID = id++ });
-            Documents.Add(new ViewModel.DemoOneViewModel() { ID = id++ });
-            Documents.Add(new ViewModel.DemoTwoViewModel() { ID = id++ });
+            Tools = new System.Collections.ObjectModel.ObservableCollection<DockManager.IDocument>();
+            Tools.Add(new ViewModel.DemoOneViewModel() { ID = id++ });
+            Tools.Add(new ViewModel.DemoTwoViewModel() { ID = id++ });
+            Tools.Add(new ViewModel.DemoThreeViewModel() { ID = id++ });
+            Tools.Add(new ViewModel.DemoFourViewModel() { ID = id++ });
+            Tools.Add(new ViewModel.DemoFiveViewModel() { ID = id++ });
         }
 
-        private System.Collections.ObjectModel.ObservableCollection<DockManager.IDocument> _documens;
-        public System.Collections.ObjectModel.ObservableCollection<DockManager.IDocument> Documents
+        private System.Collections.ObjectModel.ObservableCollection<DockManager.IDocument> _tools;
+        public System.Collections.ObjectModel.ObservableCollection<DockManager.IDocument> Tools
         {
             get
             {
-                return _documens;
+                return _tools;
             }
             set
             {
-                if (value != Documents)
+                if (value != Tools)
                 {
-                    _documens = value;
+                    _tools = value;
                     NotifyPropertyChanged("Documents");
                 }
             }

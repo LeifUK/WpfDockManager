@@ -93,68 +93,68 @@ namespace WpfDockManagerDemo.DockManager
 
         #region dependency properties 
 
-        #region DocumentItems dependency property
+        #region DocumentsSource dependency property
 
         [Bindable(true)]
         [DesignerSerializationVisibility(DesignerSerializationVisibility.Hidden)]
-        public static readonly DependencyProperty DocumentItemsProperty = DependencyProperty.Register("DocumentItems", typeof(System.Collections.Generic.IEnumerable<IDocument>), typeof(LayoutManager), new FrameworkPropertyMetadata(null, new PropertyChangedCallback(OnDocumentItemsChanged)));
+        public static readonly DependencyProperty DocumentsSourceProperty = DependencyProperty.Register("DocumentsSource", typeof(System.Collections.Generic.IEnumerable<IDocument>), typeof(LayoutManager), new FrameworkPropertyMetadata(null, new PropertyChangedCallback(OnDocumentsSourceChanged)));
 
-        public System.Collections.Generic.IEnumerable<IDocument> DocumentItems
+        public System.Collections.Generic.IEnumerable<IDocument> DocumentsSource
         {
             get
             {
-                return (System.Collections.Generic.IEnumerable<IDocument>)GetValue(DocumentItemsProperty);
+                return (System.Collections.Generic.IEnumerable<IDocument>)GetValue(DocumentsSourceProperty);
             }
             set
             {
-                SetValue(DocumentItemsProperty, value);
+                SetValue(DocumentsSourceProperty, value);
             }
         }
 
-        private static void OnDocumentItemsChanged(DependencyObject d, DependencyPropertyChangedEventArgs e)
+        private static void OnDocumentsSourceChanged(DependencyObject d, DependencyPropertyChangedEventArgs e)
         {
-            ((LayoutManager)d).OnDocumentItemsChanged(e);
+            ((LayoutManager)d).OnDocumentsSourceChanged(e);
         }
 
-        protected virtual void OnDocumentItemsChanged(DependencyPropertyChangedEventArgs e)
+        protected virtual void OnDocumentsSourceChanged(DependencyPropertyChangedEventArgs e)
         {
             if (e.NewValue != null)
             {
-                DocumentItems = (System.Collections.Generic.IEnumerable<IDocument>)e.NewValue;
+                DocumentsSource = (System.Collections.Generic.IEnumerable<IDocument>)e.NewValue;
                 Create();
             }
         }
 
         #endregion
 
-        #region ToolItems dependency property
+        #region ToolsSource dependency property
 
         [Bindable(true)]
         [DesignerSerializationVisibility(DesignerSerializationVisibility.Hidden)]
-        public static readonly DependencyProperty ToolItemsProperty = DependencyProperty.Register("ToolItems", typeof(System.Collections.IEnumerable), typeof(LayoutManager), new FrameworkPropertyMetadata(null, new PropertyChangedCallback(OnToolItemsChanged)));
+        public static readonly DependencyProperty ToolsSourceProperty = DependencyProperty.Register("ToolsSource", typeof(System.Collections.IEnumerable), typeof(LayoutManager), new FrameworkPropertyMetadata(null, new PropertyChangedCallback(OnToolsSourceChanged)));
 
-        public System.Collections.IEnumerable ToolItems
+        public System.Collections.IEnumerable ToolsSource
         {
             get
             {
-                return (System.Collections.IEnumerable)GetValue(ToolItemsProperty);
+                return (System.Collections.IEnumerable)GetValue(ToolsSourceProperty);
             }
             set
             {
-                SetValue(ToolItemsProperty, value);
+                SetValue(ToolsSourceProperty, value);
             }
         }
 
-        private static void OnToolItemsChanged(DependencyObject d, DependencyPropertyChangedEventArgs e)
+        private static void OnToolsSourceChanged(DependencyObject d, DependencyPropertyChangedEventArgs e)
         {
-            ((LayoutManager)d).OnToolItemsChanged(e);
+            ((LayoutManager)d).OnToolsSourceChanged(e);
         }
 
-        protected virtual void OnToolItemsChanged(DependencyPropertyChangedEventArgs e)
+        protected virtual void OnToolsSourceChanged(DependencyPropertyChangedEventArgs e)
         {
             if (e.NewValue != null)
             {
-                ToolItems = (System.Collections.IEnumerable)e.NewValue;
+                ToolsSource = (System.Collections.IEnumerable)e.NewValue;
                 Create();
             }
         }
@@ -171,7 +171,7 @@ namespace WpfDockManagerDemo.DockManager
         {
             get
             {
-                return (System.Windows.Controls.ControlTemplate)GetValue(ToolItemsProperty);
+                return (System.Windows.Controls.ControlTemplate)GetValue(ToolsSourceProperty);
             }
             set
             {
@@ -213,7 +213,7 @@ namespace WpfDockManagerDemo.DockManager
 
             // First load the views and view models
 
-            foreach (var document in DocumentItems)
+            foreach (var tool in ToolsSource)
             {
                 foreach (var item in Resources.Values)
                 {
@@ -221,7 +221,7 @@ namespace WpfDockManagerDemo.DockManager
                     {
                         DataTemplate dataTemplate = item as DataTemplate;
 
-                        if (document.GetType() == (Type)dataTemplate.DataType)
+                        if (tool.GetType() == (Type)dataTemplate.DataType)
                         {
                             UserControl view = (dataTemplate.LoadContent() as UserControl);
                             if (view != null)
@@ -231,8 +231,8 @@ namespace WpfDockManagerDemo.DockManager
                                 {
                                     throw new Exception(System.Reflection.MethodBase.GetCurrentMethod().Name + ": the UserControl must implement interface IView");
                                 }
-                                iView.IDocument = document;
-                                view.DataContext = document;
+                                iView.IDocument = tool as IDocument;
+                                view.DataContext = tool;
                                 view.HorizontalAlignment = HorizontalAlignment.Stretch;
                                 view.VerticalAlignment = VerticalAlignment.Stretch;
 
@@ -577,7 +577,7 @@ namespace WpfDockManagerDemo.DockManager
                     {
                         XmlElement xmlToolElement = xmlToolGroupNode as XmlElement;
 
-                        XmlAttribute xmlAttribute = xmlToolElement.Attributes.GetNamedItem("ID") as XmlAttribute;
+                        XmlAttribute xmlAttribute = xmlToolElement.Attributes.GetNamedItem("ContentId") as XmlAttribute;
                         if (xmlAttribute == null)
                         {
                             throw new Exception(System.Reflection.MethodBase.GetCurrentMethod().Name + ": a Tool element must have an ID attribute");
@@ -678,13 +678,10 @@ namespace WpfDockManagerDemo.DockManager
 
             List<UserControl> views = new List<UserControl>();
             Dictionary<string, UserControl> viewsMap = new Dictionary<string, UserControl>();
-            
-            // Warning warning
-            Dictionary<string, DataTemplate> dataTemplates = new Dictionary<string, DataTemplate>();
 
             // The application defines the views that are supported
 
-            foreach (var document in DocumentItems)
+            foreach (var tool in ToolsSource)
             {
                 foreach (var item in Resources.Values)
                 {
@@ -692,7 +689,7 @@ namespace WpfDockManagerDemo.DockManager
                     {
                         DataTemplate dataTemplate = item as DataTemplate;
 
-                        if (document.GetType() == (Type)dataTemplate.DataType)
+                        if (tool.GetType() == (Type)dataTemplate.DataType)
                         {
                             UserControl view = (dataTemplate.LoadContent() as UserControl);
                             if (view != null)
@@ -702,14 +699,14 @@ namespace WpfDockManagerDemo.DockManager
                                 {
                                     throw new Exception(System.Reflection.MethodBase.GetCurrentMethod().Name + ": the UserControl must implement interface IView");
                                 }
-                                iView.IDocument = document;
-                                view.DataContext = document;
+                                iView.IDocument = tool as IDocument;
+                                view.DataContext = tool;
                                 view.HorizontalAlignment = HorizontalAlignment.Stretch;
                                 view.VerticalAlignment = VerticalAlignment.Stretch;
 
                                 views.Add(view);
 
-                                viewsMap.Add((document as IDocument).ID.ToString(), view);
+                                viewsMap.Add(view.Name, view);
                             }
                         }
                     }

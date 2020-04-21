@@ -76,13 +76,22 @@
                 </StackPanel>
             </Grid>
 
-            <dockManager:LayoutManager x:Name="_layoutManager" Grid.Row="1" Grid.Column="0" DocumentItems="{Binding Documents}" ToolItems="{Binding Tools}" VerticalAlignment="Stretch" HorizontalAlignment="Stretch">
+            <dockManager:LayoutManager x:Name="_layoutManager" Grid.Row="1" Grid.Column="0" DocumentsSource="{Binding Documents}" ToolsSource="{Binding Tools}" VerticalAlignment="Stretch" HorizontalAlignment="Stretch">
                 <dockManager:LayoutManager.Resources>
                     <DataTemplate DataType="{x:Type viewModel:DemoOneViewModel}">
                         <view:DemoOneView x:Name="_demoOneView"/>
                     </DataTemplate>
                     <DataTemplate DataType="{x:Type viewModel:DemoTwoViewModel}">
                         <view:DemoTwoView x:Name="_demoTwoView"/>
+                    </DataTemplate>
+                    <DataTemplate DataType="{x:Type viewModel:DemoThreeViewModel}">
+                        <view:DemoThreeView x:Name="_demoThreeView"/>
+                    </DataTemplate>
+                    <DataTemplate DataType="{x:Type viewModel:DemoFourViewModel}">
+                        <view:DemoFourView x:Name="_demoFourView"/>
+                    </DataTemplate>
+                    <DataTemplate DataType="{x:Type viewModel:DemoFiveViewModel}">
+                        <view:DemoFiveView x:Name="_demoFiveView"/>
                     </DataTemplate>
                 </dockManager:LayoutManager.Resources>
                 <dockManager:LayoutManager.CloseControlTemplate>
@@ -95,7 +104,6 @@
                     </ControlTemplate>
                 </dockManager:LayoutManager.CloseControlTemplate>
             </dockManager:LayoutManager>
-
 
         </Grid>
     </Border>

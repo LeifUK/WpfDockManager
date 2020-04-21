@@ -83,12 +83,24 @@
     <Compile Include="DockManager\SplitterPane.cs" />
     <Compile Include="DockManager\User32.cs" />
     <Compile Include="DockManager\WindowLocation.cs" />
+    <Compile Include="ViewModel\DemoFiveViewModel.cs" />
+    <Compile Include="ViewModel\DemoFourViewModel.cs" />
     <Compile Include="ViewModel\DemoOneViewModel.cs" />
+    <Compile Include="ViewModel\DemoThreeViewModel.cs" />
     <Compile Include="ViewModel\DemoTwoViewModel.cs" />
     <Compile Include="DockManager\FloatingViewModel.cs" />
     <Compile Include="ViewModel\MainViewModel.cs" />
+    <Compile Include="View\DemoFiveView.xaml.cs">
+      <DependentUpon>DemoFiveView.xaml</DependentUpon>
+    </Compile>
+    <Compile Include="View\DemoFourView.xaml.cs">
+      <DependentUpon>DemoFourView.xaml</DependentUpon>
+    </Compile>
     <Compile Include="View\DemoOneView.xaml.cs">
       <DependentUpon>DemoOneView.xaml</DependentUpon>
+    </Compile>
+    <Compile Include="View\DemoThreeView.xaml.cs">
+      <DependentUpon>DemoThreeView.xaml</DependentUpon>
     </Compile>
     <Compile Include="View\DemoTwoView.xaml.cs">
       <DependentUpon>DemoTwoView.xaml</DependentUpon>
@@ -121,9 +133,21 @@
       <DependentUpon>MainWindow.xaml</DependentUpon>
       <SubType>Code</SubType>
     </Compile>
+    <Page Include="View\DemoFiveView.xaml">
+      <Generator>MSBuild:Compile</Generator>
+      <SubType>Designer</SubType>
+    </Page>
+    <Page Include="View\DemoFourView.xaml">
+      <Generator>MSBuild:Compile</Generator>
+      <SubType>Designer</SubType>
+    </Page>
     <Page Include="View\DemoOneView.xaml">
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
+    </Page>
+    <Page Include="View\DemoThreeView.xaml">
+      <Generator>MSBuild:Compile</Generator>
+      <SubType>Designer</SubType>
     </Page>
     <Page Include="View\DemoTwoView.xaml">
       <SubType>Designer</SubType>
