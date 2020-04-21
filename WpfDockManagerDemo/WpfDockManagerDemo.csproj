@@ -59,6 +59,7 @@
     </ApplicationDefinition>
     <Compile Include="DockManager\CloseRequestHandler.cs" />
     <Compile Include="DockManager\Command.cs" />
+    <Compile Include="DockManager\DockPane.cs" />
     <Compile Include="DockManager\DocumentContainer.cs" />
     <Compile Include="DockManager\DocumentPane.cs" />
     <Compile Include="DockManager\ExtensionMethods.cs" />
@@ -73,6 +74,7 @@
     <Compile Include="DockManager\TabHeaderControl.xaml.cs">
       <DependentUpon>TabHeaderControl.xaml</DependentUpon>
     </Compile>
+    <Compile Include="DockManager\ToolPane.cs" />
     <Compile Include="DockManager\Utilities.cs" />
     <Compile Include="DockManager\WindowLocationPane.xaml.cs">
       <DependentUpon>WindowLocationPane.xaml</DependentUpon>

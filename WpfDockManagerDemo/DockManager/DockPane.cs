@@ -10,10 +10,37 @@ namespace WpfDockManagerDemo.DockManager
     {
         public DockPane()
         {
-
-
+            _documentContainer = new DocumentContainer();
+            Children.Add(_documentContainer);
+            IDocumentContainer = _documentContainer;
         }
-        protected abstract void MenuButton_Click(object sender, RoutedEventArgs e);
 
+        public event EventHandler Close;
+        public event EventHandler Float;
+        public event EventHandler UngroupCurrent;
+        public event EventHandler Ungroup;
+
+        protected void FireClose()
+        {
+            Close?.Invoke(this, null);
+        }
+
+        protected void FireFloat()
+        {
+            Float?.Invoke(this, null);
+        }
+
+        protected void FireUngroupCurrent()
+        {
+            UngroupCurrent?.Invoke(this, null);
+        }
+
+        protected void FireUngroup()
+        {
+            Ungroup?.Invoke(this, null);
+        }
+
+        protected DocumentContainer _documentContainer;
+        public readonly IDocumentContainer IDocumentContainer;
     }
 }
