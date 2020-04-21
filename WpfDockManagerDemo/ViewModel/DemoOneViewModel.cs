@@ -23,12 +23,13 @@ namespace WpfDockManagerDemo.ViewModel
         {
             get
             {
-                bool canClose = true;
-                if (CloseRequest != null)
-                {
-                    canClose = CloseRequest();
-                }
-                return canClose;
+                //bool canClose = true;
+                //if (CloseRequest != null)
+                //{
+                //    canClose = CloseRequest();
+                //}
+                //return canClose;
+                return (System.Windows.Forms.MessageBox.Show("There are unsaved changes in the document. Do you wish to close without saving the changes?", "Close " + Title, System.Windows.Forms.MessageBoxButtons.OKCancel) == System.Windows.Forms.DialogResult.OK);
             }
         }
 

@@ -198,13 +198,32 @@ namespace WpfDockManagerDemo.DockManager
 
         #endregion
 
+        private void ClearViews(Panel panel)
+        {
+            // Warning warning
+            //foreach (var child in panel.Children)
+            //{
+            //    if (child is DockPane)
+            //    {
+            //        (child as DockPane).
+            //    }
+            //    else if (child is Grid)
+            //    {
+            //        ClearViews(child as Grid);
+            //    }
+            //}
+        }
+
         public void Clear()
         {
+            ClearViews(this);
+
             Children.Clear();
             while (FloatingPanes.Count > 0)
             {
                 FloatingPanes[0].Close();
             }
+            FloatingPanes.Clear();
         }
 
         private void Create()

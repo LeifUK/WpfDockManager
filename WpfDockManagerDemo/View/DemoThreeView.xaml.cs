@@ -30,7 +30,11 @@ namespace WpfDockManagerDemo.View
                     }
 
                     _iDocument = value;
-                    _iDocument.CloseRequest += _iDocument_CloseRequest;
+                    // Warning warning
+                    if (_iDocument != null)
+                    {
+                        _iDocument.CloseRequest += _iDocument_CloseRequest;
+                    }
                 }
             }
         }
