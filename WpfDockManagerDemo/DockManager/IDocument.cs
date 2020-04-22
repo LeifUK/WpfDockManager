@@ -22,8 +22,5 @@ namespace WpfDockManagerDemo.DockManager
         bool HasChanged { get; }
         void Save();
         void Close();
-
-        //event CloseRequestHandler CloseRequest;
-        event EventHandler Closing;
     }
 }

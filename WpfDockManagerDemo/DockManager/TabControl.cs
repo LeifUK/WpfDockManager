@@ -52,16 +52,28 @@ namespace WpfDockManagerDemo.DockManager
         {
             if (sender == null)
             {
-
                 return;
             }
 
             System.Collections.Generic.KeyValuePair<UserControl, IDocument> item = (System.Collections.Generic.KeyValuePair<UserControl, IDocument>)sender;
             if (item.Value.CanClose)
             {
-                int index = _items.IndexOf(item);
-                RemoveAt(index);
-                TabClosed?.Invoke(null, null);
+                if (item.Value.HasChanged)
+                {
+                    System.Windows.Forms.DialogResult dialogResult = System.Windows.Forms.MessageBox.Show("There are unsaved changes in the document. Do you wish to save the changes before closing?", "Close " + item.Value.Title, System.Windows.Forms.MessageBoxButtons.YesNoCancel);
+                    
+                    if (dialogResult == System.Windows.Forms.DialogResult.Yes)
+                    {
+                        item.Value.Save();
+                    }
+                    
+                    if (dialogResult != System.Windows.Forms.DialogResult.Cancel)
+                    {
+                        int index = _items.IndexOf(item);
+                        RemoveAt(index);
+                        TabClosed?.Invoke(null, null);
+                    }
+                }
             }
         }
 

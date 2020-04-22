@@ -89,6 +89,7 @@
     <Compile Include="ViewModel\DemoThreeViewModel.cs" />
     <Compile Include="ViewModel\DemoTwoViewModel.cs" />
     <Compile Include="DockManager\FloatingViewModel.cs" />
+    <Compile Include="ViewModel\DummyViewModel.cs" />
     <Compile Include="ViewModel\MainViewModel.cs" />
     <Compile Include="View\DemoFiveView.xaml.cs">
       <DependentUpon>DemoFiveView.xaml</DependentUpon>

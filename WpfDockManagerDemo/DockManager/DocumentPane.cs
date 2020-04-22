@@ -33,8 +33,6 @@ namespace WpfDockManagerDemo.DockManager
             ColumnDefinitions.Add(columnDefinition);
 
             RowDefinitions.Add(new RowDefinition());
-            RowDefinitions[0].Height = new GridLength(20, GridUnitType.Pixel);
-            RowDefinitions.Add(new RowDefinition());
             RowDefinitions[1].Height = new GridLength(1, GridUnitType.Star);
 
             Border = new Border();
@@ -65,30 +63,8 @@ namespace WpfDockManagerDemo.DockManager
             Grid.SetColumn(menuButton, 2);
             Children.Add(menuButton);
 
-            Button pinButton = new Button();
-            pinButton.Style = FindResource("styleHeaderPinButton") as Style;
-            Grid.SetRow(pinButton, 0);
-            Grid.SetColumn(pinButton, 3);
-            Children.Add(pinButton);
-
-            Button closeButton = new Button();
-            closeButton.Style = FindResource("styleHeaderCloseButton") as Style;
-            Grid.SetRow(closeButton, 0);
-            Grid.SetColumn(closeButton, 4);
-            Panel.SetZIndex(closeButton, 99);
-            Children.Add(closeButton);
-            closeButton.Click += delegate
-            {
-                // Warning warning => BS
-                //if (IDocument != null)
-                //{
-                //    IDocument.Closing();
-                //}
-                FireClose();
-            };
-
             _documentContainer.SelectionChanged += DocumentContainer_SelectionChanged;
-            Grid.SetRow(_documentContainer, 1);
+            Grid.SetRow(_documentContainer, 0);
             Grid.SetColumn(_documentContainer, 0);
             Grid.SetColumnSpan(_documentContainer, ColumnDefinitions.Count);
         }
@@ -147,36 +123,36 @@ namespace WpfDockManagerDemo.DockManager
             }
         }
 
-        Point _mouseDownPosition;
+        //Point _mouseDownPosition;
 
-        protected override void OnMouseLeftButtonDown(MouseButtonEventArgs e)
-        {
-            _mouseDownPosition = e.GetPosition(this);
-            base.OnMouseLeftButtonDown(e);
-            System.Windows.Input.Mouse.Capture(this);
-        }
+        //protected override void OnMouseLeftButtonDown(MouseButtonEventArgs e)
+        //{
+        //    _mouseDownPosition = e.GetPosition(this);
+        //    base.OnMouseLeftButtonDown(e);
+        //    System.Windows.Input.Mouse.Capture(this);
+        //}
 
-        protected override void OnMouseLeftButtonUp(MouseButtonEventArgs e)
-        {
-            base.OnMouseLeftButtonUp(e);
-            System.Windows.Input.Mouse.Capture(this, CaptureMode.None);
-        }
+        //protected override void OnMouseLeftButtonUp(MouseButtonEventArgs e)
+        //{
+        //    base.OnMouseLeftButtonUp(e);
+        //    System.Windows.Input.Mouse.Capture(this, CaptureMode.None);
+        //}
 
-        protected override void OnMouseMove(MouseEventArgs e)
-        {
-            base.OnMouseMove(e);
-            if (System.Windows.Input.Mouse.Captured == this)
-            {
-                Point mousePosition = e.GetPosition(this);
-                double xdiff = mousePosition.X - _mouseDownPosition.X;
-                double ydiff = mousePosition.Y - _mouseDownPosition.Y;
-                if ((xdiff * xdiff + ydiff * ydiff) > 100)
-                {
+        //protected override void OnMouseMove(MouseEventArgs e)
+        //{
+        //    base.OnMouseMove(e);
+        //    if (System.Windows.Input.Mouse.Captured == this)
+        //    {
+        //        Point mousePosition = e.GetPosition(this);
+        //        double xdiff = mousePosition.X - _mouseDownPosition.X;
+        //        double ydiff = mousePosition.Y - _mouseDownPosition.Y;
+        //        if ((xdiff * xdiff + ydiff * ydiff) > 100)
+        //        {
 
-                    FireFloat();
-                    System.Windows.Input.Mouse.Capture(this, CaptureMode.None);
-                }
-            }
-        }
+        //            FireFloat();
+        //            System.Windows.Input.Mouse.Capture(this, CaptureMode.None);
+        //        }
+        //    }
+        //}
     }
 }

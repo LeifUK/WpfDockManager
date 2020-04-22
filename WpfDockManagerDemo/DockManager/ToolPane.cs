@@ -77,15 +77,7 @@ namespace WpfDockManagerDemo.DockManager
             Grid.SetColumn(closeButton, 4);
             Panel.SetZIndex(closeButton, 99);
             Children.Add(closeButton);
-            closeButton.Click += delegate
-            {
-                // Warning warning => BS
-                //if (IDocument != null)
-                //{
-                //    IDocument.Closing();
-                //}
-                FireClose();
-            };
+            closeButton.Click += delegate { FireClose(); };
 
             _documentContainer.SelectionChanged += DocumentContainer_SelectionChanged;
             Grid.SetRow(_documentContainer, 1);

@@ -198,26 +198,8 @@ namespace WpfDockManagerDemo.DockManager
 
         #endregion
 
-        private void ClearViews(Panel panel)
-        {
-            // Warning warning
-            //foreach (var child in panel.Children)
-            //{
-            //    if (child is DockPane)
-            //    {
-            //        (child as DockPane).
-            //    }
-            //    else if (child is Grid)
-            //    {
-            //        ClearViews(child as Grid);
-            //    }
-            //}
-        }
-
         public void Clear()
         {
-            ClearViews(this);
-
             Children.Clear();
             while (FloatingPanes.Count > 0)
             {
@@ -819,10 +801,11 @@ namespace WpfDockManagerDemo.DockManager
                 return false;
             }
 
-            SplitterPane parentSplitterPane = toolPane.Parent as SplitterPane;
+            // The parent must be a SplitterPane or the LayoutManager
+            Grid parentSplitterPane = toolPane.Parent as Grid;
             if (parentSplitterPane == null)
             {
-                throw new Exception(System.Reflection.MethodBase.GetCurrentMethod().Name + ": toolPane.Parent not a SplitterPane");
+                throw new Exception(System.Reflection.MethodBase.GetCurrentMethod().Name + ": toolPane.Parent not a Grid");
             }
 
             UserControl userControl = toolPane.IDocumentContainer.ExtractUserControl(index);
