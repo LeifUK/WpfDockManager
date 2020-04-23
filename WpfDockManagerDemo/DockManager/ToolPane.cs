@@ -7,7 +7,7 @@ namespace WpfDockManagerDemo.DockManager
 {
     internal class ToolPane : DockPane
     {
-        public ToolPane()
+        public ToolPane() : base(new ToolTabControlFactory())
         {
             VerticalAlignment = System.Windows.VerticalAlignment.Stretch;
             HorizontalAlignment = HorizontalAlignment.Stretch;

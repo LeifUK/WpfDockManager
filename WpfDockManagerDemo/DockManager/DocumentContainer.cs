@@ -5,10 +5,12 @@ namespace WpfDockManagerDemo.DockManager
 {
     internal class DocumentContainer : Grid, IDocumentContainer
     {
-        public DocumentContainer()
+        public DocumentContainer(ITabControlFactory iTabControlFactory)
         {
-
+            _iTabControlFactory = iTabControlFactory;
         }
+
+        private readonly ITabControlFactory _iTabControlFactory;
 
         public event EventHandler SelectionChanged;
 
@@ -27,7 +29,7 @@ namespace WpfDockManagerDemo.DockManager
                     return (iDocument as IDocument).Title;
                 }
 
-                TabControl tabControl = Children[0] as TabControl;
+                ToolTabControl tabControl = Children[0] as ToolTabControl;
 
                 if (tabControl == null)
                 {
@@ -60,20 +62,20 @@ namespace WpfDockManagerDemo.DockManager
                 UserControl userControl2 = Children[0] as UserControl;
                 Children.RemoveAt(0);
 
-                TabControl tabControl = new TabControl();
+                ITabControl tabControl = _iTabControlFactory.GetTabControl();
                 tabControl.SelectionChanged += TabControl_SelectionChanged;
                 tabControl.TabClosed += TabControl_TabClosed;
 
-                Children.Add(tabControl);
-                Grid.SetRow(tabControl, 0);
-                Grid.SetColumn(tabControl, 0);
+                Children.Add(tabControl as System.Windows.UIElement);
+                Grid.SetRow(tabControl as System.Windows.UIElement, 0);
+                Grid.SetColumn(tabControl as System.Windows.UIElement, 0);
 
                 tabControl.AddUserControl(userControl2);
                 tabControl.AddUserControl(userControl);
             }
             else if (Children[0] is Grid)
             {
-                TabControl tabControl = Children[0] as TabControl;
+                ITabControl tabControl = Children[0] as ITabControl;
                 tabControl.AddUserControl(userControl);
             }
             else
@@ -84,7 +86,7 @@ namespace WpfDockManagerDemo.DockManager
 
         private void CheckTabCount()
         {
-            TabControl tabControl = Children[0] as TabControl;
+            ITabControl tabControl = Children[0] as ITabControl;
             if (tabControl == null)
             {
                 return;
@@ -93,7 +95,7 @@ namespace WpfDockManagerDemo.DockManager
             if (tabControl.Count == 1)
             {
                 UserControl userControl = tabControl.RemoveAt(0);
-                Children.Remove(tabControl);
+                Children.Remove((System.Windows.UIElement)tabControl);
                 Children.Add(userControl);
             }
         }
@@ -121,9 +123,9 @@ namespace WpfDockManagerDemo.DockManager
                 userControl = Children[0] as UserControl;
                 Children.RemoveAt(0);
             }
-            else if (Children[0] is TabControl)
+            else if (Children[0] is ITabControl)
             {
-                TabControl tabControl = Children[0] as TabControl;
+                ITabControl tabControl = Children[0] as ITabControl;
                 if (index >= tabControl.Count)
                 {
                     index = tabControl.Count - 1;
@@ -154,9 +156,9 @@ namespace WpfDockManagerDemo.DockManager
             {
                 return 1;
             }
-            else if (Children[0] is TabControl)
+            else if (Children[0] is ITabControl)
             {
-                return (Children[0] as TabControl).Count;
+                return (Children[0] as ITabControl).Count;
             }
 
             throw new Exception(System.Reflection.MethodBase.GetCurrentMethod().Name + ": Children[0] is not an expected type -> " + Children[0].GetType().FullName);
@@ -191,9 +193,9 @@ namespace WpfDockManagerDemo.DockManager
             {
                 return (index == 0) ? Children[0] as UserControl : null;
             }
-            else if (Children[0] is TabControl)
+            else if (Children[0] is ITabControl)
             {
-                TabControl tabControl = Children[0] as TabControl;
+                ITabControl tabControl = Children[0] as ITabControl;
 
                 if (index >= tabControl.Count)
                 {

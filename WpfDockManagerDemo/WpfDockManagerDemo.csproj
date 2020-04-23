@@ -62,6 +62,7 @@
     <Compile Include="DockManager\DockPane.cs" />
     <Compile Include="DockManager\DocumentContainer.cs" />
     <Compile Include="DockManager\DocumentPane.cs" />
+    <Compile Include="DockManager\DocumentTabControlFactory.cs" />
     <Compile Include="DockManager\ExtensionMethods.cs" />
     <Compile Include="DockManager\FloatingPane.xaml.cs">
       <DependentUpon>FloatingPane.xaml</DependentUpon>
@@ -69,12 +70,18 @@
     <Compile Include="DockManager\IDocument.cs" />
     <Compile Include="DockManager\IDocumentContainer.cs" />
     <Compile Include="DockManager\InsertionIndicatorManager.cs" />
+    <Compile Include="DockManager\ITabControl.cs" />
+    <Compile Include="DockManager\ITabControlFactory.cs" />
     <Compile Include="DockManager\IView.cs" />
+    <Compile Include="DockManager\TabControlBase.cs" />
     <Compile Include="DockManager\TabControl.cs" />
+    <Compile Include="DockManager\TabControlFactory.cs" />
+    <Compile Include="DockManager\TabControlType.cs" />
     <Compile Include="DockManager\TabHeaderControl.xaml.cs">
       <DependentUpon>TabHeaderControl.xaml</DependentUpon>
     </Compile>
     <Compile Include="DockManager\ToolPane.cs" />
+    <Compile Include="DockManager\ToolTabControl.cs" />
     <Compile Include="DockManager\Utilities.cs" />
     <Compile Include="DockManager\WindowLocationPane.xaml.cs">
       <DependentUpon>WindowLocationPane.xaml</DependentUpon>

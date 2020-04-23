@@ -30,7 +30,7 @@
     </Window.CommandBindings>
 
     <Border x:Name="MainWindowBorder" BorderBrush="LightCoral" BorderThickness="0">
-        <Grid x:Name="parentContainer" Background="White">
+        <Grid x:Name="_parentContainer" Background="White">
 
             <Grid.RowDefinitions>
                 <RowDefinition Height ="Auto"/>
@@ -64,7 +64,7 @@
                 </StackPanel>
             </Grid>
 
-            <local:DocumentContainer Grid.Row="1" x:Name="DocumentContainer"/>
+            <!--<local:DocumentContainer Grid.Row="1" x:Name="DocumentContainer"/>-->
 
         </Grid>
     </Border>

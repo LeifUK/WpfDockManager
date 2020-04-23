@@ -7,7 +7,7 @@ namespace WpfDockManagerDemo.DockManager
 {
     internal class DocumentPane : DockPane
     {
-        public DocumentPane()
+        public DocumentPane() : base(new DocumentTabControlFactory())
         {
             VerticalAlignment = System.Windows.VerticalAlignment.Stretch;
             HorizontalAlignment = HorizontalAlignment.Stretch;

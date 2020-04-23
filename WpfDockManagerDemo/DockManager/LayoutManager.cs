@@ -161,6 +161,74 @@ namespace WpfDockManagerDemo.DockManager
 
         #endregion
 
+        #region DocumentTemplates dependency property
+
+        [Bindable(true)]
+        [DesignerSerializationVisibility(DesignerSerializationVisibility.Hidden)]
+        public static readonly DependencyProperty DocumentTemplatesProperty = DependencyProperty.Register("DocumentTemplates", typeof(List<DataTemplate>), typeof(LayoutManager), new FrameworkPropertyMetadata(new List<DataTemplate>(), new PropertyChangedCallback(OnDocumentTemplatesChanged)));
+
+        public List<DataTemplate> DocumentTemplates
+        {
+            get
+            {
+                return (List<DataTemplate>)GetValue(DocumentTemplatesProperty);
+            }
+            set
+            {
+                SetValue(DocumentTemplatesProperty, value);
+            }
+        }
+
+        private static void OnDocumentTemplatesChanged(DependencyObject d, DependencyPropertyChangedEventArgs e)
+        {
+            ((LayoutManager)d).OnDocumentTemplatesChanged(e);
+        }
+
+        protected virtual void OnDocumentTemplatesChanged(DependencyPropertyChangedEventArgs e)
+        {
+            if (e.NewValue != null)
+            {
+                DocumentTemplates = (List<DataTemplate>)e.NewValue;
+                Create();
+            }
+        }
+
+        #endregion
+
+        #region ToolTemplates dependency property
+
+        [Bindable(true)]
+        [DesignerSerializationVisibility(DesignerSerializationVisibility.Hidden)]
+        public static readonly DependencyProperty ToolTemplatesProperty = DependencyProperty.Register("ToolTemplates", typeof(System.Collections.Generic.List<DataTemplate>), typeof(LayoutManager), new FrameworkPropertyMetadata(new List<DataTemplate>(), new PropertyChangedCallback(OnToolTemplatesChanged)));
+
+        public System.Collections.Generic.List<DataTemplate> ToolTemplates
+        {
+            get
+            {
+                return (System.Collections.Generic.List<DataTemplate>)GetValue(ToolTemplatesProperty);
+            }
+            set
+            {
+                SetValue(ToolTemplatesProperty, value);
+            }
+        }
+
+        private static void OnToolTemplatesChanged(DependencyObject d, DependencyPropertyChangedEventArgs e)
+        {
+            ((LayoutManager)d).OnToolTemplatesChanged(e);
+        }
+
+        protected virtual void OnToolTemplatesChanged(DependencyPropertyChangedEventArgs e)
+        {
+            if (e.NewValue != null)
+            {
+                ToolTemplates = (System.Collections.Generic.List<DataTemplate>)e.NewValue;
+                Create();
+            }
+        }
+
+        #endregion
+
         #region CloseControlTemplate dependency property
 
         [Bindable(true)]
@@ -214,30 +282,33 @@ namespace WpfDockManagerDemo.DockManager
 
             // First load the views and view models
 
-            foreach (var tool in ToolsSource)
+            if (ToolsSource != null)
             {
-                foreach (var item in Resources.Values)
+                foreach (var tool in ToolsSource)
                 {
-                    if (item is DataTemplate)
+                    foreach (var item in ToolTemplates)
                     {
-                        DataTemplate dataTemplate = item as DataTemplate;
-
-                        if (tool.GetType() == (Type)dataTemplate.DataType)
+                        if (item is DataTemplate)
                         {
-                            UserControl view = (dataTemplate.LoadContent() as UserControl);
-                            if (view != null)
-                            {
-                                IView iView = (view as IView);
-                                if (iView == null)
-                                {
-                                    throw new Exception(System.Reflection.MethodBase.GetCurrentMethod().Name + ": the UserControl must implement interface IView");
-                                }
-                                iView.IDocument = tool as IDocument;
-                                view.DataContext = tool;
-                                view.HorizontalAlignment = HorizontalAlignment.Stretch;
-                                view.VerticalAlignment = VerticalAlignment.Stretch;
+                            DataTemplate dataTemplate = item as DataTemplate;
 
-                                views.Add(view);
+                            if (tool.GetType() == (Type)dataTemplate.DataType)
+                            {
+                                UserControl view = (dataTemplate.LoadContent() as UserControl);
+                                if (view != null)
+                                {
+                                    IView iView = (view as IView);
+                                    if (iView == null)
+                                    {
+                                        throw new Exception(System.Reflection.MethodBase.GetCurrentMethod().Name + ": the UserControl must implement interface IView");
+                                    }
+                                    iView.IDocument = tool as IDocument;
+                                    view.DataContext = tool;
+                                    view.HorizontalAlignment = HorizontalAlignment.Stretch;
+                                    view.VerticalAlignment = VerticalAlignment.Stretch;
+
+                                    views.Add(view);
+                                }
                             }
                         }
                     }

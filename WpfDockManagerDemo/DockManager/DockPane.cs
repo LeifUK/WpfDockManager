@@ -8,9 +8,9 @@ namespace WpfDockManagerDemo.DockManager
 {
     internal abstract class DockPane : Grid
     {
-        public DockPane()
+        public DockPane(ITabControlFactory _tabControlFactory)
         {
-            _documentContainer = new DocumentContainer();
+            _documentContainer = new DocumentContainer(_tabControlFactory);
             Children.Add(_documentContainer);
             IDocumentContainer = _documentContainer;
         }

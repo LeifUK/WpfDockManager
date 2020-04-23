@@ -77,7 +77,7 @@
             </Grid>
 
             <dockManager:LayoutManager x:Name="_layoutManager" Grid.Row="1" Grid.Column="0" DocumentsSource="{Binding Documents}" ToolsSource="{Binding Tools}" VerticalAlignment="Stretch" HorizontalAlignment="Stretch">
-                <dockManager:LayoutManager.Resources>
+                <dockManager:LayoutManager.ToolTemplates>
                     <DataTemplate DataType="{x:Type viewModel:DemoOneViewModel}">
                         <view:DemoOneView x:Name="_demoOneView"/>
                     </DataTemplate>
@@ -93,7 +93,7 @@
                     <DataTemplate DataType="{x:Type viewModel:DemoFiveViewModel}">
                         <view:DemoFiveView x:Name="_demoFiveView"/>
                     </DataTemplate>
-                </dockManager:LayoutManager.Resources>
+                </dockManager:LayoutManager.ToolTemplates>
                 <dockManager:LayoutManager.CloseControlTemplate>
                     <ControlTemplate TargetType="Button">
                         <Grid>

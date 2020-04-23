@@ -23,7 +23,11 @@ namespace WpfDockManagerDemo.DockManager
         {
             InitializeComponent();
             StateChanged += MainWindowStateChangeRaised;
-            IDocumentContainer = DocumentContainer;
+            // Warning warning
+            DocumentContainer documentContainer = new DocumentContainer(new ToolTabControlFactory());
+            _parentContainer.Children.Add(documentContainer);
+            Grid.SetRow(documentContainer, 1);
+            IDocumentContainer = documentContainer;
         }
 
         // Can execute
@@ -87,7 +91,7 @@ namespace WpfDockManagerDemo.DockManager
             ContextMenu contextMenu = new ContextMenu();
             MenuItem menuItem = null;
 
-            int count = DocumentContainer.GetUserControlCount();
+            int count = IDocumentContainer.GetUserControlCount();
 
             if (count > 2)
             {
