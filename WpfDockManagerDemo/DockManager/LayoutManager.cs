@@ -755,7 +755,7 @@ namespace WpfDockManagerDemo.DockManager
 
             foreach (var tool in ToolsSource)
             {
-                foreach (var item in Resources.Values)
+                foreach (var item in  ToolTemplates)
                 {
                     if (item is DataTemplate)
                     {
