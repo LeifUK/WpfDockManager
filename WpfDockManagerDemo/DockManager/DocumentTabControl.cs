@@ -1,16 +1,15 @@
-﻿using System;
-using System.Windows;
+﻿using System.Windows;
 using System.Windows.Controls;
 
 namespace WpfDockManagerDemo.DockManager
 {
-    internal class ToolTabControl : TabControlBase
+    internal class DocumentTabControl : TabControlBase
     {
-        public ToolTabControl() : base(1, 0)
+        public DocumentTabControl() : base(1, 2)
         {
-            RowDefinitions.Add(new RowDefinition() { Height = new System.Windows.GridLength(1, System.Windows.GridUnitType.Star) });
-            RowDefinitions.Add(new RowDefinition() { Height = new System.Windows.GridLength(1, System.Windows.GridUnitType.Auto) });
             RowDefinitions.Add(new RowDefinition() { Height = new System.Windows.GridLength(4, System.Windows.GridUnitType.Pixel) });
+            RowDefinitions.Add(new RowDefinition() { Height = new System.Windows.GridLength(1, System.Windows.GridUnitType.Auto) });
+            RowDefinitions.Add(new RowDefinition() { Height = new System.Windows.GridLength(1, System.Windows.GridUnitType.Star) });
 
             ColumnDefinitions.Add(new ColumnDefinition() { Width = new System.Windows.GridLength(1, System.Windows.GridUnitType.Star) });
             ColumnDefinitions.Add(new ColumnDefinition() { Width = new System.Windows.GridLength(4, System.Windows.GridUnitType.Pixel) });
@@ -22,16 +21,16 @@ namespace WpfDockManagerDemo.DockManager
             _tabHeaderControl.UnselectedTabBackground = System.Windows.Media.Brushes.MidnightBlue;
             _tabHeaderControl.SelectedTabBackground = System.Windows.Media.Brushes.LightSalmon;
 
-            Border border = new Border();
-            Children.Add(border);
-            Grid.SetRow(border, 1);
-            Grid.SetRowSpan(border, 2);
-            Grid.SetColumn(border, 0);
-            Grid.SetColumnSpan(border, 4);
-            Grid.SetZIndex(border, -1);
-            border.HorizontalAlignment = System.Windows.HorizontalAlignment.Stretch;
-            border.VerticalAlignment = System.Windows.VerticalAlignment.Stretch;
-            border.Background = System.Windows.Media.Brushes.Gainsboro;
+            //Border border = new Border();
+            //Children.Add(border);
+            //Grid.SetRow(border, 0);
+            //Grid.SetRowSpan(border, 2);
+            //Grid.SetColumn(border, 0);
+            //Grid.SetColumnSpan(border, 4);
+            //Grid.SetZIndex(border, -1);
+            //border.HorizontalAlignment = System.Windows.HorizontalAlignment.Stretch;
+            //border.VerticalAlignment = System.Windows.VerticalAlignment.Stretch;
+            //border.Background = System.Windows.Media.Brushes.Gainsboro;
 
             _button = new Button();
             Children.Add(_button);

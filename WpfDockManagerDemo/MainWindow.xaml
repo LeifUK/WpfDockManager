@@ -77,21 +77,26 @@
             </Grid>
 
             <dockManager:LayoutManager x:Name="_layoutManager" Grid.Row="1" Grid.Column="0" DocumentsSource="{Binding Documents}" ToolsSource="{Binding Tools}" VerticalAlignment="Stretch" HorizontalAlignment="Stretch">
+                <dockManager:LayoutManager.DocumentTemplates>
+                    <DataTemplate DataType="{x:Type viewModel:DocumentOneViewModel}">
+                        <view:DocumentOneView x:Name="_documentOneView"/>
+                    </DataTemplate>
+                </dockManager:LayoutManager.DocumentTemplates>
                 <dockManager:LayoutManager.ToolTemplates>
-                    <DataTemplate DataType="{x:Type viewModel:DemoOneViewModel}">
-                        <view:DemoOneView x:Name="_demoOneView"/>
+                    <DataTemplate DataType="{x:Type viewModel:ToolOneViewModel}">
+                        <view:ToolOneView x:Name="_toolOneView"/>
                     </DataTemplate>
-                    <DataTemplate DataType="{x:Type viewModel:DemoTwoViewModel}">
-                        <view:DemoTwoView x:Name="_demoTwoView"/>
+                    <DataTemplate DataType="{x:Type viewModel:ToolTwoViewModel}">
+                        <view:ToolTwoView x:Name="_toolTwoView"/>
                     </DataTemplate>
-                    <DataTemplate DataType="{x:Type viewModel:DemoThreeViewModel}">
-                        <view:DemoThreeView x:Name="_demoThreeView"/>
+                    <DataTemplate DataType="{x:Type viewModel:ToolThreeViewModel}">
+                        <view:ToolThreeView x:Name="_toolThreeView"/>
                     </DataTemplate>
-                    <DataTemplate DataType="{x:Type viewModel:DemoFourViewModel}">
-                        <view:DemoFourView x:Name="_demoFourView"/>
+                    <DataTemplate DataType="{x:Type viewModel:ToolFourViewModel}">
+                        <view:ToolFourView x:Name="_toolFourView"/>
                     </DataTemplate>
-                    <DataTemplate DataType="{x:Type viewModel:DemoFiveViewModel}">
-                        <view:DemoFiveView x:Name="_demoFiveView"/>
+                    <DataTemplate DataType="{x:Type viewModel:ToolFiveViewModel}">
+                        <view:ToolFiveView x:Name="_toolFiveView"/>
                     </DataTemplate>
                 </dockManager:LayoutManager.ToolTemplates>
                 <dockManager:LayoutManager.CloseControlTemplate>

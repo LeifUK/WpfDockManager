@@ -5,9 +5,9 @@ namespace WpfDockManagerDemo.View
     /// <summary>
     /// Interaction logic for DemoFiveView.xaml
     /// </summary>
-    public partial class DemoFiveView : UserControl, DockManager.IView
+    public partial class ToolFiveView : UserControl, DockManager.IView
     {
-        public DemoFiveView()
+        public ToolFiveView()
         {
             InitializeComponent();
         }

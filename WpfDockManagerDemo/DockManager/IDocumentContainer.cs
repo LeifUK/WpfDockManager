@@ -10,5 +10,7 @@ namespace WpfDockManagerDemo.DockManager
         int GetUserControlCount();
         int GetCurrentTabIndex();
         UserControl GetUserControl(int index);
+        
+        event System.EventHandler SelectionChanged;
     }
 }

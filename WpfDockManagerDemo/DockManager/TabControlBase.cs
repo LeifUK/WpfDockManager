@@ -4,9 +4,10 @@ namespace WpfDockManagerDemo.DockManager
 {
     internal class TabControlBase : Grid, ITabControl
     {
-        public TabControlBase(bool topHeader)
+        public TabControlBase(int headerRow, int contentRow)
         {
-            _topHeader = topHeader;
+            HeaderRow = headerRow;
+            ContentRow = contentRow;
             _items = new System.Collections.ObjectModel.ObservableCollection<System.Collections.Generic.KeyValuePair<UserControl, IDocument>>();
             _tabHeaderControl = new TabHeaderControl();
             _tabHeaderControl.SelectionChanged += _tabHeaderControl_SelectionChanged;
@@ -16,10 +17,8 @@ namespace WpfDockManagerDemo.DockManager
             Children.Add(_tabHeaderControl);
         }
 
-        private readonly bool _topHeader;
-
-        protected int HeaderRow { get { return _topHeader ? 0 : 1; } }
-        protected int ContentRow { get { return _topHeader ? 1 : 0; } }
+        protected readonly int HeaderRow;
+        protected readonly int ContentRow;
 
         private void _tabHeaderControl_CloseTabRequest(object sender, System.EventArgs e)
         {
@@ -114,10 +113,12 @@ namespace WpfDockManagerDemo.DockManager
                 Children.Remove(_selectedUserControl);
             }
             _selectedUserControl = userControl;
-            _tabHeaderControl.SelectedIndex = _items.Count - 1;
             Grid.SetRow(userControl, ContentRow);
             Grid.SetColumn(userControl, 0);
             Grid.SetColumnSpan(userControl, 99);
+            Children.Add(userControl);
+            // Do this AFTER adding the child 
+            _tabHeaderControl.SelectedIndex = _items.Count - 1;
         }
 
         public UserControl RemoveAt(int index)

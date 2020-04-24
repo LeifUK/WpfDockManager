@@ -13,11 +13,31 @@ namespace WpfDockManagerDemo.ViewModel
         {
             long id = 0;
             Tools = new System.Collections.ObjectModel.ObservableCollection<DockManager.IDocument>();
-            Tools.Add(new ViewModel.DemoOneViewModel() { ID = id++ });
-            Tools.Add(new ViewModel.DemoTwoViewModel() { ID = id++ });
-            Tools.Add(new ViewModel.DemoThreeViewModel() { ID = id++ });
-            Tools.Add(new ViewModel.DemoFourViewModel() { ID = id++ });
-            Tools.Add(new ViewModel.DemoFiveViewModel() { ID = id++ });
+            Tools.Add(new ViewModel.ToolOneViewModel() { ID = id++ });
+            Tools.Add(new ViewModel.ToolTwoViewModel() { ID = id++ });
+            Tools.Add(new ViewModel.ToolThreeViewModel() { ID = id++ });
+            Tools.Add(new ViewModel.ToolFourViewModel() { ID = id++ });
+            Tools.Add(new ViewModel.ToolFiveViewModel() { ID = id++ });
+
+            Documents = new System.Collections.ObjectModel.ObservableCollection<DockManager.IDocument>();
+            Documents.Add(new ViewModel.DocumentOneViewModel());
+        }
+
+        private System.Collections.ObjectModel.ObservableCollection<DockManager.IDocument> _documents;
+        public System.Collections.ObjectModel.ObservableCollection<DockManager.IDocument> Documents
+        {
+            get
+            {
+                return _documents;
+            }
+            set
+            {
+                if (value != Documents)
+                {
+                    _documents = value;
+                    NotifyPropertyChanged("Documents");
+                }
+            }
         }
 
         private System.Collections.ObjectModel.ObservableCollection<DockManager.IDocument> _tools;
@@ -32,7 +52,7 @@ namespace WpfDockManagerDemo.ViewModel
                 if (value != Tools)
                 {
                     _tools = value;
-                    NotifyPropertyChanged("Documents");
+                    NotifyPropertyChanged("Tools");
                 }
             }
         }

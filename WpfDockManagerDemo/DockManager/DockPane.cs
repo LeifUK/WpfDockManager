@@ -8,11 +8,10 @@ namespace WpfDockManagerDemo.DockManager
 {
     internal abstract class DockPane : Grid
     {
-        public DockPane(ITabControlFactory _tabControlFactory)
+        public DockPane(IDocumentContainer iDocumentContainer)
         {
-            _documentContainer = new DocumentContainer(_tabControlFactory);
-            Children.Add(_documentContainer);
-            IDocumentContainer = _documentContainer;
+            IDocumentContainer = iDocumentContainer;
+            Children.Add(iDocumentContainer as System.Windows.UIElement);
         }
 
         public event EventHandler Close;
@@ -40,7 +39,6 @@ namespace WpfDockManagerDemo.DockManager
             Ungroup?.Invoke(this, null);
         }
 
-        protected DocumentContainer _documentContainer;
         public readonly IDocumentContainer IDocumentContainer;
     }
 }

@@ -24,7 +24,7 @@ namespace WpfDockManagerDemo.DockManager
             InitializeComponent();
             StateChanged += MainWindowStateChangeRaised;
             // Warning warning
-            DocumentContainer documentContainer = new DocumentContainer(new ToolTabControlFactory());
+            ToolContainer documentContainer = new ToolContainer();
             _parentContainer.Children.Add(documentContainer);
             Grid.SetRow(documentContainer, 1);
             IDocumentContainer = documentContainer;

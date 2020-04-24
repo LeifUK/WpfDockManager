@@ -35,18 +35,25 @@ namespace WpfDockManagerDemo.DockManager
 
         public void Shutdown()
         {
-            if (_windowLocationPane != null)
+            try
             {
-                try
-                {
 
-                    _windowLocationPane.Close();
-                    _windowLocationPane = null;
-                }
-                catch
-                {
-                    // Ignore
-                }
+                _windowLocationPane?.Close();
+                _windowLocationPane = null;
+            }
+            catch
+            {
+                // Ignore
+            }
+            try
+            {
+
+                _edgeLocationPane?.Close();
+                _edgeLocationPane = null;
+            }
+            catch
+            {
+                // Ignore
             }
         }
 
@@ -276,50 +283,97 @@ namespace WpfDockManagerDemo.DockManager
             FloatingPanes.Clear();
         }
 
-        private void Create()
+        public List<UserControl> LoadViewsFromTemplates(List<DataTemplate> dataTemplates, System.Collections.IEnumerable viewModels)
         {
             List<UserControl> views = new List<UserControl>();
 
+            if ((dataTemplates == null) || (dataTemplates.Count == 0) || (viewModels == null))
+            {
+                return views;
+            }
+
             // First load the views and view models
 
-            if (ToolsSource != null)
+            foreach (var viewModel in viewModels)
             {
-                foreach (var tool in ToolsSource)
+                foreach (var item in dataTemplates)
                 {
-                    foreach (var item in ToolTemplates)
+                    if (item is DataTemplate)
                     {
-                        if (item is DataTemplate)
+                        DataTemplate dataTemplate = item as DataTemplate;
+
+                        if (viewModel.GetType() == (Type)dataTemplate.DataType)
                         {
-                            DataTemplate dataTemplate = item as DataTemplate;
-
-                            if (tool.GetType() == (Type)dataTemplate.DataType)
+                            UserControl view = (dataTemplate.LoadContent() as UserControl);
+                            if (view != null)
                             {
-                                UserControl view = (dataTemplate.LoadContent() as UserControl);
-                                if (view != null)
+                                IView iToolView = (view as IView);
+                                if (iToolView == null)
                                 {
-                                    IView iView = (view as IView);
-                                    if (iView == null)
-                                    {
-                                        throw new Exception(System.Reflection.MethodBase.GetCurrentMethod().Name + ": the UserControl must implement interface IView");
-                                    }
-                                    iView.IDocument = tool as IDocument;
-                                    view.DataContext = tool;
-                                    view.HorizontalAlignment = HorizontalAlignment.Stretch;
-                                    view.VerticalAlignment = VerticalAlignment.Stretch;
-
-                                    views.Add(view);
+                                    throw new Exception(System.Reflection.MethodBase.GetCurrentMethod().Name + ": the UserControl must implement interface IView");
                                 }
+                                iToolView.IDocument = viewModel as IDocument;
+                                view.DataContext = viewModel;
+                                view.HorizontalAlignment = HorizontalAlignment.Stretch;
+                                view.VerticalAlignment = VerticalAlignment.Stretch;
+
+                                views.Add(view);
                             }
                         }
                     }
                 }
             }
 
-            if (views.Count == 0)
-            {
-                return;
-            }
+            return views;
+        }
 
+        private delegate DockPane DelegateCreateDockPane();
+
+        private void AddViews(List<UserControl> views, List<FrameworkElement> list_N, DelegateCreateDockPane createDockPane)
+        {
+            List<FrameworkElement> list_N_plus_1 = new List<FrameworkElement>();
+            bool isHorizontal = false;
+            int viewIndex = 1;
+
+            while (viewIndex < views.Count)
+            {
+                for (int i = 0; (i < list_N.Count) && (viewIndex < views.Count); ++i)
+                {
+                    SplitterPane splitterPane = new SplitterPane(isHorizontal);
+
+                    var node = list_N[i];
+                    System.Windows.Markup.IAddChild parentElement = (System.Windows.Markup.IAddChild)node.Parent;
+                    (node.Parent as Grid).Children.Remove(node);
+
+                    parentElement.AddChild(splitterPane);
+                    Grid.SetRow(splitterPane, Grid.GetRow(node));
+                    Grid.SetColumn(splitterPane, Grid.GetColumn(node));
+
+                    splitterPane.AddChild(node, true);
+
+                    list_N_plus_1.Add(node);
+
+                    node = views[viewIndex];
+                    DockManager.DockPane dockPane = createDockPane();
+                    dockPane.IDocumentContainer.AddUserControl(node as UserControl);
+
+                    list_N_plus_1.Add(dockPane);
+
+                    splitterPane.AddChild(dockPane, false);
+
+                    ++viewIndex;
+                }
+
+                isHorizontal = !isHorizontal;
+                list_N = list_N_plus_1;
+                list_N_plus_1 = new List<FrameworkElement>();
+            }
+        }
+
+        private void Create()
+        {
+            Clear();
+            
             /*
              * We descend the tree level by level, adding a new level when the current one is full. 
              * We continue adding nodes until we have exhausted the items in views (created above). 
@@ -365,60 +419,49 @@ namespace WpfDockManagerDemo.DockManager
 
                 and so on ... 
 
+                Document panes are children of a dock panel. At first this is a child of the top level 
+                splitter pane, or the layout manager if there are no tool panes
+
              */
 
-            List<FrameworkElement> list_N = new List<FrameworkElement>();
-            List<FrameworkElement> list_N_plus_1 = new List<FrameworkElement>();
+            SplitterPane rootSplitterPane = new SplitterPane(true);
+            Children.Add(rootSplitterPane);
 
-            DockManager.ToolPane documentPane = CreateToolPane();
-            documentPane.IDocumentContainer.AddUserControl(views[0]);
+            DocumentPanel documentPanel = new DocumentPanel();
+            rootSplitterPane.AddChild(documentPanel, true);
 
-            Children.Add(documentPane);
+            List<UserControl> documentViews = LoadViewsFromTemplates(DocumentTemplates, DocumentsSource);
 
-            list_N.Add(documentPane);
-
-            bool isHorizontal = false;
-
-            int viewIndex = 1;
-
-            while (viewIndex < views.Count)
+            if ((documentViews != null) && (documentViews.Count > 0))
             {
-                for (int i = 0; (i < list_N.Count) && (viewIndex < views.Count); ++i)
-                {
-                    SplitterPane splitterPane = new SplitterPane(isHorizontal);
+                List<FrameworkElement> list_N = new List<FrameworkElement>();
 
-                    var node = list_N[i];
-                    System.Windows.Markup.IAddChild parentElement = (System.Windows.Markup.IAddChild)node.Parent;
-                    (node.Parent as Grid).Children.Remove(node);
+                DockManager.DockPane documentPane = CreateDocumentPane();
+                documentPane.IDocumentContainer.AddUserControl(documentViews[0]);
 
-                    parentElement.AddChild(splitterPane);
-                    Grid.SetRow(splitterPane, Grid.GetRow(node));
-                    Grid.SetColumn(splitterPane, Grid.GetColumn(node));
+                documentPanel.Children.Add(documentPane);
+                list_N.Add(documentPane);
+                AddViews(documentViews, list_N, delegate { return CreateDocumentPane(); });
+            }
 
-                    splitterPane.AddChild(node, true);
+            List<UserControl> toolViews = LoadViewsFromTemplates(ToolTemplates, ToolsSource);
+            if ((toolViews != null) && (toolViews.Count > 0))
+            {
+                List<FrameworkElement> list_N = new List<FrameworkElement>();
 
-                    list_N_plus_1.Add(node);
+                DockManager.DockPane toolPane = CreateToolPane();
+                toolPane.IDocumentContainer.AddUserControl(toolViews[0]);
 
-                    node = views[viewIndex];
-                    documentPane = CreateToolPane();
-                    documentPane.IDocumentContainer.AddUserControl(node as UserControl);
+                rootSplitterPane.AddChild(toolPane, false);
 
-                    list_N_plus_1.Add(documentPane);
-
-                    splitterPane.AddChild(documentPane, false);
-
-                    ++viewIndex;
-                }
-
-                isHorizontal = !isHorizontal;
-                list_N = list_N_plus_1;
-                list_N_plus_1 = new List<FrameworkElement>();
+                list_N.Add(toolPane);
+                AddViews(toolViews, list_N, delegate { return CreateToolPane(); });
             }
 
             UpdateLayout();
         }
 
-        private XmlElement CreateToolGroupNode(XmlDocument xmlDocument, XmlNode xmlNode, ToolPane toolPane)
+        private XmlElement SaveToolGroupNode(XmlDocument xmlDocument, XmlNode xmlNode, ToolPane toolPane)
         {
             if ((xmlDocument == null) || (xmlNode == null))
             {
@@ -447,7 +490,7 @@ namespace WpfDockManagerDemo.DockManager
             return xmlToolGroup;
         }
 
-        private XmlElement CreateToolNode(XmlDocument xmlDocument, XmlNode xmlNode, IDocument iDocument, string contentId)
+        private XmlElement SaveToolNode(XmlDocument xmlDocument, XmlNode xmlNode, IDocument iDocument, string contentId)
         {
             if ((xmlDocument == null) || (xmlNode == null) || (iDocument == null))
             {
@@ -471,7 +514,7 @@ namespace WpfDockManagerDemo.DockManager
             return xmlElement;
         }
 
-        private void SaveSplitterPane(XmlDocument xmlDocument, Grid splitterPane, XmlNode xmlParentNode)
+        private void SaveSplitterPaneNode(XmlDocument xmlDocument, Grid splitterPane, XmlNode xmlParentNode)
         {
             System.Diagnostics.Trace.Assert(xmlDocument != null);
             System.Diagnostics.Trace.Assert(splitterPane != null);
@@ -511,6 +554,90 @@ namespace WpfDockManagerDemo.DockManager
             }
         }
 
+        private XmlElement SaveDocumentGroupNode(XmlDocument xmlDocument, XmlNode xmlNode, DocumentPane documentPane)
+        {
+            if ((xmlDocument == null) || (xmlNode == null))
+            {
+                throw new Exception(System.Reflection.MethodBase.GetCurrentMethod().Name + ": invalid arguments");
+            }
+
+            XmlElement xmlDocumentGroup = xmlDocument.CreateElement("DocumentGroup");
+
+            XmlAttribute xmlAttribute = xmlDocument.CreateAttribute("row");
+            xmlAttribute.Value = Grid.GetRow(documentPane).ToString();
+            xmlDocumentGroup.Attributes.Append(xmlAttribute);
+
+            xmlAttribute = xmlDocument.CreateAttribute("column");
+            xmlAttribute.Value = Grid.GetColumn(documentPane).ToString();
+            xmlDocumentGroup.Attributes.Append(xmlAttribute);
+
+            xmlAttribute = xmlDocument.CreateAttribute("width");
+            xmlAttribute.Value = documentPane.ActualWidth.ToString();
+            xmlDocumentGroup.Attributes.Append(xmlAttribute);
+
+            xmlAttribute = xmlDocument.CreateAttribute("height");
+            xmlAttribute.Value = documentPane.ActualHeight.ToString();
+            xmlDocumentGroup.Attributes.Append(xmlAttribute);
+
+            xmlNode.AppendChild(xmlDocumentGroup);
+            return xmlDocumentGroup;
+        }
+
+        private XmlElement SaveDocumentNode(XmlDocument xmlDocument, XmlNode xmlNode, IDocument iDocument, string contentId)
+        {
+            if ((xmlDocument == null) || (xmlNode == null) || (iDocument == null))
+            {
+                throw new Exception(System.Reflection.MethodBase.GetCurrentMethod().Name + ": invalid arguments");
+            }
+
+            XmlElement xmlElement = xmlDocument.CreateElement("Document");
+            XmlAttribute xmlAttribute = xmlDocument.CreateAttribute("Title");
+            xmlAttribute.Value = iDocument.Title;
+            xmlElement.Attributes.Append(xmlAttribute);
+
+            xmlAttribute = xmlDocument.CreateAttribute("ID");
+            xmlAttribute.Value = iDocument.ID.ToString();
+            xmlElement.Attributes.Append(xmlAttribute);
+
+            xmlAttribute = xmlDocument.CreateAttribute("ContentId");
+            xmlAttribute.Value = contentId;
+            xmlElement.Attributes.Append(xmlAttribute);
+
+            xmlNode.AppendChild(xmlElement);
+            return xmlElement;
+        }
+
+        private void SaveDocumentPanelNode(XmlDocument xmlDocument, DocumentPanel documentPanel, XmlNode xmlParentNode)
+        {
+            System.Diagnostics.Trace.Assert(xmlDocument != null);
+            System.Diagnostics.Trace.Assert(documentPanel != null);
+            System.Diagnostics.Trace.Assert(xmlParentNode != null);
+
+            XmlElement xmlDocumentPanel = xmlDocument.CreateElement("DocumentPanel");
+            xmlParentNode.AppendChild(xmlDocumentPanel);
+
+            XmlAttribute xmlAttribute = xmlDocument.CreateAttribute("row");
+            xmlAttribute.Value = Grid.GetRow(documentPanel).ToString();
+            xmlDocumentPanel.Attributes.Append(xmlAttribute);
+
+            xmlAttribute = xmlDocument.CreateAttribute("column");
+            xmlAttribute.Value = Grid.GetColumn(documentPanel).ToString();
+            xmlDocumentPanel.Attributes.Append(xmlAttribute);
+
+            xmlAttribute = xmlDocument.CreateAttribute("width");
+            xmlAttribute.Value = documentPanel.ActualWidth.ToString();
+            xmlDocumentPanel.Attributes.Append(xmlAttribute);
+
+            xmlAttribute = xmlDocument.CreateAttribute("height");
+            xmlAttribute.Value = documentPanel.ActualHeight.ToString();
+            xmlDocumentPanel.Attributes.Append(xmlAttribute);
+
+            foreach (var childNode in documentPanel.Children)
+            {
+                SaveNode(xmlDocument, childNode, xmlDocumentPanel);
+            }
+        }
+
         private XmlElement CreateFloatingPaneNode(XmlDocument xmlDocument, XmlNode xmlParentNode, FloatingPane floatingPane)
         {
             if ((xmlDocument == null) || (xmlParentNode == null))
@@ -538,7 +665,32 @@ namespace WpfDockManagerDemo.DockManager
             System.Diagnostics.Trace.Assert(node != null);
             System.Diagnostics.Trace.Assert(xmlParentPane != null);
 
-            if (node is ToolPane)
+            if (node is DocumentPanel)
+            {
+                SaveDocumentPanelNode(xmlDocument, node as DocumentPanel, xmlParentPane);
+            }
+            else if (node is DocumentPane)
+            {
+                DocumentPane documentPane = node as DocumentPane;
+                int count = documentPane.IDocumentContainer.GetUserControlCount();
+                if (count < 1)
+                {
+                    throw new Exception(System.Reflection.MethodBase.GetCurrentMethod().Name + ": no documents");
+                }
+
+                XmlNode xmlNodeParent = SaveDocumentGroupNode(xmlDocument, xmlParentPane, documentPane);
+
+                for (int index = 0; index < count; ++index)
+                {
+                    UserControl userControl = documentPane.IDocumentContainer.GetUserControl(index);
+                    if (userControl == null)
+                    {
+                        break;
+                    }
+                    SaveDocumentNode(xmlDocument, xmlNodeParent, userControl.DataContext as IDocument, userControl.Name);
+                }
+            }
+            else if (node is ToolPane)
             {
                 ToolPane toolPane = node as ToolPane;
                 int count = toolPane.IDocumentContainer.GetUserControlCount();
@@ -547,7 +699,7 @@ namespace WpfDockManagerDemo.DockManager
                     throw new Exception(System.Reflection.MethodBase.GetCurrentMethod().Name + ": no tools");
                 }
 
-                XmlNode xmlNodeParent = CreateToolGroupNode(xmlDocument, xmlParentPane, toolPane);
+                XmlNode xmlNodeParent = SaveToolGroupNode(xmlDocument, xmlParentPane, toolPane);
 
                 for (int index = 0; index < count; ++index)
                 {
@@ -556,12 +708,12 @@ namespace WpfDockManagerDemo.DockManager
                     {
                         break;
                     }
-                    CreateToolNode(xmlDocument, xmlNodeParent, userControl.DataContext as IDocument, userControl.Name);
+                    SaveToolNode(xmlDocument, xmlNodeParent, userControl.DataContext as IDocument, userControl.Name);
                 }
             }
             else if (node is Grid)
             {
-                SaveSplitterPane(xmlDocument, node as Grid, xmlParentPane);
+                SaveSplitterPaneNode(xmlDocument, node as Grid, xmlParentPane);
             }
         }
 
@@ -595,7 +747,7 @@ namespace WpfDockManagerDemo.DockManager
                     {
                         break;
                     }
-                    CreateToolNode(xmlDocument, xmlNodeParent, userControl.DataContext as IDocument, userControl.Name);
+                    SaveToolNode(xmlDocument, xmlNodeParent, userControl.DataContext as IDocument, userControl.Name);
                 }
             }
             xmlDocument.Save(fileNameAndPath);
@@ -655,12 +807,66 @@ namespace WpfDockManagerDemo.DockManager
                             throw new Exception(System.Reflection.MethodBase.GetCurrentMethod().Name + ": a Tool element must have an ID attribute");
                         }
                         
-                        // Warning warning => wrong -> create the view and view model here
                         if (viewsMap.ContainsKey(xmlAttribute.Value))
                         {
                             iDocumentContainer.AddUserControl(viewsMap[xmlAttribute.Value]);
                             viewsMap.Remove(xmlAttribute.Value);
                         }
+                    }
+                }
+            }
+        }
+
+        private void LoadDocumentGroup(Dictionary<string, UserControl> viewsMap, XmlElement xmlDocumentGroup, IDocumentContainer iDocumentContainer)
+        {
+            foreach (var xmlDocumentGroupNode in xmlDocumentGroup.ChildNodes)
+            {
+                if (xmlDocumentGroupNode is XmlElement)
+                {
+                    if ((xmlDocumentGroupNode as XmlElement).Name == "Document")
+                    {
+                        XmlElement xmlToolElement = xmlDocumentGroupNode as XmlElement;
+
+                        XmlAttribute xmlAttribute = xmlToolElement.Attributes.GetNamedItem("ContentId") as XmlAttribute;
+                        if (xmlAttribute == null)
+                        {
+                            throw new Exception(System.Reflection.MethodBase.GetCurrentMethod().Name + ": a Tool element must have an ID attribute");
+                        }
+
+                        if (viewsMap.ContainsKey(xmlAttribute.Value))
+                        {
+                            iDocumentContainer.AddUserControl(viewsMap[xmlAttribute.Value]);
+                            viewsMap.Remove(xmlAttribute.Value);
+                        }
+                    }
+                }
+            }
+        }
+
+        private void LoadDocumentPanel(Dictionary<string, UserControl> viewsMap, XmlElement xmlDocumentPanel, IDocumentContainer iDocumentContainer)
+        {
+            foreach (var xmlDocumentPanelNode in xmlDocumentPanel.ChildNodes)
+            {
+                if (xmlDocumentPanelNode is XmlElement)
+                {
+                    if ((xmlDocumentPanelNode as XmlElement).Name == "DocumentGroup")
+                    {
+                        XmlElement xmlDocumentGroupElement = xmlDocumentPanelNode as XmlElement;
+
+                        DocumentPane documentPane = new DocumentPane();
+
+                        //XmlAttribute xmlAttribute = xmlDocumentPanelElement.Attributes.GetNamedItem("ContentId") as XmlAttribute;
+                        //if (xmlAttribute == null)
+                        //{
+                        //    throw new Exception(System.Reflection.MethodBase.GetCurrentMethod().Name + ": a Tool element must have an ID attribute");
+                        //}
+
+                        //// Warning warning => wrong -> create the view and view model here
+                        //if (viewsMap.ContainsKey(xmlAttribute.Value))
+                        //{
+                        //    iDocumentContainer.AddUserControl(viewsMap[xmlAttribute.Value]);
+                        //    viewsMap.Remove(xmlAttribute.Value);
+                        //}
                     }
                 }
             }
@@ -701,6 +907,41 @@ namespace WpfDockManagerDemo.DockManager
                         parentElement.AddChild(newGrid);
 
                         LoadNode(viewsMap, newGrid, xmlSplitterPane, isChildHorizontal);
+                    }
+                    else if ((xmlChildNode as XmlElement).Name == "DocumentPanel")
+                    {
+                        DocumentPanel documentPanel = new DocumentPanel();
+
+                        System.Windows.Markup.IAddChild parentElement = (System.Windows.Markup.IAddChild)parentFrameworkElement;
+                        parentElement.AddChild(documentPanel);
+
+                        XmlElement xmlDocumentPanel = xmlChildNode as XmlElement;
+
+                        SetWidthOrHeight(xmlDocumentPanel, parentFrameworkElement, isParentHorizontal, row, column);
+
+                        LoadNode(viewsMap, documentPanel, xmlDocumentPanel, true);
+
+                        Grid.SetRow(documentPanel, row);
+                        Grid.SetColumn(documentPanel, column);
+                        row += rowIncrement;
+                        column += columnIncrement;
+                    }
+                    else if ((xmlChildNode as XmlElement).Name == "DocumentGroup")
+                    {
+                        DocumentPane documentPane = CreateDocumentPane();
+
+                        System.Windows.Markup.IAddChild parentElement = (System.Windows.Markup.IAddChild)parentFrameworkElement;
+                        parentElement.AddChild(documentPane);
+
+                        XmlElement xmlDocumentGroup = xmlChildNode as XmlElement;
+
+                        SetWidthOrHeight(xmlDocumentGroup, parentFrameworkElement, isParentHorizontal, row, column);
+
+                        LoadDocumentGroup(viewsMap, xmlDocumentGroup, documentPane.IDocumentContainer);
+                        Grid.SetRow(documentPane, row);
+                        Grid.SetColumn(documentPane, column);
+                        row += rowIncrement;
+                        column += columnIncrement;
                     }
                     else if ((xmlChildNode as XmlElement).Name == "ToolGroup")
                     {
@@ -751,39 +992,51 @@ namespace WpfDockManagerDemo.DockManager
             List<UserControl> views = new List<UserControl>();
             Dictionary<string, UserControl> viewsMap = new Dictionary<string, UserControl>();
 
+            List<UserControl> documentViews = LoadViewsFromTemplates(DocumentTemplates, DocumentsSource);
+            foreach (var item in documentViews)
+            {
+                viewsMap.Add(item.Name, item);
+            }
+
+            List<UserControl> toolViews = LoadViewsFromTemplates(ToolTemplates, ToolsSource);
+            foreach (var item in toolViews)
+            {
+                viewsMap.Add(item.Name, item);
+            }
+
             // The application defines the views that are supported
 
-            foreach (var tool in ToolsSource)
-            {
-                foreach (var item in  ToolTemplates)
-                {
-                    if (item is DataTemplate)
-                    {
-                        DataTemplate dataTemplate = item as DataTemplate;
+            //foreach (var tool in ToolsSource)
+            //{
+            //    foreach (var item in  ToolTemplates)
+            //    {
+            //        if (item is DataTemplate)
+            //        {
+            //            DataTemplate dataTemplate = item as DataTemplate;
 
-                        if (tool.GetType() == (Type)dataTemplate.DataType)
-                        {
-                            UserControl view = (dataTemplate.LoadContent() as UserControl);
-                            if (view != null)
-                            {
-                                IView iView = (view as IView);
-                                if (iView == null)
-                                {
-                                    throw new Exception(System.Reflection.MethodBase.GetCurrentMethod().Name + ": the UserControl must implement interface IView");
-                                }
-                                iView.IDocument = tool as IDocument;
-                                view.DataContext = tool;
-                                view.HorizontalAlignment = HorizontalAlignment.Stretch;
-                                view.VerticalAlignment = VerticalAlignment.Stretch;
+            //            if (tool.GetType() == (Type)dataTemplate.DataType)
+            //            {
+            //                UserControl view = (dataTemplate.LoadContent() as UserControl);
+            //                if (view != null)
+            //                {
+            //                    IView iView = (view as IView);
+            //                    if (iView == null)
+            //                    {
+            //                        throw new Exception(System.Reflection.MethodBase.GetCurrentMethod().Name + ": the UserControl must implement interface IView");
+            //                    }
+            //                    iView.IDocument = tool as IDocument;
+            //                    view.DataContext = tool;
+            //                    view.HorizontalAlignment = HorizontalAlignment.Stretch;
+            //                    view.VerticalAlignment = VerticalAlignment.Stretch;
 
-                                views.Add(view);
+            //                    views.Add(view);
 
-                                viewsMap.Add(view.Name, view);
-                            }
-                        }
-                    }
-                }
-            }
+            //                    viewsMap.Add(view.Name, view);
+            //                }
+            //            }
+            //        }
+            //    }
+            //}
 
             // Now load the views into the dock manager => one or more views might not be visible!
 
@@ -856,6 +1109,16 @@ namespace WpfDockManagerDemo.DockManager
             toolPane.UngroupCurrent += ToolPane_UngroupCurrent;
             toolPane.Ungroup += ToolPane_Ungroup;
             return toolPane;
+        }
+
+        private DocumentPane CreateDocumentPane()
+        {
+            DocumentPane documentPane = new DocumentPane();
+            documentPane.Close += ToolPane_Close;
+            documentPane.Float += ToolPane_Float;
+            documentPane.UngroupCurrent += ToolPane_UngroupCurrent;
+            documentPane.Ungroup += ToolPane_Ungroup;
+            return documentPane;
         }
 
         private bool UngroupToolPane(ToolPane toolPane, int index)
@@ -1058,6 +1321,8 @@ namespace WpfDockManagerDemo.DockManager
             _insertionIndicatorManager?.HideInsertionIndicator();
             _windowLocationPane?.Close();
             _windowLocationPane = null;
+            _edgeLocationPane?.Close();
+            _edgeLocationPane = null;
         }
 
         private void ExtractDocuments(FloatingPane floatingPane, ToolPane toolPane)
@@ -1248,6 +1513,7 @@ namespace WpfDockManagerDemo.DockManager
         }
 
         private WindowLocationPane _windowLocationPane;
+        private EdgeLocationPane _edgeLocationPane;
         private InsertionIndicatorManager _insertionIndicatorManager;
 
         private void FloatingWindow_LocationChanged(object sender, EventArgs e)
@@ -1298,6 +1564,19 @@ namespace WpfDockManagerDemo.DockManager
                     _windowLocationPane.Left = App.Current.MainWindow.Left + pointInGrid.X + SelectedPane.ActualWidth / 2 - _windowLocationPane.ActualWidth / 2 + 7;
                     _windowLocationPane.Top = App.Current.MainWindow.Top + pointInGrid.Y + SelectedPane.ActualHeight / 2 - _windowLocationPane.ActualHeight / 2 + 2;
                     _windowLocationPane.Owner = floatingWindow.Owner;
+
+                    if (_edgeLocationPane != null)
+                    {
+                        _edgeLocationPane.Close();
+                    }
+                    _edgeLocationPane = new EdgeLocationPane();
+                    _edgeLocationPane.AllowsTransparency = true;
+                    _edgeLocationPane.Show();
+                    Point topLeftPoint = this.PointToScreen(new Point(0, 0));
+                    _edgeLocationPane.Left = topLeftPoint.X;
+                    _edgeLocationPane.Top = topLeftPoint.Y;
+                    _edgeLocationPane.Width = this.ActualWidth;
+                    _edgeLocationPane.Height = this.ActualHeight;
                 }
             }
 
@@ -1306,10 +1585,18 @@ namespace WpfDockManagerDemo.DockManager
                 SelectedPane = null;
             }
 
-            if (!found && (_windowLocationPane != null))
+            if (!found)
             {
-                _windowLocationPane.Close();
-                _windowLocationPane = null;
+                if (_windowLocationPane != null)
+                {
+                    _windowLocationPane.Close();
+                    _windowLocationPane = null;
+                }
+                if (_edgeLocationPane != null)
+                {
+                    _edgeLocationPane.Close();
+                    _edgeLocationPane = null;
+                }
             }
 
             if ((previousPane != null) && (SelectedPane != previousPane))
@@ -1317,9 +1604,10 @@ namespace WpfDockManagerDemo.DockManager
                 previousPane.IsHighlighted = false;
             }
 
-            if (_windowLocationPane != null)
+            bool insertionFound = false;
+            if (_edgeLocationPane != null)
             {
-                WindowLocation windowLocation = _windowLocationPane.TrySelectIndicator(cursorPositionOnScreen);
+                WindowLocation windowLocation = _edgeLocationPane.TrySelectIndicator(cursorPositionOnScreen);
                 switch (windowLocation)
                 {
                     case WindowLocation.LeftEdge:
@@ -1336,23 +1624,27 @@ namespace WpfDockManagerDemo.DockManager
                             _insertionIndicatorManager = new InsertionIndicatorManager(this);
                         }
                         _insertionIndicatorManager.ShowInsertionIndicator(windowLocation);
+                        insertionFound = true;
                         break;
-                    default:
-                        if (SelectedPane != null)
-                        {
-                            if ((_insertionIndicatorManager != null) && (_insertionIndicatorManager.ParentGrid != SelectedPane))
-                            {
-                                _insertionIndicatorManager.HideInsertionIndicator();
-                                _insertionIndicatorManager = null;
-                            }
-                            if (_insertionIndicatorManager == null)
-                            {
-                                _insertionIndicatorManager = new InsertionIndicatorManager(SelectedPane);
-                            }
+                }
+            }
 
-                            _insertionIndicatorManager.ShowInsertionIndicator(windowLocation);
-                        }
-                        break;
+            if ((_windowLocationPane != null) && !insertionFound)
+            {
+                WindowLocation windowLocation = _windowLocationPane.TrySelectIndicator(cursorPositionOnScreen);
+                if (SelectedPane != null)
+                {
+                    if ((_insertionIndicatorManager != null) && (_insertionIndicatorManager.ParentGrid != SelectedPane))
+                    {
+                        _insertionIndicatorManager.HideInsertionIndicator();
+                        _insertionIndicatorManager = null;
+                    }
+                    if (_insertionIndicatorManager == null)
+                    {
+                        _insertionIndicatorManager = new InsertionIndicatorManager(SelectedPane);
+                    }
+
+                    _insertionIndicatorManager.ShowInsertionIndicator(windowLocation);
                 }
             }
         }

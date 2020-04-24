@@ -7,7 +7,7 @@ namespace WpfDockManagerDemo.DockManager
 {
     internal class DocumentPane : DockPane
     {
-        public DocumentPane() : base(new DocumentTabControlFactory())
+        public DocumentPane() : base(new DocumentContainer())
         {
             VerticalAlignment = System.Windows.VerticalAlignment.Stretch;
             HorizontalAlignment = HorizontalAlignment.Stretch;
@@ -33,18 +33,18 @@ namespace WpfDockManagerDemo.DockManager
             ColumnDefinitions.Add(columnDefinition);
 
             RowDefinitions.Add(new RowDefinition());
-            RowDefinitions[1].Height = new GridLength(1, GridUnitType.Star);
+            RowDefinitions[0].Height = new GridLength(1, GridUnitType.Star);
 
-            Border = new Border();
-            Border.VerticalAlignment = VerticalAlignment.Stretch;
-            Border.HorizontalAlignment = HorizontalAlignment.Stretch;
-            Border.Background = System.Windows.Media.Brushes.MidnightBlue;
-            Border.BorderBrush = System.Windows.Media.Brushes.Black;
-            Border.BorderThickness = new Thickness(1);
-            Grid.SetRow(Border, 0);
-            Grid.SetColumn(Border, 0);
-            Grid.SetColumnSpan(Border, 5);
-            Children.Add(Border);
+            //Border = new Border();
+            //Border.VerticalAlignment = VerticalAlignment.Stretch;
+            //Border.HorizontalAlignment = HorizontalAlignment.Stretch;
+            //Border.Background = System.Windows.Media.Brushes.MidnightBlue;
+            //Border.BorderBrush = System.Windows.Media.Brushes.Black;
+            //Border.BorderThickness = new Thickness(1);
+            //Grid.SetRow(Border, 0);
+            //Grid.SetColumn(Border, 0);
+            //Grid.SetColumnSpan(Border, 5);
+            //Children.Add(Border);
 
             _titleLabel = new Label();
             _titleLabel.FontSize = 12;
@@ -63,10 +63,10 @@ namespace WpfDockManagerDemo.DockManager
             Grid.SetColumn(menuButton, 2);
             Children.Add(menuButton);
 
-            _documentContainer.SelectionChanged += DocumentContainer_SelectionChanged;
-            Grid.SetRow(_documentContainer, 0);
-            Grid.SetColumn(_documentContainer, 0);
-            Grid.SetColumnSpan(_documentContainer, ColumnDefinitions.Count);
+            IDocumentContainer.SelectionChanged += DocumentContainer_SelectionChanged;
+            Grid.SetRow(IDocumentContainer as System.Windows.UIElement, 0);
+            Grid.SetColumn(IDocumentContainer as System.Windows.UIElement, 0);
+            Grid.SetColumnSpan(IDocumentContainer as System.Windows.UIElement, ColumnDefinitions.Count);
         }
 
         private void DocumentContainer_SelectionChanged(object sender, EventArgs e)

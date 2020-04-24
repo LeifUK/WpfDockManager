@@ -60,10 +60,14 @@
     <Compile Include="DockManager\CloseRequestHandler.cs" />
     <Compile Include="DockManager\Command.cs" />
     <Compile Include="DockManager\DockPane.cs" />
+    <Compile Include="DockManager\DocumentTabControl.cs" />
+    <Compile Include="DockManager\ToolContainer.cs" />
     <Compile Include="DockManager\DocumentContainer.cs" />
     <Compile Include="DockManager\DocumentPane.cs" />
     <Compile Include="DockManager\DocumentPanel.cs" />
-    <Compile Include="DockManager\DocumentTabControlFactory.cs" />
+    <Compile Include="DockManager\EdgeLocationPane.xaml.cs">
+      <DependentUpon>EdgeLocationPane.xaml</DependentUpon>
+    </Compile>
     <Compile Include="DockManager\ExtensionMethods.cs" />
     <Compile Include="DockManager\FloatingPane.xaml.cs">
       <DependentUpon>FloatingPane.xaml</DependentUpon>
@@ -72,7 +76,6 @@
     <Compile Include="DockManager\IDocumentContainer.cs" />
     <Compile Include="DockManager\InsertionIndicatorManager.cs" />
     <Compile Include="DockManager\ITabControl.cs" />
-    <Compile Include="DockManager\ITabControlFactory.cs" />
     <Compile Include="DockManager\IToolFactory.cs" />
     <Compile Include="DockManager\IView.cs" />
     <Compile Include="DockManager\TabControlBase.cs" />
@@ -82,7 +85,6 @@
     </Compile>
     <Compile Include="DockManager\ToolPane.cs" />
     <Compile Include="DockManager\ToolTabControl.cs" />
-    <Compile Include="DockManager\ToolTabControlFactory.cs" />
     <Compile Include="DockManager\Utilities.cs" />
     <Compile Include="DockManager\ViewType.cs" />
     <Compile Include="DockManager\WindowLocationPane.xaml.cs">
@@ -92,30 +94,38 @@
     <Compile Include="DockManager\SplitterPane.cs" />
     <Compile Include="DockManager\User32.cs" />
     <Compile Include="DockManager\WindowLocation.cs" />
-    <Compile Include="ViewModel\DemoFiveViewModel.cs" />
-    <Compile Include="ViewModel\DemoFourViewModel.cs" />
-    <Compile Include="ViewModel\DemoOneViewModel.cs" />
-    <Compile Include="ViewModel\DemoThreeViewModel.cs" />
-    <Compile Include="ViewModel\DemoTwoViewModel.cs" />
     <Compile Include="DockManager\FloatingViewModel.cs" />
     <Compile Include="ViewModel\DummyViewModel.cs" />
     <Compile Include="ViewModel\MainViewModel.cs" />
-    <Compile Include="View\DemoFiveView.xaml.cs">
-      <DependentUpon>DemoFiveView.xaml</DependentUpon>
+    <Compile Include="ViewModel\ToolFiveViewModel.cs" />
+    <Compile Include="ViewModel\ToolFourViewModel.cs" />
+    <Compile Include="ViewModel\ToolOneViewModel.cs" />
+    <Compile Include="ViewModel\ToolThreeViewModel.cs" />
+    <Compile Include="ViewModel\DocumentOneViewModel.cs" />
+    <Compile Include="ViewModel\ToolTwoViewModel.cs" />
+    <Compile Include="View\ToolFiveView.xaml.cs">
+      <DependentUpon>ToolFiveView.xaml</DependentUpon>
     </Compile>
-    <Compile Include="View\DemoFourView.xaml.cs">
-      <DependentUpon>DemoFourView.xaml</DependentUpon>
+    <Compile Include="View\ToolFourView.xaml.cs">
+      <DependentUpon>ToolFourView.xaml</DependentUpon>
     </Compile>
-    <Compile Include="View\DemoOneView.xaml.cs">
-      <DependentUpon>DemoOneView.xaml</DependentUpon>
+    <Compile Include="View\DocumentOneView.xaml.cs">
+      <DependentUpon>DocumentOneView.xaml</DependentUpon>
     </Compile>
-    <Compile Include="View\DemoThreeView.xaml.cs">
-      <DependentUpon>DemoThreeView.xaml</DependentUpon>
+    <Compile Include="View\ToolOneView.xaml.cs">
+      <DependentUpon>ToolOneView.xaml</DependentUpon>
     </Compile>
-    <Compile Include="View\DemoTwoView.xaml.cs">
-      <DependentUpon>DemoTwoView.xaml</DependentUpon>
+    <Compile Include="View\ToolThreeView.xaml.cs">
+      <DependentUpon>ToolThreeView.xaml</DependentUpon>
+    </Compile>
+    <Compile Include="View\ToolTwoView.xaml.cs">
+      <DependentUpon>ToolTwoView.xaml</DependentUpon>
     </Compile>
     <Page Include="DockManager\Dictionary.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
+    <Page Include="DockManager\EdgeLocationPane.xaml">
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
     </Page>
@@ -143,25 +153,29 @@
       <DependentUpon>MainWindow.xaml</DependentUpon>
       <SubType>Code</SubType>
     </Compile>
-    <Page Include="View\DemoFiveView.xaml">
+    <Page Include="View\ToolFiveView.xaml">
       <Generator>MSBuild:Compile</Generator>
       <SubType>Designer</SubType>
     </Page>
-    <Page Include="View\DemoFourView.xaml">
+    <Page Include="View\ToolFourView.xaml">
       <Generator>MSBuild:Compile</Generator>
       <SubType>Designer</SubType>
     </Page>
-    <Page Include="View\DemoOneView.xaml">
-      <SubType>Designer</SubType>
-      <Generator>MSBuild:Compile</Generator>
-    </Page>
-    <Page Include="View\DemoThreeView.xaml">
+    <Page Include="View\DocumentOneView.xaml">
       <Generator>MSBuild:Compile</Generator>
       <SubType>Designer</SubType>
     </Page>
-    <Page Include="View\DemoTwoView.xaml">
-      <SubType>Designer</SubType>
+    <Page Include="View\ToolOneView.xaml">
       <Generator>MSBuild:Compile</Generator>
+      <SubType>Designer</SubType>
+    </Page>
+    <Page Include="View\ToolThreeView.xaml">
+      <Generator>MSBuild:Compile</Generator>
+      <SubType>Designer</SubType>
+    </Page>
+    <Page Include="View\ToolTwoView.xaml">
+      <Generator>MSBuild:Compile</Generator>
+      <SubType>Designer</SubType>
     </Page>
   </ItemGroup>
   <ItemGroup>

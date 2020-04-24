@@ -19,19 +19,9 @@ namespace WpfDockManagerDemo.DockManager
                 return WindowLocation.Top;
             }
 
-            if (_buttonTopEdge.InputHitTest(_buttonTopEdge.PointFromScreen(cursorPositionOnScreen)) != null)
-            {
-                return WindowLocation.TopEdge;
-            }
-
             if (_buttonLeft.InputHitTest(_buttonLeft.PointFromScreen(cursorPositionOnScreen)) != null)
             {
                 return WindowLocation.Left;
-            }
-
-            if (_buttonLeftEdge.InputHitTest(_buttonLeftEdge.PointFromScreen(cursorPositionOnScreen)) != null)
-            {
-                return WindowLocation.LeftEdge;
             }
 
             if (_buttonMiddle.InputHitTest(_buttonMiddle.PointFromScreen(cursorPositionOnScreen)) != null)
@@ -44,19 +34,9 @@ namespace WpfDockManagerDemo.DockManager
                 return WindowLocation.Right;
             }
 
-            if (_buttonRightEdge.InputHitTest(_buttonRightEdge.PointFromScreen(cursorPositionOnScreen)) != null)
-            {
-                return WindowLocation.RightEdge;
-            }
-
             if (_buttonBottom.InputHitTest(_buttonBottom.PointFromScreen(cursorPositionOnScreen)) != null)
             {
                 return WindowLocation.Bottom;
-            }
-
-            if (_buttonBottomEdge.InputHitTest(_buttonBottomEdge.PointFromScreen(cursorPositionOnScreen)) != null)
-            {
-                return WindowLocation.BottomEdge;
             }
 
             return WindowLocation.None;

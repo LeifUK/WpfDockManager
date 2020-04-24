@@ -3,11 +3,11 @@
 namespace WpfDockManagerDemo.View
 {
     /// <summary>
-    /// Interaction logic for DemoOneView.xaml
+    /// Interaction logic for DemoThreeView.xaml
     /// </summary>
-    public partial class DemoOneView : UserControl, DockManager.IView
+    public partial class ToolFourView : UserControl, DockManager.IView
     {
-        public DemoOneView()
+        public ToolFourView()
         {
             InitializeComponent();
         }

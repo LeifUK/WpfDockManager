@@ -7,7 +7,7 @@ namespace WpfDockManagerDemo.DockManager
 {
     internal class ToolPane : DockPane
     {
-        public ToolPane() : base(new ToolTabControlFactory())
+        public ToolPane() : base(new ToolContainer())
         {
             VerticalAlignment = System.Windows.VerticalAlignment.Stretch;
             HorizontalAlignment = HorizontalAlignment.Stretch;
@@ -79,10 +79,10 @@ namespace WpfDockManagerDemo.DockManager
             Children.Add(closeButton);
             closeButton.Click += delegate { FireClose(); };
 
-            _documentContainer.SelectionChanged += DocumentContainer_SelectionChanged;
-            Grid.SetRow(_documentContainer, 1);
-            Grid.SetColumn(_documentContainer, 0);
-            Grid.SetColumnSpan(_documentContainer, ColumnDefinitions.Count);
+            IDocumentContainer.SelectionChanged += DocumentContainer_SelectionChanged;
+            Grid.SetRow(IDocumentContainer as System.Windows.UIElement, 1);
+            Grid.SetColumn(IDocumentContainer as System.Windows.UIElement, 0);
+            Grid.SetColumnSpan(IDocumentContainer as System.Windows.UIElement, ColumnDefinitions.Count);
         }
 
         private void DocumentContainer_SelectionChanged(object sender, EventArgs e)
