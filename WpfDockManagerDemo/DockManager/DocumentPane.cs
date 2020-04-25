@@ -35,33 +35,34 @@ namespace WpfDockManagerDemo.DockManager
             RowDefinitions.Add(new RowDefinition());
             RowDefinitions[0].Height = new GridLength(1, GridUnitType.Star);
 
-            //Border = new Border();
-            //Border.VerticalAlignment = VerticalAlignment.Stretch;
-            //Border.HorizontalAlignment = HorizontalAlignment.Stretch;
-            //Border.Background = System.Windows.Media.Brushes.MidnightBlue;
-            //Border.BorderBrush = System.Windows.Media.Brushes.Black;
-            //Border.BorderThickness = new Thickness(1);
-            //Grid.SetRow(Border, 0);
-            //Grid.SetColumn(Border, 0);
-            //Grid.SetColumnSpan(Border, 5);
-            //Children.Add(Border);
+            Border = new Border();
+            Border.VerticalAlignment = VerticalAlignment.Stretch;
+            Border.HorizontalAlignment = HorizontalAlignment.Stretch;
+            Border.Background = System.Windows.Media.Brushes.Gray;
+            Border.BorderBrush = System.Windows.Media.Brushes.Black;
+            Border.BorderThickness = new Thickness(1);
+            Grid.SetRow(Border, 0);
+            Grid.SetColumn(Border, 0);
+            Grid.SetColumnSpan(Border, 5);
+            Grid.SetZIndex(Border, -1);
+            Children.Add(Border);
 
-            _titleLabel = new Label();
-            _titleLabel.FontSize = 12;
-            _titleLabel.Padding = new Thickness(4, 0, 0, 0);
-            _titleLabel.VerticalAlignment = VerticalAlignment.Center;
-            _titleLabel.Background = System.Windows.Media.Brushes.Transparent;
-            _titleLabel.Foreground = System.Windows.Media.Brushes.White;
-            Grid.SetRow(_titleLabel, 0);
-            Grid.SetColumn(_titleLabel, 0);
-            Children.Add(_titleLabel);
+            //_titleLabel = new Label();
+            //_titleLabel.FontSize = 12;
+            //_titleLabel.Padding = new Thickness(4, 0, 0, 0);
+            //_titleLabel.VerticalAlignment = VerticalAlignment.Center;
+            //_titleLabel.Background = System.Windows.Media.Brushes.Transparent;
+            //_titleLabel.Foreground = System.Windows.Media.Brushes.White;
+            //Grid.SetRow(_titleLabel, 0);
+            //Grid.SetColumn(_titleLabel, 0);
+            //Children.Add(_titleLabel);
 
-            Button menuButton = new Button();
-            menuButton.Style = FindResource("styleHeaderMenuButton") as Style;
-            menuButton.Click += MenuButton_Click;
-            Grid.SetRow(menuButton, 0);
-            Grid.SetColumn(menuButton, 2);
-            Children.Add(menuButton);
+            //Button menuButton = new Button();
+            //menuButton.Style = FindResource("styleHeaderMenuButton") as Style;
+            //menuButton.Click += MenuButton_Click;
+            //Grid.SetRow(menuButton, 0);
+            //Grid.SetColumn(menuButton, 2);
+            //Children.Add(menuButton);
 
             IDocumentContainer.SelectionChanged += DocumentContainer_SelectionChanged;
             Grid.SetRow(IDocumentContainer as System.Windows.UIElement, 0);
@@ -71,41 +72,42 @@ namespace WpfDockManagerDemo.DockManager
 
         private void DocumentContainer_SelectionChanged(object sender, EventArgs e)
         {
-            _titleLabel.Content = IDocumentContainer.Title;
+            // Warning warning
+            //_titleLabel.Content = IDocumentContainer.Title;
         }
 
         protected Label _titleLabel;
 
-        protected void MenuButton_Click(object sender, RoutedEventArgs e)
-        {
-            ContextMenu contextMenu = new ContextMenu();
-            MenuItem menuItem = new MenuItem();
-            menuItem.Header = "Float";
-            menuItem.IsChecked = false;
-            menuItem.Command = new Command(delegate { FireFloat(); }, delegate { return true; });
-            contextMenu.Items.Add(menuItem);
+        //protected void MenuButton_Click(object sender, RoutedEventArgs e)
+        //{
+        //    ContextMenu contextMenu = new ContextMenu();
+        //    MenuItem menuItem = new MenuItem();
+        //    menuItem.Header = "Float";
+        //    menuItem.IsChecked = false;
+        //    menuItem.Command = new Command(delegate { FireFloat(); }, delegate { return true; });
+        //    contextMenu.Items.Add(menuItem);
 
-            int viewCount = IDocumentContainer.GetUserControlCount();
-            if (viewCount > 2)
-            {
-                menuItem = new MenuItem();
-                menuItem.Header = "Ungroup Current";
-                menuItem.IsChecked = false;
-                menuItem.Command = new Command(delegate { FireUngroupCurrent(); }, delegate { return true; });
-                contextMenu.Items.Add(menuItem);
-            }
+        //    int viewCount = IDocumentContainer.GetUserControlCount();
+        //    if (viewCount > 2)
+        //    {
+        //        menuItem = new MenuItem();
+        //        menuItem.Header = "Ungroup Current";
+        //        menuItem.IsChecked = false;
+        //        menuItem.Command = new Command(delegate { FireUngroupCurrent(); }, delegate { return true; });
+        //        contextMenu.Items.Add(menuItem);
+        //    }
 
-            if (viewCount > 1)
-            {
-                menuItem = new MenuItem();
-                menuItem.Header = "Ungroup";
-                menuItem.IsChecked = false;
-                menuItem.Command = new Command(delegate { FireUngroup(); }, delegate { return true; });
-                contextMenu.Items.Add(menuItem);
-            }
+        //    if (viewCount > 1)
+        //    {
+        //        menuItem = new MenuItem();
+        //        menuItem.Header = "Ungroup";
+        //        menuItem.IsChecked = false;
+        //        menuItem.Command = new Command(delegate { FireUngroup(); }, delegate { return true; });
+        //        contextMenu.Items.Add(menuItem);
+        //    }
 
-            contextMenu.IsOpen = true;
-        }
+        //    contextMenu.IsOpen = true;
+        //}
 
         public Border Border { get; private set; }
 

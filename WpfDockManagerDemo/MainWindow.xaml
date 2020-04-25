@@ -81,6 +81,9 @@
                     <DataTemplate DataType="{x:Type viewModel:DocumentOneViewModel}">
                         <view:DocumentOneView x:Name="_documentOneView"/>
                     </DataTemplate>
+                    <DataTemplate DataType="{x:Type viewModel:DocumentTwoViewModel}">
+                        <view:DocumentTwoView x:Name="_documentTwoView"/>
+                    </DataTemplate>
                 </dockManager:LayoutManager.DocumentTemplates>
                 <dockManager:LayoutManager.ToolTemplates>
                     <DataTemplate DataType="{x:Type viewModel:ToolOneViewModel}">

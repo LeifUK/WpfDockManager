@@ -830,7 +830,7 @@ namespace WpfDockManagerDemo.DockManager
                         XmlAttribute xmlAttribute = xmlToolElement.Attributes.GetNamedItem("ContentId") as XmlAttribute;
                         if (xmlAttribute == null)
                         {
-                            throw new Exception(System.Reflection.MethodBase.GetCurrentMethod().Name + ": a Tool element must have an ID attribute");
+                            throw new Exception(System.Reflection.MethodBase.GetCurrentMethod().Name + ": a Document element must have an ID attribute");
                         }
 
                         if (viewsMap.ContainsKey(xmlAttribute.Value))
@@ -838,35 +838,6 @@ namespace WpfDockManagerDemo.DockManager
                             iDocumentContainer.AddUserControl(viewsMap[xmlAttribute.Value]);
                             viewsMap.Remove(xmlAttribute.Value);
                         }
-                    }
-                }
-            }
-        }
-
-        private void LoadDocumentPanel(Dictionary<string, UserControl> viewsMap, XmlElement xmlDocumentPanel, IDocumentContainer iDocumentContainer)
-        {
-            foreach (var xmlDocumentPanelNode in xmlDocumentPanel.ChildNodes)
-            {
-                if (xmlDocumentPanelNode is XmlElement)
-                {
-                    if ((xmlDocumentPanelNode as XmlElement).Name == "DocumentGroup")
-                    {
-                        XmlElement xmlDocumentGroupElement = xmlDocumentPanelNode as XmlElement;
-
-                        DocumentPane documentPane = new DocumentPane();
-
-                        //XmlAttribute xmlAttribute = xmlDocumentPanelElement.Attributes.GetNamedItem("ContentId") as XmlAttribute;
-                        //if (xmlAttribute == null)
-                        //{
-                        //    throw new Exception(System.Reflection.MethodBase.GetCurrentMethod().Name + ": a Tool element must have an ID attribute");
-                        //}
-
-                        //// Warning warning => wrong -> create the view and view model here
-                        //if (viewsMap.ContainsKey(xmlAttribute.Value))
-                        //{
-                        //    iDocumentContainer.AddUserControl(viewsMap[xmlAttribute.Value]);
-                        //    viewsMap.Remove(xmlAttribute.Value);
-                        //}
                     }
                 }
             }
@@ -1003,40 +974,6 @@ namespace WpfDockManagerDemo.DockManager
             {
                 viewsMap.Add(item.Name, item);
             }
-
-            // The application defines the views that are supported
-
-            //foreach (var tool in ToolsSource)
-            //{
-            //    foreach (var item in  ToolTemplates)
-            //    {
-            //        if (item is DataTemplate)
-            //        {
-            //            DataTemplate dataTemplate = item as DataTemplate;
-
-            //            if (tool.GetType() == (Type)dataTemplate.DataType)
-            //            {
-            //                UserControl view = (dataTemplate.LoadContent() as UserControl);
-            //                if (view != null)
-            //                {
-            //                    IView iView = (view as IView);
-            //                    if (iView == null)
-            //                    {
-            //                        throw new Exception(System.Reflection.MethodBase.GetCurrentMethod().Name + ": the UserControl must implement interface IView");
-            //                    }
-            //                    iView.IDocument = tool as IDocument;
-            //                    view.DataContext = tool;
-            //                    view.HorizontalAlignment = HorizontalAlignment.Stretch;
-            //                    view.VerticalAlignment = VerticalAlignment.Stretch;
-
-            //                    views.Add(view);
-
-            //                    viewsMap.Add(view.Name, view);
-            //                }
-            //            }
-            //        }
-            //    }
-            //}
 
             // Now load the views into the dock manager => one or more views might not be visible!
 
