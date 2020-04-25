@@ -5,7 +5,7 @@ namespace WpfDockManagerDemo.DockManager
 {
     internal class DocumentContainer : Grid, IDocumentContainer
     {
-        // Warning warning => poiwntless? 
+        // Warning warning => pointless? 
         public DocumentContainer()
         {
             _documentTabControl = new DocumentTabControl();
@@ -26,21 +26,15 @@ namespace WpfDockManagerDemo.DockManager
         {
             get
             {
-                IDocument iDocument = Children[0] as IDocument;
-                if (iDocument != null)
-                {
-                    return (iDocument as IDocument).Title;
-                }
-
                 if (_documentTabControl.SelectedItem == null)
                 {
                     return null;
                 }
 
-                iDocument = _documentTabControl.SelectedItem.DataContext as IDocument;
+                IDocument iDocument = _documentTabControl.SelectedItem.DataContext as IDocument;
                 if (iDocument == null)
                 {
-                    throw new Exception(System.Reflection.MethodBase.GetCurrentMethod().Name + ": User Control is not a document");
+                    return null;
                 }
 
                 return iDocument.Title;

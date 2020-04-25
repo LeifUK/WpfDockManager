@@ -47,7 +47,7 @@ namespace WpfDockManagerDemo.DockManager
             insertionIndicator.RowDefinitions[1].Height = new GridLength(1, GridUnitType.Star);
 
             Border border = new Border();
-            border.Background = new System.Windows.Media.SolidColorBrush(System.Windows.Media.Color.FromArgb(255, System.Windows.Media.Colors.Gainsboro.R, System.Windows.Media.Colors.Gainsboro.G, System.Windows.Media.Colors.Gainsboro.B));
+            border.Background = new System.Windows.Media.SolidColorBrush(System.Windows.Media.Color.FromArgb(160, System.Windows.Media.Colors.Gainsboro.R, System.Windows.Media.Colors.Gainsboro.G, System.Windows.Media.Colors.Gainsboro.B));
             border.VerticalAlignment = VerticalAlignment.Stretch;
             border.HorizontalAlignment = HorizontalAlignment.Stretch;
             insertionIndicator.Children.Add(border);

@@ -1364,81 +1364,41 @@ namespace WpfDockManagerDemo.DockManager
         }
 
         /*
-         * Locates the dock pane at the specified point
-         * 
-         *      grid: The current grid to search in.
-         *      point: A point relative to the top left corner of the main window. 
-         *      left: On success this contains the left coordinate of the target DocumentPane relative to the left of the main window.
-         *      top: On success this contains the top coordinate of the target DocumentPane relative to the top of the main window.
+         * Locates the dock pane at the specified on screen point
          */
-        private ToolPane FindView(Grid grid, Point point, ref double leftGrid, ref double topGrid)
+        private ToolPane FindView(Grid grid, Point pointOnScreen)
         {
             if (grid == null)
             {
                 return null;
             }
 
-            // First locate the cell 
-
-            double top = 0.0;
-            int row = 0;
-
-            foreach (var rowDefinition in grid.RowDefinitions)
-            {
-                double newTop = top + rowDefinition.ActualHeight;
-                if (newTop >= point.Y)
-                {
-                    break;
-                }
-                top = newTop;
-                row++;
-            }
-
-            double left = 0.0;
-            int column = 0;
-            foreach (var columnDefinition in grid.ColumnDefinitions)
-            {
-                double newLeft = left + columnDefinition.ActualWidth;
-                if (newLeft >= point.X)
-                {
-                    break;
-                }
-                left = newLeft;
-                column++;
-            }
-
-            UIElement uiElement = null;
             foreach (var child in grid.Children)
             {
-                uiElement = child as UIElement;
-                if (uiElement != null)
+                if ((child is ToolPane) || (child is SplitterPane))
                 {
-                    if ((Grid.GetRow(child as UIElement) == row) && (Grid.GetColumn(child as UIElement) == column))
+                    Grid childGrid = child as Grid;
+                    Point pointInToolPane = childGrid.PointFromScreen(pointOnScreen);
+                    if (
+                            (pointInToolPane.X >= 0) &&
+                            (pointInToolPane.X <= childGrid.ActualWidth) &&
+                            (pointInToolPane.Y >= 0) &&
+                            (pointInToolPane.Y <= childGrid.ActualHeight)
+                        )
                     {
-                        leftGrid += left;
-                        topGrid += top;
-
-                        if (uiElement is ToolPane)
+                        if (child is ToolPane)
                         {
-                            return uiElement as ToolPane;
+                            return child as ToolPane;
                         }
 
-                        // Recursively navigate down the tree
-
-                        if (uiElement is Grid)
-                        {
-                            Point subPoint = new Point(point.X - left, point.Y - top);
-                            return FindView(uiElement as Grid, subPoint, ref leftGrid, ref topGrid);
-                        }
-
-                        return null;
+                        return FindView(childGrid, pointOnScreen);
                     }
                 }
             }
-            
+
             return null;
         }
- 
+
         // The WPF method does not work properly -> call into User32.dll
         Point GetCursorPosition()
         {
@@ -1461,31 +1421,22 @@ namespace WpfDockManagerDemo.DockManager
                 throw new Exception(System.Reflection.MethodBase.GetCurrentMethod().Name + ": null floating window");
             }
 
-            ToolPane previousPane = SelectedPane;
-
-            var source = PresentationSource.FromVisual(this);
-            System.Windows.Media.Matrix transformFromDevice = source.CompositionTarget.TransformFromDevice;
             Point cursorPositionOnScreen = GetCursorPosition();
 
             bool found = false;
-            Point pointMouse = transformFromDevice.Transform(cursorPositionOnScreen);
-            Rect rectMain = new Rect(App.Current.MainWindow.Left, App.Current.MainWindow.Top, App.Current.MainWindow.ActualWidth, App.Current.MainWindow.ActualHeight);
-            if (rectMain.Contains(pointMouse))
-            {
-                Vector vector = new Vector(1.0, 1.0);
-                Point pixelSize = (Point)transformFromDevice.Transform(vector);
-                double captionHeightInDIU = SystemParameters.WindowCaptionHeight / pixelSize.Y;
-
-                // The constants are frigs .. 
-                Point pointInMainWindow = new Point(pointMouse.X - rectMain.X - 7, pointMouse.Y - rectMain.Y - captionHeightInDIU - 7);
-
-                double topGrid = captionHeightInDIU;
-                double leftGrid = 0.0;
-                var pane = FindView(this, pointInMainWindow, ref leftGrid, ref topGrid);
+            Point cursorPositionInMainWindow = this.PointFromScreen(cursorPositionOnScreen);
+            if (
+                    (cursorPositionInMainWindow.X >= 0) &&
+                    (cursorPositionInMainWindow.X <= this.ActualWidth) && 
+                    (cursorPositionInMainWindow.Y >= 0) &&
+                    (cursorPositionInMainWindow.Y <= this.ActualHeight) 
+                )
+            { 
+                var pane = FindView(this, cursorPositionOnScreen);
                 found = pane != null;
                 if ((pane != null) && (SelectedPane != pane))
                 {
-                    Point pointInGrid = new Point(leftGrid, topGrid);
+                    Point pointInGrid = this.PointFromScreen(pane.PointToScreen(new Point(0, 0)));
 
                     pane.IsHighlighted = true;
                     SelectedPane = pane;
@@ -1516,6 +1467,8 @@ namespace WpfDockManagerDemo.DockManager
                     _edgeLocationPane.Height = this.ActualHeight;
                 }
             }
+
+            ToolPane previousPane = SelectedPane;
 
             if (!found)
             {

@@ -21,16 +21,16 @@ namespace WpfDockManagerDemo.DockManager
             _tabHeaderControl.UnselectedTabBackground = System.Windows.Media.Brushes.MidnightBlue;
             _tabHeaderControl.SelectedTabBackground = System.Windows.Media.Brushes.LightSalmon;
 
-            //Border border = new Border();
-            //Children.Add(border);
-            //Grid.SetRow(border, 0);
-            //Grid.SetRowSpan(border, 2);
-            //Grid.SetColumn(border, 0);
-            //Grid.SetColumnSpan(border, 4);
-            //Grid.SetZIndex(border, -1);
-            //border.HorizontalAlignment = System.Windows.HorizontalAlignment.Stretch;
-            //border.VerticalAlignment = System.Windows.VerticalAlignment.Stretch;
-            //border.Background = System.Windows.Media.Brushes.Gainsboro;
+            Border border = new Border();
+            Children.Add(border);
+            Grid.SetRow(border, 0);
+            Grid.SetRowSpan(border, 2);
+            Grid.SetColumn(border, 0);
+            Grid.SetColumnSpan(border, 4);
+            Grid.SetZIndex(border, -1);
+            border.HorizontalAlignment = System.Windows.HorizontalAlignment.Stretch;
+            border.VerticalAlignment = System.Windows.VerticalAlignment.Stretch;
+            border.Background = System.Windows.Media.Brushes.SlateGray;
 
             _button = new Button();
             Children.Add(_button);
