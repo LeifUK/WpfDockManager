@@ -4,12 +4,10 @@ using System.Windows;
 using System.Windows.Controls;
 using System.ComponentModel;
 using System.Windows.Media;
+using System.Windows.Input;
 
 namespace WpfControlLibrary
 {
-    /// <summary>
-    /// Interaction logic for UserControl1.xaml
-    /// </summary>
     public partial class TabHeaderControl : UserControl, INotifyPropertyChanged
     {
         public TabHeaderControl()
@@ -17,8 +15,9 @@ namespace WpfControlLibrary
             InitializeComponent();
             SetButtonStates();
         }
-        
+
         public event EventHandler CloseTabRequest;
+        public event EventHandler SelectionChanged;
 
         #region Dependency properties
 
@@ -157,6 +156,7 @@ namespace WpfControlLibrary
             if (e.NewValue != null)
             {
                 _listBox.SelectedIndex = (int)e.NewValue;
+                _listBox.ScrollIntoView(_listBox.SelectedItem);
             }
         }
 
@@ -193,6 +193,7 @@ namespace WpfControlLibrary
             {
                 _listBox.Items.Add(item);
             }
+            SelectedIndex = 0;
         }
 
         protected virtual void OnItemsSourceChanged(DependencyPropertyChangedEventArgs e)
@@ -338,12 +339,36 @@ namespace WpfControlLibrary
 
         #endregion
 
+        #region ActiveArrowBrush dependency property
+
+        [Bindable(true)]
+        [DesignerSerializationVisibility(DesignerSerializationVisibility.Hidden)]
+        public static readonly DependencyProperty ActiveArrowBrushProperty = DependencyProperty.Register("ActiveArrowBrush", typeof(Brush), typeof(TabHeaderControl), new FrameworkPropertyMetadata(Brushes.White, null));
+        public Brush ActiveArrowBrush
+        {
+            get
+            {
+                return (Brush)GetValue(ActiveArrowBrushProperty);
+            }
+            set
+            {
+                if (value != ActiveArrowBrush)
+                {
+                    SetValue(ActiveArrowBrushProperty, value);
+                }
+            }
+        }
+
+        #endregion
+
         #endregion
 
         private void _listBox_SelectionChanged(object sender, SelectionChangedEventArgs e)
         {
             SetButtonStates();
             SelectedItem = _listBox.SelectedItem;
+            SelectedIndex = _listBox.SelectedIndex;
+            SelectionChanged?.Invoke(sender, null);
         }
 
         private void Button_Click(object sender, RoutedEventArgs e)
@@ -364,8 +389,11 @@ namespace WpfControlLibrary
             {
                 if (item is Label)
                 {
-                    string text = (string)(item as Label).Content;
-                    CloseTabRequest?.Invoke(text, null);
+                    ContentPresenter contentPresenter = (item as Label).Content as ContentPresenter;
+                    if (contentPresenter != null)
+                    {
+                        CloseTabRequest?.Invoke(contentPresenter.Content, null);
+                    }
                 }
             }
         }

@@ -171,9 +171,9 @@ namespace WpfDockManagerDemo.DockManager
             {
                 return -1;
             }
-            else if (Children[0] is TabControl)
+            else if (Children[0] is ITabControl)
             {
-                return (Children[0] as TabControl).SelectedIndex;
+                return (Children[0] as ITabControl).SelectedIndex;
             }
 
             throw new Exception(System.Reflection.MethodBase.GetCurrentMethod().Name + ": Children[0] is not an expected type -> " + Children[0].GetType().FullName);

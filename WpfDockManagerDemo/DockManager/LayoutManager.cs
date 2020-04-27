@@ -5,6 +5,7 @@ using System.Windows;
 using System.Windows.Controls;
 using System.ComponentModel;
 using System.Xml;
+using System.Windows.Input;
 
 /*
  * Note: I have placed most of the intelligence in this class rather than spreading 
@@ -368,6 +369,28 @@ namespace WpfDockManagerDemo.DockManager
                 list_N = list_N_plus_1;
                 list_N_plus_1 = new List<FrameworkElement>();
             }
+        }
+
+        private DocumentPane CreateDocumentPane()
+        {
+            DocumentPane documentPane = new DocumentPane();
+            documentPane.Close += DocumentPane_Close; ;
+            return documentPane;
+        }
+
+        private void DocumentPane_Close(object sender, EventArgs e)
+        {
+            throw new NotImplementedException();
+        }
+
+        private ToolPane CreateToolPane()
+        {
+            ToolPane toolPane = new ToolPane();
+            toolPane.Close += ToolPane_Close;
+            toolPane.Float += ToolPane_Float;
+            toolPane.UngroupCurrent += ToolPane_UngroupCurrent;
+            toolPane.Ungroup += ToolPane_Ungroup;
+            return toolPane;
         }
 
         private void Create()
@@ -1038,27 +1061,7 @@ namespace WpfDockManagerDemo.DockManager
             return toolPane;
         }
 
-        private ToolPane CreateToolPane()
-        {
-            ToolPane toolPane = new ToolPane();
-            toolPane.Close += ToolPane_Close;
-            toolPane.Float += ToolPane_Float;
-            toolPane.UngroupCurrent += ToolPane_UngroupCurrent;
-            toolPane.Ungroup += ToolPane_Ungroup;
-            return toolPane;
-        }
-
-        private DocumentPane CreateDocumentPane()
-        {
-            DocumentPane documentPane = new DocumentPane();
-            documentPane.Close += ToolPane_Close;
-            documentPane.Float += ToolPane_Float;
-            documentPane.UngroupCurrent += ToolPane_UngroupCurrent;
-            documentPane.Ungroup += ToolPane_Ungroup;
-            return documentPane;
-        }
-
-        private bool UngroupToolPane(ToolPane toolPane, int index)
+        private bool UngroupToolPane(ToolPane toolPane, int index, double paneWidth)
         {
             if (toolPane == null)
             {
@@ -1098,15 +1101,25 @@ namespace WpfDockManagerDemo.DockManager
             newGrid.AddChild(toolPane, true);
             newGrid.AddChild(newDocumentPane, false);
 
+            /*
+             * Now evenly space them 
+             */
+            //parentSplitterPane.ColumnDefinitions[0].Width = new GridLength(paneWidth, GridUnitType.Star);
+            //parentSplitterPane.ColumnDefinitions[2].Width = new GridLength(parentSplitterPane.ActualWidth - paneWidth, GridUnitType.Star);
+
             return true;
         }
 
         private void ToolPane_Ungroup(object sender, EventArgs e)
         {
             ToolPane toolPane = sender as ToolPane;
+            var parentGrid = toolPane.Parent as Grid;
 
-            while (UngroupToolPane(toolPane, 1))
+            int count = 1;
+            double paneWidth = toolPane.ActualWidth / toolPane.IDocumentContainer.GetUserControlCount();
+            while (UngroupToolPane(toolPane, 1, paneWidth))
             {
+                ++count;
                 // Nothing here
             }
         }
@@ -1119,11 +1132,84 @@ namespace WpfDockManagerDemo.DockManager
                 throw new Exception(System.Reflection.MethodBase.GetCurrentMethod().Name + ": sender not a ToolPane");
             }
 
+            double paneWidth = toolPane.ActualWidth / 2;
             int index = toolPane.IDocumentContainer.GetCurrentTabIndex();
             if (index > -1)
             {
-                UngroupToolPane(toolPane, index);
+                UngroupToolPane(toolPane, index, paneWidth);
             }
+        }
+
+        private FloatingPane CreateFloatingPane()
+        {
+            FloatingPane floatingPane = new FloatingPane();
+            floatingPane.LocationChanged += FloatingWindow_LocationChanged;
+            floatingPane.Closed += FloatingPane_Closed;
+            floatingPane.Ungroup += FloatingPane_Ungroup;
+            floatingPane.UngroupCurrent += FloatingPane_UngroupCurrent;
+            floatingPane.DataContext = new FloatingViewModel();
+            (floatingPane.DataContext as FloatingViewModel).Title = floatingPane.Title;
+            floatingPane.EndDrag += FloatingView_EndDrag;
+            // Ensure the window remains on top of the main window
+            floatingPane.Owner = App.Current.MainWindow;
+            floatingPane.Show();
+            FloatingPanes.Add(floatingPane);
+            return floatingPane;
+        }
+
+        private void ToolPane_Float(object sender, FloatEventArgs e)
+        {
+            ToolPane toolPane = sender as ToolPane;
+
+            if (toolPane == null)
+            {
+                return;
+            }
+
+            Point cursorPositionOnScreen = Utilities.GetCursorPosition();
+            Point cursorPositionInMainWindow = App.Current.MainWindow.PointFromScreen(cursorPositionOnScreen);
+            Point cursorPositionInToolPane = toolPane.PointFromScreen(cursorPositionOnScreen);
+
+            Point mainWindowLocation = App.Current.MainWindow.PointToScreen(new Point(0, 0));
+
+            ExtractToolPane(toolPane);
+
+            FloatingPane floatingPane = CreateFloatingPane();
+
+            while (true)
+            {
+                UserControl userControl = toolPane.IDocumentContainer.ExtractUserControl(0);
+                if (userControl == null)
+                {
+                    break;
+                }
+
+                floatingPane.IDocumentContainer.AddUserControl(userControl);
+            }
+
+            floatingPane.Left = mainWindowLocation.X + cursorPositionInMainWindow.X - cursorPositionInToolPane.X;
+            floatingPane.Top = mainWindowLocation.Y + cursorPositionInMainWindow.Y - cursorPositionInToolPane.Y;
+            floatingPane.Width = toolPane.ActualWidth;
+            floatingPane.Height = toolPane.ActualHeight;
+
+            if (e.Drag)
+            {
+                // Ensure the floated window can be dragged by the user
+                IntPtr hWnd = new System.Windows.Interop.WindowInteropHelper(floatingPane).EnsureHandle();
+                Utilities.SendLeftMouseButtonDown(hWnd);
+            }
+        }
+
+        private void ToolPane_Close(object sender, EventArgs e)
+        {
+            ToolPane toolPane = sender as ToolPane;
+
+            if (toolPane == null)
+            {
+                return;
+            }
+
+            ExtractToolPane(toolPane);
         }
 
         private void FloatingPane_Closed(object sender, EventArgs e)
@@ -1187,65 +1273,6 @@ namespace WpfDockManagerDemo.DockManager
                 newfloatingPane.Top = floatingPane.Top + 10;
                 newfloatingPane.IDocumentContainer.AddUserControl(userControl);
             }
-        }
-
-        private FloatingPane CreateFloatingPane()
-        {
-            FloatingPane floatingPane = new FloatingPane();
-            floatingPane.LocationChanged += FloatingWindow_LocationChanged;
-            floatingPane.Closed += FloatingPane_Closed;
-            floatingPane.Ungroup += FloatingPane_Ungroup;
-            floatingPane.UngroupCurrent += FloatingPane_UngroupCurrent;
-            floatingPane.DataContext = new FloatingViewModel();
-            (floatingPane.DataContext as FloatingViewModel).Title = floatingPane.Title;
-            floatingPane.EndDrag += FloatingView_EndDrag;
-            // Ensure the window remains on top of the main window
-            floatingPane.Owner = App.Current.MainWindow;
-            floatingPane.Show();
-            FloatingPanes.Add(floatingPane);
-            return floatingPane;
-        }
-
-        private void ToolPane_Float(object sender, EventArgs e)
-        {
-            System.Windows.Input.MouseEventArgs mouseEventArgs = e as System.Windows.Input.MouseEventArgs;
-
-            ToolPane toolPane = sender as ToolPane;
-
-            if (toolPane == null)
-            {
-                return;
-            }
-
-            Point mousePosition;
-            if (mouseEventArgs != null)
-            {
-                mousePosition = mouseEventArgs.GetPosition(App.Current.MainWindow);
-            }
-            else
-            {
-                mousePosition = new Point(App.Current.MainWindow.Left + App.Current.MainWindow.Width/2, App.Current.MainWindow.Top + App.Current.MainWindow.Height / 2);
-            }
-
-            Point mainWindowLocation = App.Current.MainWindow.PointToScreen(new Point(0, 0));
-
-            ExtractToolPane(toolPane);
-
-            FloatingPane floatingPane = CreateFloatingPane();
-
-            while (true)
-            {
-                UserControl userControl = toolPane.IDocumentContainer.ExtractUserControl(0);
-                if (userControl == null)
-                {
-                    break;
-                }
-
-                floatingPane.IDocumentContainer.AddUserControl(userControl);
-            }
-
-            floatingPane.Left = mainWindowLocation.X + mousePosition.X;
-            floatingPane.Top = mainWindowLocation.Y + mousePosition.Y;
         }
 
         private void CancelSelection()
@@ -1399,16 +1426,6 @@ namespace WpfDockManagerDemo.DockManager
             return null;
         }
 
-        // The WPF method does not work properly -> call into User32.dll
-        Point GetCursorPosition()
-        {
-            if (User32.GetCursorPos(out User32.POINT point) == false)
-            {
-                return new Point(0, 0);
-            }
-            return new Point(point.X, point.Y);
-        }
-
         private WindowLocationPane _windowLocationPane;
         private EdgeLocationPane _edgeLocationPane;
         private InsertionIndicatorManager _insertionIndicatorManager;
@@ -1421,10 +1438,10 @@ namespace WpfDockManagerDemo.DockManager
                 throw new Exception(System.Reflection.MethodBase.GetCurrentMethod().Name + ": null floating window");
             }
 
-            Point cursorPositionOnScreen = GetCursorPosition();
+            Point cursorPositionOnScreen = Utilities.GetCursorPosition();
 
             bool found = false;
-            Point cursorPositionInMainWindow = this.PointFromScreen(cursorPositionOnScreen);
+            Point cursorPositionInMainWindow = PointFromScreen(cursorPositionOnScreen);
             if (
                     (cursorPositionInMainWindow.X >= 0) &&
                     (cursorPositionInMainWindow.X <= this.ActualWidth) && 
@@ -1436,7 +1453,7 @@ namespace WpfDockManagerDemo.DockManager
                 found = pane != null;
                 if ((pane != null) && (SelectedPane != pane))
                 {
-                    Point pointInGrid = this.PointFromScreen(pane.PointToScreen(new Point(0, 0)));
+                    Point pointInGrid = PointFromScreen(pane.PointToScreen(new Point(0, 0)));
 
                     pane.IsHighlighted = true;
                     SelectedPane = pane;
@@ -1448,7 +1465,6 @@ namespace WpfDockManagerDemo.DockManager
                     _windowLocationPane = new WindowLocationPane();
                     _windowLocationPane.AllowsTransparency = true;
                     _windowLocationPane.Show();
-                    // The constants are frigs .. 
                     _windowLocationPane.Left = App.Current.MainWindow.Left + pointInGrid.X + SelectedPane.ActualWidth / 2 - _windowLocationPane.ActualWidth / 2 + 7;
                     _windowLocationPane.Top = App.Current.MainWindow.Top + pointInGrid.Y + SelectedPane.ActualHeight / 2 - _windowLocationPane.ActualHeight / 2 + 2;
                     _windowLocationPane.Owner = floatingWindow.Owner;
@@ -1463,8 +1479,8 @@ namespace WpfDockManagerDemo.DockManager
                     Point topLeftPoint = this.PointToScreen(new Point(0, 0));
                     _edgeLocationPane.Left = topLeftPoint.X;
                     _edgeLocationPane.Top = topLeftPoint.Y;
-                    _edgeLocationPane.Width = this.ActualWidth;
-                    _edgeLocationPane.Height = this.ActualHeight;
+                    _edgeLocationPane.Width = ActualWidth;
+                    _edgeLocationPane.Height = ActualHeight;
                 }
             }
 
@@ -1538,17 +1554,5 @@ namespace WpfDockManagerDemo.DockManager
                 }
             }
         }
-
-        private void ToolPane_Close(object sender, EventArgs e)
-        {
-            ToolPane toolPane = sender as ToolPane;
-
-            if (toolPane == null)
-            {
-                return;
-            }
-
-            ExtractToolPane(toolPane);
-         }
     }
 }

@@ -15,7 +15,7 @@ namespace WpfDockManagerDemo.DockManager
         }
 
         public event EventHandler Close;
-        public event EventHandler Float;
+        public event FloatEventHandler Float;
         public event EventHandler UngroupCurrent;
         public event EventHandler Ungroup;
 
@@ -24,9 +24,11 @@ namespace WpfDockManagerDemo.DockManager
             Close?.Invoke(this, null);
         }
 
-        protected void FireFloat()
+        protected void FireFloat(bool drag)
         {
-            Float?.Invoke(this, null);
+            FloatEventArgs floatEventArgs = new FloatEventArgs();
+            floatEventArgs.Drag = drag;
+            Float?.Invoke(this, floatEventArgs);
         }
 
         protected void FireUngroupCurrent()

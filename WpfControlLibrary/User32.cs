@@ -1,7 +1,7 @@
 ﻿using System.Runtime.InteropServices;
 using System;
 
-namespace WpfDockManagerDemo.DockManager
+namespace WpfControlLibrary
 {
     class User32
     {

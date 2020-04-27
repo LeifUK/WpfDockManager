@@ -48,6 +48,9 @@
     <Reference Include="PresentationFramework" />
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="TabHeader.cs" />
+    <Compile Include="User32.cs" />
+    <Compile Include="Utilities.cs" />
     <Page Include="TabHeaderControl.xaml">
       <Generator>MSBuild:Compile</Generator>
       <SubType>Designer</SubType>

@@ -4,7 +4,7 @@ using System.Linq;
 using System.Windows;
 using System.Windows.Controls;
 
-namespace WpfDockManagerDemo.DockManager
+namespace WpfControlLibrary
 {
     public static class Utilities
     {

@@ -61,6 +61,8 @@
     <Compile Include="DockManager\Command.cs" />
     <Compile Include="DockManager\DockPane.cs" />
     <Compile Include="DockManager\DocumentTabControl.cs" />
+    <Compile Include="DockManager\FloatEventArgs.cs" />
+    <Compile Include="DockManager\FloatEventHandler.cs" />
     <Compile Include="DockManager\ToolContainer.cs" />
     <Compile Include="DockManager\DocumentContainer.cs" />
     <Compile Include="DockManager\DocumentPane.cs" />

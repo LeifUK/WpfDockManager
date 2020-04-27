@@ -98,7 +98,7 @@ namespace WpfDockManagerDemo.DockManager
             MenuItem menuItem = new MenuItem();
             menuItem.Header = "Float";
             menuItem.IsChecked = false;
-            menuItem.Command = new Command(delegate { FireFloat(); }, delegate { return true; });
+            menuItem.Command = new Command(delegate { FireFloat(false); }, delegate { return true; });
             contextMenu.Items.Add(menuItem);
 
             int viewCount = IDocumentContainer.GetUserControlCount();
@@ -165,7 +165,7 @@ namespace WpfDockManagerDemo.DockManager
                 if ((xdiff * xdiff + ydiff * ydiff) > 100)
                 {
 
-                    FireFloat();
+                    FireFloat(true);
                     System.Windows.Input.Mouse.Capture(this, CaptureMode.None);
                 }
             }

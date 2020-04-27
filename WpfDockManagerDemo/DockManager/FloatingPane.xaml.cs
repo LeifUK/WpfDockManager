@@ -139,31 +139,6 @@ namespace WpfDockManagerDemo.DockManager
             }
         }
 
-        //public void AddUserControl(UserControl userControl)
-        //{
-        //    DocumentContainer.AddUserControl(userControl);
-        //}
-
-        //public UserControl ExtractUserControl(int index)
-        //{
-        //    return DocumentContainer.ExtractUserControl(index);
-        //}
-
-        //public int GetUserControlCount()
-        //{
-        //    return DocumentContainer.GetUserControlCount();
-        //}
-
-        //public UserControl GetUserControl(int index)
-        //{
-        //    return DocumentContainer.GetUserControl(index);
-        //}
-
-        //public int GetCurrentTabIndex()
-        //{
-        //    return DocumentContainer.GetCurrentTabIndex();
-        //}
-
         internal readonly IDocumentContainer IDocumentContainer;
     }
 }

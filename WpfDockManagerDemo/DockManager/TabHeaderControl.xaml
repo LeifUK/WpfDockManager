@@ -121,7 +121,7 @@
                                             <ColumnDefinition Width="Auto"/>
                                             <ColumnDefinition Width="6"/>
                                             <ColumnDefinition Width="Auto"/>
-                                            <ColumnDefinition Width="1"/>
+                                            <ColumnDefinition Width="2"/>
                                         </Grid.ColumnDefinitions>
                                         <Label Grid.Column="1" x:Name="Label" FontSize="{Binding Path=FontSize, RelativeSource={RelativeSource AncestorType={x:Type local:TabHeaderControl}}}" FontFamily="{Binding Path=FontFamily, RelativeSource={RelativeSource AncestorType={x:Type local:TabHeaderControl}}}" FontStyle="{Binding Path=FontStyle, RelativeSource={RelativeSource AncestorType={x:Type local:TabHeaderControl}}}" Foreground="Black" Width="Auto" Padding="2,0,2,0" Margin="0" VerticalAlignment="Center">
                                             <ContentPresenter />
