@@ -14,7 +14,24 @@ namespace WpfDockManagerDemo.DockManager
             _tabHeaderControl.CloseTabRequest += _tabHeaderControl_CloseTabRequest;
             _tabHeaderControl.ItemsSource = _items;
             _tabHeaderControl.DisplayMemberPath = "Value.Title";
+            _tabHeaderControl.ItemsChanged += _tabHeaderControl_ItemsChanged;
             Children.Add(_tabHeaderControl);
+        }
+
+        private void _tabHeaderControl_ItemsChanged(object sender, System.EventArgs e)
+        {
+            var items = new System.Collections.ObjectModel.ObservableCollection<System.Collections.Generic.KeyValuePair<UserControl, IDocument>>();
+
+            foreach (var item in _tabHeaderControl.Items)
+            {
+                items.Add((System.Collections.Generic.KeyValuePair<UserControl,IDocument>)item);
+            }
+            int selectedIndex = _tabHeaderControl.SelectedIndex;
+
+            _items = items;
+            _tabHeaderControl.SelectedIndex = selectedIndex;
+
+            _tabHeaderControl_SelectionChanged(this, null);
         }
 
         protected readonly int HeaderRow;
@@ -163,7 +180,7 @@ namespace WpfDockManagerDemo.DockManager
 
         public int SelectedIndex { get { return _tabHeaderControl.SelectedIndex; } }
 
-        public UserControl SelectedItem { get { return SelectedIndex > -1 ? _items[SelectedIndex].Key : null; } }
+        public UserControl SelectedItem { get { return ((SelectedIndex > -1) && (SelectedIndex < _items.Count)) ? _items[SelectedIndex].Key : null; } }
 
         #endregion ITabControl
     }

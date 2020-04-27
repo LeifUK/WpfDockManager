@@ -34,7 +34,6 @@ namespace WpfDockManagerDemo.DockManager
             border.Background = System.Windows.Media.Brushes.Gainsboro;
 
             _items = new System.Collections.ObjectModel.ObservableCollection<System.Collections.Generic.KeyValuePair<UserControl, IDocument>>();
-            _tabHeaderControl.ItemsSource = _items;
             _tabHeaderControl.DisplayMemberPath = "Value.Title";
             _tabHeaderControl.SelectionChanged += _tabHeaderControl_SelectionChanged;
             _tabHeaderControl.CloseTabRequest += _tabHeaderControl_CloseTabRequest;

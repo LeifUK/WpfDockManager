@@ -4,7 +4,7 @@ using System.Windows;
 using System.Windows.Controls;
 using System.ComponentModel;
 using System.Windows.Media;
-using System.Windows.Input;
+using System.Collections.Generic;
 
 namespace WpfControlLibrary
 {
@@ -14,11 +14,24 @@ namespace WpfControlLibrary
         {
             InitializeComponent();
             SetButtonStates();
+
+            _listBox.ItemsChanged += _listBox_ItemsChanged;
+        }
+
+        private void _listBox_ItemsChanged(object sender, EventArgs e)
+        {
+            SelectedIndex = _listBox.SelectedIndex;
+            ItemsChanged?.Invoke(this, null);
         }
 
         public event EventHandler CloseTabRequest;
         public event EventHandler SelectionChanged;
         public event EventHandler ItemsChanged;
+
+        public ItemCollection Items 
+        {
+            get { return _listBox.Items; }
+        }
 
         #region Dependency properties
 
@@ -189,11 +202,11 @@ namespace WpfControlLibrary
         private void PrepareItemsSource(IEnumerable itemsSource)
         {
             _listBox.Items.Clear();
-
             foreach (var item in itemsSource)
             {
                 _listBox.Items.Add(item);
             }
+
             SelectedIndex = 0;
         }
 

@@ -1,4 +1,5 @@
-﻿using System.Windows;
+﻿using System;
+using System.Windows;
 using System.Windows.Input;
 using System.Windows.Controls;
 
@@ -6,6 +7,7 @@ namespace WpfControlLibrary
 {
     public class TabHeader : ListBox
     {
+        public event EventHandler ItemsChanged; 
         bool _mouseLeftButtonDown = false;
         int _dragIndex;
 
@@ -110,6 +112,8 @@ namespace WpfControlLibrary
             Items.Insert(selectedIndex, item);
             _dragIndex = selectedIndex;
             SelectedIndex = selectedIndex;
+
+            ItemsChanged?.Invoke(this, null);
         }
     }
 }
