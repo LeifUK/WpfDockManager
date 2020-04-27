@@ -1166,7 +1166,7 @@ namespace WpfDockManagerDemo.DockManager
                 return;
             }
 
-            Point cursorPositionOnScreen = Utilities.GetCursorPosition();
+            Point cursorPositionOnScreen = WpfControlLibrary.Utilities.GetCursorPosition();
             Point cursorPositionInMainWindow = App.Current.MainWindow.PointFromScreen(cursorPositionOnScreen);
             Point cursorPositionInToolPane = toolPane.PointFromScreen(cursorPositionOnScreen);
 
@@ -1196,7 +1196,7 @@ namespace WpfDockManagerDemo.DockManager
             {
                 // Ensure the floated window can be dragged by the user
                 IntPtr hWnd = new System.Windows.Interop.WindowInteropHelper(floatingPane).EnsureHandle();
-                Utilities.SendLeftMouseButtonDown(hWnd);
+                WpfControlLibrary.Utilities.SendLeftMouseButtonDown(hWnd);
             }
         }
 
@@ -1438,7 +1438,7 @@ namespace WpfDockManagerDemo.DockManager
                 throw new Exception(System.Reflection.MethodBase.GetCurrentMethod().Name + ": null floating window");
             }
 
-            Point cursorPositionOnScreen = Utilities.GetCursorPosition();
+            Point cursorPositionOnScreen = WpfControlLibrary.Utilities.GetCursorPosition();
 
             bool found = false;
             Point cursorPositionInMainWindow = PointFromScreen(cursorPositionOnScreen);

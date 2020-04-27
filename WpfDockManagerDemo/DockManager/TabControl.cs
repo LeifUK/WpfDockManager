@@ -15,7 +15,7 @@ namespace WpfDockManagerDemo.DockManager
             ColumnDefinitions.Add(new ColumnDefinition() { Width = new System.Windows.GridLength(20, System.Windows.GridUnitType.Pixel) });
             ColumnDefinitions.Add(new ColumnDefinition() { Width = new System.Windows.GridLength(4, System.Windows.GridUnitType.Pixel) });
 
-            _tabHeaderControl = new TabHeaderControl();
+            _tabHeaderControl = new WpfControlLibrary.TabHeaderControl();
             Children.Add(_tabHeaderControl);
             Grid.SetRow(_tabHeaderControl, 1);
             Grid.SetColumn(_tabHeaderControl, 0);
@@ -115,7 +115,7 @@ namespace WpfDockManagerDemo.DockManager
             SelectionChanged?.Invoke(sender, e);
         }
 
-        TabHeaderControl _tabHeaderControl;
+        WpfControlLibrary.TabHeaderControl _tabHeaderControl;
         Button _button;
 
         private UserControl _selectedUserControl;

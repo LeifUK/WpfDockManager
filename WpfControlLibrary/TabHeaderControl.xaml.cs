@@ -18,6 +18,7 @@ namespace WpfControlLibrary
 
         public event EventHandler CloseTabRequest;
         public event EventHandler SelectionChanged;
+        public event EventHandler ItemsChanged;
 
         #region Dependency properties
 

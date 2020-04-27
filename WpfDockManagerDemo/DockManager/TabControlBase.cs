@@ -9,7 +9,7 @@ namespace WpfDockManagerDemo.DockManager
             HeaderRow = headerRow;
             ContentRow = contentRow;
             _items = new System.Collections.ObjectModel.ObservableCollection<System.Collections.Generic.KeyValuePair<UserControl, IDocument>>();
-            _tabHeaderControl = new TabHeaderControl();
+            _tabHeaderControl = new WpfControlLibrary.TabHeaderControl();
             _tabHeaderControl.SelectionChanged += _tabHeaderControl_SelectionChanged;
             _tabHeaderControl.CloseTabRequest += _tabHeaderControl_CloseTabRequest;
             _tabHeaderControl.ItemsSource = _items;
@@ -84,7 +84,7 @@ namespace WpfDockManagerDemo.DockManager
             SelectionChanged?.Invoke(sender, e);
         }
 
-        protected TabHeaderControl _tabHeaderControl;
+        protected WpfControlLibrary.TabHeaderControl _tabHeaderControl;
 
         protected UserControl _selectedUserControl;
         protected System.Collections.ObjectModel.ObservableCollection<System.Collections.Generic.KeyValuePair<UserControl,IDocument>> _items;

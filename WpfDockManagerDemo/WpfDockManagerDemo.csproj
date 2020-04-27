@@ -8,12 +8,13 @@
     <OutputType>WinExe</OutputType>
     <RootNamespace>WpfDockManagerDemo</RootNamespace>
     <AssemblyName>WpfDockManagerDemo</AssemblyName>
-    <TargetFrameworkVersion>v4.6.1</TargetFrameworkVersion>
+    <TargetFrameworkVersion>v4.7.2</TargetFrameworkVersion>
     <FileAlignment>512</FileAlignment>
     <ProjectTypeGuids>{60dc8134-eba5-43b8-bcc9-bb4bc16c2548};{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}</ProjectTypeGuids>
     <WarningLevel>4</WarningLevel>
     <AutoGenerateBindingRedirects>true</AutoGenerateBindingRedirects>
     <Deterministic>true</Deterministic>
+    <TargetFrameworkProfile />
   </PropertyGroup>
   <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Debug|AnyCPU' ">
     <PlatformTarget>AnyCPU</PlatformTarget>
@@ -82,19 +83,14 @@
     <Compile Include="DockManager\IView.cs" />
     <Compile Include="DockManager\TabControlBase.cs" />
     <Compile Include="DockManager\TabControl.cs" />
-    <Compile Include="DockManager\TabHeaderControl.xaml.cs">
-      <DependentUpon>TabHeaderControl.xaml</DependentUpon>
-    </Compile>
     <Compile Include="DockManager\ToolPane.cs" />
     <Compile Include="DockManager\ToolTabControl.cs" />
-    <Compile Include="DockManager\Utilities.cs" />
     <Compile Include="DockManager\ViewType.cs" />
     <Compile Include="DockManager\WindowLocationPane.xaml.cs">
       <DependentUpon>WindowLocationPane.xaml</DependentUpon>
     </Compile>
     <Compile Include="DockManager\LayoutManager.cs" />
     <Compile Include="DockManager\SplitterPane.cs" />
-    <Compile Include="DockManager\User32.cs" />
     <Compile Include="DockManager\WindowLocation.cs" />
     <Compile Include="DockManager\FloatingViewModel.cs" />
     <Compile Include="ViewModel\DocumentTwoViewModel.cs" />
@@ -138,10 +134,6 @@
     <Page Include="DockManager\FloatingPane.xaml">
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
-    </Page>
-    <Page Include="DockManager\TabHeaderControl.xaml">
-      <Generator>MSBuild:Compile</Generator>
-      <SubType>Designer</SubType>
     </Page>
     <Page Include="DockManager\WindowLocationPane.xaml">
       <SubType>Designer</SubType>
@@ -218,6 +210,10 @@
     <ProjectReference Include="..\BetterWpfControls\BetterWpfControls.csproj">
       <Project>{e8229630-9896-4536-b6f9-ba8c1738e498}</Project>
       <Name>BetterWpfControls</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\WpfControlLibrary\WpfControlLibrary.csproj">
+      <Project>{460c09de-de0d-4d2b-b1ec-f2bbd72022c6}</Project>
+      <Name>WpfControlLibrary</Name>
     </ProjectReference>
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
