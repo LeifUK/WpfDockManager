@@ -48,7 +48,7 @@
                     <ControlTemplate TargetType="Button">
                         <Grid Margin="0,0,0,0">
                             <Border Name="_border" Background="Transparent" Width="18" Height="18" CornerRadius="0" BorderThickness="0" BorderBrush="Gray" HorizontalAlignment="Center"/>
-                            <Path Name="_pathPointer" Fill="OliveDrab" Stroke="Black" StrokeThickness="0" Panel.ZIndex="98">
+                            <Path Name="_pathPointer" Fill="Green" Stroke="Black" StrokeThickness="0" Panel.ZIndex="98">
                                 <Path.Data>
                                     <PathGeometry>
                                         <PathGeometry.Figures>
@@ -70,7 +70,10 @@
                         </Grid>
                         <ControlTemplate.Triggers>
                             <Trigger Property="IsEnabled" Value="False">
-                                <Setter TargetName="_pathPointer" Property="Fill" Value="Gainsboro" />
+                                <Setter TargetName="_pathPointer" Property="Fill" Value="{Binding Path=DisabledArrowBrush, RelativeSource={RelativeSource AncestorType={x:Type local:TabHeaderControl}}}" />
+                            </Trigger>
+                            <Trigger Property="IsEnabled" Value="True">
+                                <Setter TargetName="_pathPointer" Property="Fill" Value="{Binding Path=EnabledArrowBrush, RelativeSource={RelativeSource AncestorType={x:Type local:TabHeaderControl}}}" />
                             </Trigger>
                             <Trigger Property="IsMouseOver" Value="True">
                                 <Setter TargetName="_pathPointer" Property="Fill" Value="Gray" />

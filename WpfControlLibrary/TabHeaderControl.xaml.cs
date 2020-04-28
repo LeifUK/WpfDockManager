@@ -105,6 +105,41 @@ namespace WpfControlLibrary
 
         #endregion
 
+        #region SelectedValue dependency property
+
+        [Bindable(true)]
+        [DesignerSerializationVisibility(DesignerSerializationVisibility.Hidden)]
+        public static readonly DependencyProperty SelectedValueProperty = DependencyProperty.Register("SelectedValue", typeof(Object), typeof(TabHeaderControl), new FrameworkPropertyMetadata((Object)null, new PropertyChangedCallback(OnSelectedValueChanged)));
+        public Object SelectedValue
+        {
+            get
+            {
+                return GetValue(SelectedValueProperty);
+            }
+            set
+            {
+                if (value != SelectedItem)
+                {
+                    SetValue(SelectedValueProperty, value);
+                }
+            }
+        }
+
+        private static void OnSelectedValueChanged(DependencyObject d, DependencyPropertyChangedEventArgs e)
+        {
+            ((TabHeaderControl)d).OnSelectedValueChanged(e);
+        }
+
+        protected virtual void OnSelectedValueChanged(DependencyPropertyChangedEventArgs e)
+        {
+            if (e.NewValue != null)
+            {
+                _listBox.SelectedValue = e.NewValue;
+            }
+        }
+
+        #endregion
+
         #region SelectedItem dependency property
 
         [Bindable(true)]
@@ -353,23 +388,80 @@ namespace WpfControlLibrary
 
         #endregion
 
-        #region ActiveArrowBrush dependency property
+        #region EnabledArrowBrush dependency property
 
         [Bindable(true)]
         [DesignerSerializationVisibility(DesignerSerializationVisibility.Hidden)]
-        public static readonly DependencyProperty ActiveArrowBrushProperty = DependencyProperty.Register("ActiveArrowBrush", typeof(Brush), typeof(TabHeaderControl), new FrameworkPropertyMetadata(Brushes.White, null));
-        public Brush ActiveArrowBrush
+        public static readonly DependencyProperty EnabledArrowBrushProperty = DependencyProperty.Register("EnabledArrowBrush", typeof(Brush), typeof(TabHeaderControl), new FrameworkPropertyMetadata(Brushes.Green, null));
+        public Brush EnabledArrowBrush
         {
             get
             {
-                return (Brush)GetValue(ActiveArrowBrushProperty);
+                return (Brush)GetValue(EnabledArrowBrushProperty);
             }
             set
             {
-                if (value != ActiveArrowBrush)
+                if (value != EnabledArrowBrush)
                 {
-                    SetValue(ActiveArrowBrushProperty, value);
+                    SetValue(EnabledArrowBrushProperty, value);
                 }
+            }
+        }
+
+        #endregion
+
+        #region DisabledArrowBrush dependency property
+
+        [Bindable(true)]
+        [DesignerSerializationVisibility(DesignerSerializationVisibility.Hidden)]
+        public static readonly DependencyProperty DisabledArrowBrushProperty = DependencyProperty.Register("DisabledArrowBrush", typeof(Brush), typeof(TabHeaderControl), new FrameworkPropertyMetadata(Brushes.Gray, null));
+        public Brush DisabledArrowBrush
+        {
+            get
+            {
+                return (Brush)GetValue(DisabledArrowBrushProperty);
+            }
+            set
+            {
+                if (value != DisabledArrowBrush)
+                {
+                    SetValue(DisabledArrowBrushProperty, value);
+                }
+            }
+        }
+
+        #endregion
+
+        #region ItemTemplate dependency property
+
+        [Bindable(true)]
+        [DesignerSerializationVisibility(DesignerSerializationVisibility.Hidden)]
+        public static readonly DependencyProperty ItemTemplateProperty = DependencyProperty.Register("ItemTemplate", typeof(DataTemplate), typeof(TabHeaderControl), new FrameworkPropertyMetadata(null, new PropertyChangedCallback(OnItemTemplateChanged)));
+        public DataTemplate ItemTemplate
+        {
+            get
+            {
+                return (DataTemplate)GetValue(ItemTemplateProperty);
+            }
+            set
+            {
+                if (value != ItemTemplate)
+                {
+                    SetValue(ItemTemplateProperty, value);
+                }
+            }
+        }
+
+        private static void OnItemTemplateChanged(DependencyObject d, DependencyPropertyChangedEventArgs e)
+        {
+            ((TabHeaderControl)d).OnItemTemplateChanged(e);
+        }
+
+        protected virtual void OnItemTemplateChanged(DependencyPropertyChangedEventArgs e)
+        {
+            if (e.NewValue != null)
+            {
+                _listBox.ItemTemplate = (DataTemplate)e.NewValue;
             }
         }
 

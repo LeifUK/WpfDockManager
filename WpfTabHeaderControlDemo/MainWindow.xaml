@@ -78,7 +78,11 @@
             <RowDefinition Height="Auto"/>
             <RowDefinition Height="10"/>
             <RowDefinition Height="Auto"/>
-            <RowDefinition Height="10"/>
+            <RowDefinition Height="20"/>
+
+            <RowDefinition Height="Auto"/>
+            <RowDefinition Height="0"/>
+            <RowDefinition Height="*"/>
         </Grid.RowDefinitions>
         <Grid.ColumnDefinitions>
             <ColumnDefinition Width="*"/>
@@ -86,6 +90,7 @@
             <ColumnDefinition Width="Auto"/>
             <ColumnDefinition Width="10"/>
         </Grid.ColumnDefinitions>
+        
         <Border Grid.Row="0" Grid.RowSpan="3" Grid.Column="0" Grid.ColumnSpan="99" VerticalAlignment="Stretch" HorizontalAlignment="Stretch" Background="LightYellow"/>
         <Button Grid.Row="1" Grid.Column="2" Name="_buttonFile" Content="File" Click="_buttonFile_Click" Style="{StaticResource LeftArrow}" Foreground="Black">
             <Button.LayoutTransform>
@@ -111,6 +116,7 @@
             <wpfcontrollibrary:TabHeaderControl.FontFamily>
                 <Binding Path="FontFamily"/>
             </wpfcontrollibrary:TabHeaderControl.FontFamily>
+            <wpfcontrollibrary:TabHeaderControl.DisabledArrowBrush>Transparent</wpfcontrollibrary:TabHeaderControl.DisabledArrowBrush>
         </wpfcontrollibrary:TabHeaderControl>
         <Label Grid.Row="3" Grid.Column="0" Grid.ColumnSpan="99" Name="_labelSelectedItem" FontSize="48" Content="{Binding SelectedHeader.Label, Mode=TwoWay}" VerticalAlignment="Stretch" HorizontalAlignment="Stretch" Background="{Binding Path=SelectedTabBackground}"/>
 
@@ -167,5 +173,55 @@
 
             <CheckBox Grid.Row="6" Grid.Column="2" Content="Show Tab Border" IsChecked="{Binding ShowTabBorder}"/>
         </Grid>
+
+        <Border Grid.Row="12" Grid.RowSpan="3" Grid.Column="0" Grid.ColumnSpan="99" VerticalAlignment="Stretch" HorizontalAlignment="Stretch" Background="LightYellow"/>
+        <Button Grid.Row="13" Grid.Column="2" Content="File" Click="_buttonFile_Click" Style="{StaticResource LeftArrow}" Foreground="Black">
+            <Button.LayoutTransform>
+                <RotateTransform Angle="-90" CenterX="0.5" CenterY="0.5"/>
+            </Button.LayoutTransform>
+        </Button>
+        <wpfcontrollibrary:TabHeaderControl Grid.Row="13" Grid.Column="0" x:Name="_tabHeaderCustom" ItemsSource="{Binding ListBoxItems}" SelectedItem="{Binding SelectedHeader, Mode=TwoWay}">
+            <wpfcontrollibrary:TabHeaderControl.ItemTemplate>
+                <DataTemplate>
+                    <Grid>
+                        <Grid.ColumnDefinitions>
+                            <ColumnDefinition Width="4"/>
+                            <ColumnDefinition Width="20"/>
+                            <ColumnDefinition Width="4"/>
+                            <ColumnDefinition Width="Auto"/>
+                            <ColumnDefinition Width="4"/>
+                            <ColumnDefinition Width="20"/>
+                            <ColumnDefinition Width="4"/>
+                        </Grid.ColumnDefinitions>
+                        <Ellipse Grid.Column="1" Width="10" Height="10" Fill="Crimson"/>
+                        <Label Grid.Column="3" FontFamily="Courier" FontSize="24">
+                            <TextBlock>
+                                <Run Text="{Binding Label}"/><Run Text=" ("/><Run Text="{Binding ID}"/><Run Text=")"/>
+                            </TextBlock>
+                        </Label>
+                        <Ellipse Grid.Column="5" Width="10" Height="10" Fill="Crimson"/>
+                    </Grid>
+                </DataTemplate>
+            </wpfcontrollibrary:TabHeaderControl.ItemTemplate>
+            <wpfcontrollibrary:TabHeaderControl.SelectedTabBackground>
+                <Binding Path="SelectedTabBackground" Mode="TwoWay"/>
+            </wpfcontrollibrary:TabHeaderControl.SelectedTabBackground>
+            <wpfcontrollibrary:TabHeaderControl.UnselectedTabBackground>
+                <Binding Path="UnselectedTabBackground" Mode="TwoWay"/>
+            </wpfcontrollibrary:TabHeaderControl.UnselectedTabBackground>
+            <wpfcontrollibrary:TabHeaderControl.SelectedTabBorderThickness>
+                <Binding Path="SelectedTabBorderThickness_Top"/>
+            </wpfcontrollibrary:TabHeaderControl.SelectedTabBorderThickness>
+            <wpfcontrollibrary:TabHeaderControl.SelectedTabForeground>Black</wpfcontrollibrary:TabHeaderControl.SelectedTabForeground>
+            <wpfcontrollibrary:TabHeaderControl.UnselectedTabForeground>White</wpfcontrollibrary:TabHeaderControl.UnselectedTabForeground>
+            <wpfcontrollibrary:TabHeaderControl.FontSize>
+                <Binding Path="FontSize"/>
+            </wpfcontrollibrary:TabHeaderControl.FontSize>
+            <wpfcontrollibrary:TabHeaderControl.FontFamily>
+                <Binding Path="FontFamily"/>
+            </wpfcontrollibrary:TabHeaderControl.FontFamily>
+        </wpfcontrollibrary:TabHeaderControl>
+        <Label Grid.Row="15" Grid.Column="0" Grid.ColumnSpan="99" Name="_labelSelectedItemCustom" FontSize="48" Content="{Binding SelectedHeader.Label, Mode=TwoWay}" VerticalAlignment="Stretch" HorizontalAlignment="Stretch" Background="{Binding Path=SelectedTabBackground}"/>
+
     </Grid>
 </Window>
