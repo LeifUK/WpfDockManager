@@ -40,6 +40,7 @@ namespace WpfControlLibrary
         [Bindable(true)]
         [DesignerSerializationVisibility(DesignerSerializationVisibility.Hidden)]
         public static readonly DependencyProperty DisplayMemberPathProperty = DependencyProperty.Register("DisplayMemberPath", typeof(string), typeof(TabHeaderControl), new FrameworkPropertyMetadata((FrameworkElement)null, new PropertyChangedCallback(OnDisplayMemberPathChanged)));
+
         public string DisplayMemberPath
         {
             get
@@ -75,6 +76,7 @@ namespace WpfControlLibrary
         [Bindable(true)]
         [DesignerSerializationVisibility(DesignerSerializationVisibility.Hidden)]
         public static readonly DependencyProperty SelectedValuePathProperty = DependencyProperty.Register("SelectedValuePath", typeof(string), typeof(TabHeaderControl), new FrameworkPropertyMetadata((FrameworkElement)null, new PropertyChangedCallback(OnSelectedValuePathChanged)));
+
         public string SelectedValuePath
         {
             get
@@ -110,6 +112,7 @@ namespace WpfControlLibrary
         [Bindable(true)]
         [DesignerSerializationVisibility(DesignerSerializationVisibility.Hidden)]
         public static readonly DependencyProperty SelectedValueProperty = DependencyProperty.Register("SelectedValue", typeof(Object), typeof(TabHeaderControl), new FrameworkPropertyMetadata((Object)null, new PropertyChangedCallback(OnSelectedValueChanged)));
+
         public Object SelectedValue
         {
             get
@@ -145,6 +148,7 @@ namespace WpfControlLibrary
         [Bindable(true)]
         [DesignerSerializationVisibility(DesignerSerializationVisibility.Hidden)]
         public static readonly DependencyProperty SelectedItemProperty = DependencyProperty.Register("SelectedItem", typeof(Object), typeof(TabHeaderControl), new FrameworkPropertyMetadata((Object)null, new PropertyChangedCallback(OnSelectedItemChanged)));
+
         public Object SelectedItem
         {
             get
@@ -180,6 +184,7 @@ namespace WpfControlLibrary
         [Bindable(true)]
         [DesignerSerializationVisibility(DesignerSerializationVisibility.Hidden)]
         public static readonly DependencyProperty SelectedIndexProperty = DependencyProperty.Register("SelectedIndex", typeof(int), typeof(TabHeaderControl), new FrameworkPropertyMetadata(0, new PropertyChangedCallback(OnSelectedIndexChanged)));
+
         public int SelectedIndex
         {
             get
@@ -270,6 +275,7 @@ namespace WpfControlLibrary
         [Bindable(true)]
         [DesignerSerializationVisibility(DesignerSerializationVisibility.Hidden)]
         public static readonly DependencyProperty SelectedTabBackgroundProperty = DependencyProperty.Register("SelectedTabBackground", typeof(Brush), typeof(TabHeaderControl), new FrameworkPropertyMetadata(Brushes.Khaki, null));
+
         public Brush SelectedTabBackground
         {
             get
@@ -292,6 +298,7 @@ namespace WpfControlLibrary
         [Bindable(true)]
         [DesignerSerializationVisibility(DesignerSerializationVisibility.Hidden)]
         public static readonly DependencyProperty UnselectedTabBackgroundProperty = DependencyProperty.Register("UnselectedTabBackground", typeof(Brush), typeof(TabHeaderControl), new FrameworkPropertyMetadata(Brushes.Navy, null));
+
         public Brush UnselectedTabBackground
         {
             get
@@ -314,6 +321,7 @@ namespace WpfControlLibrary
         [Bindable(true)]
         [DesignerSerializationVisibility(DesignerSerializationVisibility.Hidden)]
         public static readonly DependencyProperty SelectedTabForegroundProperty = DependencyProperty.Register("SelectedTabForeground", typeof(Brush), typeof(TabHeaderControl), new FrameworkPropertyMetadata(Brushes.Black, null));
+
         public Brush SelectedTabForeground
         {
             get
@@ -336,6 +344,7 @@ namespace WpfControlLibrary
         [Bindable(true)]
         [DesignerSerializationVisibility(DesignerSerializationVisibility.Hidden)]
         public static readonly DependencyProperty UnselectedTabForegroundProperty = DependencyProperty.Register("UnselectedTabForeground", typeof(Brush), typeof(TabHeaderControl), new FrameworkPropertyMetadata(Brushes.White, null));
+
         public Brush UnselectedTabForeground
         {
             get
@@ -358,6 +367,7 @@ namespace WpfControlLibrary
         [Bindable(true)]
         [DesignerSerializationVisibility(DesignerSerializationVisibility.Hidden)]
         public static readonly DependencyProperty SelectedTabBorderThicknessProperty = DependencyProperty.Register("SelectedTabBorderThickness", typeof(string), typeof(TabHeaderControl), new FrameworkPropertyMetadata(null, new PropertyChangedCallback(OnSelectedTabBorderThicknessChanged)));
+
         public Object SelectedTabBorderThickness
         {
             get
@@ -393,6 +403,7 @@ namespace WpfControlLibrary
         [Bindable(true)]
         [DesignerSerializationVisibility(DesignerSerializationVisibility.Hidden)]
         public static readonly DependencyProperty EnabledArrowBrushProperty = DependencyProperty.Register("EnabledArrowBrush", typeof(Brush), typeof(TabHeaderControl), new FrameworkPropertyMetadata(Brushes.Green, null));
+
         public Brush EnabledArrowBrush
         {
             get
@@ -415,6 +426,7 @@ namespace WpfControlLibrary
         [Bindable(true)]
         [DesignerSerializationVisibility(DesignerSerializationVisibility.Hidden)]
         public static readonly DependencyProperty DisabledArrowBrushProperty = DependencyProperty.Register("DisabledArrowBrush", typeof(Brush), typeof(TabHeaderControl), new FrameworkPropertyMetadata(Brushes.Gray, null));
+
         public Brush DisabledArrowBrush
         {
             get
@@ -432,11 +444,49 @@ namespace WpfControlLibrary
 
         #endregion
 
+        #region ArrowTemplate dependency property
+
+        [Bindable(true)]
+        [DesignerSerializationVisibility(DesignerSerializationVisibility.Hidden)]
+        public static readonly DependencyProperty ArrowTemplateProperty = DependencyProperty.Register("ArrowTemplate", typeof(ControlTemplate), typeof(TabHeaderControl), new FrameworkPropertyMetadata(null, new PropertyChangedCallback(OnArrowTemplateChanged)));
+
+        public ControlTemplate ArrowTemplate
+        {
+            get
+            {
+                return (ControlTemplate)GetValue(ArrowTemplateProperty);
+            }
+            set
+            {
+                if (value != ArrowTemplate)
+                {
+                    SetValue(ArrowTemplateProperty, value);
+                }
+            }
+        }
+
+        private static void OnArrowTemplateChanged(DependencyObject d, DependencyPropertyChangedEventArgs e)
+        {
+            ((TabHeaderControl)d).OnArrowTemplateChanged(e);
+        }
+
+        protected virtual void OnArrowTemplateChanged(DependencyPropertyChangedEventArgs e)
+        {
+            if (e.NewValue != null)
+            {
+                _buttonRight.Template = (ControlTemplate)e.NewValue;
+                _buttonLeft.Template = (ControlTemplate)e.NewValue;
+            }
+        }
+
+        #endregion
+
         #region ItemTemplate dependency property
 
         [Bindable(true)]
         [DesignerSerializationVisibility(DesignerSerializationVisibility.Hidden)]
         public static readonly DependencyProperty ItemTemplateProperty = DependencyProperty.Register("ItemTemplate", typeof(DataTemplate), typeof(TabHeaderControl), new FrameworkPropertyMetadata(null, new PropertyChangedCallback(OnItemTemplateChanged)));
+
         public DataTemplate ItemTemplate
         {
             get
@@ -462,6 +512,29 @@ namespace WpfControlLibrary
             if (e.NewValue != null)
             {
                 _listBox.ItemTemplate = (DataTemplate)e.NewValue;
+            }
+        }
+
+        #endregion
+
+        #region ShowCloseButton dependency property
+
+        [Bindable(true)]
+        [DesignerSerializationVisibility(DesignerSerializationVisibility.Hidden)]
+        public static readonly DependencyProperty ShowCloseButtonProperty = DependencyProperty.Register("ShowCloseButton", typeof(bool), typeof(TabHeaderControl), new FrameworkPropertyMetadata(true, null));
+
+        public bool ShowCloseButton
+        {
+            get
+            {
+                return (bool)GetValue(ShowCloseButtonProperty);
+            }
+            set
+            {
+                if (value != ShowCloseButton)
+                {
+                    SetValue(ShowCloseButtonProperty, value);
+                }
             }
         }
 

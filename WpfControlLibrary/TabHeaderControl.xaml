@@ -7,6 +7,7 @@
              mc:Ignorable="d" 
              d:DesignHeight="450" d:DesignWidth="800">
     <UserControl.Resources>
+        <BooleanToVisibilityConverter x:Key="BooleanToVisibilityConverter" />
         <Style x:Key="StyleCloseButton" TargetType="Button">
             <Setter Property="Width" Value="20"/>
             <Setter Property="Height" Value="20"/>
@@ -26,10 +27,14 @@
                         <ControlTemplate.Triggers>
                             <Trigger Property="IsMouseOver" Value="True">
                                 <Setter TargetName="_border" Property="Background" Value="Gainsboro" />
+                                <Setter TargetName="_line_1" Property="Stroke" Value="Black" />
+                                <Setter TargetName="_line_2" Property="Stroke" Value="Black" />
                                 <Setter TargetName="_border" Property="BorderThickness" Value="1" />
                             </Trigger>
                             <Trigger Property="IsPressed" Value="True">
                                 <Setter TargetName="_border" Property="Background" Value="Khaki" />
+                                <Setter TargetName="_line_1" Property="Stroke" Value="Black" />
+                                <Setter TargetName="_line_2" Property="Stroke" Value="Black" />
                                 <Setter TargetName="_border" Property="BorderThickness" Value="1" />
                             </Trigger>
                         </ControlTemplate.Triggers>
@@ -38,8 +43,6 @@
             </Setter>
         </Style>
         <Style x:Key="LeftArrow" TargetType="Button">
-            <Setter Property="Width" Value="20"/>
-            <Setter Property="Height" Value="20"/>
             <Setter Property="VerticalAlignment" Value="Center"/>
             <Setter Property="Background" Value="Transparent"/>
             <Setter Property="BorderThickness" Value="0"/>
@@ -129,7 +132,7 @@
                                         <Label Grid.Column="1" x:Name="Label" FontSize="{Binding Path=FontSize, RelativeSource={RelativeSource AncestorType={x:Type local:TabHeaderControl}}}" FontFamily="{Binding Path=FontFamily, RelativeSource={RelativeSource AncestorType={x:Type local:TabHeaderControl}}}" FontStyle="{Binding Path=FontStyle, RelativeSource={RelativeSource AncestorType={x:Type local:TabHeaderControl}}}" Foreground="Black" Width="Auto" Padding="2,0,2,0" Margin="0" VerticalAlignment="Center">
                                             <ContentPresenter />
                                         </Label>
-                                        <Button Grid.Column="3" x:Name="Button" Click="Button_Click" Foreground="Gray" BorderThickness="0" Background="Transparent" Style="{StaticResource StyleCloseButton}"/>
+                                        <Button Grid.Column="3" x:Name="Button" Click="Button_Click" Foreground="Gray" BorderThickness="0" Background="Transparent" Style="{StaticResource StyleCloseButton}" Visibility="{Binding ShowCloseButton, RelativeSource={RelativeSource AncestorType={x:Type local:TabHeaderControl}}, Converter={StaticResource BooleanToVisibilityConverter}}"/>
                                     </Grid>
                                 </Border>
                                 <ControlTemplate.Triggers>

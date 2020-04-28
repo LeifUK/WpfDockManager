@@ -15,8 +15,12 @@ namespace WpfListboxDemo
 
             _comboBoxSelectedTabBackground.ItemsSource = typeof(Brushes).GetProperties();
             _comboBoxUnselectedTabBackground.ItemsSource = typeof(Brushes).GetProperties();
-            _tabHeaderTop.CloseTabRequest += _tabHeaderTop_CloseTabRequest; 
-            _tabHeaderBottom.CloseTabRequest += _tabHeaderBottom_CloseTabRequest;
+            _tabHeader1.CloseTabRequest += _tabHeader1_CloseTabRequest;
+            _tabHeader2.CloseTabRequest += _tabHeader2_CloseTabRequest;
+            _tabHeader3.CloseTabRequest += _tabHeader3_CloseTabRequest;
+            _tabHeader1.ItemsChanged += _tabHeader1_ItemsChanged;
+            _tabHeader2.ItemsChanged += _tabHeader2_ItemsChanged;
+            _tabHeader3.ItemsChanged += _tabHeader3_ItemsChanged;
 
             DataContext = new MainWindowModel();
             (DataContext as MainWindowModel).SelectedHeader = (DataContext as MainWindowModel).ListBoxItems[2];
@@ -28,7 +32,37 @@ namespace WpfListboxDemo
             _comboBoxUnselectedTabBackground_SelectionChanged(null, null);
         }
 
-        private void _tabHeaderBottom_CloseTabRequest(object sender, System.EventArgs e)
+        private void ItemsChanged(WpfControlLibrary.TabHeaderControl tabHeaderControl)
+        {
+            MainWindowModel viewModel = (DataContext as MainWindowModel);
+            if (viewModel == null)
+            {
+                return;
+            }
+            System.Collections.ObjectModel.ObservableCollection<TabHeaderItem> listBoxItems = new System.Collections.ObjectModel.ObservableCollection<TabHeaderItem>();
+            foreach (var item in tabHeaderControl.Items)
+            {
+                listBoxItems.Add(item as TabHeaderItem);
+            }
+            viewModel.ListBoxItems = listBoxItems;
+        }
+
+        private void _tabHeader1_ItemsChanged(object sender, System.EventArgs e)
+        {
+            ItemsChanged(_tabHeader1);
+        }
+
+        private void _tabHeader2_ItemsChanged(object sender, System.EventArgs e)
+        {
+            ItemsChanged(_tabHeader2);
+        }
+
+        private void _tabHeader3_ItemsChanged(object sender, System.EventArgs e)
+        {
+            ItemsChanged(_tabHeader3);
+        }
+
+        private void _tabHeader1_CloseTabRequest(object sender, System.EventArgs e)
         {
             if ((DataContext as MainWindowModel).ListBoxItems.Contains(sender as TabHeaderItem))
             {
@@ -45,9 +79,14 @@ namespace WpfListboxDemo
             }
         }
 
-        private void _tabHeaderTop_CloseTabRequest(object sender, System.EventArgs e)
+        private void _tabHeader2_CloseTabRequest(object sender, System.EventArgs e)
         {
-            _tabHeaderBottom_CloseTabRequest(sender, e);
+            _tabHeader1_CloseTabRequest(sender, e);
+        }
+
+        private void _tabHeader3_CloseTabRequest(object sender, System.EventArgs e)
+        {
+            _tabHeader1_CloseTabRequest(sender, e);
         }
 
         private void Button_Click(object sender, RoutedEventArgs e)
@@ -102,6 +141,21 @@ namespace WpfListboxDemo
                 (DataContext as MainWindowModel).FontFamily = dlg.Font.Name;
                 (DataContext as MainWindowModel).FontSize = dlg.Font.Size;
             }
+        }
+
+        private void _buttonFile1_Click(object sender, RoutedEventArgs e)
+        {
+
+        }
+
+        private void _buttonFile2_Click(object sender, RoutedEventArgs e)
+        {
+
+        }
+
+        private void _buttonFile3_Click(object sender, RoutedEventArgs e)
+        {
+
         }
     }
 }

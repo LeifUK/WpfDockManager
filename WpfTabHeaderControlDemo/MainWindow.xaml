@@ -6,7 +6,8 @@
         xmlns:local="clr-namespace:WpfListboxDemo"
         xmlns:wpfcontrollibrary="clr-namespace:WpfControlLibrary;assembly=WpfControlLibrary"
         mc:Ignorable="d"
-        Title="MainWindow" Height="450" Width="800">
+        Background="LightSteelBlue"
+        Title="WPF Tab Header Demo Apps" Height="450" Width="800">
     <Window.Resources>
         <Style TargetType="Border" x:Key="SelectedTabBackground">
             <Setter Property="Background" Value="Red"/>
@@ -69,20 +70,21 @@
             <RowDefinition Height="0"/>
             <RowDefinition Height="*"/>
 
-            <RowDefinition Height="20"/>
+            <RowDefinition Height="*"/>
+            
             <RowDefinition Height="*"/>
             <RowDefinition Height="0"/>
             <RowDefinition Height="Auto"/>
 
-            <RowDefinition Height="10"/>
-            <RowDefinition Height="Auto"/>
-            <RowDefinition Height="10"/>
-            <RowDefinition Height="Auto"/>
-            <RowDefinition Height="20"/>
-
+            <RowDefinition Height="*"/>
+            
             <RowDefinition Height="Auto"/>
             <RowDefinition Height="0"/>
             <RowDefinition Height="*"/>
+
+            <RowDefinition Height="*"/>
+            
+            <RowDefinition Height="Auto"/>
         </Grid.RowDefinitions>
         <Grid.ColumnDefinitions>
             <ColumnDefinition Width="*"/>
@@ -91,13 +93,13 @@
             <ColumnDefinition Width="10"/>
         </Grid.ColumnDefinitions>
         
-        <Border Grid.Row="0" Grid.RowSpan="3" Grid.Column="0" Grid.ColumnSpan="99" VerticalAlignment="Stretch" HorizontalAlignment="Stretch" Background="LightYellow"/>
-        <Button Grid.Row="1" Grid.Column="2" Name="_buttonFile" Content="File" Click="_buttonFile_Click" Style="{StaticResource LeftArrow}" Foreground="Black">
+        <!--<Border Grid.Row="0" Grid.RowSpan="3" Grid.Column="0" Grid.ColumnSpan="99" VerticalAlignment="Stretch" HorizontalAlignment="Stretch" Background="LightYellow"/>-->
+        <Button Grid.Row="1" Grid.Column="2" Name="_buttonFile1" Content="File" Click="_buttonFile1_Click" Style="{StaticResource LeftArrow}" Foreground="Black">
             <Button.LayoutTransform>
                 <RotateTransform Angle="-90" CenterX="0.5" CenterY="0.5"/>
             </Button.LayoutTransform>
         </Button>
-        <wpfcontrollibrary:TabHeaderControl Grid.Row="1" Grid.Column="0" x:Name="_tabHeaderTop" ItemsSource="{Binding ListBoxItems}" SelectedItem="{Binding SelectedHeader, Mode=TwoWay}">
+        <wpfcontrollibrary:TabHeaderControl Grid.Row="1" Grid.Column="0" x:Name="_tabHeader1" ItemsSource="{Binding ListBoxItems}" SelectedItem="{Binding SelectedHeader, Mode=TwoWay}">
             <wpfcontrollibrary:TabHeaderControl.DisplayMemberPath>HeaderText</wpfcontrollibrary:TabHeaderControl.DisplayMemberPath>
             <wpfcontrollibrary:TabHeaderControl.SelectedTabBackground>
                 <Binding Path="SelectedTabBackground" Mode="TwoWay"/>
@@ -120,13 +122,32 @@
         </wpfcontrollibrary:TabHeaderControl>
         <Label Grid.Row="3" Grid.Column="0" Grid.ColumnSpan="99" Name="_labelSelectedItem" FontSize="48" Content="{Binding SelectedHeader.Label, Mode=TwoWay}" VerticalAlignment="Stretch" HorizontalAlignment="Stretch" Background="{Binding Path=SelectedTabBackground}"/>
 
-        <Border Grid.Row="4" Grid.RowSpan="3" Grid.Column="0" Grid.ColumnSpan="99" VerticalAlignment="Stretch" HorizontalAlignment="Stretch" Background="LightYellow"/>
-        <Button Grid.Row="7" Grid.Column="2" Content="File" Click="_buttonFile_Click" Style="{StaticResource LeftArrow}" Foreground="Black">
+        <!--<Border Grid.Row="4" Grid.RowSpan="3" Grid.Column="0" Grid.ColumnSpan="99" VerticalAlignment="Stretch" HorizontalAlignment="Stretch" Background="LightYellow"/>-->
+        <Button Grid.Row="7" Grid.Column="2" Name="_buttonFile2" Content="File" Click="_buttonFile2_Click" Style="{StaticResource LeftArrow}" Foreground="Black">
             <Button.LayoutTransform>
                 <RotateTransform Angle="-90" CenterX="0.5" CenterY="0.5"/>
             </Button.LayoutTransform>
         </Button>
-        <wpfcontrollibrary:TabHeaderControl Grid.Row="7" Grid.Column="0" x:Name="_tabHeaderBottom" ItemsSource="{Binding ListBoxItems}" SelectedItem="{Binding SelectedHeader, Mode=TwoWay}">
+        <wpfcontrollibrary:TabHeaderControl Grid.Row="7" Grid.Column="0" x:Name="_tabHeader2" ItemsSource="{Binding ListBoxItems}" SelectedItem="{Binding SelectedHeader, Mode=TwoWay}">
+            <wpfcontrollibrary:TabHeaderControl.ArrowTemplate>
+                <ControlTemplate>
+                    <Label Content="&lt;" FontSize="18" VerticalAlignment="Center" Padding="0" Width="20" HorizontalContentAlignment="Center">
+                        <Label.Style>
+                            <Style TargetType="Label">
+                                <Style.Triggers>
+                                    <Trigger Property="IsEnabled" Value="True">
+                                        <Setter Property="Foreground" Value="White"/>
+                                        <Setter Property="Background" Value="Green"/>
+                                    </Trigger>
+                                    <Trigger Property="IsEnabled" Value="False">
+                                        <Setter Property="Foreground" Value="Gainsboro"/>
+                                    </Trigger>
+                                </Style.Triggers>
+                            </Style>
+                        </Label.Style>
+                    </Label>
+                </ControlTemplate>
+            </wpfcontrollibrary:TabHeaderControl.ArrowTemplate>
             <wpfcontrollibrary:TabHeaderControl.DisplayMemberPath>Label</wpfcontrollibrary:TabHeaderControl.DisplayMemberPath>
             <wpfcontrollibrary:TabHeaderControl.SelectedTabBackground>
                 <Binding Path="SelectedTabBackground" Mode="TwoWay"/>
@@ -148,39 +169,14 @@
         </wpfcontrollibrary:TabHeaderControl>
         <Label Grid.Row="5" Grid.Column="0" Grid.ColumnSpan="99" FontSize="48" Content="{Binding SelectedHeader.Label, Mode=TwoWay}" BorderThickness="1" BorderBrush="Gray" VerticalAlignment="Stretch" HorizontalAlignment="Stretch" Background="{Binding Path=SelectedTabBackground}"/>
 
-        <Grid Grid.Row="9" Grid.Column="0" Grid.ColumnSpan="99" >
-            <Grid.RowDefinitions>
-                <RowDefinition Height="Auto"/>
-                <RowDefinition Height="10"/>
-                <RowDefinition Height="Auto"/>
-                <RowDefinition Height="10"/>
-                <RowDefinition Height="Auto"/>
-                <RowDefinition Height="10"/>
-                <RowDefinition Height="Auto"/>
-            </Grid.RowDefinitions>
-            <Grid.ColumnDefinitions>
-                <ColumnDefinition Width="Auto"/>
-                <ColumnDefinition Width="10"/>
-                <ColumnDefinition Width="*"/>
-            </Grid.ColumnDefinitions>
-            <Label Grid.Row="0" Grid.Column="0"  Content="Selected Tab Background:"/>
-            <ComboBox Grid.Row="0" Grid.Column="2" Name="_comboBoxSelectedTabBackground" DisplayMemberPath="Name" SelectedValuePath="Name" SelectionChanged="_comboBoxSelectedTabBackground_SelectionChanged" HorizontalAlignment="Left"/>
-
-            <Label Grid.Row="2" Grid.Column="0"  Content="Unselected Tab Background:"/>
-            <ComboBox Grid.Row="2" Grid.Column="2" Name="_comboBoxUnselectedTabBackground" DisplayMemberPath="Name" SelectedValuePath="Name" SelectionChanged="_comboBoxUnselectedTabBackground_SelectionChanged" HorizontalAlignment="Left"/>
-
-            <Button Grid.Row="4" Grid.Column="2" Name="_buttonChooseFont" Content="Choose Font" Click="_buttonChooseFont_Click" HorizontalAlignment="Left" Width="90"/>
-
-            <CheckBox Grid.Row="6" Grid.Column="2" Content="Show Tab Border" IsChecked="{Binding ShowTabBorder}"/>
-        </Grid>
-
-        <Border Grid.Row="12" Grid.RowSpan="3" Grid.Column="0" Grid.ColumnSpan="99" VerticalAlignment="Stretch" HorizontalAlignment="Stretch" Background="LightYellow"/>
-        <Button Grid.Row="13" Grid.Column="2" Content="File" Click="_buttonFile_Click" Style="{StaticResource LeftArrow}" Foreground="Black">
+        <!--<Border Grid.Row="8" Grid.RowSpan="3" Grid.Column="0" Grid.ColumnSpan="99" VerticalAlignment="Stretch" HorizontalAlignment="Stretch" Background="LightYellow"/>-->
+        <Button Grid.Row="9" Grid.Column="2"  Name="_buttonFile3" Content="File" Click="_buttonFile3_Click" Style="{StaticResource LeftArrow}" Foreground="Black">
             <Button.LayoutTransform>
                 <RotateTransform Angle="-90" CenterX="0.5" CenterY="0.5"/>
             </Button.LayoutTransform>
         </Button>
-        <wpfcontrollibrary:TabHeaderControl Grid.Row="13" Grid.Column="0" x:Name="_tabHeaderCustom" ItemsSource="{Binding ListBoxItems}" SelectedItem="{Binding SelectedHeader, Mode=TwoWay}">
+        <wpfcontrollibrary:TabHeaderControl Grid.Row="9" Grid.Column="0" x:Name="_tabHeader3" ItemsSource="{Binding ListBoxItems}" SelectedItem="{Binding SelectedHeader, Mode=TwoWay}">
+            <wpfcontrollibrary:TabHeaderControl.ShowCloseButton>false</wpfcontrollibrary:TabHeaderControl.ShowCloseButton>
             <wpfcontrollibrary:TabHeaderControl.ItemTemplate>
                 <DataTemplate>
                     <Grid>
@@ -221,7 +217,34 @@
                 <Binding Path="FontFamily"/>
             </wpfcontrollibrary:TabHeaderControl.FontFamily>
         </wpfcontrollibrary:TabHeaderControl>
-        <Label Grid.Row="15" Grid.Column="0" Grid.ColumnSpan="99" Name="_labelSelectedItemCustom" FontSize="48" Content="{Binding SelectedHeader.Label, Mode=TwoWay}" VerticalAlignment="Stretch" HorizontalAlignment="Stretch" Background="{Binding Path=SelectedTabBackground}"/>
+        <Label Grid.Row="11" Grid.Column="0" Grid.ColumnSpan="99" Name="_labelSelectedItemCustom" FontSize="48" Content="{Binding SelectedHeader.Label, Mode=TwoWay}" VerticalAlignment="Stretch" HorizontalAlignment="Stretch" Background="{Binding Path=SelectedTabBackground}"/>
 
+        <Border Grid.Row="13" Grid.Column="0" Grid.ColumnSpan="99" BorderBrush="Gray" BorderThickness="1" Padding="10" HorizontalAlignment="Left">
+            <Grid>
+                <Grid.RowDefinitions>
+                    <RowDefinition Height="Auto"/>
+                    <RowDefinition Height="10"/>
+                    <RowDefinition Height="Auto"/>
+                    <RowDefinition Height="10"/>
+                    <RowDefinition Height="Auto"/>
+                    <RowDefinition Height="10"/>
+                    <RowDefinition Height="Auto"/>
+                </Grid.RowDefinitions>
+                <Grid.ColumnDefinitions>
+                    <ColumnDefinition Width="Auto"/>
+                    <ColumnDefinition Width="10"/>
+                    <ColumnDefinition Width="*"/>
+                </Grid.ColumnDefinitions>
+                <Label Grid.Row="0" Grid.Column="0"  Content="Selected Tab Background:"/>
+                <ComboBox Grid.Row="0" Grid.Column="2" Name="_comboBoxSelectedTabBackground" DisplayMemberPath="Name" SelectedValuePath="Name" SelectionChanged="_comboBoxSelectedTabBackground_SelectionChanged" HorizontalAlignment="Left"/>
+
+                <Label Grid.Row="2" Grid.Column="0"  Content="Unselected Tab Background:"/>
+                <ComboBox Grid.Row="2" Grid.Column="2" Name="_comboBoxUnselectedTabBackground" DisplayMemberPath="Name" SelectedValuePath="Name" SelectionChanged="_comboBoxUnselectedTabBackground_SelectionChanged" HorizontalAlignment="Left"/>
+
+                <Button Grid.Row="4" Grid.Column="2" Name="_buttonChooseFont" Content="Choose Font" Click="_buttonChooseFont_Click" HorizontalAlignment="Left" Width="90"/>
+
+                <CheckBox Grid.Row="6" Grid.Column="2" Content="Show Tab Border" IsChecked="{Binding ShowTabBorder}"/>
+            </Grid>
+        </Border>
     </Grid>
 </Window>

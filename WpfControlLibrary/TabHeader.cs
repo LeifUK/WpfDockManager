@@ -8,8 +8,9 @@ namespace WpfControlLibrary
     public class TabHeader : ListBox
     {
         public event EventHandler ItemsChanged; 
-        bool _mouseLeftButtonDown = false;
-        int _dragIndex;
+
+        private bool _mouseLeftButtonDown = false;
+        private int _dragIndex;
 
         protected override void OnPreviewMouseLeftButtonDown(MouseButtonEventArgs e)
         {
@@ -43,10 +44,10 @@ namespace WpfControlLibrary
         private bool IsMouseOverListBoxItem(Point cursorScreenPosition, int index, out Rect bounds)
         {
             ListBoxItem item = GetListBoxItem(index);
-            Point point = item.PointFromScreen(cursorScreenPosition);
+            Point cursorItemPosition = item.PointFromScreen(cursorScreenPosition);
             Point itemTopLeft = item.PointToScreen(new Point(0, 0));
             bounds = new Rect(itemTopLeft.X, itemTopLeft.Y, item.ActualWidth, item.ActualHeight);
-            return (point.X >= 0) && (point.Y >= 0) && (point.X <= item.ActualWidth) && (point.Y <= item.ActualHeight);
+            return (cursorItemPosition.X >= 0) && (cursorItemPosition.Y >= 0) && (cursorItemPosition.X <= item.ActualWidth) && (cursorItemPosition.Y <= item.ActualHeight);
         }
 
         private int GetListBoxItemIndex(Point cursorScreenPosition)
