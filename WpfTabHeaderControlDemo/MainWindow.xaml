@@ -171,7 +171,6 @@
             </Button.LayoutTransform>
         </Button>
         <wpfcontrollibrary:TabHeaderControl Grid.Row="7" Grid.Column="0" x:Name="_tabHeader3" ItemsSource="{Binding ListBoxItems}" SelectedItem="{Binding SelectedHeader, Mode=TwoWay}">
-            <wpfcontrollibrary:TabHeaderControl.ShowCloseButton>false</wpfcontrollibrary:TabHeaderControl.ShowCloseButton>
             <wpfcontrollibrary:TabHeaderControl.ItemContainerStyle>
                 <Style TargetType="ListBoxItem">
                     <Setter Property="FrameworkElement.Margin" Value="0"/>
@@ -215,20 +214,6 @@
                     </Style.Triggers>
                 </Style>
             </wpfcontrollibrary:TabHeaderControl.ItemContainerStyle>
-            <wpfcontrollibrary:TabHeaderControl.SelectedTabBackground>
-                <Binding Path="SelectedTabBackground" Mode="TwoWay"/>
-            </wpfcontrollibrary:TabHeaderControl.SelectedTabBackground>
-            <wpfcontrollibrary:TabHeaderControl.UnselectedTabBackground>
-                <Binding Path="UnselectedTabBackground" Mode="TwoWay"/>
-            </wpfcontrollibrary:TabHeaderControl.UnselectedTabBackground>
-            <wpfcontrollibrary:TabHeaderControl.SelectedTabBorderThickness>
-                <Binding Path="SelectedTabBorderThickness_Top"/>
-            </wpfcontrollibrary:TabHeaderControl.SelectedTabBorderThickness>
-            <wpfcontrollibrary:TabHeaderControl.SelectedTabForeground>Black</wpfcontrollibrary:TabHeaderControl.SelectedTabForeground>
-            <wpfcontrollibrary:TabHeaderControl.UnselectedTabForeground>White</wpfcontrollibrary:TabHeaderControl.UnselectedTabForeground>
-            <wpfcontrollibrary:TabHeaderControl.FontSize>
-                <Binding Path="FontSize"/>
-            </wpfcontrollibrary:TabHeaderControl.FontSize>
             <wpfcontrollibrary:TabHeaderControl.FontFamily>
                 <Binding Path="FontFamily"/>
             </wpfcontrollibrary:TabHeaderControl.FontFamily>

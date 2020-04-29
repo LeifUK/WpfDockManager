@@ -156,7 +156,19 @@ namespace WpfListboxDemo
         int clickIndex = -1;
         private void Button_Click(object sender, RoutedEventArgs e)
         {
-            System.Windows.Forms.MessageBox.Show("You clicked on tab item index " + clickIndex);
+            MainWindowModel mainWindowModel = (DataContext as MainWindowModel);
+            if ((clickIndex > -1) && (clickIndex < mainWindowModel.ListBoxItems.Count))
+            {
+                mainWindowModel.ListBoxItems.RemoveAt(clickIndex);
+            }
+            if (clickIndex > 0)
+            {
+                --clickIndex;
+            }
+            if (mainWindowModel.ListBoxItems.Count > 0)
+            {
+                _tabHeader3.SelectedIndex = clickIndex;
+            }
         }
 
         private void ListBoxItem_PreviewMouseLeftButtonDown(object sender, System.Windows.Input.MouseButtonEventArgs e)
