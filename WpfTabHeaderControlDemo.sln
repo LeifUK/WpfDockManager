@@ -1,0 +1,32 @@
+﻿
+Microsoft Visual Studio Solution File, Format Version 12.00
+# Visual Studio Version 16
+VisualStudioVersion = 16.0.29728.190
+MinimumVisualStudioVersion = 10.0.40219.1
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "WpfControlLibrary", "WpfControlLibrary\WpfControlLibrary.csproj", "{460C09DE-DE0D-4D2B-B1EC-F2BBD72022C6}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "WpfTabHeaderControlDemo", "WpfTabHeaderControlDemo\WpfTabHeaderControlDemo.csproj", "{3E0AA70B-C167-4EF1-ACBE-DA0C2662F783}"
+EndProject
+Global
+	GlobalSection(SolutionConfigurationPlatforms) = preSolution
+		Debug|Any CPU = Debug|Any CPU
+		Release|Any CPU = Release|Any CPU
+	EndGlobalSection
+	GlobalSection(ProjectConfigurationPlatforms) = postSolution
+		{460C09DE-DE0D-4D2B-B1EC-F2BBD72022C6}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{460C09DE-DE0D-4D2B-B1EC-F2BBD72022C6}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{460C09DE-DE0D-4D2B-B1EC-F2BBD72022C6}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{460C09DE-DE0D-4D2B-B1EC-F2BBD72022C6}.Release|Any CPU.Build.0 = Release|Any CPU
+	
+		{3E0AA70B-C167-4EF1-ACBE-DA0C2662F783}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{3E0AA70B-C167-4EF1-ACBE-DA0C2662F783}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{3E0AA70B-C167-4EF1-ACBE-DA0C2662F783}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{3E0AA70B-C167-4EF1-ACBE-DA0C2662F783}.Release|Any CPU.Build.0 = Release|Any CPU
+	EndGlobalSection
+	GlobalSection(SolutionProperties) = preSolution
+		HideSolutionNode = FALSE
+	EndGlobalSection
+	GlobalSection(ExtensibilityGlobals) = postSolution
+		SolutionGuid = {D5C58807-4EE1-41A7-8E24-F4899AF32A1F}
+	EndGlobalSection
+EndGlobal
