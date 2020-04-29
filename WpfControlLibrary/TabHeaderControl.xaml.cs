@@ -481,37 +481,37 @@ namespace WpfControlLibrary
 
         #endregion
 
-        #region ItemTemplate dependency property
+        #region ItemContainerStyle dependency property
 
         [Bindable(true)]
         [DesignerSerializationVisibility(DesignerSerializationVisibility.Hidden)]
-        public static readonly DependencyProperty ItemTemplateProperty = DependencyProperty.Register("ItemTemplate", typeof(DataTemplate), typeof(TabHeaderControl), new FrameworkPropertyMetadata(null, new PropertyChangedCallback(OnItemTemplateChanged)));
+        public static readonly DependencyProperty ItemContainerStyleProperty = DependencyProperty.Register("ItemContainerStyle", typeof(Style), typeof(TabHeaderControl), new FrameworkPropertyMetadata(null, new PropertyChangedCallback(OnItemContainerStyleChanged)));
 
-        public DataTemplate ItemTemplate
+        public Style ItemContainerStyle
         {
             get
             {
-                return (DataTemplate)GetValue(ItemTemplateProperty);
+                return (Style)GetValue(ItemContainerStyleProperty);
             }
             set
             {
-                if (value != ItemTemplate)
+                if (value != ItemContainerStyle)
                 {
-                    SetValue(ItemTemplateProperty, value);
+                    SetValue(ItemContainerStyleProperty, value);
                 }
             }
         }
 
-        private static void OnItemTemplateChanged(DependencyObject d, DependencyPropertyChangedEventArgs e)
+        private static void OnItemContainerStyleChanged(DependencyObject d, DependencyPropertyChangedEventArgs e)
         {
-            ((TabHeaderControl)d).OnItemTemplateChanged(e);
+            ((TabHeaderControl)d).OnItemContainerStyleChanged(e);
         }
 
-        protected virtual void OnItemTemplateChanged(DependencyPropertyChangedEventArgs e)
+        protected virtual void OnItemContainerStyleChanged(DependencyPropertyChangedEventArgs e)
         {
             if (e.NewValue != null)
             {
-                _listBox.ItemTemplate = (DataTemplate)e.NewValue;
+                _listBox.ItemContainerStyle = (Style)e.NewValue;
             }
         }
 

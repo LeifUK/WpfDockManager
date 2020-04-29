@@ -7,7 +7,7 @@
         xmlns:wpfcontrollibrary="clr-namespace:WpfControlLibrary;assembly=WpfControlLibrary"
         mc:Ignorable="d"
         Background="LightSteelBlue"
-        Title="WPF Tab Header Demo Apps" Height="450" Width="800">
+        Title="WPF Tab Header Demo Apps" Height="800" Width="800">
     <Window.Resources>
         <Style TargetType="Border" x:Key="SelectedTabBackground">
             <Setter Property="Background" Value="Red"/>
@@ -66,20 +66,18 @@
     <Grid Margin="10">
         <Grid.RowDefinitions>
             <RowDefinition Height="20"/>
+            
             <RowDefinition Height="Auto"/>
-            <RowDefinition Height="0"/>
             <RowDefinition Height="*"/>
 
             <RowDefinition Height="*"/>
             
             <RowDefinition Height="*"/>
-            <RowDefinition Height="0"/>
             <RowDefinition Height="Auto"/>
 
             <RowDefinition Height="*"/>
             
             <RowDefinition Height="Auto"/>
-            <RowDefinition Height="0"/>
             <RowDefinition Height="*"/>
 
             <RowDefinition Height="*"/>
@@ -93,7 +91,6 @@
             <ColumnDefinition Width="10"/>
         </Grid.ColumnDefinitions>
         
-        <!--<Border Grid.Row="0" Grid.RowSpan="3" Grid.Column="0" Grid.ColumnSpan="99" VerticalAlignment="Stretch" HorizontalAlignment="Stretch" Background="LightYellow"/>-->
         <Button Grid.Row="1" Grid.Column="2" Name="_buttonFile1" Content="File" Click="_buttonFile1_Click" Style="{StaticResource LeftArrow}" Foreground="Black">
             <Button.LayoutTransform>
                 <RotateTransform Angle="-90" CenterX="0.5" CenterY="0.5"/>
@@ -120,15 +117,15 @@
             </wpfcontrollibrary:TabHeaderControl.FontFamily>
             <wpfcontrollibrary:TabHeaderControl.DisabledArrowBrush>Transparent</wpfcontrollibrary:TabHeaderControl.DisabledArrowBrush>
         </wpfcontrollibrary:TabHeaderControl>
-        <Label Grid.Row="3" Grid.Column="0" Grid.ColumnSpan="99" Name="_labelSelectedItem" FontSize="48" Content="{Binding SelectedHeader.Label, Mode=TwoWay}" VerticalAlignment="Stretch" HorizontalAlignment="Stretch" Background="{Binding Path=SelectedTabBackground}"/>
+        <Label Grid.Row="2" Grid.Column="0" Grid.ColumnSpan="99" Name="_labelSelectedItem" FontSize="48" Content="{Binding SelectedHeader.Label, Mode=TwoWay}" VerticalAlignment="Stretch" HorizontalAlignment="Stretch" Background="White"/>
 
-        <!--<Border Grid.Row="4" Grid.RowSpan="3" Grid.Column="0" Grid.ColumnSpan="99" VerticalAlignment="Stretch" HorizontalAlignment="Stretch" Background="LightYellow"/>-->
-        <Button Grid.Row="7" Grid.Column="2" Name="_buttonFile2" Content="File" Click="_buttonFile2_Click" Style="{StaticResource LeftArrow}" Foreground="Black">
+        <Label Grid.Row="4" Grid.Column="0" Grid.ColumnSpan="99" FontSize="48" Content="{Binding SelectedHeader.Label, Mode=TwoWay}" BorderThickness="1" BorderBrush="Gray" VerticalAlignment="Stretch" HorizontalAlignment="Stretch" Background="White"/>
+        <Button Grid.Row="5" Grid.Column="2" Name="_buttonFile2" Content="File" Click="_buttonFile2_Click" Style="{StaticResource LeftArrow}" Foreground="Black">
             <Button.LayoutTransform>
                 <RotateTransform Angle="-90" CenterX="0.5" CenterY="0.5"/>
             </Button.LayoutTransform>
         </Button>
-        <wpfcontrollibrary:TabHeaderControl Grid.Row="7" Grid.Column="0" x:Name="_tabHeader2" ItemsSource="{Binding ListBoxItems}" SelectedItem="{Binding SelectedHeader, Mode=TwoWay}">
+        <wpfcontrollibrary:TabHeaderControl Grid.Row="5" Grid.Column="0" x:Name="_tabHeader2" ItemsSource="{Binding ListBoxItems}" SelectedItem="{Binding SelectedHeader, Mode=TwoWay}">
             <wpfcontrollibrary:TabHeaderControl.ArrowTemplate>
                 <ControlTemplate>
                     <Label Content="&lt;" FontSize="18" VerticalAlignment="Center" Padding="0" Width="20" HorizontalContentAlignment="Center">
@@ -167,38 +164,57 @@
                 <Binding Path="FontFamily"/>
             </wpfcontrollibrary:TabHeaderControl.FontFamily>
         </wpfcontrollibrary:TabHeaderControl>
-        <Label Grid.Row="5" Grid.Column="0" Grid.ColumnSpan="99" FontSize="48" Content="{Binding SelectedHeader.Label, Mode=TwoWay}" BorderThickness="1" BorderBrush="Gray" VerticalAlignment="Stretch" HorizontalAlignment="Stretch" Background="{Binding Path=SelectedTabBackground}"/>
 
-        <!--<Border Grid.Row="8" Grid.RowSpan="3" Grid.Column="0" Grid.ColumnSpan="99" VerticalAlignment="Stretch" HorizontalAlignment="Stretch" Background="LightYellow"/>-->
-        <Button Grid.Row="9" Grid.Column="2"  Name="_buttonFile3" Content="File" Click="_buttonFile3_Click" Style="{StaticResource LeftArrow}" Foreground="Black">
+        <Button Grid.Row="7" Grid.Column="2"  Name="_buttonFile3" Content="File" Click="_buttonFile3_Click" Style="{StaticResource LeftArrow}" Foreground="Black">
             <Button.LayoutTransform>
                 <RotateTransform Angle="-90" CenterX="0.5" CenterY="0.5"/>
             </Button.LayoutTransform>
         </Button>
-        <wpfcontrollibrary:TabHeaderControl Grid.Row="9" Grid.Column="0" x:Name="_tabHeader3" ItemsSource="{Binding ListBoxItems}" SelectedItem="{Binding SelectedHeader, Mode=TwoWay}">
+        <wpfcontrollibrary:TabHeaderControl Grid.Row="7" Grid.Column="0" x:Name="_tabHeader3" ItemsSource="{Binding ListBoxItems}" SelectedItem="{Binding SelectedHeader, Mode=TwoWay}">
             <wpfcontrollibrary:TabHeaderControl.ShowCloseButton>false</wpfcontrollibrary:TabHeaderControl.ShowCloseButton>
-            <wpfcontrollibrary:TabHeaderControl.ItemTemplate>
-                <DataTemplate>
-                    <Grid>
-                        <Grid.ColumnDefinitions>
-                            <ColumnDefinition Width="4"/>
-                            <ColumnDefinition Width="20"/>
-                            <ColumnDefinition Width="4"/>
-                            <ColumnDefinition Width="Auto"/>
-                            <ColumnDefinition Width="4"/>
-                            <ColumnDefinition Width="20"/>
-                            <ColumnDefinition Width="4"/>
-                        </Grid.ColumnDefinitions>
-                        <Ellipse Grid.Column="1" Width="10" Height="10" Fill="Crimson"/>
-                        <Label Grid.Column="3" FontFamily="Courier" FontSize="24">
-                            <TextBlock>
-                                <Run Text="{Binding Label}"/><Run Text=" ("/><Run Text="{Binding ID}"/><Run Text=")"/>
-                            </TextBlock>
-                        </Label>
-                        <Ellipse Grid.Column="5" Width="10" Height="10" Fill="Crimson"/>
-                    </Grid>
-                </DataTemplate>
-            </wpfcontrollibrary:TabHeaderControl.ItemTemplate>
+            <wpfcontrollibrary:TabHeaderControl.ItemContainerStyle>
+                <Style TargetType="ListBoxItem">
+                    <Setter Property="FrameworkElement.Margin" Value="0"/>
+                    <Setter Property="FocusVisualStyle" Value="{x:Null}" />
+                    <Setter Property="Padding" Value="0" />
+                    <Setter Property="Margin" Value="0" />
+                    <EventSetter Event="PreviewMouseLeftButtonDown" Handler="ListBoxItem_PreviewMouseLeftButtonDown" />
+
+                    <Setter Property="Template">
+                        <Setter.Value>
+                            <ControlTemplate TargetType="ListBoxItem">
+                                <Border Background="{TemplateBinding Background}" Padding="4" SnapsToDevicePixels="true" BorderThickness="0" CornerRadius="20,10,0,0">
+                                    <Grid>
+                                        <Grid.ColumnDefinitions>
+                                            <ColumnDefinition Width="4"/>
+                                            <ColumnDefinition Width="Auto"/>
+                                            <ColumnDefinition Width="2"/>
+                                            <ColumnDefinition Width="Auto"/>
+                                            <ColumnDefinition Width="2"/>
+                                        </Grid.ColumnDefinitions>
+                                        <Label Grid.Column="1" FontSize="14" Foreground="{TemplateBinding Foreground}" Background="{TemplateBinding Background}" Width="Auto" Padding="2,0,2,0" Margin="0" VerticalAlignment="Center">
+                                            <TextBlock>
+                                                <Run Text="{Binding Label}"/><Run Text=" ("/><Run Text="{Binding ID}"/><Run Text=")"/>
+                                            </TextBlock>
+                                        </Label>
+                                        <Button Grid.Column="3" Width="20" Height="20" Content="X" FontSize="12" Background="{TemplateBinding Background}" Foreground="{TemplateBinding Foreground}" BorderThickness="0" Click="Button_Click"/>
+                                    </Grid>
+                                </Border>
+                            </ControlTemplate>
+                        </Setter.Value>
+                    </Setter>
+                    <Style.Triggers>
+                        <Trigger Property="IsSelected" Value="True">
+                            <Setter Property="Background" Value="Orange"/>
+                            <Setter Property="Foreground" Value="Black"/>
+                        </Trigger>
+                        <Trigger Property="IsSelected" Value="False">
+                            <Setter Property="Background" Value="DarkSlateBlue"/>
+                            <Setter Property="Foreground" Value="White"/>
+                        </Trigger>
+                    </Style.Triggers>
+                </Style>
+            </wpfcontrollibrary:TabHeaderControl.ItemContainerStyle>
             <wpfcontrollibrary:TabHeaderControl.SelectedTabBackground>
                 <Binding Path="SelectedTabBackground" Mode="TwoWay"/>
             </wpfcontrollibrary:TabHeaderControl.SelectedTabBackground>
@@ -217,9 +233,9 @@
                 <Binding Path="FontFamily"/>
             </wpfcontrollibrary:TabHeaderControl.FontFamily>
         </wpfcontrollibrary:TabHeaderControl>
-        <Label Grid.Row="11" Grid.Column="0" Grid.ColumnSpan="99" Name="_labelSelectedItemCustom" FontSize="48" Content="{Binding SelectedHeader.Label, Mode=TwoWay}" VerticalAlignment="Stretch" HorizontalAlignment="Stretch" Background="{Binding Path=SelectedTabBackground}"/>
+        <Label Grid.Row="8" Grid.Column="0" Grid.ColumnSpan="99" Name="_labelSelectedItemCustom" FontSize="48" Content="{Binding SelectedHeader.Label, Mode=TwoWay}" VerticalAlignment="Stretch" HorizontalAlignment="Stretch" Background="White"/>
 
-        <Border Grid.Row="13" Grid.Column="0" Grid.ColumnSpan="99" BorderBrush="Gray" BorderThickness="1" Padding="10" HorizontalAlignment="Left">
+        <Border Grid.Row="10" Grid.Column="0" Grid.ColumnSpan="99" BorderBrush="Gray" BorderThickness="1" Padding="10" HorizontalAlignment="Left">
             <Grid>
                 <Grid.RowDefinitions>
                     <RowDefinition Height="Auto"/>

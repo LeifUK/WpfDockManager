@@ -116,7 +116,7 @@ namespace WpfListboxDemo
             {
                 _showTabBorder = value;
                 SelectedTabBorderThickness_Top = value ? "1,1,1,0" : "0";
-                SelectedTabBorderThickness_Bottom = SelectedTabBorderThickness_Top;
+                SelectedTabBorderThickness_Bottom = value ? "1,0,1,1" : "0";
                 NotifyPropertyChanged("ShowTabBorder");
             }
         }

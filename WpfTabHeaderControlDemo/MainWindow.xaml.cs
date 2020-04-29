@@ -89,32 +89,6 @@ namespace WpfListboxDemo
             _tabHeader1_CloseTabRequest(sender, e);
         }
 
-        private void Button_Click(object sender, RoutedEventArgs e)
-        {
-
-        }
-
-        private void _buttonFile_Click(object sender, RoutedEventArgs e)
-        {
-            MainWindowModel viewModel = (DataContext as MainWindowModel);
-            if (viewModel == null)
-            {
-                return;
-            }
-
-            ContextMenu contextMenu = new ContextMenu();
-            foreach (var item in viewModel.ListBoxItems)
-            {
-                MenuItem menuItem = new MenuItem();
-                menuItem.Header = item.Label;
-                menuItem.IsChecked = item == viewModel.SelectedHeader;
-                menuItem.Command = new Command(delegate { viewModel.SelectedHeader = item; }, delegate { return true; });
-                contextMenu.Items.Add(menuItem);
-            }
-
-            contextMenu.IsOpen = true;
-        }
-
         private Brush ConvertSelectedItemToBrush(ComboBox comboBox)
         {
             var converter = new System.Windows.Media.BrushConverter();
@@ -143,19 +117,63 @@ namespace WpfListboxDemo
             }
         }
 
+        private void _buttonFile_Click(object sender, RoutedEventArgs e)
+        {
+            MainWindowModel viewModel = (DataContext as MainWindowModel);
+            if (viewModel == null)
+            {
+                return;
+            }
+
+            ContextMenu contextMenu = new ContextMenu();
+            foreach (var item in viewModel.ListBoxItems)
+            {
+                MenuItem menuItem = new MenuItem();
+                menuItem.Header = item.Label;
+                menuItem.IsChecked = item == viewModel.SelectedHeader;
+                menuItem.Command = new Command(delegate { viewModel.SelectedHeader = item; }, delegate { return true; });
+                contextMenu.Items.Add(menuItem);
+            }
+
+            contextMenu.IsOpen = true;
+        }
+
         private void _buttonFile1_Click(object sender, RoutedEventArgs e)
         {
-
+            _buttonFile_Click(sender, e);
         }
 
         private void _buttonFile2_Click(object sender, RoutedEventArgs e)
         {
-
+            _buttonFile_Click(sender, e);
         }
 
         private void _buttonFile3_Click(object sender, RoutedEventArgs e)
         {
+            _buttonFile_Click(sender, e);
+        }
 
+        int clickIndex = -1;
+        private void Button_Click(object sender, RoutedEventArgs e)
+        {
+            System.Windows.Forms.MessageBox.Show("You clicked on tab item index " + clickIndex);
+        }
+
+        private void ListBoxItem_PreviewMouseLeftButtonDown(object sender, System.Windows.Input.MouseButtonEventArgs e)
+        {
+            System.Windows.Controls.ListBoxItem listBoxItem = sender as System.Windows.Controls.ListBoxItem;
+            if (listBoxItem == null)
+            {
+                return;
+            }
+
+            TabHeaderItem tabHeaderItem = listBoxItem.DataContext as TabHeaderItem;
+            if (tabHeaderItem == null)
+            {
+                return;
+            }
+
+            clickIndex = (DataContext as MainWindowModel).ListBoxItems.IndexOf(tabHeaderItem);
         }
     }
 }
