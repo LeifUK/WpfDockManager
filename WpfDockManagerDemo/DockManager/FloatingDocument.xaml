@@ -1,4 +1,4 @@
-﻿<Window x:Class="WpfDockManagerDemo.DockManager.FloatingPane"
+﻿<Window x:Class="WpfDockManagerDemo.DockManager.FloatingDocument"
         x:ClassModifier="internal"
         xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
         xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"

@@ -11,13 +11,21 @@ namespace WpfDockManagerDemo.DockManager
         public DockPane(IDocumentContainer iDocumentContainer)
         {
             IDocumentContainer = iDocumentContainer;
+            IDocumentContainer.Float += IDocumentContainer_Float;
             Children.Add(iDocumentContainer as System.Windows.UIElement);
+        }
+
+        private void IDocumentContainer_Float(object sender, EventArgs e)
+        {
+            FireFloat(false);
         }
 
         public event EventHandler Close;
         public event FloatEventHandler Float;
         public event EventHandler UngroupCurrent;
         public event EventHandler Ungroup;
+        
+        abstract public bool IsHighlighted { get; set; }
 
         protected void FireClose()
         {

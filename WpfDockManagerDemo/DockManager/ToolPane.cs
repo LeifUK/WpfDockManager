@@ -126,7 +126,7 @@ namespace WpfDockManagerDemo.DockManager
         public Border Border { get; private set; }
 
         private bool _isHighlighted;
-        public bool IsHighlighted
+        public override bool IsHighlighted
         {
             get
             {

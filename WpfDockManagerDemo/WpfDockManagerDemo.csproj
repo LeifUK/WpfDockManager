@@ -64,6 +64,11 @@
     <Compile Include="DockManager\DocumentTabControl.cs" />
     <Compile Include="DockManager\FloatEventArgs.cs" />
     <Compile Include="DockManager\FloatEventHandler.cs" />
+    <Compile Include="DockManager\FloatingDocument.cs" />
+    <Compile Include="DockManager\FloatingPane.xaml.cs">
+      <DependentUpon>FloatingPane.xaml</DependentUpon>
+    </Compile>
+    <Compile Include="DockManager\FloatingTool.cs" />
     <Compile Include="DockManager\ToolContainer.cs" />
     <Compile Include="DockManager\DocumentContainer.cs" />
     <Compile Include="DockManager\DocumentPane.cs" />
@@ -72,9 +77,6 @@
       <DependentUpon>EdgeLocationPane.xaml</DependentUpon>
     </Compile>
     <Compile Include="DockManager\ExtensionMethods.cs" />
-    <Compile Include="DockManager\FloatingPane.xaml.cs">
-      <DependentUpon>FloatingPane.xaml</DependentUpon>
-    </Compile>
     <Compile Include="DockManager\IDocument.cs" />
     <Compile Include="DockManager\IDocumentContainer.cs" />
     <Compile Include="DockManager\InsertionIndicatorManager.cs" />
@@ -82,7 +84,6 @@
     <Compile Include="DockManager\IToolFactory.cs" />
     <Compile Include="DockManager\IView.cs" />
     <Compile Include="DockManager\TabControlBase.cs" />
-    <Compile Include="DockManager\TabControl.cs" />
     <Compile Include="DockManager\ToolPane.cs" />
     <Compile Include="DockManager\ToolTabControl.cs" />
     <Compile Include="DockManager\ViewType.cs" />
@@ -93,6 +94,7 @@
     <Compile Include="DockManager\SplitterPane.cs" />
     <Compile Include="DockManager\WindowLocation.cs" />
     <Compile Include="DockManager\FloatingViewModel.cs" />
+    <Compile Include="ViewModel\DocumentThreeViewModel.cs" />
     <Compile Include="ViewModel\DocumentTwoViewModel.cs" />
     <Compile Include="ViewModel\DummyViewModel.cs" />
     <Compile Include="ViewModel\MainViewModel.cs" />
@@ -102,6 +104,9 @@
     <Compile Include="ViewModel\ToolThreeViewModel.cs" />
     <Compile Include="ViewModel\DocumentOneViewModel.cs" />
     <Compile Include="ViewModel\ToolTwoViewModel.cs" />
+    <Compile Include="View\DocumentThreeView.xaml.cs">
+      <DependentUpon>DocumentThreeView.xaml</DependentUpon>
+    </Compile>
     <Compile Include="View\DocumentTwoView.xaml.cs">
       <DependentUpon>DocumentTwoView.xaml</DependentUpon>
     </Compile>
@@ -133,7 +138,7 @@
     </Page>
     <Page Include="DockManager\FloatingPane.xaml">
       <SubType>Designer</SubType>
-      <Generator>MSBuild:Compile</Generator>
+      <Generator>XamlIntelliSenseFileGenerator</Generator>
     </Page>
     <Page Include="DockManager\WindowLocationPane.xaml">
       <SubType>Designer</SubType>
@@ -151,6 +156,10 @@
       <DependentUpon>MainWindow.xaml</DependentUpon>
       <SubType>Code</SubType>
     </Compile>
+    <Page Include="View\DocumentThreeView.xaml">
+      <Generator>MSBuild:Compile</Generator>
+      <SubType>Designer</SubType>
+    </Page>
     <Page Include="View\DocumentTwoView.xaml">
       <Generator>MSBuild:Compile</Generator>
       <SubType>Designer</SubType>
@@ -207,10 +216,6 @@
     <None Include="App.config" />
   </ItemGroup>
   <ItemGroup>
-    <ProjectReference Include="..\BetterWpfControls\BetterWpfControls.csproj">
-      <Project>{e8229630-9896-4536-b6f9-ba8c1738e498}</Project>
-      <Name>BetterWpfControls</Name>
-    </ProjectReference>
     <ProjectReference Include="..\WpfControlLibrary\WpfControlLibrary.csproj">
       <Project>{460c09de-de0d-4d2b-b1ec-f2bbd72022c6}</Project>
       <Name>WpfControlLibrary</Name>

@@ -49,7 +49,7 @@
             <Setter Property="Template">
                 <Setter.Value>
                     <ControlTemplate TargetType="Button">
-                        <Grid Margin="0,0,0,0">
+                        <Grid Margin="2,0,2,0">
                             <Border Name="_border" Background="Transparent" Width="18" Height="18" CornerRadius="0" BorderThickness="0" BorderBrush="Gray" HorizontalAlignment="Center"/>
                             <Path Name="_pathPointer" Fill="Green" Stroke="Black" StrokeThickness="0" Panel.ZIndex="98">
                                 <Path.Data>
@@ -95,21 +95,17 @@
             <RowDefinition Height="Auto"/>
         </Grid.RowDefinitions>
         <Grid.ColumnDefinitions>
-            <ColumnDefinition Width="2"/>
             <ColumnDefinition Width="Auto"/>
-            <ColumnDefinition Width="2"/>
             <ColumnDefinition Width="*"/>
-            <ColumnDefinition Width="2"/>
             <ColumnDefinition Width="Auto"/>
-            <ColumnDefinition Width="2"/>
         </Grid.ColumnDefinitions>
-        <Button Grid.Row="0" Grid.Column="1" Name="_buttonLeft" Padding="0" Style="{StaticResource LeftArrow}" Click="_buttonLeft_Click"/>
-        <Button Grid.Row="0" Grid.Column="5" Name="_buttonRight" Padding="0" Style="{StaticResource LeftArrow}" Click="_buttonRight_Click">
+        <Button Grid.Row="0" Grid.Column="0" Name="_buttonLeft" Padding="0" Style="{StaticResource LeftArrow}" Click="_buttonLeft_Click"/>
+        <Button Grid.Row="0" Grid.Column="2" Name="_buttonRight" Padding="0" Style="{StaticResource LeftArrow}" Click="_buttonRight_Click">
             <Button.LayoutTransform>
                 <RotateTransform Angle="180" CenterX="0.5" CenterY="0.5"/>
             </Button.LayoutTransform>
        </Button>
-        <local:TabHeader Grid.Row="0" Grid.Column="3" x:Name="_listBox" ScrollViewer.HorizontalScrollBarVisibility="Hidden" SelectionChanged="_listBox_SelectionChanged" Background="Transparent" Padding="0,-2,0,-2" BorderThickness="0">
+        <local:TabHeader Grid.Row="0" Grid.Column="1" x:Name="_listBox" ScrollViewer.HorizontalScrollBarVisibility="Hidden" SelectionChanged="_listBox_SelectionChanged" Background="Transparent" Padding="0,-2,0,-2" BorderThickness="0">
             <ListBox.ItemContainerStyle>
                 <Style TargetType="ListBoxItem">
                     <Setter Property="FrameworkElement.Margin" Value="0"/>

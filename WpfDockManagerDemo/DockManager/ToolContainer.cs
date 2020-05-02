@@ -10,6 +10,7 @@ namespace WpfDockManagerDemo.DockManager
         }
 
         public event EventHandler SelectionChanged;
+        public event EventHandler Float;
 
         public string Title
         {

@@ -142,7 +142,7 @@ namespace WpfDockManagerDemo.DockManager
         {
             if ((index < 0) || (index >= Count))
             {
-                throw new System.Exception(System.Reflection.MethodBase.GetCurrentMethod().Name + ": invalid index (" + index + ")");
+                return null;
             }
 
             UserControl userControl = _items[index].Key;

@@ -112,6 +112,39 @@
         </Setter>
     </Style>
 
+    <Style x:Key="styleDocumentMenuButton" TargetType="Button">
+        <Setter Property="Width" Value="20"/>
+        <Setter Property="Height" Value="20"/>
+        <Setter Property="VerticalAlignment" Value="Top"/>
+        <Setter Property="Background" Value="Transparent"/>
+        <Setter Property="Foreground" Value="White"/>
+        <Setter Property="BorderThickness" Value="0"/>
+        <Setter Property="Template">
+            <Setter.Value>
+                <ControlTemplate TargetType="Button">
+                    <Grid Margin="0,0,0,0">
+                        <Border Name="_border" Background="{TemplateBinding Background}" Width="18" Height="18" CornerRadius="0" BorderThickness="0" BorderBrush="Gray" HorizontalAlignment="Center" VerticalAlignment="Center">
+                            <Ellipse Name="_ellipse" Width="10" Height="10" Fill="{TemplateBinding Foreground}" HorizontalAlignment="Center" VerticalAlignment="Center"/>
+                        </Border>
+                    </Grid>
+
+                    <ControlTemplate.Triggers>
+                        <Trigger Property="IsMouseOver" Value="True">
+                            <Setter TargetName="_border" Property="Background" Value="Gainsboro" />
+                            <Setter TargetName="_border" Property="BorderThickness" Value="1" />
+                            <Setter TargetName="_ellipse" Property="Fill" Value="Black" />
+                        </Trigger>
+                        <Trigger Property="IsPressed" Value="True">
+                            <Setter TargetName="_border" Property="Background" Value="Khaki" />
+                            <Setter TargetName="_border" Property="BorderThickness" Value="1" />
+                            <Setter TargetName="_ellipse" Property="Fill" Value="Black" />
+                        </Trigger>
+                    </ControlTemplate.Triggers>
+                </ControlTemplate>
+            </Setter.Value>
+        </Setter>
+    </Style>
+
     <!--Base style for title bar buttons-->
     <Style x:Key="CaptionButtonStyle" TargetType="Button">
         <Setter Property="Template">

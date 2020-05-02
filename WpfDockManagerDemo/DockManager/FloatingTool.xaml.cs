@@ -9,9 +9,9 @@ namespace WpfDockManagerDemo.DockManager
     /// <summary>
     /// Interaction logic for FloatingWindow.xaml
     /// </summary>
-    internal partial class FloatingPane : Window
+    internal partial class FloatingTool : Window
     {
-        internal FloatingPane(IDocumentContainer iDocument)
+        internal FloatingTool(IDocumentContainer iDocument)
         {
             InitializeComponent();
             StateChanged += MainWindowStateChangeRaised;
@@ -134,3 +134,5 @@ namespace WpfDockManagerDemo.DockManager
         internal readonly IDocumentContainer IDocumentContainer;
     }
 }
+
+

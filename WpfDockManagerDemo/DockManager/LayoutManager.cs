@@ -26,7 +26,8 @@ namespace WpfDockManagerDemo.DockManager
     {
         public LayoutManager()
         {
-            FloatingPanes = new List<FloatingPane>();
+            FloatingTools = new List<FloatingTool>();
+            FloatingDocuments = new List<FloatingDocument>();
         }
 
         ~LayoutManager()
@@ -95,9 +96,11 @@ namespace WpfDockManagerDemo.DockManager
         public DataTemplate DocumentPaneTitleTemplate { get; set; }
         public DataTemplate DocumentPaneHeaderTemplate { get; set; }
 
-        public List<FloatingPane> FloatingPanes;
+        internal List<FloatingTool> FloatingTools;
+        // Warning warning
+        internal List<FloatingDocument> FloatingDocuments;
 
-        private ToolPane SelectedPane;
+        private DockPane SelectedPane;
 
         #region dependency properties 
 
@@ -277,11 +280,16 @@ namespace WpfDockManagerDemo.DockManager
         public void Clear()
         {
             Children.Clear();
-            while (FloatingPanes.Count > 0)
+            while (FloatingTools.Count > 0)
             {
-                FloatingPanes[0].Close();
+                FloatingTools[0].Close();
             }
-            FloatingPanes.Clear();
+            FloatingTools.Clear();
+            while (FloatingDocuments.Count > 0)
+            {
+                FloatingDocuments[0].Close();
+            }
+            FloatingDocuments.Clear();
         }
 
         public List<UserControl> LoadViewsFromTemplates(List<DataTemplate> dataTemplates, System.Collections.IEnumerable viewModels)
@@ -375,8 +383,52 @@ namespace WpfDockManagerDemo.DockManager
         {
             DocumentPane documentPane = new DocumentPane();
             documentPane.Close += DocumentPane_Close; ;
+            documentPane.Float += DockPane_Float;
             return documentPane;
         }
+
+        //private void DocumentPane_Float(object sender, FloatEventArgs e)
+        //{
+        //    DockPane documentPane = sender as DockPane;
+
+        //    if (documentPane == null)
+        //    {
+        //        return;
+        //    }
+
+        //    Point cursorPositionOnScreen = WpfControlLibrary.Utilities.GetCursorPosition();
+        //    Point cursorPositionInMainWindow = App.Current.MainWindow.PointFromScreen(cursorPositionOnScreen);
+        //    Point cursorPositionInToolPane = documentPane.PointFromScreen(cursorPositionOnScreen);
+
+        //    Point mainWindowLocation = App.Current.MainWindow.PointToScreen(new Point(0, 0));
+
+        //    ExtractDocumentPane(documentPane);
+
+        //    FloatingDocument floatingDocument = CreateFloatingDocument();
+
+        //    while (true)
+        //    {
+        //        UserControl userControl = documentPane.IDocumentContainer.ExtractUserControl(0);
+        //        if (userControl == null)
+        //        {
+        //            break;
+        //        }
+
+        //        floatingDocument.IDocumentContainer.AddUserControl(userControl);
+        //    }
+
+        //    floatingDocument.Left = mainWindowLocation.X + cursorPositionInMainWindow.X - cursorPositionInToolPane.X;
+        //    floatingDocument.Top = mainWindowLocation.Y + cursorPositionInMainWindow.Y - cursorPositionInToolPane.Y;
+        //    floatingDocument.Width = documentPane.ActualWidth;
+        //    floatingDocument.Height = documentPane.ActualHeight;
+
+        //    if (e.Drag)
+        //    {
+        //        // Ensure the floated window can be dragged by the user
+        //        IntPtr hWnd = new System.Windows.Interop.WindowInteropHelper(floatingDocument).EnsureHandle();
+        //        WpfControlLibrary.Utilities.SendLeftMouseButtonDown(hWnd);
+        //    }
+        //}
 
         private void DocumentPane_Close(object sender, EventArgs e)
         {
@@ -387,10 +439,29 @@ namespace WpfDockManagerDemo.DockManager
         {
             ToolPane toolPane = new ToolPane();
             toolPane.Close += ToolPane_Close;
-            toolPane.Float += ToolPane_Float;
+            toolPane.Float += DockPane_Float;
             toolPane.UngroupCurrent += ToolPane_UngroupCurrent;
             toolPane.Ungroup += ToolPane_Ungroup;
             return toolPane;
+        }
+
+        // Warning warning => as per floating tool!
+        private FloatingDocument CreateFloatingDocument()
+        {
+            FloatingDocument floatingDocument = new FloatingDocument();
+            floatingDocument.LocationChanged += FloatingWindow_LocationChanged;
+            // Warning warning
+            floatingDocument.Closed += FloatingTool_Closed;
+            floatingDocument.Ungroup += FloatingPane_Ungroup;
+            floatingDocument.UngroupCurrent += FloatingPane_UngroupCurrent;
+            floatingDocument.DataContext = new FloatingViewModel();
+            (floatingDocument.DataContext as FloatingViewModel).Title = floatingDocument.Title;
+            floatingDocument.EndDrag += FloatingPane_EndDrag;
+            // Ensure the window remains on top of the main window
+            floatingDocument.Owner = App.Current.MainWindow;
+            floatingDocument.Show();
+            FloatingDocuments.Add(floatingDocument);
+            return floatingDocument;
         }
 
         private void Create()
@@ -661,25 +732,25 @@ namespace WpfDockManagerDemo.DockManager
             }
         }
 
-        private XmlElement CreateFloatingPaneNode(XmlDocument xmlDocument, XmlNode xmlParentNode, FloatingPane floatingPane)
+        private XmlElement CreateFloatingToolNode(XmlDocument xmlDocument, XmlNode xmlParentNode, FloatingTool floatingTool)
         {
             if ((xmlDocument == null) || (xmlParentNode == null))
             {
                 throw new Exception(System.Reflection.MethodBase.GetCurrentMethod().Name + ": invalid arguments");
             }
 
-            XmlElement xmlFloatingPane = xmlDocument.CreateElement("FloatingPane");
+            XmlElement xmlFloatingTool = xmlDocument.CreateElement("FloatingTool");
 
             XmlAttribute xmlAttribute = xmlDocument.CreateAttribute("width");
-            xmlAttribute.Value = floatingPane.ActualWidth.ToString();
-            xmlFloatingPane.Attributes.Append(xmlAttribute);
+            xmlAttribute.Value = floatingTool.ActualWidth.ToString();
+            xmlFloatingTool.Attributes.Append(xmlAttribute);
 
             xmlAttribute = xmlDocument.CreateAttribute("height");
-            xmlAttribute.Value = floatingPane.ActualHeight.ToString();
-            xmlFloatingPane.Attributes.Append(xmlAttribute);
+            xmlAttribute.Value = floatingTool.ActualHeight.ToString();
+            xmlFloatingTool.Attributes.Append(xmlAttribute);
 
-            xmlParentNode.AppendChild(xmlFloatingPane);
-            return xmlFloatingPane;
+            xmlParentNode.AppendChild(xmlFloatingTool);
+            return xmlFloatingTool;
         }
 
         private void SaveNode(XmlDocument xmlDocument, Object node, XmlNode xmlParentPane)
@@ -753,19 +824,19 @@ namespace WpfDockManagerDemo.DockManager
             xmlDocument.AppendChild(xmlLayoutManager);
 
             SaveNode(xmlDocument, Children[0], xmlLayoutManager);
-            foreach (FloatingPane floatingPane in FloatingPanes)
+            foreach (FloatingTool floatingTool in FloatingTools)
             {
-                int count = floatingPane.IDocumentContainer.GetUserControlCount();
+                int count = floatingTool.IDocumentContainer.GetUserControlCount();
                 if (count < 1)
                 {
                     throw new Exception(System.Reflection.MethodBase.GetCurrentMethod().Name + ": no documents");
                 }
 
-                XmlElement xmlNodeParent = CreateFloatingPaneNode(xmlDocument, xmlLayoutManager, floatingPane);
+                XmlElement xmlNodeParent = CreateFloatingToolNode(xmlDocument, xmlLayoutManager, floatingTool);
 
                 for (int index = 0; index < count; ++index)
                 {
-                    UserControl userControl = floatingPane.IDocumentContainer.GetUserControl(index);
+                    UserControl userControl = floatingTool.IDocumentContainer.GetUserControl(index);
                     if (userControl == null)
                     {
                         break;
@@ -954,12 +1025,12 @@ namespace WpfDockManagerDemo.DockManager
                         row += rowIncrement;
                         column += columnIncrement;
                     }
-                    else if ((xmlChildNode as XmlElement).Name == "FloatingPane")
+                    else if ((xmlChildNode as XmlElement).Name == "FloatingTool")
                     {
-                        FloatingPane floatingPane = CreateFloatingPane();
+                        FloatingTool floatingTool = CreateFloatingTool();
 
-                        XmlElement xmlfloatingPane = xmlChildNode as XmlElement;
-                        LoadToolGroup(viewsMap, xmlfloatingPane, floatingPane.IDocumentContainer);
+                        XmlElement xmlfloatingTool = xmlChildNode as XmlElement;
+                        LoadToolGroup(viewsMap, xmlfloatingTool, floatingTool.IDocumentContainer);
                     }
                 }
                 
@@ -1008,6 +1079,60 @@ namespace WpfDockManagerDemo.DockManager
         /*
          * Remove a document pane from the document tree
          */
+         // Warning warning => this is essentially the same as ExtractToolPane => rplace DocumentPane with DockPane
+        private DocumentPane ExtractDocumentPane(DocumentPane documentPane)
+        {
+            if (documentPane == null)
+            {
+                return null;
+            }
+
+            Grid parentGrid = documentPane.Parent as Grid;
+            if (parentGrid == null)
+            {
+                throw new Exception(System.Reflection.MethodBase.GetCurrentMethod().Name + ": documentPane parent must be a Grid");
+            }
+
+            if (parentGrid == this)
+            {
+                this.Children.Remove(documentPane);
+            }
+            else
+            {
+                if (parentGrid.Parent is FloatingTool)
+                {
+                    return null;
+                }
+
+                Grid grandparentGrid = parentGrid.Parent as Grid;
+                if (grandparentGrid == null)
+                {
+                    throw new Exception(System.Reflection.MethodBase.GetCurrentMethod().Name + ": Grid parent not a Grid");
+                }
+                parentGrid.Children.Remove(documentPane);
+
+                FrameworkElement frameworkElement = null;
+                foreach (var item in parentGrid.Children)
+                {
+                    if (!(item is GridSplitter))
+                    {
+                        frameworkElement = item as FrameworkElement;
+                        break;
+                    }
+                }
+
+                System.Diagnostics.Trace.Assert(frameworkElement != null);
+
+                parentGrid.Children.Remove(frameworkElement);
+                grandparentGrid.Children.Remove(parentGrid);
+                Grid.SetRow(frameworkElement, Grid.GetRow(parentGrid));
+                Grid.SetColumn(frameworkElement, Grid.GetColumn(parentGrid));
+                grandparentGrid.Children.Add(frameworkElement);
+            }
+
+            return documentPane;
+        }
+
         private ToolPane ExtractToolPane(ToolPane toolPane)
         {
             if (toolPane == null)
@@ -1018,7 +1143,7 @@ namespace WpfDockManagerDemo.DockManager
             Grid parentGrid = toolPane.Parent as Grid;
             if (parentGrid == null)
             {
-                throw new Exception(System.Reflection.MethodBase.GetCurrentMethod().Name + ": toolPane parent must be a Grid");
+                throw new Exception(System.Reflection.MethodBase.GetCurrentMethod().Name + ": ToolPane parent must be a Grid");
             }
 
             if (parentGrid == this)
@@ -1027,7 +1152,7 @@ namespace WpfDockManagerDemo.DockManager
             }
             else
             {
-                if (parentGrid.Parent is FloatingPane)
+                if (parentGrid.Parent is FloatingTool)
                 {
                     return null;
                 }
@@ -1140,45 +1265,53 @@ namespace WpfDockManagerDemo.DockManager
             }
         }
 
-        private FloatingPane CreateFloatingPane()
+        private FloatingTool CreateFloatingTool()
         {
-            FloatingPane floatingPane = new FloatingPane();
-            floatingPane.LocationChanged += FloatingWindow_LocationChanged;
-            floatingPane.Closed += FloatingPane_Closed;
-            floatingPane.Ungroup += FloatingPane_Ungroup;
-            floatingPane.UngroupCurrent += FloatingPane_UngroupCurrent;
-            floatingPane.DataContext = new FloatingViewModel();
-            (floatingPane.DataContext as FloatingViewModel).Title = floatingPane.Title;
-            floatingPane.EndDrag += FloatingView_EndDrag;
+            FloatingTool floatingTool = new FloatingTool();
+            floatingTool.LocationChanged += FloatingWindow_LocationChanged;
+            floatingTool.Closed += FloatingTool_Closed;
+            floatingTool.Ungroup += FloatingPane_Ungroup;
+            floatingTool.UngroupCurrent += FloatingPane_UngroupCurrent;
+            floatingTool.DataContext = new FloatingViewModel();
+            (floatingTool.DataContext as FloatingViewModel).Title = floatingTool.Title;
+            floatingTool.EndDrag += FloatingPane_EndDrag;
             // Ensure the window remains on top of the main window
-            floatingPane.Owner = App.Current.MainWindow;
-            floatingPane.Show();
-            FloatingPanes.Add(floatingPane);
-            return floatingPane;
+            floatingTool.Owner = App.Current.MainWindow;
+            floatingTool.Show();
+            FloatingTools.Add(floatingTool);
+            return floatingTool;
         }
 
-        private void ToolPane_Float(object sender, FloatEventArgs e)
+        private void DockPane_Float(object sender, FloatEventArgs e)
         {
-            ToolPane toolPane = sender as ToolPane;
+            DockPane dockPane = sender as DockPane;
 
-            if (toolPane == null)
+            if (dockPane == null)
             {
                 return;
             }
 
             Point cursorPositionOnScreen = WpfControlLibrary.Utilities.GetCursorPosition();
             Point cursorPositionInMainWindow = App.Current.MainWindow.PointFromScreen(cursorPositionOnScreen);
-            Point cursorPositionInToolPane = toolPane.PointFromScreen(cursorPositionOnScreen);
+            Point cursorPositionInToolPane = dockPane.PointFromScreen(cursorPositionOnScreen);
 
             Point mainWindowLocation = App.Current.MainWindow.PointToScreen(new Point(0, 0));
 
-            ExtractToolPane(toolPane);
-
-            FloatingPane floatingPane = CreateFloatingPane();
+            FloatingPane floatingPane = null;
+            if (dockPane is ToolPane)
+            {
+                ExtractToolPane(dockPane as ToolPane);
+                floatingPane = CreateFloatingTool();
+            }
+            else
+            {
+                ExtractDocumentPane(dockPane as DocumentPane);
+                floatingPane = CreateFloatingDocument();
+            }
 
             while (true)
             {
-                UserControl userControl = toolPane.IDocumentContainer.ExtractUserControl(0);
+                UserControl userControl = dockPane.IDocumentContainer.ExtractUserControl(0);
                 if (userControl == null)
                 {
                     break;
@@ -1189,8 +1322,8 @@ namespace WpfDockManagerDemo.DockManager
 
             floatingPane.Left = mainWindowLocation.X + cursorPositionInMainWindow.X - cursorPositionInToolPane.X;
             floatingPane.Top = mainWindowLocation.Y + cursorPositionInMainWindow.Y - cursorPositionInToolPane.Y;
-            floatingPane.Width = toolPane.ActualWidth;
-            floatingPane.Height = toolPane.ActualHeight;
+            floatingPane.Width = dockPane.ActualWidth;
+            floatingPane.Height = dockPane.ActualHeight;
 
             if (e.Drag)
             {
@@ -1212,11 +1345,11 @@ namespace WpfDockManagerDemo.DockManager
             ExtractToolPane(toolPane);
         }
 
-        private void FloatingPane_Closed(object sender, EventArgs e)
+        private void FloatingTool_Closed(object sender, EventArgs e)
         {
-            if (FloatingPanes.Contains(sender as FloatingPane))
+            if (FloatingTools.Contains(sender as FloatingTool))
             {
-                FloatingPanes.Remove(sender as FloatingPane);
+                FloatingTools.Remove(sender as FloatingTool);
             }
         }
 
@@ -1241,13 +1374,21 @@ namespace WpfDockManagerDemo.DockManager
                     return;
                 }
 
-                FloatingPane newfloatingPane = CreateFloatingPane();
-                // Warning warning -> check window is visible
+                FloatingPane newFloatingPane = null;
+                if (sender is FloatingTool)
+                {
+                    newFloatingPane = CreateFloatingTool();
+                }
+                else
+                {
+                    newFloatingPane = CreateFloatingDocument();
+                }
+                
                 left += 10;
                 top += 10;
-                newfloatingPane.Left = left;
-                newfloatingPane.Top = top;
-                newfloatingPane.IDocumentContainer.AddUserControl(userControl);
+                newFloatingPane.Left = left;
+                newFloatingPane.Top = top;
+                newFloatingPane.IDocumentContainer.AddUserControl(userControl);
             }
         }
 
@@ -1262,16 +1403,25 @@ namespace WpfDockManagerDemo.DockManager
             int index = floatingPane.IDocumentContainer.GetCurrentTabIndex();
             if (index > -1)
             {
-                UserControl userControl = floatingPane.IDocumentContainer.ExtractUserControl(1);
+                UserControl userControl = floatingPane.IDocumentContainer.ExtractUserControl(index);
                 if (userControl == null)
                 {
                     return;
                 }
 
-                FloatingPane newfloatingPane = CreateFloatingPane();
-                newfloatingPane.Left = floatingPane.Left + 10;
-                newfloatingPane.Top = floatingPane.Top + 10;
-                newfloatingPane.IDocumentContainer.AddUserControl(userControl);
+                FloatingPane newFloatingPane = null;
+                if (sender is FloatingTool)
+                {
+                    newFloatingPane = CreateFloatingTool();
+                }
+                else
+                {
+                    newFloatingPane = CreateFloatingDocument();
+                }
+
+                newFloatingPane.Left = floatingPane.Left + 10;
+                newFloatingPane.Top = floatingPane.Top + 10;
+                newFloatingPane.IDocumentContainer.AddUserControl(userControl);
             }
         }
 
@@ -1289,7 +1439,7 @@ namespace WpfDockManagerDemo.DockManager
             _edgeLocationPane = null;
         }
 
-        private void ExtractDocuments(FloatingPane floatingPane, ToolPane toolPane)
+        private void ExtractDocuments(FloatingPane floatingPane, DockPane toolPane)
         {
             while (true)
             {
@@ -1304,9 +1454,9 @@ namespace WpfDockManagerDemo.DockManager
             floatingPane.Close();
         }
 
-        private void FloatingView_EndDrag(object sender, EventArgs e)
+        private void FloatingPane_EndDrag(object sender, EventArgs e)
         {
-            FloatingPane floatingPane = sender as FloatingPane;
+            FloatingPane floatingTool = sender as FloatingPane;
 
             App.Current.Dispatcher.Invoke(delegate
             {
@@ -1316,9 +1466,9 @@ namespace WpfDockManagerDemo.DockManager
                 }
 
                 if (
-                        (floatingPane == null) ||
+                        (floatingTool == null) ||
                         (SelectedPane == null) ||
-                        (!(SelectedPane.Parent is SplitterPane) && (SelectedPane.Parent != this)) ||
+                        (!(SelectedPane.Parent is SplitterPane) && !(SelectedPane.Parent is DocumentPanel) && (SelectedPane.Parent != this)) ||
                         (_windowLocationPane == null) ||
                         (_insertionIndicatorManager == null) ||
                         (_insertionIndicatorManager.WindowLocation == WindowLocation.None)
@@ -1328,8 +1478,8 @@ namespace WpfDockManagerDemo.DockManager
                 }
 
                 SplitterPane parentSplitterPane = (SelectedPane.Parent as SplitterPane);
-                ToolPane toolPane = null;
-                ToolPane selectedPane = SelectedPane;
+                DockPane dockPane = null;
+                DockPane selectedPane = SelectedPane;
                 WindowLocation windowLocation = _insertionIndicatorManager.WindowLocation;
                 CancelSelection();
 
@@ -1340,12 +1490,19 @@ namespace WpfDockManagerDemo.DockManager
                     case WindowLocation.LeftEdge:
                     case WindowLocation.RightEdge:
 
-                        toolPane = CreateToolPane();
-                        ExtractDocuments(floatingPane, toolPane);
+                        if (sender is FloatingTool)
+                        {
+                            dockPane = CreateToolPane();
+                        }
+                        else
+                        {
+                            dockPane = CreateDocumentPane();
+                        }
+                        ExtractDocuments(floatingTool, dockPane);
 
                         parentSplitterPane = new SplitterPane((windowLocation == WindowLocation.TopEdge) || (windowLocation == WindowLocation.BottomEdge));
                         bool isFirst = (windowLocation == WindowLocation.TopEdge) || (windowLocation == WindowLocation.LeftEdge);
-                        parentSplitterPane.AddChild(toolPane, isFirst);
+                        parentSplitterPane.AddChild(dockPane, isFirst);
 
                         if (Children.Count == 0)
                         {
@@ -1365,24 +1522,40 @@ namespace WpfDockManagerDemo.DockManager
                     case WindowLocation.Top:
                     case WindowLocation.Bottom:
 
-                        toolPane = CreateToolPane();
-                        ExtractDocuments(floatingPane, toolPane);
-
-                        parentSplitterPane.Children.Remove(selectedPane);
+                        if (sender is FloatingTool)
+                        {
+                            dockPane = CreateToolPane();
+                        }
+                        else
+                        {
+                            dockPane = CreateDocumentPane();
+                        }
+                        ExtractDocuments(floatingTool, dockPane);
 
                         SplitterPane newGrid = new SplitterPane((windowLocation == WindowLocation.Top) || (windowLocation == WindowLocation.Bottom));
-                        parentSplitterPane.Children.Add(newGrid);
-                        Grid.SetRow(newGrid, Grid.GetRow(selectedPane));
-                        Grid.SetColumn(newGrid, Grid.GetColumn(selectedPane));
 
+                        if (selectedPane.Parent is DocumentPanel)
+                        {
+                            DocumentPanel documentPanel = selectedPane.Parent as DocumentPanel;
+                            documentPanel.Children.Remove(selectedPane);
+                            documentPanel.Children.Add(newGrid);
+                        }
+                        else
+                        {
+                            parentSplitterPane.Children.Remove(selectedPane);
+
+                            parentSplitterPane.Children.Add(newGrid);
+                            Grid.SetRow(newGrid, Grid.GetRow(selectedPane));
+                            Grid.SetColumn(newGrid, Grid.GetColumn(selectedPane));
+                        }
                         bool isTargetFirst = (windowLocation == WindowLocation.Right) || (windowLocation == WindowLocation.Bottom);
                         newGrid.AddChild(selectedPane, isTargetFirst);
-                        newGrid.AddChild(toolPane, !isTargetFirst);
+                        newGrid.AddChild(dockPane, !isTargetFirst);
                         break;
 
                     case WindowLocation.Middle:
 
-                        ExtractDocuments(floatingPane, selectedPane as ToolPane);
+                        ExtractDocuments(floatingTool, selectedPane);
                         break;
                 }
 
@@ -1393,7 +1566,7 @@ namespace WpfDockManagerDemo.DockManager
         /*
          * Locates the dock pane at the specified on screen point
          */
-        private ToolPane FindView(Grid grid, Point pointOnScreen)
+        private DockPane FindDockPane(Grid grid, Point pointOnScreen)
         {
             if (grid == null)
             {
@@ -1402,7 +1575,7 @@ namespace WpfDockManagerDemo.DockManager
 
             foreach (var child in grid.Children)
             {
-                if ((child is ToolPane) || (child is SplitterPane))
+                if ((child is DocumentPanel) || (child is DockPane) || (child is SplitterPane))
                 {
                     Grid childGrid = child as Grid;
                     Point pointInToolPane = childGrid.PointFromScreen(pointOnScreen);
@@ -1413,12 +1586,12 @@ namespace WpfDockManagerDemo.DockManager
                             (pointInToolPane.Y <= childGrid.ActualHeight)
                         )
                     {
-                        if (child is ToolPane)
+                        if (child is DockPane)
                         {
-                            return child as ToolPane;
+                            return child as DockPane;
                         }
 
-                        return FindView(childGrid, pointOnScreen);
+                        return FindDockPane(childGrid, pointOnScreen);
                     }
                 }
             }
@@ -1448,43 +1621,58 @@ namespace WpfDockManagerDemo.DockManager
                     (cursorPositionInMainWindow.Y >= 0) &&
                     (cursorPositionInMainWindow.Y <= this.ActualHeight) 
                 )
-            { 
-                var pane = FindView(this, cursorPositionOnScreen);
+            {
+                Type paneType = (sender is FloatingDocument) ? typeof(DocumentPane) : typeof(ToolPane);
+                var pane = FindDockPane(this, cursorPositionOnScreen);
                 found = pane != null;
                 if ((pane != null) && (SelectedPane != pane))
                 {
-                    Point pointInGrid = PointFromScreen(pane.PointToScreen(new Point(0, 0)));
+                    if (SelectedPane != null)
+                    {
+                        SelectedPane.IsHighlighted = false;
+                    }
 
                     pane.IsHighlighted = true;
                     SelectedPane = pane;
                     if (_windowLocationPane != null)
                     {
                         _windowLocationPane.Close();
+                        _windowLocationPane = null;
                     }
-                    
-                    _windowLocationPane = new WindowLocationPane();
-                    _windowLocationPane.AllowsTransparency = true;
-                    _windowLocationPane.Show();
-                    _windowLocationPane.Left = App.Current.MainWindow.Left + pointInGrid.X + SelectedPane.ActualWidth / 2 - _windowLocationPane.ActualWidth / 2 + 7;
-                    _windowLocationPane.Top = App.Current.MainWindow.Top + pointInGrid.Y + SelectedPane.ActualHeight / 2 - _windowLocationPane.ActualHeight / 2 + 2;
-                    _windowLocationPane.Owner = floatingWindow.Owner;
+
+                    if (paneType == pane.GetType())
+                    {
+                        _windowLocationPane = new WindowLocationPane();
+                        _windowLocationPane.AllowsTransparency = true;
+                        _windowLocationPane.Show();
+                        Point topLeftPoint = pane.PointToScreen(new Point(0, 0));
+                        _windowLocationPane.Left = topLeftPoint.X;
+                        _windowLocationPane.Top = topLeftPoint.Y;
+                        _windowLocationPane.Width = SelectedPane.ActualWidth;
+                        _windowLocationPane.Height = SelectedPane.ActualHeight;
+                    }
 
                     if (_edgeLocationPane != null)
                     {
                         _edgeLocationPane.Close();
+                        _edgeLocationPane = null;
                     }
-                    _edgeLocationPane = new EdgeLocationPane();
-                    _edgeLocationPane.AllowsTransparency = true;
-                    _edgeLocationPane.Show();
-                    Point topLeftPoint = this.PointToScreen(new Point(0, 0));
-                    _edgeLocationPane.Left = topLeftPoint.X;
-                    _edgeLocationPane.Top = topLeftPoint.Y;
-                    _edgeLocationPane.Width = ActualWidth;
-                    _edgeLocationPane.Height = ActualHeight;
+
+                    if (sender is FloatingTool)
+                    {
+                        _edgeLocationPane = new EdgeLocationPane();
+                        _edgeLocationPane.AllowsTransparency = true;
+                        _edgeLocationPane.Show();
+                        Point topLeftPoint = PointToScreen(new Point(0, 0));
+                        _edgeLocationPane.Left = topLeftPoint.X;
+                        _edgeLocationPane.Top = topLeftPoint.Y;
+                        _edgeLocationPane.Width = ActualWidth;
+                        _edgeLocationPane.Height = ActualHeight;
+                    }
                 }
             }
 
-            ToolPane previousPane = SelectedPane;
+            DockPane previousPane = SelectedPane;
 
             if (!found)
             {

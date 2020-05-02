@@ -28,6 +28,8 @@ namespace WpfControlLibrary
         public event EventHandler SelectionChanged;
         public event EventHandler ItemsChanged;
 
+        public ListBox ListBox { get { return _listBox; } }
+
         public ItemCollection Items 
         {
             get { return _listBox.Items; }

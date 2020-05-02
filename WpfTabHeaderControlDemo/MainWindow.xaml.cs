@@ -153,21 +153,21 @@ namespace WpfListboxDemo
             _buttonFile_Click(sender, e);
         }
 
-        int clickIndex = -1;
+        int _listBoxItemIndex = -1;
         private void Button_Click(object sender, RoutedEventArgs e)
         {
             MainWindowModel mainWindowModel = (DataContext as MainWindowModel);
-            if ((clickIndex > -1) && (clickIndex < mainWindowModel.ListBoxItems.Count))
+            if ((_listBoxItemIndex > -1) && (_listBoxItemIndex < mainWindowModel.ListBoxItems.Count))
             {
-                mainWindowModel.ListBoxItems.RemoveAt(clickIndex);
+                mainWindowModel.ListBoxItems.RemoveAt(_listBoxItemIndex);
             }
-            if (clickIndex > 0)
+            if (_listBoxItemIndex > 0)
             {
-                --clickIndex;
+                --_listBoxItemIndex;
             }
             if (mainWindowModel.ListBoxItems.Count > 0)
             {
-                _tabHeader3.SelectedIndex = clickIndex;
+                _tabHeader3.SelectedIndex = _listBoxItemIndex;
             }
         }
 
@@ -185,7 +185,7 @@ namespace WpfListboxDemo
                 return;
             }
 
-            clickIndex = (DataContext as MainWindowModel).ListBoxItems.IndexOf(tabHeaderItem);
+            _listBoxItemIndex = (DataContext as MainWindowModel).ListBoxItems.IndexOf(tabHeaderItem);
         }
     }
 }

@@ -64,7 +64,8 @@ namespace WpfDockManagerDemo.DockManager
         public Border Border { get; private set; }
 
         private bool _isHighlighted;
-        public bool IsHighlighted
+        // Warning warning => move to DockPane?
+        public override bool IsHighlighted
         {
             get
             {

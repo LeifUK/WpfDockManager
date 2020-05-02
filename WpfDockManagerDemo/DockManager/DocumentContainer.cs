@@ -11,9 +11,15 @@ namespace WpfDockManagerDemo.DockManager
             _documentTabControl = new DocumentTabControl();
             _documentTabControl.SelectionChanged += TabControl_SelectionChanged;
             _documentTabControl.TabClosed += TabControl_TabClosed;
+            _documentTabControl.Float += _documentTabControl_Float;
             Children.Add(_documentTabControl);
             Grid.SetRow(_documentTabControl, 0);
             Grid.SetColumn(_documentTabControl, 0);
+        }
+
+        private void _documentTabControl_Float(object sender, EventArgs e)
+        {
+            Float?.Invoke(sender, e);
         }
 
         private DocumentTabControl _documentTabControl;
@@ -21,6 +27,7 @@ namespace WpfDockManagerDemo.DockManager
         #region IDocumentContainer
 
         public event EventHandler SelectionChanged;
+        public event EventHandler Float;
 
         public string Title
         {
@@ -58,15 +65,6 @@ namespace WpfDockManagerDemo.DockManager
 
         public UserControl ExtractUserControl(int index)
         {
-            if (index >= _documentTabControl.Count)
-            {
-                index = _documentTabControl.Count - 1;
-            }
-            if (index < 0)
-            {
-                index = 0;
-            }
-
             return _documentTabControl.RemoveAt(index);
         }
 

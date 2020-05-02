@@ -22,6 +22,7 @@ namespace WpfDockManagerDemo.ViewModel
             Documents = new System.Collections.ObjectModel.ObservableCollection<DockManager.IDocument>();
             Documents.Add(new ViewModel.DocumentOneViewModel());
             Documents.Add(new ViewModel.DocumentTwoViewModel());
+            Documents.Add(new ViewModel.DocumentThreeViewModel());
         }
 
         private System.Collections.ObjectModel.ObservableCollection<DockManager.IDocument> _documents;

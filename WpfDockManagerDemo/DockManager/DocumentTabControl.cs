@@ -5,6 +5,7 @@ namespace WpfDockManagerDemo.DockManager
 {
     internal class DocumentTabControl : TabControlBase
     {
+        // Warning warning => merge into document container?
         public DocumentTabControl() : base(1, 2)
         {
             RowDefinitions.Add(new RowDefinition() { Height = new System.Windows.GridLength(4, System.Windows.GridUnitType.Pixel) });
@@ -12,6 +13,8 @@ namespace WpfDockManagerDemo.DockManager
             RowDefinitions.Add(new RowDefinition() { Height = new System.Windows.GridLength(1, System.Windows.GridUnitType.Star) });
 
             ColumnDefinitions.Add(new ColumnDefinition() { Width = new System.Windows.GridLength(1, System.Windows.GridUnitType.Star) });
+            ColumnDefinitions.Add(new ColumnDefinition() { Width = new System.Windows.GridLength(4, System.Windows.GridUnitType.Pixel) });
+            ColumnDefinitions.Add(new ColumnDefinition() { Width = new System.Windows.GridLength(20, System.Windows.GridUnitType.Pixel) });
             ColumnDefinitions.Add(new ColumnDefinition() { Width = new System.Windows.GridLength(4, System.Windows.GridUnitType.Pixel) });
             ColumnDefinitions.Add(new ColumnDefinition() { Width = new System.Windows.GridLength(20, System.Windows.GridUnitType.Pixel) });
             ColumnDefinitions.Add(new ColumnDefinition() { Width = new System.Windows.GridLength(4, System.Windows.GridUnitType.Pixel) });
@@ -32,21 +35,44 @@ namespace WpfDockManagerDemo.DockManager
             border.VerticalAlignment = System.Windows.VerticalAlignment.Stretch;
             border.Background = System.Windows.Media.Brushes.SlateGray;
 
-            _button = new Button();
-            Children.Add(_button);
-            Grid.SetRow(_button, 1);
-            Grid.SetColumn(_button, 2);
-            _button.Click += _button_Click; ;
+            _menuButton = new Button();
+            Children.Add(_menuButton);
+            Grid.SetRow(_menuButton, 1);
+            Grid.SetColumn(_menuButton, 2);
+            _menuButton.Click += delegate { DisplayGeneralMenu(); };
             // Warning warning warning
             System.Windows.ResourceDictionary res = (System.Windows.ResourceDictionary)App.LoadComponent(new System.Uri("/WpfDockManagerDemo;component/DockManager/Dictionary.xaml", System.UriKind.Relative));
-            _button.Style = (System.Windows.Style)res["MenuButtonStyle"];
+            _menuButton.Style = (System.Windows.Style)res["styleDocumentMenuButton"];
+
+            _documentButton = new Button();
+            Children.Add(_documentButton);
+            Grid.SetRow(_documentButton, 1);
+            Grid.SetColumn(_documentButton, 4);
+            _documentButton.Click += delegate { DisplayItemsMenu(); };
+            _documentButton.Style = FindResource("styleHeaderMenuButton") as Style;
         }
+
+        private void DisplayGeneralMenu()
+        {
+            ContextMenu contextMenu = new ContextMenu();
+            int i = 0;
+            MenuItem menuItem = new MenuItem();
+            menuItem.Header = "Float";
+            menuItem.IsChecked = false;
+            menuItem.Command = new Command(delegate { Float?.Invoke(this, null); }, delegate { return true; });
+            contextMenu.Items.Add(menuItem);
+
+            contextMenu.IsOpen = true;
+        }
+
+        public event System.EventHandler Float;
 
         private void _button_Click(object sender, RoutedEventArgs e)
         {
             DisplayItemsMenu();
         }
 
-        private Button _button;
+        private Button _documentButton;
+        private Button _menuButton;
     }
 }

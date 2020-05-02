@@ -9,17 +9,17 @@ namespace WpfDockManagerDemo.DockManager
     /// <summary>
     /// Interaction logic for FloatingWindow.xaml
     /// </summary>
-    internal partial class FloatingPane : Window
+    internal partial class FloatingDocument : Window
     {
-        internal FloatingPane(IDocumentContainer iDocument)
+        public FloatingDocument()
         {
             InitializeComponent();
             StateChanged += MainWindowStateChangeRaised;
             // Warning warning
-            ToolContainer documentContainer = new ToolContainer();
-            _parentContainer.Children.Add(iDocument as UIElement);
-            Grid.SetRow(iDocument as UIElement, 1);
-            IDocumentContainer = iDocument;
+            DocumentContainer documentContainer = new DocumentContainer();
+            _parentContainer.Children.Add(documentContainer);
+            Grid.SetRow(documentContainer, 1);
+            IDocumentContainer = documentContainer;
         }
 
         // Can execute
@@ -134,3 +134,5 @@ namespace WpfDockManagerDemo.DockManager
         internal readonly IDocumentContainer IDocumentContainer;
     }
 }
+
+
