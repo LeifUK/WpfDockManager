@@ -6,7 +6,7 @@ namespace WpfDockManagerDemo.DockManager
     internal class DocumentTabControl : TabControlBase
     {
         // Warning warning => merge into document container?
-        public DocumentTabControl() : base(1, 2)
+        public DocumentTabControl() : base()
         {
             RowDefinitions.Add(new RowDefinition() { Height = new System.Windows.GridLength(4, System.Windows.GridUnitType.Pixel) });
             RowDefinitions.Add(new RowDefinition() { Height = new System.Windows.GridLength(1, System.Windows.GridUnitType.Auto) });
