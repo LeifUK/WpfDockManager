@@ -10,7 +10,10 @@ namespace WpfDockManagerDemo.DockManager
         }
 
         public event EventHandler SelectionChanged;
+        // Warning warning
         public event EventHandler Float;
+        public event EventHandler UngroupCurrent;
+        public event EventHandler Ungroup;
 
         public string Title
         {

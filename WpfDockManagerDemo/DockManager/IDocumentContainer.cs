@@ -1,4 +1,5 @@
-﻿using System.Windows.Controls;
+﻿using System;
+using System.Windows.Controls;
 
 namespace WpfDockManagerDemo.DockManager
 {
@@ -11,7 +12,9 @@ namespace WpfDockManagerDemo.DockManager
         int GetCurrentTabIndex();
         UserControl GetUserControl(int index);
 
-        event System.EventHandler SelectionChanged;
-        event System.EventHandler Float;
+        event EventHandler SelectionChanged;
+        event EventHandler Float;
+        event EventHandler UngroupCurrent;
+        event EventHandler Ungroup;
     }
 }

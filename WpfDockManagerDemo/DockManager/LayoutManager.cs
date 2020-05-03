@@ -382,7 +382,7 @@ namespace WpfDockManagerDemo.DockManager
         private DocumentPane CreateDocumentPane()
         {
             DocumentPane documentPane = new DocumentPane();
-            documentPane.Close += DocumentPane_Close; ;
+            documentPane.Close += DockPane_Close; ;
             documentPane.Float += DockPane_Float;
             return documentPane;
         }
@@ -430,15 +430,10 @@ namespace WpfDockManagerDemo.DockManager
         //    }
         //}
 
-        private void DocumentPane_Close(object sender, EventArgs e)
-        {
-            throw new NotImplementedException();
-        }
-
         private ToolPane CreateToolPane()
         {
             ToolPane toolPane = new ToolPane();
-            toolPane.Close += ToolPane_Close;
+            toolPane.Close += DockPane_Close;
             toolPane.Float += DockPane_Float;
             toolPane.UngroupCurrent += ToolPane_UngroupCurrent;
             toolPane.Ungroup += ToolPane_Ungroup;
@@ -1080,14 +1075,14 @@ namespace WpfDockManagerDemo.DockManager
          * Remove a document pane from the document tree
          */
          // Warning warning => this is essentially the same as ExtractToolPane => rplace DocumentPane with DockPane
-        private DocumentPane ExtractDocumentPane(DocumentPane documentPane)
+        private DockPane ExtractDockPane(DockPane dockPane)
         {
-            if (documentPane == null)
+            if (dockPane == null)
             {
                 return null;
             }
 
-            Grid parentGrid = documentPane.Parent as Grid;
+            Grid parentGrid = dockPane.Parent as Grid;
             if (parentGrid == null)
             {
                 throw new Exception(System.Reflection.MethodBase.GetCurrentMethod().Name + ": documentPane parent must be a Grid");
@@ -1095,21 +1090,21 @@ namespace WpfDockManagerDemo.DockManager
 
             if (parentGrid == this)
             {
-                this.Children.Remove(documentPane);
+                this.Children.Remove(dockPane);
             }
             else
             {
-                if (parentGrid.Parent is FloatingTool)
-                {
-                    return null;
-                }
+                //if (parentGrid.Parent is FloatingTool)
+                //{
+                //    return null;
+                //}
 
                 Grid grandparentGrid = parentGrid.Parent as Grid;
                 if (grandparentGrid == null)
                 {
                     throw new Exception(System.Reflection.MethodBase.GetCurrentMethod().Name + ": Grid parent not a Grid");
                 }
-                parentGrid.Children.Remove(documentPane);
+                parentGrid.Children.Remove(dockPane);
 
                 FrameworkElement frameworkElement = null;
                 foreach (var item in parentGrid.Children)
@@ -1130,61 +1125,61 @@ namespace WpfDockManagerDemo.DockManager
                 grandparentGrid.Children.Add(frameworkElement);
             }
 
-            return documentPane;
+            return dockPane;
         }
 
-        private ToolPane ExtractToolPane(ToolPane toolPane)
-        {
-            if (toolPane == null)
-            {
-                return null;
-            }
+        //private ToolPane ExtractToolPane(ToolPane toolPane)
+        //{
+        //    if (toolPane == null)
+        //    {
+        //        return null;
+        //    }
 
-            Grid parentGrid = toolPane.Parent as Grid;
-            if (parentGrid == null)
-            {
-                throw new Exception(System.Reflection.MethodBase.GetCurrentMethod().Name + ": ToolPane parent must be a Grid");
-            }
+        //    Grid parentGrid = toolPane.Parent as Grid;
+        //    if (parentGrid == null)
+        //    {
+        //        throw new Exception(System.Reflection.MethodBase.GetCurrentMethod().Name + ": ToolPane parent must be a Grid");
+        //    }
 
-            if (parentGrid == this)
-            {
-                this.Children.Remove(toolPane);
-            }
-            else
-            {
-                if (parentGrid.Parent is FloatingTool)
-                {
-                    return null;
-                }
+        //    if (parentGrid == this)
+        //    {
+        //        this.Children.Remove(toolPane);
+        //    }
+        //    else
+        //    {
+        //        if (parentGrid.Parent is FloatingTool)
+        //        {
+        //            return null;
+        //        }
 
-                Grid grandparentGrid = parentGrid.Parent as Grid;
-                if (grandparentGrid == null)
-                {
-                    throw new Exception(System.Reflection.MethodBase.GetCurrentMethod().Name + ": Grid parent not a Grid");
-                }
-                parentGrid.Children.Remove(toolPane);
+        //        Grid grandparentGrid = parentGrid.Parent as Grid;
+        //        if (grandparentGrid == null)
+        //        {
+        //            throw new Exception(System.Reflection.MethodBase.GetCurrentMethod().Name + ": Grid parent not a Grid");
+        //        }
+        //        parentGrid.Children.Remove(toolPane);
 
-                FrameworkElement frameworkElement = null;
-                foreach (var item in parentGrid.Children)
-                {
-                    if (!(item is GridSplitter))
-                    {
-                        frameworkElement = item as FrameworkElement;
-                        break;
-                    }
-                }
+        //        FrameworkElement frameworkElement = null;
+        //        foreach (var item in parentGrid.Children)
+        //        {
+        //            if (!(item is GridSplitter))
+        //            {
+        //                frameworkElement = item as FrameworkElement;
+        //                break;
+        //            }
+        //        }
 
-                System.Diagnostics.Trace.Assert(frameworkElement != null);
+        //        System.Diagnostics.Trace.Assert(frameworkElement != null);
 
-                parentGrid.Children.Remove(frameworkElement);
-                grandparentGrid.Children.Remove(parentGrid);
-                Grid.SetRow(frameworkElement, Grid.GetRow(parentGrid));
-                Grid.SetColumn(frameworkElement, Grid.GetColumn(parentGrid));
-                grandparentGrid.Children.Add(frameworkElement);
-            }
+        //        parentGrid.Children.Remove(frameworkElement);
+        //        grandparentGrid.Children.Remove(parentGrid);
+        //        Grid.SetRow(frameworkElement, Grid.GetRow(parentGrid));
+        //        Grid.SetColumn(frameworkElement, Grid.GetColumn(parentGrid));
+        //        grandparentGrid.Children.Add(frameworkElement);
+        //    }
 
-            return toolPane;
-        }
+        //    return toolPane;
+        //}
 
         private bool UngroupToolPane(ToolPane toolPane, int index, double paneWidth)
         {
@@ -1297,15 +1292,15 @@ namespace WpfDockManagerDemo.DockManager
 
             Point mainWindowLocation = App.Current.MainWindow.PointToScreen(new Point(0, 0));
 
+            ExtractDockPane(dockPane);
+
             FloatingPane floatingPane = null;
             if (dockPane is ToolPane)
             {
-                ExtractToolPane(dockPane as ToolPane);
                 floatingPane = CreateFloatingTool();
             }
             else
             {
-                ExtractDocumentPane(dockPane as DocumentPane);
                 floatingPane = CreateFloatingDocument();
             }
 
@@ -1333,16 +1328,17 @@ namespace WpfDockManagerDemo.DockManager
             }
         }
 
-        private void ToolPane_Close(object sender, EventArgs e)
+        // Warning warning => what about the view model? Remove from list???
+        private void DockPane_Close(object sender, EventArgs e)
         {
-            ToolPane toolPane = sender as ToolPane;
+            DockPane dockPane = sender as DockPane;
 
-            if (toolPane == null)
+            if (dockPane == null)
             {
                 return;
             }
 
-            ExtractToolPane(toolPane);
+            ExtractDockPane(dockPane);
         }
 
         private void FloatingTool_Closed(object sender, EventArgs e)

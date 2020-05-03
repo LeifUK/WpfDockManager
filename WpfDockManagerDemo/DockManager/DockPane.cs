@@ -22,6 +22,7 @@ namespace WpfDockManagerDemo.DockManager
 
         public event EventHandler Close;
         public event FloatEventHandler Float;
+        // Warning warning => move to document container
         public event EventHandler UngroupCurrent;
         public event EventHandler Ungroup;
         

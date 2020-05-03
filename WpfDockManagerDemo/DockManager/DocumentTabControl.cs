@@ -21,6 +21,7 @@ namespace WpfDockManagerDemo.DockManager
 
             Grid.SetRow(_tabHeaderControl, 1);
             Grid.SetColumn(_tabHeaderControl, 0);
+            //Grid.SetZIndex(_tabHeaderControl, 2);
             _tabHeaderControl.UnselectedTabBackground = System.Windows.Media.Brushes.MidnightBlue;
             _tabHeaderControl.SelectedTabBackground = System.Windows.Media.Brushes.LightSalmon;
 
@@ -62,15 +63,36 @@ namespace WpfDockManagerDemo.DockManager
             menuItem.Command = new Command(delegate { Float?.Invoke(this, null); }, delegate { return true; });
             contextMenu.Items.Add(menuItem);
 
+            int viewCount = _tabHeaderControl.Items.Count;
+            if (viewCount > 2)
+            {
+                menuItem = new MenuItem();
+                menuItem.Header = "Ungroup Current";
+                menuItem.IsChecked = false;
+                menuItem.Command = new Command(delegate { UngroupCurrent?.Invoke(this, null); }, delegate { return true; });
+                contextMenu.Items.Add(menuItem);
+            }
+
+            if (viewCount > 1)
+            {
+                menuItem = new MenuItem();
+                menuItem.Header = "Ungroup";
+                menuItem.IsChecked = false;
+                menuItem.Command = new Command(delegate { Ungroup?.Invoke(this, null); }, delegate { return true; });
+                contextMenu.Items.Add(menuItem);
+            }
+
             contextMenu.IsOpen = true;
         }
 
         public event System.EventHandler Float;
+        public event System.EventHandler UngroupCurrent;
+        public event System.EventHandler Ungroup;
 
-        private void _button_Click(object sender, RoutedEventArgs e)
-        {
-            DisplayItemsMenu();
-        }
+        //private void _button_Click(object sender, RoutedEventArgs e)
+        //{
+        //    DisplayItemsMenu();
+        //}
 
         private Button _documentButton;
         private Button _menuButton;
