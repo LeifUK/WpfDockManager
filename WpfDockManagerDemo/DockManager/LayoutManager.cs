@@ -382,61 +382,20 @@ namespace WpfDockManagerDemo.DockManager
         private DocumentPane CreateDocumentPane()
         {
             DocumentPane documentPane = new DocumentPane();
-            documentPane.Close += DockPane_Close; ;
+            documentPane.Close += DockPane_Close;
             documentPane.Float += DockPane_Float;
+            documentPane.UngroupCurrent += DockPane_UngroupCurrent;
+            documentPane.Ungroup += DockPane_Ungroup;
             return documentPane;
         }
-
-        //private void DocumentPane_Float(object sender, FloatEventArgs e)
-        //{
-        //    DockPane documentPane = sender as DockPane;
-
-        //    if (documentPane == null)
-        //    {
-        //        return;
-        //    }
-
-        //    Point cursorPositionOnScreen = WpfControlLibrary.Utilities.GetCursorPosition();
-        //    Point cursorPositionInMainWindow = App.Current.MainWindow.PointFromScreen(cursorPositionOnScreen);
-        //    Point cursorPositionInToolPane = documentPane.PointFromScreen(cursorPositionOnScreen);
-
-        //    Point mainWindowLocation = App.Current.MainWindow.PointToScreen(new Point(0, 0));
-
-        //    ExtractDocumentPane(documentPane);
-
-        //    FloatingDocument floatingDocument = CreateFloatingDocument();
-
-        //    while (true)
-        //    {
-        //        UserControl userControl = documentPane.IDocumentContainer.ExtractUserControl(0);
-        //        if (userControl == null)
-        //        {
-        //            break;
-        //        }
-
-        //        floatingDocument.IDocumentContainer.AddUserControl(userControl);
-        //    }
-
-        //    floatingDocument.Left = mainWindowLocation.X + cursorPositionInMainWindow.X - cursorPositionInToolPane.X;
-        //    floatingDocument.Top = mainWindowLocation.Y + cursorPositionInMainWindow.Y - cursorPositionInToolPane.Y;
-        //    floatingDocument.Width = documentPane.ActualWidth;
-        //    floatingDocument.Height = documentPane.ActualHeight;
-
-        //    if (e.Drag)
-        //    {
-        //        // Ensure the floated window can be dragged by the user
-        //        IntPtr hWnd = new System.Windows.Interop.WindowInteropHelper(floatingDocument).EnsureHandle();
-        //        WpfControlLibrary.Utilities.SendLeftMouseButtonDown(hWnd);
-        //    }
-        //}
 
         private ToolPane CreateToolPane()
         {
             ToolPane toolPane = new ToolPane();
             toolPane.Close += DockPane_Close;
             toolPane.Float += DockPane_Float;
-            toolPane.UngroupCurrent += ToolPane_UngroupCurrent;
-            toolPane.Ungroup += ToolPane_Ungroup;
+            toolPane.UngroupCurrent += DockPane_UngroupCurrent;
+            toolPane.Ungroup += DockPane_Ungroup;
             return toolPane;
         }
 
@@ -1181,14 +1140,14 @@ namespace WpfDockManagerDemo.DockManager
         //    return toolPane;
         //}
 
-        private bool UngroupToolPane(ToolPane toolPane, int index, double paneWidth)
+        private bool UngroupToolPane(DockPane dockPane, int index, double paneWidth)
         {
-            if (toolPane == null)
+            if (dockPane == null)
             {
-                throw new Exception(System.Reflection.MethodBase.GetCurrentMethod().Name + ": toolPane is null");
+                throw new Exception(System.Reflection.MethodBase.GetCurrentMethod().Name + ": dockPane is null");
             }
 
-            int viewCount = toolPane.IDocumentContainer.GetUserControlCount();
+            int viewCount = dockPane.IDocumentContainer.GetUserControlCount();
             if (viewCount < 2)
             {
                 // Cannot ungroup one item!
@@ -1196,30 +1155,31 @@ namespace WpfDockManagerDemo.DockManager
             }
 
             // The parent must be a SplitterPane or the LayoutManager
-            Grid parentSplitterPane = toolPane.Parent as Grid;
+            Grid parentSplitterPane = dockPane.Parent as Grid;
             if (parentSplitterPane == null)
             {
-                throw new Exception(System.Reflection.MethodBase.GetCurrentMethod().Name + ": toolPane.Parent not a Grid");
+                throw new Exception(System.Reflection.MethodBase.GetCurrentMethod().Name + ": dockPane.Parent not a Grid");
             }
 
-            UserControl userControl = toolPane.IDocumentContainer.ExtractUserControl(index);
+            UserControl userControl = dockPane.IDocumentContainer.ExtractUserControl(index);
             if (userControl == null)
             {
                 return false;
             }
 
-            ToolPane newDocumentPane = CreateToolPane();
-            newDocumentPane.IDocumentContainer.AddUserControl(userControl);
 
-            parentSplitterPane.Children.Remove(toolPane);
+            DockPane newDockPane = (dockPane is ToolPane) ? (DockPane) CreateToolPane() : CreateDocumentPane();
+            newDockPane.IDocumentContainer.AddUserControl(userControl);
+
+            parentSplitterPane.Children.Remove(dockPane);
 
             SplitterPane newGrid = new SplitterPane(false);
             parentSplitterPane.Children.Add(newGrid);
-            Grid.SetRow(newGrid, Grid.GetRow(toolPane));
-            Grid.SetColumn(newGrid, Grid.GetColumn(toolPane));
+            Grid.SetRow(newGrid, Grid.GetRow(dockPane));
+            Grid.SetColumn(newGrid, Grid.GetColumn(dockPane));
 
-            newGrid.AddChild(toolPane, true);
-            newGrid.AddChild(newDocumentPane, false);
+            newGrid.AddChild(dockPane, true);
+            newGrid.AddChild(newDockPane, false);
 
             /*
              * Now evenly space them 
@@ -1230,33 +1190,33 @@ namespace WpfDockManagerDemo.DockManager
             return true;
         }
 
-        private void ToolPane_Ungroup(object sender, EventArgs e)
+        private void DockPane_Ungroup(object sender, EventArgs e)
         {
-            ToolPane toolPane = sender as ToolPane;
-            var parentGrid = toolPane.Parent as Grid;
+            DockPane dockPane = sender as DockPane;
+            var parentGrid = dockPane.Parent as Grid;
 
             int count = 1;
-            double paneWidth = toolPane.ActualWidth / toolPane.IDocumentContainer.GetUserControlCount();
-            while (UngroupToolPane(toolPane, 1, paneWidth))
+            double paneWidth = dockPane.ActualWidth / dockPane.IDocumentContainer.GetUserControlCount();
+            while (UngroupToolPane(dockPane, 1, paneWidth))
             {
                 ++count;
                 // Nothing here
             }
         }
 
-        private void ToolPane_UngroupCurrent(object sender, EventArgs e)
+        private void DockPane_UngroupCurrent(object sender, EventArgs e)
         {
-            ToolPane toolPane = sender as ToolPane;
-            if (toolPane == null)
+            DockPane dockPane = sender as DockPane;
+            if (dockPane == null)
             {
                 throw new Exception(System.Reflection.MethodBase.GetCurrentMethod().Name + ": sender not a ToolPane");
             }
 
-            double paneWidth = toolPane.ActualWidth / 2;
-            int index = toolPane.IDocumentContainer.GetCurrentTabIndex();
+            double paneWidth = dockPane.ActualWidth / 2;
+            int index = dockPane.IDocumentContainer.GetCurrentTabIndex();
             if (index > -1)
             {
-                UngroupToolPane(toolPane, index, paneWidth);
+                UngroupToolPane(dockPane, index, paneWidth);
             }
         }
 

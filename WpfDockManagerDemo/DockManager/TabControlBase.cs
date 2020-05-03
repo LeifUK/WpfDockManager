@@ -88,14 +88,14 @@ namespace WpfDockManagerDemo.DockManager
         {
             if (_selectedUserControl != null)
             {
-                //Children.Remove(_selectedUserControl);
+                Children.Remove(_selectedUserControl);
                 _selectedUserControl = null;
             }
             
             if ((_tabHeaderControl.SelectedIndex > -1) && (_tabHeaderControl.SelectedIndex < _items.Count))
             {
                 _selectedUserControl = _items[_tabHeaderControl.SelectedIndex].Key;
-                //Children.Add(_selectedUserControl);
+                Children.Add(_selectedUserControl);
             }
 
             SelectionChanged?.Invoke(sender, e);
@@ -128,13 +128,13 @@ namespace WpfDockManagerDemo.DockManager
             _items.Add(new System.Collections.Generic.KeyValuePair<UserControl, IDocument>(userControl, iDocument));
             if (_selectedUserControl != null)
             {
-                //Children.Remove(_selectedUserControl);
+                Children.Remove(_selectedUserControl);
             }
             _selectedUserControl = userControl;
-            //Grid.SetRow(userControl, ContentRow);
-            //Grid.SetColumn(userControl, 0);
-            //Grid.SetColumnSpan(userControl, 99);
-            //Children.Add(userControl);
+            Grid.SetRow(userControl, ContentRow);
+            Grid.SetColumn(userControl, 0);
+            Grid.SetColumnSpan(userControl, 99);
+            Children.Add(userControl);
             // Do this AFTER adding the child 
             _tabHeaderControl.SelectedIndex = _items.Count - 1;
         }
@@ -150,7 +150,7 @@ namespace WpfDockManagerDemo.DockManager
             _items.RemoveAt(index);
             if (userControl == _selectedUserControl)
             {
-               // Children.Remove(_selectedUserControl);
+                Children.Remove(_selectedUserControl);
                 _selectedUserControl = null;
 
                 if (_items.Count > 0)
@@ -160,7 +160,7 @@ namespace WpfDockManagerDemo.DockManager
                         --index;
                     }
                     _selectedUserControl = _items[index].Key;
-                    //Children.Add(_selectedUserControl);
+                    Children.Add(_selectedUserControl);
                 }
             }
 
