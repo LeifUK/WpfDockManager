@@ -122,7 +122,7 @@ namespace WpfDockManagerDemo.DockManager
             {
                 items.Add((System.Collections.Generic.KeyValuePair<UserControl, IDocument>)item);
             }
-            int selectedIndex = _tabHeaderControl.SelectedIndex;
+            int selectedIndex = (_tabHeaderControl.SelectedIndex == -1) ? 0 : _tabHeaderControl.SelectedIndex;
 
             _items = items;
 

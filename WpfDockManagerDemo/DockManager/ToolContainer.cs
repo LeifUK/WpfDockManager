@@ -8,17 +8,32 @@ namespace WpfDockManagerDemo.DockManager
     {
         public ToolContainer()
         {
-            _items = new System.Collections.ObjectModel.ObservableCollection<System.Collections.Generic.KeyValuePair<UserControl, IDocument>>();
-
-            RowDefinitions.Add(new RowDefinition() { Height = new System.Windows.GridLength(1, System.Windows.GridUnitType.Star) });
-            RowDefinitions.Add(new RowDefinition() { Height = new System.Windows.GridLength(1, System.Windows.GridUnitType.Auto) });
-            RowDefinitions.Add(new RowDefinition() { Height = new System.Windows.GridLength(4, System.Windows.GridUnitType.Pixel) });
+            rowDefinition_UserControl = new RowDefinition() { Height = new System.Windows.GridLength(1, System.Windows.GridUnitType.Star) };
+            rowDefinition_TabHeader = new RowDefinition() { Height = new System.Windows.GridLength(1, System.Windows.GridUnitType.Auto) };
+            rowDefinition_Spacer = new RowDefinition() { Height = new System.Windows.GridLength(4, System.Windows.GridUnitType.Pixel) };
+            RowDefinitions.Add(rowDefinition_UserControl);
+            RowDefinitions.Add(rowDefinition_TabHeader);
+            RowDefinitions.Add(rowDefinition_Spacer);
 
             ColumnDefinitions.Add(new ColumnDefinition() { Width = new System.Windows.GridLength(1, System.Windows.GridUnitType.Star) });
             ColumnDefinitions.Add(new ColumnDefinition() { Width = new System.Windows.GridLength(4, System.Windows.GridUnitType.Pixel) });
             ColumnDefinitions.Add(new ColumnDefinition() { Width = new System.Windows.GridLength(20, System.Windows.GridUnitType.Pixel) });
             ColumnDefinitions.Add(new ColumnDefinition() { Width = new System.Windows.GridLength(4, System.Windows.GridUnitType.Pixel) });
 
+            _items = new System.Collections.ObjectModel.ObservableCollection<System.Collections.Generic.KeyValuePair<UserControl, IDocument>>();
+
+            _tabHeaderControl = new WpfControlLibrary.TabHeaderControl();
+            _tabHeaderControl.SelectionChanged += _tabHeaderControl_SelectionChanged;
+            _tabHeaderControl.CloseTabRequest += _tabHeaderControl_CloseTabRequest;
+            _tabHeaderControl.ItemsSource = _items;
+            _tabHeaderControl.DisplayMemberPath = "Value.Title";
+            _tabHeaderControl.ItemsChanged += _tabHeaderControl_ItemsChanged;
+            Children.Add(_tabHeaderControl);
+            Grid.SetRow(_tabHeaderControl, 1);
+            Grid.SetColumn(_tabHeaderControl, 0);
+            Grid.SetZIndex(_tabHeaderControl, 1);
+            _tabHeaderControl.UnselectedTabBackground = System.Windows.Media.Brushes.MidnightBlue;
+            _tabHeaderControl.SelectedTabBackground = System.Windows.Media.Brushes.LightSalmon;
 
             _border = new Border();
             Children.Add(_border);
@@ -43,22 +58,9 @@ namespace WpfDockManagerDemo.DockManager
             _button.Visibility = Visibility.Hidden;
         }
 
-        public WpfControlLibrary.TabHeaderControl CreateTabHeaderControl()
-        {
-            _tabHeaderControl = new WpfControlLibrary.TabHeaderControl();
-            _tabHeaderControl.SelectionChanged += _tabHeaderControl_SelectionChanged;
-            _tabHeaderControl.CloseTabRequest += _tabHeaderControl_CloseTabRequest;
-            _tabHeaderControl.ItemsSource = _items;
-            _tabHeaderControl.DisplayMemberPath = "Value.Title";
-            _tabHeaderControl.ItemsChanged += _tabHeaderControl_ItemsChanged;
-            Children.Add(_tabHeaderControl);
-            Grid.SetRow(_tabHeaderControl, 1);
-            Grid.SetColumn(_tabHeaderControl, 0);
-            Grid.SetZIndex(_tabHeaderControl, 1);
-            _tabHeaderControl.UnselectedTabBackground = System.Windows.Media.Brushes.MidnightBlue;
-            _tabHeaderControl.SelectedTabBackground = System.Windows.Media.Brushes.LightSalmon;
-            return _tabHeaderControl;
-        }
+        RowDefinition rowDefinition_UserControl;
+        RowDefinition rowDefinition_TabHeader;
+        RowDefinition rowDefinition_Spacer;
 
         protected System.Collections.ObjectModel.ObservableCollection<System.Collections.Generic.KeyValuePair<UserControl, IDocument>> _items;
         public WpfControlLibrary.TabHeaderControl _tabHeaderControl;
@@ -191,17 +193,7 @@ namespace WpfDockManagerDemo.DockManager
         {
             get
             {
-                if (_items.Count == 0)
-                {
-                    return null;
-                }
-                
-                if (_items.Count == 1)
-                {
-                    return _items[0].Value.Title;
-                }
-
-                if ((_tabHeaderControl == null) || (_tabHeaderControl.SelectedIndex == -1))
+                if ((_items.Count == 0) || (_tabHeaderControl.SelectedIndex == -1)
                 {
                     return null;
                 }
@@ -212,52 +204,11 @@ namespace WpfDockManagerDemo.DockManager
 
         public void AddUserControl(UserControl userControl)
         {
-            if (_items.Count == 0)
-            {
-                _items.Add(new System.Collections.Generic.KeyValuePair<UserControl, IDocument>(userControl, (userControl.DataContext) as IDocument));
-                Children.Add(userControl);
-                Grid.SetRow(userControl, 0);
-                Grid.SetRowSpan(userControl, 2);
-                Grid.SetColumn(userControl, 0);
-                Grid.SetColumnSpan(userControl, 4);
-            }
-            else if (_items.Count == 1)
-            {
-                UserControl userControl2 = _items[0].Key;
-                _items.RemoveAt(0);
-                Children.Remove(userControl2);
+            System.Diagnostics.Trace.Assert(userControl != null);
+            System.Diagnostics.Trace.Assert((userControl.DataContext as IDocument) != null);
 
-                CreateTabHeaderControl();
-
-                DoAddUserControl(userControl2);
-                DoAddUserControl(userControl);
-            }
-            else if (_items.Count > 1)
-            {
-                DoAddUserControl(userControl);
-            }
-            else
-            {
-                throw new Exception(System.Reflection.MethodBase.GetCurrentMethod().Name + ": Children[0] is not an expected type -> " + Children[0].GetType().FullName);
-            }
-        }
-
-
-        private void DoAddUserControl(UserControl userControl)
-        {
-            if (userControl == null)
-            {
-                throw new System.Exception(System.Reflection.MethodBase.GetCurrentMethod().Name + ": userControl is null");
-            }
-
-            IDocument iDocument = userControl.DataContext as IDocument;
-            if (iDocument == null)
-            {
-                throw new System.Exception(System.Reflection.MethodBase.GetCurrentMethod().Name + ": userControl is not a IDocument");
-            }
-
-            _items.Add(new System.Collections.Generic.KeyValuePair<UserControl, IDocument>(userControl, iDocument));
-            if (_selectedUserControl != null)
+            _items.Add(new System.Collections.Generic.KeyValuePair<UserControl, IDocument>(userControl, userControl.DataContext as IDocument));
+            if ((_selectedUserControl != null) && Children.Contains(_selectedUserControl))
             {
                 Children.Remove(_selectedUserControl);
             }
@@ -268,21 +219,21 @@ namespace WpfDockManagerDemo.DockManager
             Grid.SetColumnSpan(userControl, 99);
             // Do this AFTER adding the child 
             _tabHeaderControl.SelectedIndex = _items.Count - 1;
+
+            CheckTabCount();
         }
 
         private void CheckTabCount()
         {
-            if ((_items.Count == 1) && (_tabHeaderControl != null))
+            if (_items.Count == 1)
             {
-                Children.Remove(_tabHeaderControl);
-                _tabHeaderControl = null;
-
-                UserControl userControl = _items[0].Key;
-                Children.Add(userControl);
-                Grid.SetRow(userControl, 0);
-                Grid.SetRowSpan(userControl, 2);
-                Grid.SetColumn(userControl, 0);
-                Grid.SetColumnSpan(userControl, 4);
+                rowDefinition_TabHeader.Height = new GridLength(0);
+                rowDefinition_Spacer.Height = new GridLength(0);
+            }
+            else
+            {
+                rowDefinition_TabHeader.Height = new System.Windows.GridLength(1, System.Windows.GridUnitType.Auto);
+                rowDefinition_Spacer.Height = new System.Windows.GridLength(4, System.Windows.GridUnitType.Pixel);
             }
         }
 
@@ -310,7 +261,7 @@ namespace WpfDockManagerDemo.DockManager
                 Children.Remove(userControl);
                 _items.RemoveAt(0);
             }
-            else if ((_items.Count > 1) && (_tabHeaderControl != null))
+            else if (_items.Count > 1)
             {
                 var item = _items[index];
                 _items.RemoveAt(index);
@@ -325,10 +276,6 @@ namespace WpfDockManagerDemo.DockManager
                 }
                 CheckTabCount();
             }
-            else
-            {
-                throw new Exception(System.Reflection.MethodBase.GetCurrentMethod().Name + ": Children[0] is not an expected type -> " + Children[0].GetType().FullName);
-            }
 
             return userControl;
         }
@@ -340,17 +287,12 @@ namespace WpfDockManagerDemo.DockManager
 
         public int GetCurrentTabIndex()
         {
-            switch (_items.Count)
+            if (_items.Count == 0)
             {
-                case 0:
-                    return -1;
-                case 1:
-                    return 0;
-                default:
-                    return (_tabHeaderControl != null) ? _tabHeaderControl.SelectedIndex : -1;
+                return -1;
             }
 
-            throw new Exception(System.Reflection.MethodBase.GetCurrentMethod().Name + ": Children[0] is not an expected type -> " + Children[0].GetType().FullName);
+            return _tabHeaderControl.SelectedIndex;
         }
 
         public UserControl GetUserControl(int index)
