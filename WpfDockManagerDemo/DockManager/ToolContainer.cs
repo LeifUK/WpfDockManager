@@ -193,7 +193,7 @@ namespace WpfDockManagerDemo.DockManager
         {
             get
             {
-                if ((_items.Count == 0) || (_tabHeaderControl.SelectedIndex == -1)
+                if ((_items.Count == 0) || (_tabHeaderControl.SelectedIndex == -1))
                 {
                     return null;
                 }
@@ -205,7 +205,7 @@ namespace WpfDockManagerDemo.DockManager
         public void AddUserControl(UserControl userControl)
         {
             System.Diagnostics.Trace.Assert(userControl != null);
-            System.Diagnostics.Trace.Assert((userControl.DataContext as IDocument) != null);
+            System.Diagnostics.Trace.Assert(userControl.DataContext is IDocument);
 
             _items.Add(new System.Collections.Generic.KeyValuePair<UserControl, IDocument>(userControl, userControl.DataContext as IDocument));
             if ((_selectedUserControl != null) && Children.Contains(_selectedUserControl))

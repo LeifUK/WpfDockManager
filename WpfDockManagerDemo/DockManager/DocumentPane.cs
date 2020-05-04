@@ -67,8 +67,7 @@ namespace WpfDockManagerDemo.DockManager
 
         private void DocumentContainer_SelectionChanged(object sender, EventArgs e)
         {
-            // Warning warning
-            //_titleLabel.Content = IDocumentContainer.Title;
+            // Nothing to do!
         }
 
         protected Label _titleLabel;

@@ -379,23 +379,27 @@ namespace WpfDockManagerDemo.DockManager
             }
         }
 
+        private void RegisterDockPane(DockPane dockPane)
+        {
+            System.Diagnostics.Trace.Assert(dockPane != null);
+
+            dockPane.Close += DockPane_Close;
+            dockPane.Float += DockPane_Float;
+            dockPane.UngroupCurrent += DockPane_UngroupCurrent;
+            dockPane.Ungroup += DockPane_Ungroup;
+        }
+
         private DocumentPane CreateDocumentPane()
         {
             DocumentPane documentPane = new DocumentPane();
-            documentPane.Close += DockPane_Close;
-            documentPane.Float += DockPane_Float;
-            documentPane.UngroupCurrent += DockPane_UngroupCurrent;
-            documentPane.Ungroup += DockPane_Ungroup;
+            RegisterDockPane(documentPane);
             return documentPane;
         }
 
         private ToolPane CreateToolPane()
         {
             ToolPane toolPane = new ToolPane();
-            toolPane.Close += DockPane_Close;
-            toolPane.Float += DockPane_Float;
-            toolPane.UngroupCurrent += DockPane_UngroupCurrent;
-            toolPane.Ungroup += DockPane_Ungroup;
+            RegisterDockPane(toolPane);
             return toolPane;
         }
 
@@ -1033,7 +1037,6 @@ namespace WpfDockManagerDemo.DockManager
         /*
          * Remove a document pane from the document tree
          */
-         // Warning warning => this is essentially the same as ExtractToolPane => rplace DocumentPane with DockPane
         private DockPane ExtractDockPane(DockPane dockPane)
         {
             if (dockPane == null)
@@ -1086,59 +1089,6 @@ namespace WpfDockManagerDemo.DockManager
 
             return dockPane;
         }
-
-        //private ToolPane ExtractToolPane(ToolPane toolPane)
-        //{
-        //    if (toolPane == null)
-        //    {
-        //        return null;
-        //    }
-
-        //    Grid parentGrid = toolPane.Parent as Grid;
-        //    if (parentGrid == null)
-        //    {
-        //        throw new Exception(System.Reflection.MethodBase.GetCurrentMethod().Name + ": ToolPane parent must be a Grid");
-        //    }
-
-        //    if (parentGrid == this)
-        //    {
-        //        this.Children.Remove(toolPane);
-        //    }
-        //    else
-        //    {
-        //        if (parentGrid.Parent is FloatingTool)
-        //        {
-        //            return null;
-        //        }
-
-        //        Grid grandparentGrid = parentGrid.Parent as Grid;
-        //        if (grandparentGrid == null)
-        //        {
-        //            throw new Exception(System.Reflection.MethodBase.GetCurrentMethod().Name + ": Grid parent not a Grid");
-        //        }
-        //        parentGrid.Children.Remove(toolPane);
-
-        //        FrameworkElement frameworkElement = null;
-        //        foreach (var item in parentGrid.Children)
-        //        {
-        //            if (!(item is GridSplitter))
-        //            {
-        //                frameworkElement = item as FrameworkElement;
-        //                break;
-        //            }
-        //        }
-
-        //        System.Diagnostics.Trace.Assert(frameworkElement != null);
-
-        //        parentGrid.Children.Remove(frameworkElement);
-        //        grandparentGrid.Children.Remove(parentGrid);
-        //        Grid.SetRow(frameworkElement, Grid.GetRow(parentGrid));
-        //        Grid.SetColumn(frameworkElement, Grid.GetColumn(parentGrid));
-        //        grandparentGrid.Children.Add(frameworkElement);
-        //    }
-
-        //    return toolPane;
-        //}
 
         private bool UngroupToolPane(DockPane dockPane, int index, double paneWidth)
         {

@@ -150,6 +150,11 @@ namespace WpfDockManagerDemo.DockManager
             SelectionChanged?.Invoke(sender, e);
         }
 
+        private void TabControl_TabClosed(object sender, EventArgs e)
+        {
+            // WArning warning
+        }
+
         private UserControl _selectedUserControl;
         private WpfControlLibrary.TabHeaderControl _tabHeaderControl;
         private Button _documentButton;
@@ -166,41 +171,22 @@ namespace WpfDockManagerDemo.DockManager
         {
             get
             {
-                if (_tabHeaderControl.SelectedItem == null)
+                if ((_items.Count == 0) || (_tabHeaderControl.SelectedIndex == -1))
                 {
                     return null;
                 }
 
-                IDocument iDocument = _items[_tabHeaderControl.SelectedIndex].Value;
-                if (iDocument == null)
-                {
-                    return null;
-                }
-
-                return iDocument.Title;
+                return _items[_tabHeaderControl.SelectedIndex].Value.Title;
             }
         }
 
         public void AddUserControl(UserControl userControl)
         {
-            if (userControl == null)
-            {
-                throw new System.Exception(System.Reflection.MethodBase.GetCurrentMethod().Name + ": userControl is null");
-            }
+            System.Diagnostics.Trace.Assert(userControl != null);
+            System.Diagnostics.Trace.Assert(userControl.DataContext is IDocument);
 
-            IDocument iDocument = userControl.DataContext as IDocument;
-            if (iDocument == null)
-            {
-                throw new System.Exception(System.Reflection.MethodBase.GetCurrentMethod().Name + ": userControl is not a IDocument");
-            }
-
-            _items.Add(new System.Collections.Generic.KeyValuePair<UserControl, IDocument>(userControl, iDocument));
-            _tabHeaderControl.SelectedIndex = _items.Count - 1;
-        }
-
-        private void TabControl_TabClosed(object sender, EventArgs e)
-        {
-            // WArning warning
+            _items.Add(new System.Collections.Generic.KeyValuePair<UserControl, IDocument>(userControl, userControl.DataContext as IDocument));
+            _tabHeaderControl.SelectedItem = _items[_items.Count - 1];
         }
 
         public UserControl ExtractUserControl(int index)
@@ -212,20 +198,6 @@ namespace WpfDockManagerDemo.DockManager
 
             UserControl userControl = _items[index].Key;
             _items.RemoveAt(index);
-            if (userControl == _selectedUserControl)
-            {
-                Children.Remove(_selectedUserControl);
-                _selectedUserControl = null;
-
-                if (_items.Count > 0)
-                {
-                    if (index >= _items.Count)
-                    {
-                        --index;
-                    }
-                    _tabHeaderControl.SelectedIndex = index;
-                }
-            }
 
             return userControl;
         }
