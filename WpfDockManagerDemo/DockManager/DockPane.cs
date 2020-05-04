@@ -11,18 +11,11 @@ namespace WpfDockManagerDemo.DockManager
         public DockPane(IDocumentContainer iDocumentContainer)
         {
             IDocumentContainer = iDocumentContainer;
-            IDocumentContainer.Float += IDocumentContainer_Float;
             Children.Add(iDocumentContainer as System.Windows.UIElement);
-        }
-
-        private void IDocumentContainer_Float(object sender, EventArgs e)
-        {
-            FireFloat(false);
         }
 
         public event EventHandler Close;
         public event FloatEventHandler Float;
-        // Warning warning => move to document container
         public event EventHandler UngroupCurrent;
         public event EventHandler Ungroup;
         
@@ -40,16 +33,37 @@ namespace WpfDockManagerDemo.DockManager
             Float?.Invoke(this, floatEventArgs);
         }
 
-        protected void FireUngroupCurrent()
-        {
-            UngroupCurrent?.Invoke(this, null);
-        }
-
-        protected void FireUngroup()
-        {
-            Ungroup?.Invoke(this, null);
-        }
-
         public readonly IDocumentContainer IDocumentContainer;
+
+        protected void DisplayGeneralMenu()
+        {
+            ContextMenu contextMenu = new ContextMenu();
+            MenuItem menuItem = new MenuItem();
+            menuItem.Header = "Float";
+            menuItem.IsChecked = false;
+            menuItem.Command = new Command(delegate { FireFloat(false); }, delegate { return true; });
+            contextMenu.Items.Add(menuItem);
+
+            int viewCount = IDocumentContainer.GetUserControlCount();
+            if (viewCount > 2)
+            {
+                menuItem = new MenuItem();
+                menuItem.Header = "Ungroup Current";
+                menuItem.IsChecked = false;
+                menuItem.Command = new Command(delegate { UngroupCurrent?.Invoke(this, null); }, delegate { return true; });
+                contextMenu.Items.Add(menuItem);
+            }
+
+            if (viewCount > 1)
+            {
+                menuItem = new MenuItem();
+                menuItem.Header = "Ungroup";
+                menuItem.IsChecked = false;
+                menuItem.Command = new Command(delegate { Ungroup?.Invoke(this, null); }, delegate { return true; });
+                contextMenu.Items.Add(menuItem);
+            }
+
+            contextMenu.IsOpen = true;
+        }
     }
 }

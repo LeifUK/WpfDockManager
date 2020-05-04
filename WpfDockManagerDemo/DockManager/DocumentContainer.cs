@@ -49,7 +49,7 @@ namespace WpfDockManagerDemo.DockManager
             Children.Add(_menuButton);
             Grid.SetRow(_menuButton, 1);
             Grid.SetColumn(_menuButton, 2);
-            _menuButton.Click += delegate { DisplayGeneralMenu(); };
+            _menuButton.Click += delegate { if (DisplayGeneralMenu != null) DisplayGeneralMenu(); };
             // Warning warning warning
             System.Windows.ResourceDictionary res = (System.Windows.ResourceDictionary)App.LoadComponent(new System.Uri("/WpfDockManagerDemo;component/DockManager/Dictionary.xaml", System.UriKind.Relative));
             _menuButton.Style = (System.Windows.Style)res["styleDocumentMenuButton"];
@@ -58,61 +58,12 @@ namespace WpfDockManagerDemo.DockManager
             Children.Add(_documentButton);
             Grid.SetRow(_documentButton, 1);
             Grid.SetColumn(_documentButton, 4);
-            _documentButton.Click += delegate { DisplayItemsMenu(); };
+            _documentButton.Click += delegate { Helpers.DisplayItemsMenu(_items, _tabHeaderControl, _selectedUserControl); };
             _documentButton.Style = FindResource("styleHeaderMenuButton") as Style;
         }
 
-        System.Collections.ObjectModel.ObservableCollection<System.Collections.Generic.KeyValuePair<UserControl, IDocument>> _items;
-
-        public void DisplayItemsMenu()
-        {
-            ContextMenu contextMenu = new ContextMenu();
-            int i = 0;
-            foreach (var item in _items)
-            {
-                MenuItem menuItem = new MenuItem();
-                menuItem.Header = item.Value.Title;
-                menuItem.IsChecked = item.Key == _selectedUserControl;
-                menuItem.CommandParameter = i;
-                ++i;
-                menuItem.Command = new Command(delegate { _tabHeaderControl.SelectedIndex = (int)menuItem.CommandParameter; }, delegate { return true; });
-                contextMenu.Items.Add(menuItem);
-            }
-
-            contextMenu.IsOpen = true;
-        }
-
-        private void DisplayGeneralMenu()
-        {
-            ContextMenu contextMenu = new ContextMenu();
-            int i = 0;
-            MenuItem menuItem = new MenuItem();
-            menuItem.Header = "Float";
-            menuItem.IsChecked = false;
-            menuItem.Command = new Command(delegate { Float?.Invoke(this, null); }, delegate { return true; });
-            contextMenu.Items.Add(menuItem);
-
-            int viewCount = _items.Count;
-            if (viewCount > 2)
-            {
-                menuItem = new MenuItem();
-                menuItem.Header = "Ungroup Current";
-                menuItem.IsChecked = false;
-                menuItem.Command = new Command(delegate { UngroupCurrent?.Invoke(this, null); }, delegate { return true; });
-                contextMenu.Items.Add(menuItem);
-            }
-
-            if (viewCount > 1)
-            {
-                menuItem = new MenuItem();
-                menuItem.Header = "Ungroup";
-                menuItem.IsChecked = false;
-                menuItem.Command = new Command(delegate { Ungroup?.Invoke(this, null); }, delegate { return true; });
-                contextMenu.Items.Add(menuItem);
-            }
-
-            contextMenu.IsOpen = true;
-        }
+        private System.Collections.ObjectModel.ObservableCollection<System.Collections.Generic.KeyValuePair<UserControl, IDocument>> _items;
+        public Action DisplayGeneralMenu;
 
         private void _tabHeaderControl_ItemsChanged(object sender, EventArgs e)
         {
@@ -152,7 +103,7 @@ namespace WpfDockManagerDemo.DockManager
 
         private void TabControl_TabClosed(object sender, EventArgs e)
         {
-            // WArning warning
+            TabClosed?.Invoke(sender, e);
         }
 
         private UserControl _selectedUserControl;
@@ -163,9 +114,7 @@ namespace WpfDockManagerDemo.DockManager
         #region IDocumentContainer
 
         public event EventHandler SelectionChanged;
-        public event EventHandler Float;
-        public event EventHandler UngroupCurrent;
-        public event EventHandler Ungroup;
+        public event EventHandler TabClosed;
 
         public string Title
         {
@@ -198,6 +147,10 @@ namespace WpfDockManagerDemo.DockManager
 
             UserControl userControl = _items[index].Key;
             _items.RemoveAt(index);
+            if (Children.Contains(userControl))
+            {
+                Children.Remove(userControl);
+            }
 
             return userControl;
         }

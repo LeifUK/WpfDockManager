@@ -68,6 +68,7 @@
       <DependentUpon>FloatingPane.xaml</DependentUpon>
     </Compile>
     <Compile Include="DockManager\FloatingTool.cs" />
+    <Compile Include="DockManager\Helpers.cs" />
     <Compile Include="DockManager\ToolContainer.cs" />
     <Compile Include="DockManager\DocumentContainer.cs" />
     <Compile Include="DockManager\DocumentPane.cs" />

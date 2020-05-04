@@ -44,18 +44,16 @@ namespace WpfDockManagerDemo.DockManager
             Grid.SetZIndex(_border, -1);
             _border.HorizontalAlignment = System.Windows.HorizontalAlignment.Stretch;
             _border.VerticalAlignment = System.Windows.VerticalAlignment.Stretch;
-            _border.Background = System.Windows.Media.Brushes.Orange;
-            _border.Visibility = Visibility.Hidden;
+            _border.Background = System.Windows.Media.Brushes.Gray;
 
             _button = new Button();
             Children.Add(_button);
             Grid.SetRow(_button, 1);
             Grid.SetColumn(_button, 2);
-            _button.Click += _button_Click; ;
+            _button.Click += delegate { Helpers.DisplayItemsMenu(_items, _tabHeaderControl, _selectedUserControl); };
             // Warning warning warning
             System.Windows.ResourceDictionary res = (System.Windows.ResourceDictionary)App.LoadComponent(new System.Uri("/WpfDockManagerDemo;component/DockManager/Dictionary.xaml", System.UriKind.Relative));
             _button.Style = (System.Windows.Style)res["MenuButtonStyle"];
-            _button.Visibility = Visibility.Hidden;
         }
 
         RowDefinition rowDefinition_UserControl;
@@ -158,36 +156,34 @@ namespace WpfDockManagerDemo.DockManager
             return userControl;
         }
 
-        // Warning warning
-        public void DisplayItemsMenu()
+        private void CheckTabCount()
         {
-            ContextMenu contextMenu = new ContextMenu();
-            int i = 0;
-            foreach (var item in _items)
+            if (_items.Count == 1)
             {
-                MenuItem menuItem = new MenuItem();
-                menuItem.Header = item.Value.Title;
-                menuItem.IsChecked = item.Key == _selectedUserControl;
-                menuItem.CommandParameter = i;
-                ++i;
-                menuItem.Command = new Command(delegate { _tabHeaderControl.SelectedIndex = (int)menuItem.CommandParameter; }, delegate { return true; });
-                contextMenu.Items.Add(menuItem);
+                rowDefinition_TabHeader.Height = new GridLength(0);
+                rowDefinition_Spacer.Height = new GridLength(0);
             }
-
-            contextMenu.IsOpen = true;
+            else
+            {
+                rowDefinition_TabHeader.Height = new System.Windows.GridLength(1, System.Windows.GridUnitType.Auto);
+                rowDefinition_Spacer.Height = new System.Windows.GridLength(4, System.Windows.GridUnitType.Pixel);
+            }
         }
 
-        private void _button_Click(object sender, RoutedEventArgs e)
+        private void TabControl_TabClosed(object sender, EventArgs e)
         {
-            DisplayItemsMenu();
+            CheckTabCount();
         }
+
+        private void TabControl_SelectionChanged(object sender, EventArgs e)
+        {
+            SelectionChanged?.Invoke(sender, e);
+        }
+
+        #region IDocumentContainer
 
         public event EventHandler SelectionChanged;
         public event EventHandler TabClosed;
-        // Warning warning
-        public event EventHandler Float;
-        public event EventHandler UngroupCurrent;
-        public event EventHandler Ungroup;
 
         public string Title
         {
@@ -223,30 +219,6 @@ namespace WpfDockManagerDemo.DockManager
             CheckTabCount();
         }
 
-        private void CheckTabCount()
-        {
-            if (_items.Count == 1)
-            {
-                rowDefinition_TabHeader.Height = new GridLength(0);
-                rowDefinition_Spacer.Height = new GridLength(0);
-            }
-            else
-            {
-                rowDefinition_TabHeader.Height = new System.Windows.GridLength(1, System.Windows.GridUnitType.Auto);
-                rowDefinition_Spacer.Height = new System.Windows.GridLength(4, System.Windows.GridUnitType.Pixel);
-            }
-        }
-
-        private void TabControl_TabClosed(object sender, EventArgs e)
-        {
-            CheckTabCount();
-        }
-
-        private void TabControl_SelectionChanged(object sender, EventArgs e)
-        {
-            SelectionChanged?.Invoke(sender, e);
-        }
-
         public UserControl ExtractUserControl(int index)
         {
             if ((index < 0) || (index >= _items.Count))
@@ -254,28 +226,13 @@ namespace WpfDockManagerDemo.DockManager
                 return null;
             }
 
-            UserControl userControl = null;
-            if (_items.Count == 1)
+            UserControl userControl = _items[index].Key;
+            _items.RemoveAt(index);
+            if (Children.Contains(userControl))
             {
-                userControl = _items[0].Key;
                 Children.Remove(userControl);
-                _items.RemoveAt(0);
             }
-            else if (_items.Count > 1)
-            {
-                var item = _items[index];
-                _items.RemoveAt(index);
-                userControl = item.Key;
-                if (index > 0)
-                {
-                    --index;
-                }
-                if (_items.Count > 0)
-                {
-                    _tabHeaderControl.SelectedIndex = index;
-                }
-                CheckTabCount();
-            }
+            CheckTabCount();
 
             return userControl;
         }
@@ -304,5 +261,7 @@ namespace WpfDockManagerDemo.DockManager
 
             return _items[index].Key;
         }
+
+        #endregion IDocumentContainer
     }
 }

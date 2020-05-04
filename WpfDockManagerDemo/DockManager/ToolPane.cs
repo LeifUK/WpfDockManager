@@ -60,7 +60,7 @@ namespace WpfDockManagerDemo.DockManager
 
             Button menuButton = new Button();
             menuButton.Style = FindResource("styleHeaderMenuButton") as Style;
-            menuButton.Click += MenuButton_Click;
+            menuButton.Click += delegate { DisplayGeneralMenu(); };
             Grid.SetRow(menuButton, 0);
             Grid.SetColumn(menuButton, 2);
             Children.Add(menuButton);
@@ -91,37 +91,6 @@ namespace WpfDockManagerDemo.DockManager
         }
 
         protected Label _titleLabel;
-
-        protected void MenuButton_Click(object sender, RoutedEventArgs e)
-        {
-            ContextMenu contextMenu = new ContextMenu();
-            MenuItem menuItem = new MenuItem();
-            menuItem.Header = "Float";
-            menuItem.IsChecked = false;
-            menuItem.Command = new Command(delegate { FireFloat(false); }, delegate { return true; });
-            contextMenu.Items.Add(menuItem);
-
-            int viewCount = IDocumentContainer.GetUserControlCount();
-            if (viewCount > 2)
-            {
-                menuItem = new MenuItem();
-                menuItem.Header = "Ungroup Current";
-                menuItem.IsChecked = false;
-                menuItem.Command = new Command(delegate { FireUngroupCurrent(); }, delegate { return true; });
-                contextMenu.Items.Add(menuItem);
-            }
-
-            if (viewCount > 1)
-            {
-                menuItem = new MenuItem();
-                menuItem.Header = "Ungroup";
-                menuItem.IsChecked = false;
-                menuItem.Command = new Command(delegate { FireUngroup(); }, delegate { return true; });
-                contextMenu.Items.Add(menuItem);
-            }
-
-            contextMenu.IsOpen = true;
-        }
 
         public Border Border { get; private set; }
 

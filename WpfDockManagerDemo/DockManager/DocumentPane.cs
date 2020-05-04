@@ -9,6 +9,8 @@ namespace WpfDockManagerDemo.DockManager
     {
         public DocumentPane() : base(new DocumentContainer())
         {
+            (IDocumentContainer as DocumentContainer).DisplayGeneralMenu = DisplayGeneralMenu;
+
             VerticalAlignment = System.Windows.VerticalAlignment.Stretch;
             HorizontalAlignment = HorizontalAlignment.Stretch;
 
@@ -48,29 +50,15 @@ namespace WpfDockManagerDemo.DockManager
             Children.Add(Border);
 
             IDocumentContainer.SelectionChanged += DocumentContainer_SelectionChanged;
-            IDocumentContainer.Ungroup += IDocumentContainer_Ungroup;
-            IDocumentContainer.UngroupCurrent += IDocumentContainer_UngroupCurrent;
             Grid.SetRow(IDocumentContainer as System.Windows.UIElement, 0);
             Grid.SetColumn(IDocumentContainer as System.Windows.UIElement, 0);
             Grid.SetColumnSpan(IDocumentContainer as System.Windows.UIElement, ColumnDefinitions.Count);
-        }
-
-        private void IDocumentContainer_UngroupCurrent(object sender, EventArgs e)
-        {
-            FireUngroupCurrent();
-        }
-
-        private void IDocumentContainer_Ungroup(object sender, EventArgs e)
-        {
-            FireUngroup();
         }
 
         private void DocumentContainer_SelectionChanged(object sender, EventArgs e)
         {
             // Nothing to do!
         }
-
-        protected Label _titleLabel;
 
         public Border Border { get; private set; }
 
