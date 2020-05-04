@@ -13,9 +13,6 @@ namespace WpfDockManagerDemo.DockManager
         UserControl GetUserControl(int index);
 
         event EventHandler SelectionChanged;
-        //event EventHandler Float;
-        //event EventHandler UngroupCurrent;
-        //event EventHandler Ungroup;
         event EventHandler TabClosed;
     }
 }
