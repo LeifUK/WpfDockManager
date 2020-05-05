@@ -4,7 +4,7 @@ using System.Windows.Controls;
 
 namespace WpfDockManagerDemo.DockManager
 {
-    internal class DocumentContainer : Grid, IDocumentContainer
+    internal class DocumentContainer : Grid, IUserViewContainer
     {
         public DocumentContainer()
         {
@@ -14,6 +14,7 @@ namespace WpfDockManagerDemo.DockManager
             _tabHeaderControl.DisplayMemberPath = "Value.Title";
             _tabHeaderControl.ItemsChanged += _tabHeaderControl_ItemsChanged;
             _tabHeaderControl.SelectionChanged += TabHeaderControl_SelectionChanged;
+            _tabHeaderControl.CloseTabRequest += _tabHeaderControl_CloseTabRequest;
             Children.Add(_tabHeaderControl);
 
             RowDefinitions.Add(new RowDefinition() { Height = new System.Windows.GridLength(4, System.Windows.GridUnitType.Pixel) });
@@ -33,17 +34,6 @@ namespace WpfDockManagerDemo.DockManager
             Grid.SetColumnSpan(_tabHeaderControl, 1);
             _tabHeaderControl.UnselectedTabBackground = System.Windows.Media.Brushes.MidnightBlue;
             _tabHeaderControl.SelectedTabBackground = System.Windows.Media.Brushes.LightSalmon;
-
-            Border border = new Border();
-            Children.Add(border);
-            Grid.SetRow(border, 0);
-            Grid.SetRowSpan(border, 2);
-            Grid.SetColumn(border, 0);
-            Grid.SetColumnSpan(border, 4);
-            Grid.SetZIndex(border, -1);
-            border.HorizontalAlignment = System.Windows.HorizontalAlignment.Stretch;
-            border.VerticalAlignment = System.Windows.VerticalAlignment.Stretch;
-            border.Background = System.Windows.Media.Brushes.SlateGray;
 
             _menuButton = new Button();
             Children.Add(_menuButton);
@@ -101,8 +91,17 @@ namespace WpfDockManagerDemo.DockManager
             SelectionChanged?.Invoke(sender, e);
         }
 
-        private void TabControl_TabClosed(object sender, EventArgs e)
+        private void _tabHeaderControl_CloseTabRequest(object sender, EventArgs e)
         {
+            for (int index = 0; index < _items.Count; ++index)
+            {
+                System.Collections.Generic.KeyValuePair<UserControl, IDocument> item = (System.Collections.Generic.KeyValuePair<UserControl, IDocument>)sender;
+                if (_items[index].Key == item.Key)
+                {
+                    _items.RemoveAt(index);
+                    break;
+                }
+            }
             TabClosed?.Invoke(sender, e);
         }
 

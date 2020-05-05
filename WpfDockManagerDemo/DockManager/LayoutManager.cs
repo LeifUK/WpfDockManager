@@ -364,7 +364,7 @@ namespace WpfDockManagerDemo.DockManager
 
                     node = views[viewIndex];
                     DockManager.DockPane dockPane = createDockPane();
-                    dockPane.IDocumentContainer.AddUserControl(node as UserControl);
+                    dockPane.IUserViewContainer.AddUserControl(node as UserControl);
 
                     list_N_plus_1.Add(dockPane);
 
@@ -489,7 +489,7 @@ namespace WpfDockManagerDemo.DockManager
                 List<FrameworkElement> list_N = new List<FrameworkElement>();
 
                 DockManager.DockPane documentPane = CreateDocumentPane();
-                documentPane.IDocumentContainer.AddUserControl(documentViews[0]);
+                documentPane.IUserViewContainer.AddUserControl(documentViews[0]);
 
                 documentPanel.Children.Add(documentPane);
                 list_N.Add(documentPane);
@@ -502,7 +502,7 @@ namespace WpfDockManagerDemo.DockManager
                 List<FrameworkElement> list_N = new List<FrameworkElement>();
 
                 DockManager.DockPane toolPane = CreateToolPane();
-                toolPane.IDocumentContainer.AddUserControl(toolViews[0]);
+                toolPane.IUserViewContainer.AddUserControl(toolViews[0]);
 
                 rootSplitterPane.AddChild(toolPane, false);
 
@@ -724,7 +724,7 @@ namespace WpfDockManagerDemo.DockManager
             else if (node is DocumentPane)
             {
                 DocumentPane documentPane = node as DocumentPane;
-                int count = documentPane.IDocumentContainer.GetUserControlCount();
+                int count = documentPane.IUserViewContainer.GetUserControlCount();
                 if (count < 1)
                 {
                     throw new Exception(System.Reflection.MethodBase.GetCurrentMethod().Name + ": no documents");
@@ -734,7 +734,7 @@ namespace WpfDockManagerDemo.DockManager
 
                 for (int index = 0; index < count; ++index)
                 {
-                    UserControl userControl = documentPane.IDocumentContainer.GetUserControl(index);
+                    UserControl userControl = documentPane.IUserViewContainer.GetUserControl(index);
                     if (userControl == null)
                     {
                         break;
@@ -745,7 +745,7 @@ namespace WpfDockManagerDemo.DockManager
             else if (node is ToolPane)
             {
                 ToolPane toolPane = node as ToolPane;
-                int count = toolPane.IDocumentContainer.GetUserControlCount();
+                int count = toolPane.IUserViewContainer.GetUserControlCount();
                 if (count < 1)
                 {
                     throw new Exception(System.Reflection.MethodBase.GetCurrentMethod().Name + ": no tools");
@@ -755,7 +755,7 @@ namespace WpfDockManagerDemo.DockManager
 
                 for (int index = 0; index < count; ++index)
                 {
-                    UserControl userControl = toolPane.IDocumentContainer.GetUserControl(index);
+                    UserControl userControl = toolPane.IUserViewContainer.GetUserControl(index);
                     if (userControl == null)
                     {
                         break;
@@ -784,7 +784,7 @@ namespace WpfDockManagerDemo.DockManager
             SaveNode(xmlDocument, Children[0], xmlLayoutManager);
             foreach (FloatingTool floatingTool in FloatingTools)
             {
-                int count = floatingTool.IDocumentContainer.GetUserControlCount();
+                int count = floatingTool.IUserViewContainer.GetUserControlCount();
                 if (count < 1)
                 {
                     throw new Exception(System.Reflection.MethodBase.GetCurrentMethod().Name + ": no documents");
@@ -794,7 +794,7 @@ namespace WpfDockManagerDemo.DockManager
 
                 for (int index = 0; index < count; ++index)
                 {
-                    UserControl userControl = floatingTool.IDocumentContainer.GetUserControl(index);
+                    UserControl userControl = floatingTool.IUserViewContainer.GetUserControl(index);
                     if (userControl == null)
                     {
                         break;
@@ -843,7 +843,7 @@ namespace WpfDockManagerDemo.DockManager
             }
         }
 
-        private void LoadToolGroup(Dictionary<string, UserControl> viewsMap, XmlElement xmlToolGroup, IDocumentContainer iDocumentContainer)
+        private void LoadToolGroup(Dictionary<string, UserControl> viewsMap, XmlElement xmlToolGroup, IUserViewContainer iUserViewContainer)
         {
             foreach (var xmlToolGroupNode in xmlToolGroup.ChildNodes)
             {
@@ -861,7 +861,7 @@ namespace WpfDockManagerDemo.DockManager
                         
                         if (viewsMap.ContainsKey(xmlAttribute.Value))
                         {
-                            iDocumentContainer.AddUserControl(viewsMap[xmlAttribute.Value]);
+                            iUserViewContainer.AddUserControl(viewsMap[xmlAttribute.Value]);
                             viewsMap.Remove(xmlAttribute.Value);
                         }
                     }
@@ -869,7 +869,7 @@ namespace WpfDockManagerDemo.DockManager
             }
         }
 
-        private void LoadDocumentGroup(Dictionary<string, UserControl> viewsMap, XmlElement xmlDocumentGroup, IDocumentContainer iDocumentContainer)
+        private void LoadDocumentGroup(Dictionary<string, UserControl> viewsMap, XmlElement xmlDocumentGroup, IUserViewContainer iUserViewContainer)
         {
             foreach (var xmlDocumentGroupNode in xmlDocumentGroup.ChildNodes)
             {
@@ -887,7 +887,7 @@ namespace WpfDockManagerDemo.DockManager
 
                         if (viewsMap.ContainsKey(xmlAttribute.Value))
                         {
-                            iDocumentContainer.AddUserControl(viewsMap[xmlAttribute.Value]);
+                            iUserViewContainer.AddUserControl(viewsMap[xmlAttribute.Value]);
                             viewsMap.Remove(xmlAttribute.Value);
                         }
                     }
@@ -960,7 +960,7 @@ namespace WpfDockManagerDemo.DockManager
 
                         SetWidthOrHeight(xmlDocumentGroup, parentFrameworkElement, isParentHorizontal, row, column);
 
-                        LoadDocumentGroup(viewsMap, xmlDocumentGroup, documentPane.IDocumentContainer);
+                        LoadDocumentGroup(viewsMap, xmlDocumentGroup, documentPane.IUserViewContainer);
                         Grid.SetRow(documentPane, row);
                         Grid.SetColumn(documentPane, column);
                         row += rowIncrement;
@@ -977,7 +977,7 @@ namespace WpfDockManagerDemo.DockManager
 
                         SetWidthOrHeight(xmlToolGroup, parentFrameworkElement, isParentHorizontal, row, column);
 
-                        LoadToolGroup(viewsMap, xmlToolGroup, toolPane.IDocumentContainer);
+                        LoadToolGroup(viewsMap, xmlToolGroup, toolPane.IUserViewContainer);
                         Grid.SetRow(toolPane, row);
                         Grid.SetColumn(toolPane, column);
                         row += rowIncrement;
@@ -988,7 +988,7 @@ namespace WpfDockManagerDemo.DockManager
                         FloatingTool floatingTool = CreateFloatingTool();
 
                         XmlElement xmlfloatingTool = xmlChildNode as XmlElement;
-                        LoadToolGroup(viewsMap, xmlfloatingTool, floatingTool.IDocumentContainer);
+                        LoadToolGroup(viewsMap, xmlfloatingTool, floatingTool.IUserViewContainer);
                     }
                 }
                 
@@ -1045,10 +1045,7 @@ namespace WpfDockManagerDemo.DockManager
             }
 
             Grid parentGrid = dockPane.Parent as Grid;
-            if (parentGrid == null)
-            {
-                throw new Exception(System.Reflection.MethodBase.GetCurrentMethod().Name + ": documentPane parent must be a Grid");
-            }
+            System.Diagnostics.Trace.Assert(parentGrid != null, System.Reflection.MethodBase.GetCurrentMethod().Name + ": documentPane parent must be a Grid");
 
             if (parentGrid == this)
             {
@@ -1056,16 +1053,9 @@ namespace WpfDockManagerDemo.DockManager
             }
             else
             {
-                //if (parentGrid.Parent is FloatingTool)
-                //{
-                //    return null;
-                //}
-
                 Grid grandparentGrid = parentGrid.Parent as Grid;
-                if (grandparentGrid == null)
-                {
-                    throw new Exception(System.Reflection.MethodBase.GetCurrentMethod().Name + ": Grid parent not a Grid");
-                }
+                System.Diagnostics.Trace.Assert(grandparentGrid != null, System.Reflection.MethodBase.GetCurrentMethod().Name + ": Grid parent not a Grid");
+
                 parentGrid.Children.Remove(dockPane);
 
                 FrameworkElement frameworkElement = null;
@@ -1097,7 +1087,7 @@ namespace WpfDockManagerDemo.DockManager
                 throw new Exception(System.Reflection.MethodBase.GetCurrentMethod().Name + ": dockPane is null");
             }
 
-            int viewCount = dockPane.IDocumentContainer.GetUserControlCount();
+            int viewCount = dockPane.IUserViewContainer.GetUserControlCount();
             if (viewCount < 2)
             {
                 // Cannot ungroup one item!
@@ -1111,15 +1101,14 @@ namespace WpfDockManagerDemo.DockManager
                 throw new Exception(System.Reflection.MethodBase.GetCurrentMethod().Name + ": dockPane.Parent not a Grid");
             }
 
-            UserControl userControl = dockPane.IDocumentContainer.ExtractUserControl(index);
+            UserControl userControl = dockPane.IUserViewContainer.ExtractUserControl(index);
             if (userControl == null)
             {
                 return false;
             }
 
-
             DockPane newDockPane = (dockPane is ToolPane) ? (DockPane) CreateToolPane() : CreateDocumentPane();
-            newDockPane.IDocumentContainer.AddUserControl(userControl);
+            newDockPane.IUserViewContainer.AddUserControl(userControl);
 
             parentSplitterPane.Children.Remove(dockPane);
 
@@ -1131,12 +1120,6 @@ namespace WpfDockManagerDemo.DockManager
             newGrid.AddChild(dockPane, true);
             newGrid.AddChild(newDockPane, false);
 
-            /*
-             * Now evenly space them 
-             */
-            //parentSplitterPane.ColumnDefinitions[0].Width = new GridLength(paneWidth, GridUnitType.Star);
-            //parentSplitterPane.ColumnDefinitions[2].Width = new GridLength(parentSplitterPane.ActualWidth - paneWidth, GridUnitType.Star);
-
             return true;
         }
 
@@ -1146,7 +1129,7 @@ namespace WpfDockManagerDemo.DockManager
             var parentGrid = dockPane.Parent as Grid;
 
             int count = 1;
-            double paneWidth = dockPane.ActualWidth / dockPane.IDocumentContainer.GetUserControlCount();
+            double paneWidth = dockPane.ActualWidth / dockPane.IUserViewContainer.GetUserControlCount();
             while (UngroupToolPane(dockPane, 1, paneWidth))
             {
                 ++count;
@@ -1163,7 +1146,7 @@ namespace WpfDockManagerDemo.DockManager
             }
 
             double paneWidth = dockPane.ActualWidth / 2;
-            int index = dockPane.IDocumentContainer.GetCurrentTabIndex();
+            int index = dockPane.IUserViewContainer.GetCurrentTabIndex();
             if (index > -1)
             {
                 UngroupToolPane(dockPane, index, paneWidth);
@@ -1216,13 +1199,13 @@ namespace WpfDockManagerDemo.DockManager
 
             while (true)
             {
-                UserControl userControl = dockPane.IDocumentContainer.ExtractUserControl(0);
+                UserControl userControl = dockPane.IUserViewContainer.ExtractUserControl(0);
                 if (userControl == null)
                 {
                     break;
                 }
 
-                floatingPane.IDocumentContainer.AddUserControl(userControl);
+                floatingPane.IUserViewContainer.AddUserControl(userControl);
             }
 
             floatingPane.Left = mainWindowLocation.X + cursorPositionInMainWindow.X - cursorPositionInToolPane.X;
@@ -1267,14 +1250,14 @@ namespace WpfDockManagerDemo.DockManager
                 throw new Exception(System.Reflection.MethodBase.GetCurrentMethod().Name + ": sender not a FloatingPane");
             }
 
-            int viewCount = floatingPane.IDocumentContainer.GetUserControlCount();
+            int viewCount = floatingPane.IUserViewContainer.GetUserControlCount();
 
             double left = floatingPane.Left;
             double top = floatingPane.Top;
 
             for (int index = 1; index < viewCount; ++index)
             {
-                UserControl userControl = floatingPane.IDocumentContainer.ExtractUserControl(1);
+                UserControl userControl = floatingPane.IUserViewContainer.ExtractUserControl(1);
                 if (userControl == null)
                 {
                     return;
@@ -1294,7 +1277,7 @@ namespace WpfDockManagerDemo.DockManager
                 top += 10;
                 newFloatingPane.Left = left;
                 newFloatingPane.Top = top;
-                newFloatingPane.IDocumentContainer.AddUserControl(userControl);
+                newFloatingPane.IUserViewContainer.AddUserControl(userControl);
             }
         }
 
@@ -1306,10 +1289,10 @@ namespace WpfDockManagerDemo.DockManager
                 throw new Exception(System.Reflection.MethodBase.GetCurrentMethod().Name + ": sender not a FloatingPane");
             }
 
-            int index = floatingPane.IDocumentContainer.GetCurrentTabIndex();
+            int index = floatingPane.IUserViewContainer.GetCurrentTabIndex();
             if (index > -1)
             {
-                UserControl userControl = floatingPane.IDocumentContainer.ExtractUserControl(index);
+                UserControl userControl = floatingPane.IUserViewContainer.ExtractUserControl(index);
                 if (userControl == null)
                 {
                     return;
@@ -1327,7 +1310,7 @@ namespace WpfDockManagerDemo.DockManager
 
                 newFloatingPane.Left = floatingPane.Left + 10;
                 newFloatingPane.Top = floatingPane.Top + 10;
-                newFloatingPane.IDocumentContainer.AddUserControl(userControl);
+                newFloatingPane.IUserViewContainer.AddUserControl(userControl);
             }
         }
 
@@ -1349,13 +1332,13 @@ namespace WpfDockManagerDemo.DockManager
         {
             while (true)
             {
-                UserControl userControl = floatingPane.IDocumentContainer.ExtractUserControl(0);
+                UserControl userControl = floatingPane.IUserViewContainer.ExtractUserControl(0);
                 if (userControl == null)
                 {
                     break;
                 }
 
-                toolPane.IDocumentContainer.AddUserControl(userControl);
+                toolPane.IUserViewContainer.AddUserControl(userControl);
             }
             floatingPane.Close();
         }

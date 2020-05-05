@@ -15,9 +15,9 @@ namespace WpfListboxDemo
 
             _comboBoxSelectedTabBackground.ItemsSource = typeof(Brushes).GetProperties();
             _comboBoxUnselectedTabBackground.ItemsSource = typeof(Brushes).GetProperties();
-            _tabHeader1.CloseTabRequest += _tabHeader1_CloseTabRequest;
-            _tabHeader2.CloseTabRequest += _tabHeader2_CloseTabRequest;
-            _tabHeader3.CloseTabRequest += _tabHeader3_CloseTabRequest;
+            _tabHeader1.CloseTab += _tabHeader1_CloseTabRequest;
+            _tabHeader2.CloseTab += _tabHeader2_CloseTabRequest;
+            _tabHeader3.CloseTab += _tabHeader3_CloseTabRequest;
             _tabHeader1.ItemsChanged += _tabHeader1_ItemsChanged;
             _tabHeader2.ItemsChanged += _tabHeader2_ItemsChanged;
             _tabHeader3.ItemsChanged += _tabHeader3_ItemsChanged;

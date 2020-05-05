@@ -8,10 +8,19 @@ namespace WpfDockManagerDemo.DockManager
 {
     internal abstract class DockPane : Grid
     {
-        public DockPane(IDocumentContainer iDocumentContainer)
+        public DockPane(IUserViewContainer iUserViewContainer)
         {
-            IDocumentContainer = iDocumentContainer;
-            Children.Add(iDocumentContainer as System.Windows.UIElement);
+            IUserViewContainer = iUserViewContainer;
+            IUserViewContainer.TabClosed += IDocumentContainer_TabClosed;
+            Children.Add(iUserViewContainer as System.Windows.UIElement);
+        }
+
+        private void IDocumentContainer_TabClosed(object sender, EventArgs e)
+        {
+            if (IUserViewContainer.GetUserControlCount() == 0)
+            {
+                FireClose();
+            }
         }
 
         public event EventHandler Close;
@@ -33,7 +42,7 @@ namespace WpfDockManagerDemo.DockManager
             Float?.Invoke(this, floatEventArgs);
         }
 
-        public readonly IDocumentContainer IDocumentContainer;
+        public readonly IUserViewContainer IUserViewContainer;
 
         protected void DisplayGeneralMenu()
         {
@@ -44,7 +53,7 @@ namespace WpfDockManagerDemo.DockManager
             menuItem.Command = new Command(delegate { FireFloat(false); }, delegate { return true; });
             contextMenu.Items.Add(menuItem);
 
-            int viewCount = IDocumentContainer.GetUserControlCount();
+            int viewCount = IUserViewContainer.GetUserControlCount();
             if (viewCount > 2)
             {
                 menuItem = new MenuItem();

@@ -9,7 +9,7 @@ namespace WpfDockManagerDemo.DockManager
     {
         public DocumentPane() : base(new DocumentContainer())
         {
-            (IDocumentContainer as DocumentContainer).DisplayGeneralMenu = DisplayGeneralMenu;
+            (IUserViewContainer as DocumentContainer).DisplayGeneralMenu = DisplayGeneralMenu;
 
             VerticalAlignment = System.Windows.VerticalAlignment.Stretch;
             HorizontalAlignment = HorizontalAlignment.Stretch;
@@ -49,10 +49,12 @@ namespace WpfDockManagerDemo.DockManager
             Grid.SetZIndex(Border, -1);
             Children.Add(Border);
 
-            IDocumentContainer.SelectionChanged += DocumentContainer_SelectionChanged;
-            Grid.SetRow(IDocumentContainer as System.Windows.UIElement, 0);
-            Grid.SetColumn(IDocumentContainer as System.Windows.UIElement, 0);
-            Grid.SetColumnSpan(IDocumentContainer as System.Windows.UIElement, ColumnDefinitions.Count);
+            IUserViewContainer.SelectionChanged += DocumentContainer_SelectionChanged;
+            Grid.SetRow(IUserViewContainer as System.Windows.UIElement, 0);
+            Grid.SetColumn(IUserViewContainer as System.Windows.UIElement, 0);
+            Grid.SetColumnSpan(IUserViewContainer as System.Windows.UIElement, ColumnDefinitions.Count);
+
+            IsHighlighted = false;
         }
 
         private void DocumentContainer_SelectionChanged(object sender, EventArgs e)
@@ -60,7 +62,7 @@ namespace WpfDockManagerDemo.DockManager
             // Nothing to do!
         }
 
-        public Border Border { get; private set; }
+        private Border Border { get; set; }
 
         private bool _isHighlighted;
         // Warning warning => move to DockPane?

@@ -79,15 +79,15 @@ namespace WpfDockManagerDemo.DockManager
             Children.Add(closeButton);
             closeButton.Click += delegate { FireClose(); };
 
-            IDocumentContainer.SelectionChanged += DocumentContainer_SelectionChanged;
-            Grid.SetRow(IDocumentContainer as System.Windows.UIElement, 1);
-            Grid.SetColumn(IDocumentContainer as System.Windows.UIElement, 0);
-            Grid.SetColumnSpan(IDocumentContainer as System.Windows.UIElement, ColumnDefinitions.Count);
+            IUserViewContainer.SelectionChanged += DocumentContainer_SelectionChanged;
+            Grid.SetRow(IUserViewContainer as System.Windows.UIElement, 1);
+            Grid.SetColumn(IUserViewContainer as System.Windows.UIElement, 0);
+            Grid.SetColumnSpan(IUserViewContainer as System.Windows.UIElement, ColumnDefinitions.Count);
         }
 
         private void DocumentContainer_SelectionChanged(object sender, EventArgs e)
         {
-            _titleLabel.Content = IDocumentContainer.Title;
+            _titleLabel.Content = IUserViewContainer.Title;
         }
 
         protected Label _titleLabel;

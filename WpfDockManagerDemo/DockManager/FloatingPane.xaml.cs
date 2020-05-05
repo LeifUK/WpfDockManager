@@ -11,15 +11,15 @@ namespace WpfDockManagerDemo.DockManager
     /// </summary>
     internal partial class FloatingPane : Window
     {
-        internal FloatingPane(IDocumentContainer iDocument)
+        internal FloatingPane(IUserViewContainer iUserViewContainer)
         {
             InitializeComponent();
             StateChanged += MainWindowStateChangeRaised;
             // Warning warning
             ToolContainer documentContainer = new ToolContainer();
-            _parentContainer.Children.Add(iDocument as UIElement);
-            Grid.SetRow(iDocument as UIElement, 1);
-            IDocumentContainer = iDocument;
+            _parentContainer.Children.Add(iUserViewContainer as UIElement);
+            Grid.SetRow(iUserViewContainer as UIElement, 1);
+            IUserViewContainer = iUserViewContainer;
         }
 
         // Can execute
@@ -83,7 +83,7 @@ namespace WpfDockManagerDemo.DockManager
             ContextMenu contextMenu = new ContextMenu();
             MenuItem menuItem = null;
 
-            int count = IDocumentContainer.GetUserControlCount();
+            int count = IUserViewContainer.GetUserControlCount();
 
             if (count > 2)
             {
@@ -131,6 +131,6 @@ namespace WpfDockManagerDemo.DockManager
             }
         }
 
-        internal readonly IDocumentContainer IDocumentContainer;
+        internal readonly IUserViewContainer IUserViewContainer;
     }
 }

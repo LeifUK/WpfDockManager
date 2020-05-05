@@ -17,7 +17,7 @@ namespace WpfDockManagerDemo.DockManager
         bool CanFloat { get; }
         /*
          * Return true if there are edits that need to be saved
-         * Warning warning -> not needed by Tool view model
+         * Not used by Tool view model
          */
         bool HasChanged { get; }
         void Save();

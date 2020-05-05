@@ -4,7 +4,7 @@ using System.Windows.Controls;
 
 namespace WpfDockManagerDemo.DockManager
 {
-    internal class ToolContainer : Grid, IDocumentContainer
+    internal class ToolContainer : Grid, IUserViewContainer
     {
         public ToolContainer()
         {
@@ -56,9 +56,9 @@ namespace WpfDockManagerDemo.DockManager
             _button.Style = (System.Windows.Style)res["MenuButtonStyle"];
         }
 
-        RowDefinition rowDefinition_UserControl;
-        RowDefinition rowDefinition_TabHeader;
-        RowDefinition rowDefinition_Spacer;
+        private RowDefinition rowDefinition_UserControl;
+        private RowDefinition rowDefinition_TabHeader;
+        private RowDefinition rowDefinition_Spacer;
 
         protected System.Collections.ObjectModel.ObservableCollection<System.Collections.Generic.KeyValuePair<UserControl, IDocument>> _items;
         public WpfControlLibrary.TabHeaderControl _tabHeaderControl;
@@ -122,7 +122,7 @@ namespace WpfDockManagerDemo.DockManager
                     {
                         int index = _items.IndexOf(item);
                         RemoveAt(index);
-                        TabClosed?.Invoke(null, null);
+                        TabClosed?.Invoke(sender, null);
                     }
                 }
             }
