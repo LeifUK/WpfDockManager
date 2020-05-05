@@ -1035,7 +1035,7 @@ namespace WpfDockManagerDemo.DockManager
         }
 
         /*
-         * Remove a document pane from the document tree
+         * Remove a dock pane from the tree
          */
         private DockPane ExtractDockPane(DockPane dockPane)
         {
@@ -1080,12 +1080,9 @@ namespace WpfDockManagerDemo.DockManager
             return dockPane;
         }
 
-        private bool UngroupToolPane(DockPane dockPane, int index, double paneWidth)
+        private bool UngroupDockPane(DockPane dockPane, int index, double paneWidth)
         {
-            if (dockPane == null)
-            {
-                throw new Exception(System.Reflection.MethodBase.GetCurrentMethod().Name + ": dockPane is null");
-            }
+            System.Diagnostics.Trace.Assert(dockPane != null, System.Reflection.MethodBase.GetCurrentMethod().Name + ": dockPane is null");
 
             int viewCount = dockPane.IUserViewContainer.GetUserControlCount();
             if (viewCount < 2)
@@ -1096,10 +1093,7 @@ namespace WpfDockManagerDemo.DockManager
 
             // The parent must be a SplitterPane or the LayoutManager
             Grid parentSplitterPane = dockPane.Parent as Grid;
-            if (parentSplitterPane == null)
-            {
-                throw new Exception(System.Reflection.MethodBase.GetCurrentMethod().Name + ": dockPane.Parent not a Grid");
-            }
+            System.Diagnostics.Trace.Assert(parentSplitterPane != null, System.Reflection.MethodBase.GetCurrentMethod().Name + ": dockPane.Parent not a Grid");
 
             UserControl userControl = dockPane.IUserViewContainer.ExtractUserControl(index);
             if (userControl == null)
@@ -1130,7 +1124,7 @@ namespace WpfDockManagerDemo.DockManager
 
             int count = 1;
             double paneWidth = dockPane.ActualWidth / dockPane.IUserViewContainer.GetUserControlCount();
-            while (UngroupToolPane(dockPane, 1, paneWidth))
+            while (UngroupDockPane(dockPane, 1, paneWidth))
             {
                 ++count;
                 // Nothing here
@@ -1149,7 +1143,7 @@ namespace WpfDockManagerDemo.DockManager
             int index = dockPane.IUserViewContainer.GetCurrentTabIndex();
             if (index > -1)
             {
-                UngroupToolPane(dockPane, index, paneWidth);
+                UngroupDockPane(dockPane, index, paneWidth);
             }
         }
 
@@ -1242,75 +1236,69 @@ namespace WpfDockManagerDemo.DockManager
             }
         }
 
-        private void FloatingPane_Ungroup(object sender, EventArgs e)
+        private FloatingPane UnGroupFloatingPane(FloatingPane floatingPane, int index, double left, double top)
         {
-            FloatingPane floatingPane = sender as FloatingPane;
             if (floatingPane == null)
             {
-                throw new Exception(System.Reflection.MethodBase.GetCurrentMethod().Name + ": sender not a FloatingPane");
+                return null;
             }
+
+            UserControl userControl = floatingPane.IUserViewContainer.ExtractUserControl(index);
+            if (userControl == null)
+            {
+                return null;
+            }
+
+            FloatingPane newFloatingPane = null;
+            if (floatingPane is FloatingTool)
+            {
+                newFloatingPane = CreateFloatingTool();
+            }
+            else
+            {
+                newFloatingPane = CreateFloatingDocument();
+            }
+
+            newFloatingPane.Left = left;
+            newFloatingPane.Top = top;
+            newFloatingPane.IUserViewContainer.AddUserControl(userControl);
+
+            return floatingPane;
+        }
+
+        private void FloatingPane_Ungroup(object sender, EventArgs e)
+        {
+            System.Diagnostics.Trace.Assert(sender is FloatingPane, System.Reflection.MethodBase.GetCurrentMethod().Name + ": sender not a FloatingPane");
+
+            FloatingPane floatingPane = sender as FloatingPane;
 
             int viewCount = floatingPane.IUserViewContainer.GetUserControlCount();
 
             double left = floatingPane.Left;
             double top = floatingPane.Top;
 
+            // Warning warning => off screen?
             for (int index = 1; index < viewCount; ++index)
             {
-                UserControl userControl = floatingPane.IUserViewContainer.ExtractUserControl(1);
-                if (userControl == null)
+                left += 10;
+                top += 10;
+                if (UnGroupFloatingPane(floatingPane, 1, left, top) == null)
                 {
                     return;
                 }
-
-                FloatingPane newFloatingPane = null;
-                if (sender is FloatingTool)
-                {
-                    newFloatingPane = CreateFloatingTool();
-                }
-                else
-                {
-                    newFloatingPane = CreateFloatingDocument();
-                }
-                
-                left += 10;
-                top += 10;
-                newFloatingPane.Left = left;
-                newFloatingPane.Top = top;
-                newFloatingPane.IUserViewContainer.AddUserControl(userControl);
             }
         }
 
         private void FloatingPane_UngroupCurrent(object sender, EventArgs e)
         {
+            System.Diagnostics.Trace.Assert(sender is FloatingPane, System.Reflection.MethodBase.GetCurrentMethod().Name + ": sender not a FloatingPane");
+
             FloatingPane floatingPane = sender as FloatingPane;
-            if (floatingPane == null)
-            {
-                throw new Exception(System.Reflection.MethodBase.GetCurrentMethod().Name + ": sender not a FloatingPane");
-            }
 
             int index = floatingPane.IUserViewContainer.GetCurrentTabIndex();
             if (index > -1)
             {
-                UserControl userControl = floatingPane.IUserViewContainer.ExtractUserControl(index);
-                if (userControl == null)
-                {
-                    return;
-                }
-
-                FloatingPane newFloatingPane = null;
-                if (sender is FloatingTool)
-                {
-                    newFloatingPane = CreateFloatingTool();
-                }
-                else
-                {
-                    newFloatingPane = CreateFloatingDocument();
-                }
-
-                newFloatingPane.Left = floatingPane.Left + 10;
-                newFloatingPane.Top = floatingPane.Top + 10;
-                newFloatingPane.IUserViewContainer.AddUserControl(userControl);
+                UnGroupFloatingPane(floatingPane, index, floatingPane.Left + 10, floatingPane.Top + 10);
             }
         }
 
@@ -1345,17 +1333,19 @@ namespace WpfDockManagerDemo.DockManager
 
         private void FloatingPane_EndDrag(object sender, EventArgs e)
         {
-            FloatingPane floatingTool = sender as FloatingPane;
+            System.Diagnostics.Trace.Assert(sender is FloatingPane, System.Reflection.MethodBase.GetCurrentMethod().Name + ": sender not a FloatingPane");
 
             App.Current.Dispatcher.Invoke(delegate
             {
+                FloatingPane floatingPane = sender as FloatingPane;
+
                 if (SelectedPane == null)
                 {
                     return;
                 }
 
                 if (
-                        (floatingTool == null) ||
+                        (floatingPane == null) ||
                         (SelectedPane == null) ||
                         (!(SelectedPane.Parent is SplitterPane) && !(SelectedPane.Parent is DocumentPanel) && (SelectedPane.Parent != this)) ||
                         (_windowLocationPane == null) ||
@@ -1387,7 +1377,7 @@ namespace WpfDockManagerDemo.DockManager
                         {
                             dockPane = CreateDocumentPane();
                         }
-                        ExtractDocuments(floatingTool, dockPane);
+                        ExtractDocuments(floatingPane, dockPane);
 
                         parentSplitterPane = new SplitterPane((windowLocation == WindowLocation.TopEdge) || (windowLocation == WindowLocation.BottomEdge));
                         bool isFirst = (windowLocation == WindowLocation.TopEdge) || (windowLocation == WindowLocation.LeftEdge);
@@ -1419,7 +1409,7 @@ namespace WpfDockManagerDemo.DockManager
                         {
                             dockPane = CreateDocumentPane();
                         }
-                        ExtractDocuments(floatingTool, dockPane);
+                        ExtractDocuments(floatingPane, dockPane);
 
                         SplitterPane newGrid = new SplitterPane((windowLocation == WindowLocation.Top) || (windowLocation == WindowLocation.Bottom));
 
@@ -1444,7 +1434,7 @@ namespace WpfDockManagerDemo.DockManager
 
                     case WindowLocation.Middle:
 
-                        ExtractDocuments(floatingTool, selectedPane);
+                        ExtractDocuments(floatingPane, selectedPane);
                         break;
                 }
 
