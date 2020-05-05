@@ -5,6 +5,7 @@
         xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
         xmlns:local="clr-namespace:WpfDockManagerDemo.DockManager"
         mc:Ignorable="d"
+        Topmost="True"
         WindowStyle="None"
         ResizeMode="NoResize"
         Background="Transparent"

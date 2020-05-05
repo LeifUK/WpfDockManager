@@ -6,7 +6,7 @@ using System.Windows.Input;
 
 namespace WpfDockManagerDemo.DockManager
 {
-    internal abstract class DockPane : Grid
+    internal abstract class DockPane : SelectablePane
     {
         public DockPane(IUserViewContainer iUserViewContainer)
         {
@@ -27,8 +27,6 @@ namespace WpfDockManagerDemo.DockManager
         public event FloatEventHandler Float;
         public event EventHandler UngroupCurrent;
         public event EventHandler Ungroup;
-        
-        abstract public bool IsHighlighted { get; set; }
 
         protected void FireClose()
         {

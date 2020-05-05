@@ -97,10 +97,9 @@ namespace WpfDockManagerDemo.DockManager
         public DataTemplate DocumentPaneHeaderTemplate { get; set; }
 
         internal List<FloatingTool> FloatingTools;
-        // Warning warning
         internal List<FloatingDocument> FloatingDocuments;
 
-        private DockPane SelectedPane;
+        private SelectablePane SelectedPane;
 
         #region dependency properties 
 
@@ -317,10 +316,7 @@ namespace WpfDockManagerDemo.DockManager
                             if (view != null)
                             {
                                 IView iToolView = (view as IView);
-                                if (iToolView == null)
-                                {
-                                    throw new Exception(System.Reflection.MethodBase.GetCurrentMethod().Name + ": the UserControl must implement interface IView");
-                                }
+                                System.Diagnostics.Trace.Assert(iToolView != null, System.Reflection.MethodBase.GetCurrentMethod().Name + ": the UserControl must implement interface IView");
                                 iToolView.IDocument = viewModel as IDocument;
                                 view.DataContext = viewModel;
                                 view.HorizontalAlignment = HorizontalAlignment.Stretch;
@@ -515,10 +511,9 @@ namespace WpfDockManagerDemo.DockManager
 
         private XmlElement SaveToolGroupNode(XmlDocument xmlDocument, XmlNode xmlNode, ToolPane toolPane)
         {
-            if ((xmlDocument == null) || (xmlNode == null))
-            {
-                throw new Exception(System.Reflection.MethodBase.GetCurrentMethod().Name + ": invalid arguments");
-            }
+            System.Diagnostics.Trace.Assert(xmlDocument != null);
+            System.Diagnostics.Trace.Assert(xmlNode != null);
+            System.Diagnostics.Trace.Assert(toolPane != null);
 
             XmlElement xmlToolGroup = xmlDocument.CreateElement("ToolGroup");
 
@@ -544,10 +539,9 @@ namespace WpfDockManagerDemo.DockManager
 
         private XmlElement SaveToolNode(XmlDocument xmlDocument, XmlNode xmlNode, IDocument iDocument, string contentId)
         {
-            if ((xmlDocument == null) || (xmlNode == null) || (iDocument == null))
-            {
-                throw new Exception(System.Reflection.MethodBase.GetCurrentMethod().Name + ": invalid arguments");
-            }
+            System.Diagnostics.Trace.Assert(xmlDocument != null);
+            System.Diagnostics.Trace.Assert(xmlNode != null);
+            System.Diagnostics.Trace.Assert(iDocument != null);
 
             XmlElement xmlElement = xmlDocument.CreateElement("Tool");
             XmlAttribute xmlAttribute = xmlDocument.CreateAttribute("Title");
@@ -608,10 +602,9 @@ namespace WpfDockManagerDemo.DockManager
 
         private XmlElement SaveDocumentGroupNode(XmlDocument xmlDocument, XmlNode xmlNode, DocumentPane documentPane)
         {
-            if ((xmlDocument == null) || (xmlNode == null))
-            {
-                throw new Exception(System.Reflection.MethodBase.GetCurrentMethod().Name + ": invalid arguments");
-            }
+            System.Diagnostics.Trace.Assert(xmlDocument != null);
+            System.Diagnostics.Trace.Assert(xmlNode != null);
+            System.Diagnostics.Trace.Assert(documentPane != null);
 
             XmlElement xmlDocumentGroup = xmlDocument.CreateElement("DocumentGroup");
 
@@ -637,10 +630,9 @@ namespace WpfDockManagerDemo.DockManager
 
         private XmlElement SaveDocumentNode(XmlDocument xmlDocument, XmlNode xmlNode, IDocument iDocument, string contentId)
         {
-            if ((xmlDocument == null) || (xmlNode == null) || (iDocument == null))
-            {
-                throw new Exception(System.Reflection.MethodBase.GetCurrentMethod().Name + ": invalid arguments");
-            }
+            System.Diagnostics.Trace.Assert(xmlDocument != null);
+            System.Diagnostics.Trace.Assert(xmlNode != null);
+            System.Diagnostics.Trace.Assert(iDocument != null);
 
             XmlElement xmlElement = xmlDocument.CreateElement("Document");
             XmlAttribute xmlAttribute = xmlDocument.CreateAttribute("Title");
@@ -692,10 +684,8 @@ namespace WpfDockManagerDemo.DockManager
 
         private XmlElement CreateFloatingToolNode(XmlDocument xmlDocument, XmlNode xmlParentNode, FloatingTool floatingTool)
         {
-            if ((xmlDocument == null) || (xmlParentNode == null))
-            {
-                throw new Exception(System.Reflection.MethodBase.GetCurrentMethod().Name + ": invalid arguments");
-            }
+            System.Diagnostics.Trace.Assert(xmlDocument != null);
+            System.Diagnostics.Trace.Assert(xmlParentNode != null);
 
             XmlElement xmlFloatingTool = xmlDocument.CreateElement("FloatingTool");
 
@@ -1058,23 +1048,26 @@ namespace WpfDockManagerDemo.DockManager
 
                 parentGrid.Children.Remove(dockPane);
 
-                FrameworkElement frameworkElement = null;
-                foreach (var item in parentGrid.Children)
+                if (!(parentGrid is DocumentPanel))
                 {
-                    if (!(item is GridSplitter))
+                    FrameworkElement frameworkElement = null;
+                    foreach (var item in parentGrid.Children)
                     {
-                        frameworkElement = item as FrameworkElement;
-                        break;
+                        if (!(item is GridSplitter))
+                        {
+                            frameworkElement = item as FrameworkElement;
+                            break;
+                        }
                     }
+
+                    System.Diagnostics.Trace.Assert(frameworkElement != null);
+
+                    parentGrid.Children.Remove(frameworkElement);
+                    grandparentGrid.Children.Remove(parentGrid);
+                    Grid.SetRow(frameworkElement, Grid.GetRow(parentGrid));
+                    Grid.SetColumn(frameworkElement, Grid.GetColumn(parentGrid));
+                    grandparentGrid.Children.Add(frameworkElement);
                 }
-
-                System.Diagnostics.Trace.Assert(frameworkElement != null);
-
-                parentGrid.Children.Remove(frameworkElement);
-                grandparentGrid.Children.Remove(parentGrid);
-                Grid.SetRow(frameworkElement, Grid.GetRow(parentGrid));
-                Grid.SetColumn(frameworkElement, Grid.GetColumn(parentGrid));
-                grandparentGrid.Children.Add(frameworkElement);
             }
 
             return dockPane;
@@ -1133,11 +1126,9 @@ namespace WpfDockManagerDemo.DockManager
 
         private void DockPane_UngroupCurrent(object sender, EventArgs e)
         {
+            System.Diagnostics.Trace.Assert(sender is DockPane);
+
             DockPane dockPane = sender as DockPane;
-            if (dockPane == null)
-            {
-                throw new Exception(System.Reflection.MethodBase.GetCurrentMethod().Name + ": sender not a ToolPane");
-            }
 
             double paneWidth = dockPane.ActualWidth / 2;
             int index = dockPane.IUserViewContainer.GetCurrentTabIndex();
@@ -1166,12 +1157,9 @@ namespace WpfDockManagerDemo.DockManager
 
         private void DockPane_Float(object sender, FloatEventArgs e)
         {
-            DockPane dockPane = sender as DockPane;
+            System.Diagnostics.Trace.Assert(sender is DockPane);
 
-            if (dockPane == null)
-            {
-                return;
-            }
+            DockPane dockPane = sender as DockPane;
 
             Point cursorPositionOnScreen = WpfControlLibrary.Utilities.GetCursorPosition();
             Point cursorPositionInMainWindow = App.Current.MainWindow.PointFromScreen(cursorPositionOnScreen);
@@ -1268,7 +1256,7 @@ namespace WpfDockManagerDemo.DockManager
 
         private void FloatingPane_Ungroup(object sender, EventArgs e)
         {
-            System.Diagnostics.Trace.Assert(sender is FloatingPane, System.Reflection.MethodBase.GetCurrentMethod().Name + ": sender not a FloatingPane");
+            System.Diagnostics.Trace.Assert(sender is FloatingPane);
 
             FloatingPane floatingPane = sender as FloatingPane;
 
@@ -1291,7 +1279,7 @@ namespace WpfDockManagerDemo.DockManager
 
         private void FloatingPane_UngroupCurrent(object sender, EventArgs e)
         {
-            System.Diagnostics.Trace.Assert(sender is FloatingPane, System.Reflection.MethodBase.GetCurrentMethod().Name + ": sender not a FloatingPane");
+            System.Diagnostics.Trace.Assert(sender is FloatingPane);
 
             FloatingPane floatingPane = sender as FloatingPane;
 
@@ -1358,7 +1346,7 @@ namespace WpfDockManagerDemo.DockManager
 
                 SplitterPane parentSplitterPane = (SelectedPane.Parent as SplitterPane);
                 DockPane dockPane = null;
-                DockPane selectedPane = SelectedPane;
+                SelectablePane selectedPane = SelectedPane;
                 WindowLocation windowLocation = _insertionIndicatorManager.WindowLocation;
                 CancelSelection();
 
@@ -1434,7 +1422,16 @@ namespace WpfDockManagerDemo.DockManager
 
                     case WindowLocation.Middle:
 
-                        ExtractDocuments(floatingPane, selectedPane);
+                        if (selectedPane is DockPane)
+                        {
+                            ExtractDocuments(floatingPane, selectedPane as DockPane);
+                        }
+                        else if (selectedPane is DocumentPanel)
+                        {
+                            DocumentPane documentPane = CreateDocumentPane();
+                            selectedPane.Children.Add(documentPane);
+                            ExtractDocuments(floatingPane, documentPane);
+                        }
                         break;
                 }
 
@@ -1443,9 +1440,9 @@ namespace WpfDockManagerDemo.DockManager
         }
 
         /*
-         * Locates the dock pane at the specified on screen point
+         * Locates the deepest SelectablePane in the tree at the specified on screen point
          */
-        private DockPane FindDockPane(Grid grid, Point pointOnScreen)
+        private SelectablePane FindSelectablePane(Grid grid, Point pointOnScreen)
         {
             if (grid == null)
             {
@@ -1454,7 +1451,7 @@ namespace WpfDockManagerDemo.DockManager
 
             foreach (var child in grid.Children)
             {
-                if ((child is DocumentPanel) || (child is DockPane) || (child is SplitterPane))
+                if ((child is SelectablePane) || (child is SplitterPane))
                 {
                     Grid childGrid = child as Grid;
                     Point pointInToolPane = childGrid.PointFromScreen(pointOnScreen);
@@ -1465,12 +1462,19 @@ namespace WpfDockManagerDemo.DockManager
                             (pointInToolPane.Y <= childGrid.ActualHeight)
                         )
                     {
-                        if (child is DockPane)
+                        if (child is DocumentPanel)
+                        {
+                            if (!(child as DocumentPanel).ContainsDocuments())
+                            {
+                                return child as DocumentPanel;
+                            }
+                        }
+                        else if (child is DockPane)
                         {
                             return child as DockPane;
                         }
 
-                        return FindDockPane(childGrid, pointOnScreen);
+                        return FindSelectablePane(childGrid, pointOnScreen);
                     }
                 }
             }
@@ -1484,12 +1488,9 @@ namespace WpfDockManagerDemo.DockManager
 
         private void FloatingWindow_LocationChanged(object sender, EventArgs e)
         {
-            Window floatingWindow = sender as Window;
-            if (floatingWindow == null)
-            {
-                throw new Exception(System.Reflection.MethodBase.GetCurrentMethod().Name + ": null floating window");
-            }
+            System.Diagnostics.Trace.Assert(sender is Window);
 
+            Window floatingWindow = sender as Window;
             Point cursorPositionOnScreen = WpfControlLibrary.Utilities.GetCursorPosition();
 
             bool found = false;
@@ -1502,7 +1503,7 @@ namespace WpfDockManagerDemo.DockManager
                 )
             {
                 Type paneType = (sender is FloatingDocument) ? typeof(DocumentPane) : typeof(ToolPane);
-                var pane = FindDockPane(this, cursorPositionOnScreen);
+                var pane = FindSelectablePane(this, cursorPositionOnScreen);
                 found = pane != null;
                 if ((pane != null) && (SelectedPane != pane))
                 {
@@ -1519,7 +1520,7 @@ namespace WpfDockManagerDemo.DockManager
                         _windowLocationPane = null;
                     }
 
-                    if (paneType == pane.GetType())
+                    if ((paneType == pane.GetType()) || ((pane is DocumentPanel) && (sender is FloatingDocument)))
                     {
                         _windowLocationPane = new WindowLocationPane();
                         _windowLocationPane.AllowsTransparency = true;
@@ -1551,7 +1552,7 @@ namespace WpfDockManagerDemo.DockManager
                 }
             }
 
-            DockPane previousPane = SelectedPane;
+            SelectablePane previousPane = SelectedPane;
 
             if (!found)
             {
@@ -1577,10 +1578,11 @@ namespace WpfDockManagerDemo.DockManager
                 previousPane.IsHighlighted = false;
             }
 
-            bool insertionFound = false;
+            WindowLocation windowLocation = WindowLocation.None;
+
             if (_edgeLocationPane != null)
             {
-                WindowLocation windowLocation = _edgeLocationPane.TrySelectIndicator(cursorPositionOnScreen);
+                windowLocation = _edgeLocationPane.TrySelectIndicator(cursorPositionOnScreen);
                 switch (windowLocation)
                 {
                     case WindowLocation.LeftEdge:
@@ -1597,28 +1599,24 @@ namespace WpfDockManagerDemo.DockManager
                             _insertionIndicatorManager = new InsertionIndicatorManager(this);
                         }
                         _insertionIndicatorManager.ShowInsertionIndicator(windowLocation);
-                        insertionFound = true;
-                        break;
+                        return;
                 }
             }
 
-            if ((_windowLocationPane != null) && !insertionFound)
+            if ((_windowLocationPane != null) && (SelectedPane != null))
             {
-                WindowLocation windowLocation = _windowLocationPane.TrySelectIndicator(cursorPositionOnScreen);
-                if (SelectedPane != null)
+                windowLocation = _windowLocationPane.TrySelectIndicator(cursorPositionOnScreen);
+                if ((_insertionIndicatorManager != null) && (_insertionIndicatorManager.ParentGrid != SelectedPane))
                 {
-                    if ((_insertionIndicatorManager != null) && (_insertionIndicatorManager.ParentGrid != SelectedPane))
-                    {
-                        _insertionIndicatorManager.HideInsertionIndicator();
-                        _insertionIndicatorManager = null;
-                    }
-                    if (_insertionIndicatorManager == null)
-                    {
-                        _insertionIndicatorManager = new InsertionIndicatorManager(SelectedPane);
-                    }
-
-                    _insertionIndicatorManager.ShowInsertionIndicator(windowLocation);
+                    _insertionIndicatorManager.HideInsertionIndicator();
+                    _insertionIndicatorManager = null;
                 }
+                if (_insertionIndicatorManager == null)
+                {
+                    _insertionIndicatorManager = new InsertionIndicatorManager(SelectedPane);
+                }
+
+                _insertionIndicatorManager.ShowInsertionIndicator(windowLocation);
             }
         }
     }

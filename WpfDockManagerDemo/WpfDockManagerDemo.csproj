@@ -69,6 +69,7 @@
     <Compile Include="DockManager\FloatingTool.cs" />
     <Compile Include="DockManager\Helpers.cs" />
     <Compile Include="DockManager\IUserViewContainer.cs" />
+    <Compile Include="DockManager\SelectablePane.cs" />
     <Compile Include="DockManager\ToolContainer.cs" />
     <Compile Include="DockManager\DocumentContainer.cs" />
     <Compile Include="DockManager\DocumentPane.cs" />
@@ -79,7 +80,6 @@
     <Compile Include="DockManager\ExtensionMethods.cs" />
     <Compile Include="DockManager\IDocument.cs" />
     <Compile Include="DockManager\InsertionIndicatorManager.cs" />
-    <Compile Include="DockManager\IToolFactory.cs" />
     <Compile Include="DockManager\IView.cs" />
     <Compile Include="DockManager\ToolPane.cs" />
     <Compile Include="DockManager\ViewType.cs" />

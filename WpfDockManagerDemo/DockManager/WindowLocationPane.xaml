@@ -8,6 +8,7 @@
         xmlns:SystemWindows="clr-namespace:System.Windows;assembly=PresentationFramework"
         mc:Ignorable="d"
         WindowStyle="None"
+        Topmost="True"
         ResizeMode="NoResize"
         Background="Transparent"
         Title="IndicatorPane" Height="240" Width="240">
