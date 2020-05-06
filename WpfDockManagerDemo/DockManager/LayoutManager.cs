@@ -113,7 +113,7 @@ namespace WpfDockManagerDemo.DockManager
         internal ListView _topPane;
         internal ListView _rightPane;
         internal ListView _bottomPane;
-        internal SplitterPane _root;
+        internal Grid _root;
 
         private SelectablePane SelectedPane;
 
@@ -451,13 +451,13 @@ namespace WpfDockManagerDemo.DockManager
             return toolPane;
         }
 
-        private void SetRootSplitterPane(SplitterPane root)
+        private void SetRootPane(Grid grid)
         {
             if ((_root != null) && Children.Contains(_root))
             {
                 Children.Remove(_root);
             }
-            _root = root;
+            _root = grid;
             Children.Add(_root);
             Grid.SetRow(_root, 1);
             Grid.SetColumn(_root, 1);
@@ -536,10 +536,10 @@ namespace WpfDockManagerDemo.DockManager
 
              */
 
-            SetRootSplitterPane(new SplitterPane(true));
+            SetRootPane(new SplitterPane(true));
 
             DocumentPanel documentPanel = new DocumentPanel();
-            _root.AddChild(documentPanel, true);
+            (_root as SplitterPane).AddChild(documentPanel, true);
 
             List<UserControl> documentViews = LoadViewsFromTemplates(DocumentTemplates, DocumentsSource);
 
@@ -563,7 +563,7 @@ namespace WpfDockManagerDemo.DockManager
                 DockManager.DockPane toolPane = CreateToolPane();
                 toolPane.IViewContainer.AddUserControl(toolViews[0]);
 
-                _root.AddChild(toolPane, false);
+                (_root as SplitterPane).AddChild(toolPane, false);
 
                 list_N.Add(toolPane);
                 AddViews(toolViews, list_N, delegate { return CreateToolPane(); });
@@ -975,9 +975,9 @@ namespace WpfDockManagerDemo.DockManager
 
                         if (parentFrameworkElement == this)
                         {
-                            row = 1;
-                            column = 1;
-                            SetRootSplitterPane(newGrid);
+                            SetRootPane(newGrid);
+                            row = Grid.GetRow(_root);
+                            column = Grid.GetColumn(_root);
                         }
                         else
                         {
@@ -1135,10 +1135,19 @@ namespace WpfDockManagerDemo.DockManager
                     System.Diagnostics.Trace.Assert(frameworkElement != null);
 
                     parentGrid.Children.Remove(frameworkElement);
+                    int row = Grid.GetRow(parentGrid);
+                    int column = Grid.GetColumn(parentGrid);
                     grandparentGrid.Children.Remove(parentGrid);
-                    Grid.SetRow(frameworkElement, Grid.GetRow(parentGrid));
-                    Grid.SetColumn(frameworkElement, Grid.GetColumn(parentGrid));
-                    grandparentGrid.Children.Add(frameworkElement);
+                    if (grandparentGrid == this)
+                    {
+                        SetRootPane(frameworkElement as Grid);
+                    }
+                    else
+                    {
+                        grandparentGrid.Children.Add(frameworkElement);
+                        Grid.SetRow(frameworkElement, row);
+                        Grid.SetColumn(frameworkElement, column);
+                    }
                 }
             }
 
@@ -1449,9 +1458,9 @@ namespace WpfDockManagerDemo.DockManager
                         }
                         else
                         {
-                            SplitterPane rootSplitterPane = _root;
-                            SetRootSplitterPane(parentSplitterPane);
-                            parentSplitterPane.AddChild(rootSplitterPane, !isFirst);
+                            Grid rootPane = _root;
+                            SetRootPane(parentSplitterPane);
+                            parentSplitterPane.AddChild(rootPane, !isFirst);
                         }
                         break;
 
@@ -1481,11 +1490,11 @@ namespace WpfDockManagerDemo.DockManager
                         else
                         {
                             parentSplitterPane.Children.Remove(selectedPane);
-
                             parentSplitterPane.Children.Add(newGrid);
                             Grid.SetRow(newGrid, Grid.GetRow(selectedPane));
                             Grid.SetColumn(newGrid, Grid.GetColumn(selectedPane));
                         }
+
                         bool isTargetFirst = (windowLocation == WindowLocation.Right) || (windowLocation == WindowLocation.Bottom);
                         newGrid.AddChild(selectedPane, isTargetFirst);
                         newGrid.AddChild(dockPane, !isTargetFirst);
