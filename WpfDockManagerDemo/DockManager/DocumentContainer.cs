@@ -4,7 +4,7 @@ using System.Windows.Controls;
 
 namespace WpfDockManagerDemo.DockManager
 {
-    internal class DocumentContainer : Grid, IUserViewContainer
+    internal class DocumentContainer : Grid, IViewContainer
     {
         public DocumentContainer()
         {
@@ -13,7 +13,7 @@ namespace WpfDockManagerDemo.DockManager
             _tabHeaderControl.ItemsSource = _items;
             _tabHeaderControl.DisplayMemberPath = "Value.Title";
             _tabHeaderControl.ItemsChanged += _tabHeaderControl_ItemsChanged;
-            _tabHeaderControl.SelectionChanged += TabHeaderControl_SelectionChanged;
+            _tabHeaderControl.SelectionChanged += _tabHeaderControl_SelectionChanged;
             _tabHeaderControl.CloseTabRequest += _tabHeaderControl_CloseTabRequest;
             Children.Add(_tabHeaderControl);
 
@@ -55,22 +55,7 @@ namespace WpfDockManagerDemo.DockManager
         private System.Collections.ObjectModel.ObservableCollection<System.Collections.Generic.KeyValuePair<UserControl, IDocument>> _items;
         public Action DisplayGeneralMenu;
 
-        private void _tabHeaderControl_ItemsChanged(object sender, EventArgs e)
-        {
-            var items = new System.Collections.ObjectModel.ObservableCollection<System.Collections.Generic.KeyValuePair<UserControl, IDocument>>();
-
-            foreach (var item in _tabHeaderControl.Items)
-            {
-                items.Add((System.Collections.Generic.KeyValuePair<UserControl, IDocument>)item);
-            }
-            int selectedIndex = (_tabHeaderControl.SelectedIndex == -1) ? 0 : _tabHeaderControl.SelectedIndex;
-
-            _items = items;
-
-            _tabHeaderControl.SelectedIndex = selectedIndex;
-        }
-
-        private void TabHeaderControl_SelectionChanged(object sender, EventArgs e)
+        private void _tabHeaderControl_SelectionChanged(object sender, EventArgs e)
         {
             if ((_selectedUserControl != null) && (Children.Contains(_selectedUserControl)))
             {
@@ -91,18 +76,69 @@ namespace WpfDockManagerDemo.DockManager
             SelectionChanged?.Invoke(sender, e);
         }
 
+        private void _tabHeaderControl_ItemsChanged(object sender, EventArgs e)
+        {
+            var items = new System.Collections.ObjectModel.ObservableCollection<System.Collections.Generic.KeyValuePair<UserControl, IDocument>>();
+
+            foreach (var item in _tabHeaderControl.Items)
+            {
+                items.Add((System.Collections.Generic.KeyValuePair<UserControl, IDocument>)item);
+            }
+            int selectedIndex = (_tabHeaderControl.SelectedIndex == -1) ? 0 : _tabHeaderControl.SelectedIndex;
+
+            _items = items;
+            _tabHeaderControl.SelectedIndex = selectedIndex;
+            
+            _tabHeaderControl_SelectionChanged(this, null);
+        }
+
         private void _tabHeaderControl_CloseTabRequest(object sender, EventArgs e)
         {
-            for (int index = 0; index < _items.Count; ++index)
+            if (sender == null)
             {
-                System.Collections.Generic.KeyValuePair<UserControl, IDocument> item = (System.Collections.Generic.KeyValuePair<UserControl, IDocument>)sender;
-                if (_items[index].Key == item.Key)
-                {
-                    _items.RemoveAt(index);
-                    break;
-                }
+                return;
             }
-            TabClosed?.Invoke(sender, e);
+
+            System.Collections.Generic.KeyValuePair<UserControl, IDocument> item = (System.Collections.Generic.KeyValuePair<UserControl, IDocument>)sender;
+            if (item.Value.CanClose)
+            {
+                if (item.Value.HasChanged)
+                {
+                    System.Windows.Forms.DialogResult dialogResult = System.Windows.Forms.MessageBox.Show("There are unsaved changes in the document. Do you wish to save the changes before closing?", "Close " + item.Value.Title, System.Windows.Forms.MessageBoxButtons.YesNoCancel);
+
+                    if (dialogResult == System.Windows.Forms.DialogResult.Yes)
+                    {
+                        item.Value.Save();
+                    }
+
+                    if (dialogResult == System.Windows.Forms.DialogResult.Cancel)
+                    {
+                        return;
+                    }
+                }
+
+                int index = _items.IndexOf(item);
+
+                _items.RemoveAt(index);
+                _tabHeaderControl.ItemsSource = _items;
+
+                if (item.Key == _selectedUserControl)
+                {
+                    Children.Remove(_selectedUserControl);
+                    _selectedUserControl = null;
+
+                    if (_items.Count > 0)
+                    {
+                        if (index >= _items.Count)
+                        {
+                            --index;
+                        }
+                        _selectedUserControl = _items[index].Key;
+                        Children.Add(_selectedUserControl);
+                    }
+                }
+                TabClosed?.Invoke(sender, null);
+            }
         }
 
         private UserControl _selectedUserControl;

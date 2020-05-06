@@ -3,7 +3,7 @@ using System.Windows.Controls;
 
 namespace WpfDockManagerDemo.DockManager
 {
-    internal interface IUserViewContainer
+    internal interface IViewContainer
     {
         string Title { get; }
         void AddUserControl(UserControl userControl);

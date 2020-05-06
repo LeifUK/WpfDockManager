@@ -4,7 +4,7 @@ using System.Windows.Controls;
 
 namespace WpfDockManagerDemo.DockManager
 {
-    internal class ToolContainer : Grid, IUserViewContainer
+    internal class ToolContainer : Grid, IViewContainer
     {
         public ToolContainer()
         {
@@ -91,7 +91,7 @@ namespace WpfDockManagerDemo.DockManager
             {
                 items.Add((System.Collections.Generic.KeyValuePair<UserControl, IDocument>)item);
             }
-            int selectedIndex = _tabHeaderControl.SelectedIndex;
+            int selectedIndex = (_tabHeaderControl.SelectedIndex == -1) ? 0 : _tabHeaderControl.SelectedIndex;
 
             _items = items;
             _tabHeaderControl.SelectedIndex = selectedIndex;
@@ -99,7 +99,7 @@ namespace WpfDockManagerDemo.DockManager
             _tabHeaderControl_SelectionChanged(this, null);
         }
 
-        private void _tabHeaderControl_CloseTabRequest(object sender, System.EventArgs e)
+        private void _tabHeaderControl_CloseTabRequest(object sender, EventArgs e)
         {
             if (sender == null)
             {
@@ -118,42 +118,37 @@ namespace WpfDockManagerDemo.DockManager
                         item.Value.Save();
                     }
 
-                    if (dialogResult != System.Windows.Forms.DialogResult.Cancel)
+                    if (dialogResult == System.Windows.Forms.DialogResult.Cancel)
                     {
-                        int index = _items.IndexOf(item);
-                        RemoveAt(index);
-                        TabClosed?.Invoke(sender, null);
+                        return;
                     }
                 }
-            }
-        }
 
-        public UserControl RemoveAt(int index)
-        {
-            if ((index < 0) || (index >= _items.Count))
-            {
-                return null;
-            }
+                int index = _items.IndexOf(item);
 
-            UserControl userControl = _items[index].Key;
-            _items.RemoveAt(index);
-            if (userControl == _selectedUserControl)
-            {
-                Children.Remove(_selectedUserControl);
-                _selectedUserControl = null;
+                _items.RemoveAt(index);
+                _tabHeaderControl.ItemsSource = _items;
 
-                if (_items.Count > 0)
+                if (item.Key == _selectedUserControl)
                 {
-                    if (index >= _items.Count)
-                    {
-                        --index;
-                    }
-                    _selectedUserControl = _items[index].Key;
-                    Children.Add(_selectedUserControl);
-                }
-            }
+                    Children.Remove(_selectedUserControl);
+                    _selectedUserControl = null;
 
-            return userControl;
+                    if (_items.Count > 0)
+                    {
+                        if (index >= _items.Count)
+                        {
+                            --index;
+                        }
+                        _selectedUserControl = _items[index].Key;
+                        Children.Add(_selectedUserControl);
+                    }
+                }
+                
+                CheckTabCount();
+
+                TabClosed?.Invoke(sender, null);
+            }
         }
 
         private void CheckTabCount()

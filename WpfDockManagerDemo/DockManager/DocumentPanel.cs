@@ -6,12 +6,28 @@ namespace WpfDockManagerDemo.DockManager
     {
         public DocumentPanel()
         {
+            IsHighlighted = false;
         }
 
+        private bool _isHighlighted;
         public override bool IsHighlighted 
         { 
-            get ; 
-            set ; 
+            get
+            {
+                return _isHighlighted;
+            }
+            set
+            {
+                _isHighlighted = value;
+                if (value)
+                {
+                    Background = System.Windows.Media.Brushes.Firebrick;
+                }
+                else
+                {
+                    Background = System.Windows.Media.Brushes.White;
+                }
+            }
         }
 
         private bool ContainsDocuments(Grid grid)

@@ -79,15 +79,15 @@ namespace WpfDockManagerDemo.DockManager
             Children.Add(closeButton);
             closeButton.Click += delegate { FireClose(); };
 
-            IUserViewContainer.SelectionChanged += DocumentContainer_SelectionChanged;
-            Grid.SetRow(IUserViewContainer as System.Windows.UIElement, 1);
-            Grid.SetColumn(IUserViewContainer as System.Windows.UIElement, 0);
-            Grid.SetColumnSpan(IUserViewContainer as System.Windows.UIElement, ColumnDefinitions.Count);
+            IViewContainer.SelectionChanged += DocumentContainer_SelectionChanged;
+            Grid.SetRow(IViewContainer as System.Windows.UIElement, 1);
+            Grid.SetColumn(IViewContainer as System.Windows.UIElement, 0);
+            Grid.SetColumnSpan(IViewContainer as System.Windows.UIElement, ColumnDefinitions.Count);
         }
 
         private void DocumentContainer_SelectionChanged(object sender, EventArgs e)
         {
-            _titleLabel.Content = IUserViewContainer.Title;
+            _titleLabel.Content = IViewContainer.Title;
         }
 
         protected Label _titleLabel;
@@ -104,7 +104,7 @@ namespace WpfDockManagerDemo.DockManager
             set
             {
                 _isHighlighted = value;
-                Border.Background = IsHighlighted ? System.Windows.Media.Brushes.Red : System.Windows.Media.Brushes.SteelBlue;
+                Border.Background = IsHighlighted ? System.Windows.Media.Brushes.Firebrick : System.Windows.Media.Brushes.SteelBlue;
             }
         }
 

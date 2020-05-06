@@ -68,7 +68,7 @@
     </Compile>
     <Compile Include="DockManager\FloatingTool.cs" />
     <Compile Include="DockManager\Helpers.cs" />
-    <Compile Include="DockManager\IUserViewContainer.cs" />
+    <Compile Include="DockManager\IViewContainer.cs" />
     <Compile Include="DockManager\SelectablePane.cs" />
     <Compile Include="DockManager\ToolContainer.cs" />
     <Compile Include="DockManager\DocumentContainer.cs" />

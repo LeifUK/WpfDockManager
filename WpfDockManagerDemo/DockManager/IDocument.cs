@@ -10,11 +10,13 @@ namespace WpfDockManagerDemo.DockManager
     {
         // A unique ID
         long ID { get; }
+
         // A user friendly title
         string Title { get; set; }
 
         bool CanClose { get; }
         bool CanFloat { get; }
+
         /*
          * Return true if there are edits that need to be saved
          * Not used by Tool view model
