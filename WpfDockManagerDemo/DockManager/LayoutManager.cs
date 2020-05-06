@@ -28,6 +28,17 @@ namespace WpfDockManagerDemo.DockManager
         {
             FloatingTools = new List<FloatingTool>();
             FloatingDocuments = new List<FloatingDocument>();
+
+            RowDefinitions.Add(new RowDefinition() { Height = new System.Windows.GridLength(20, System.Windows.GridUnitType.Pixel) });
+            RowDefinitions.Add(new RowDefinition() { Height = new System.Windows.GridLength(1, System.Windows.GridUnitType.Star) });
+            RowDefinitions.Add(new RowDefinition() { Height = new System.Windows.GridLength(20, System.Windows.GridUnitType.Pixel) });
+
+            ColumnDefinitions.Add(new ColumnDefinition() { Width = new System.Windows.GridLength(20, System.Windows.GridUnitType.Pixel) });
+            ColumnDefinitions.Add(new ColumnDefinition() { Width = new System.Windows.GridLength(1, System.Windows.GridUnitType.Star) });
+            ColumnDefinitions.Add(new ColumnDefinition() { Width = new System.Windows.GridLength(20, System.Windows.GridUnitType.Pixel) });
+            CreateSidePanes();
+
+            Background = System.Windows.Media.Brushes.LightBlue;
         }
 
         ~LayoutManager()
@@ -98,6 +109,11 @@ namespace WpfDockManagerDemo.DockManager
 
         internal List<FloatingTool> FloatingTools;
         internal List<FloatingDocument> FloatingDocuments;
+        internal ListView _leftPane;
+        internal ListView _topPane;
+        internal ListView _rightPane;
+        internal ListView _bottomPane;
+        internal SplitterPane _root;
 
         private SelectablePane SelectedPane;
 
@@ -276,9 +292,45 @@ namespace WpfDockManagerDemo.DockManager
 
         #endregion
 
+        private void CreateSidePanes()
+        {
+            _leftPane = new ListView();
+            _leftPane.Items.Add("L");
+            Children.Add(_leftPane);
+            Grid.SetRow(_leftPane, 1);
+            Grid.SetColumn(_leftPane, 0);
+            _leftPane.Height = 50;
+            _leftPane.Width = 50;
+
+            _rightPane = new ListView();
+            _rightPane.Items.Add("R");
+            Children.Add(_rightPane);
+            Grid.SetRow(_rightPane, 1);
+            Grid.SetColumn(_rightPane, 2);
+            _rightPane.Height = 50;
+            _rightPane.Width = 50;
+
+            _topPane = new ListView();
+            _topPane.Items.Add("T");
+            Children.Add(_topPane);
+            Grid.SetRow(_topPane, 0);
+            Grid.SetColumn(_topPane, 1);
+            _topPane.Height = 50;
+            _topPane.Width = 50;
+
+            _bottomPane = new ListView();
+            _bottomPane.Items.Add("B");
+            Children.Add(_bottomPane);
+            Grid.SetRow(_bottomPane, 2);
+            Grid.SetColumn(_bottomPane, 1);
+            _bottomPane.Height = 50;
+            _bottomPane.Width = 50;
+        }
+
         public void Clear()
         {
             Children.Clear();
+            CreateSidePanes();
             while (FloatingTools.Count > 0)
             {
                 FloatingTools[0].Close();
@@ -399,6 +451,18 @@ namespace WpfDockManagerDemo.DockManager
             return toolPane;
         }
 
+        private void SetRootSplitterPane(SplitterPane root)
+        {
+            if ((_root != null) && Children.Contains(_root))
+            {
+                Children.Remove(_root);
+            }
+            _root = root;
+            Children.Add(_root);
+            Grid.SetRow(_root, 1);
+            Grid.SetColumn(_root, 1);
+        }
+
         // Warning warning => as per floating tool!
         private FloatingDocument CreateFloatingDocument()
         {
@@ -421,7 +485,7 @@ namespace WpfDockManagerDemo.DockManager
         private void Create()
         {
             Clear();
-            
+
             /*
              * We descend the tree level by level, adding a new level when the current one is full. 
              * We continue adding nodes until we have exhausted the items in views (created above). 
@@ -472,11 +536,10 @@ namespace WpfDockManagerDemo.DockManager
 
              */
 
-            SplitterPane rootSplitterPane = new SplitterPane(true);
-            Children.Add(rootSplitterPane);
+            SetRootSplitterPane(new SplitterPane(true));
 
             DocumentPanel documentPanel = new DocumentPanel();
-            rootSplitterPane.AddChild(documentPanel, true);
+            _root.AddChild(documentPanel, true);
 
             List<UserControl> documentViews = LoadViewsFromTemplates(DocumentTemplates, DocumentsSource);
 
@@ -500,7 +563,7 @@ namespace WpfDockManagerDemo.DockManager
                 DockManager.DockPane toolPane = CreateToolPane();
                 toolPane.IViewContainer.AddUserControl(toolViews[0]);
 
-                rootSplitterPane.AddChild(toolPane, false);
+                _root.AddChild(toolPane, false);
 
                 list_N.Add(toolPane);
                 AddViews(toolViews, list_N, delegate { return CreateToolPane(); });
@@ -771,7 +834,7 @@ namespace WpfDockManagerDemo.DockManager
             XmlElement xmlLayoutManager = xmlDocument.CreateElement("LayoutManager");
             xmlDocument.AppendChild(xmlLayoutManager);
 
-            SaveNode(xmlDocument, Children[0], xmlLayoutManager);
+            SaveNode(xmlDocument, _root, xmlLayoutManager);
             foreach (FloatingTool floatingTool in FloatingTools)
             {
                 int count = floatingTool.IViewContainer.GetUserControlCount();
@@ -906,18 +969,27 @@ namespace WpfDockManagerDemo.DockManager
                             throw new Exception(System.Reflection.MethodBase.GetCurrentMethod().Name + ": a SplitterPane element must have an orientation attribute");
                         }
 
-                        SetWidthOrHeight(xmlSplitterPane, parentFrameworkElement, isParentHorizontal, row, column);
-
                         bool isChildHorizontal = xmlAttribute.Value == "Horizontal";
 
-                        Grid newGrid = new SplitterPane(isChildHorizontal);
-                        Grid.SetRow(newGrid, row);
-                        Grid.SetColumn(newGrid, column);
+                        SplitterPane newGrid = new SplitterPane(isChildHorizontal);
+
+                        if (parentFrameworkElement == this)
+                        {
+                            row = 1;
+                            column = 1;
+                            SetRootSplitterPane(newGrid);
+                        }
+                        else
+                        {
+                            System.Windows.Markup.IAddChild parentElement = (System.Windows.Markup.IAddChild)parentFrameworkElement;
+                            parentElement.AddChild(newGrid);
+                            Grid.SetRow(newGrid, row);
+                            Grid.SetColumn(newGrid, column);
+                        }
+                        SetWidthOrHeight(xmlSplitterPane, parentFrameworkElement, isParentHorizontal, row, column);
+
                         row += rowIncrement;
                         column += columnIncrement;
-
-                        System.Windows.Markup.IAddChild parentElement = (System.Windows.Markup.IAddChild)parentFrameworkElement;
-                        parentElement.AddChild(newGrid);
 
                         LoadNode(viewsMap, newGrid, xmlSplitterPane, isChildHorizontal);
                     }
@@ -1377,9 +1449,8 @@ namespace WpfDockManagerDemo.DockManager
                         }
                         else
                         {
-                            SplitterPane rootSplitterPane = Children[0] as SplitterPane;
-                            Children.Remove(rootSplitterPane);
-                            Children.Add(parentSplitterPane);
+                            SplitterPane rootSplitterPane = _root;
+                            SetRootSplitterPane(parentSplitterPane);
                             parentSplitterPane.AddChild(rootSplitterPane, !isFirst);
                         }
                         break;
