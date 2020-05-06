@@ -1408,7 +1408,7 @@ namespace WpfDockManagerDemo.DockManager
                         (floatingPane == null) ||
                         (SelectedPane == null) ||
                         (!(SelectedPane.Parent is SplitterPane) && !(SelectedPane.Parent is DocumentPanel) && (SelectedPane.Parent != this)) ||
-                        (_windowLocationPane == null) ||
+                        //(_windowLocationPane == null) ||
                         (_insertionIndicatorManager == null) ||
                         (_insertionIndicatorManager.WindowLocation == WindowLocation.None)
                    )
@@ -1614,11 +1614,11 @@ namespace WpfDockManagerDemo.DockManager
                         _edgeLocationPane = new EdgeLocationPane();
                         _edgeLocationPane.AllowsTransparency = true;
                         _edgeLocationPane.Show();
-                        Point topLeftPoint = PointToScreen(new Point(0, 0));
+                        Point topLeftPoint = _root.PointToScreen(new Point(0, 0));
                         _edgeLocationPane.Left = topLeftPoint.X;
                         _edgeLocationPane.Top = topLeftPoint.Y;
-                        _edgeLocationPane.Width = ActualWidth;
-                        _edgeLocationPane.Height = ActualHeight;
+                        _edgeLocationPane.Width = _root.ActualWidth;
+                        _edgeLocationPane.Height = _root.ActualHeight;
                     }
                 }
             }
