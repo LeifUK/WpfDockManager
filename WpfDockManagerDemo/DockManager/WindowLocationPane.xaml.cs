@@ -41,5 +41,14 @@ namespace WpfDockManagerDemo.DockManager
 
             return WindowLocation.None;
         }
+
+        public void ShowIcons(WindowLocation windowLocations)
+        {
+            _buttonLeft.Visibility = windowLocations.HasFlag(WindowLocation.Left) ? Visibility.Visible : Visibility.Hidden;
+            _buttonTop.Visibility = windowLocations.HasFlag(WindowLocation.Top) ? Visibility.Visible : Visibility.Hidden;
+            _buttonRight.Visibility = windowLocations.HasFlag(WindowLocation.Right) ? Visibility.Visible : Visibility.Hidden;
+            _buttonBottom.Visibility = windowLocations.HasFlag(WindowLocation.Bottom) ? Visibility.Visible : Visibility.Hidden;
+            _buttonMiddle.Visibility = windowLocations.HasFlag(WindowLocation.Middle) ? Visibility.Visible : Visibility.Hidden;
+        }
     }
 }

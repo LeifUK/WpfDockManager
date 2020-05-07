@@ -1697,6 +1697,10 @@ namespace WpfDockManagerDemo.DockManager
                 }
 
                 _insertionIndicatorManager.ShowInsertionIndicator(windowLocation);
+                if (SelectedPane is DocumentPanel)
+                {
+                    _windowLocationPane.ShowIcons(WindowLocation.Middle);
+                }
             }
         }
     }
