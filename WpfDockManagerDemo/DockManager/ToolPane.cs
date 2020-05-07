@@ -67,6 +67,7 @@ namespace WpfDockManagerDemo.DockManager
 
             Button pinButton = new Button();
             pinButton.Style = FindResource("styleHeaderPinButton") as Style;
+            pinButton.Click += PinButton_Click;
             Grid.SetRow(pinButton, 0);
             Grid.SetColumn(pinButton, 3);
             Children.Add(pinButton);
@@ -85,12 +86,21 @@ namespace WpfDockManagerDemo.DockManager
             Grid.SetColumnSpan(IViewContainer as System.Windows.UIElement, ColumnDefinitions.Count);
         }
 
+        public event EventHandler UnPin;
+
+        private void PinButton_Click(object sender, RoutedEventArgs e)
+        {
+            UnPin?.Invoke(this, null);
+        }
+
         private void DocumentContainer_SelectionChanged(object sender, EventArgs e)
         {
             _titleLabel.Content = IViewContainer.Title;
         }
 
         protected Label _titleLabel;
+
+        public string Title { get { return IViewContainer.Title; } }
 
         public Border Border { get; private set; }
 

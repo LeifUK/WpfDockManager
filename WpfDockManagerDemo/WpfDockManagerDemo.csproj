@@ -70,6 +70,9 @@
     <Compile Include="DockManager\Helpers.cs" />
     <Compile Include="DockManager\IViewContainer.cs" />
     <Compile Include="DockManager\SelectablePane.cs" />
+    <Compile Include="DockManager\EdgeToolPane.xaml.cs">
+      <DependentUpon>EdgeToolPane.xaml</DependentUpon>
+    </Compile>
     <Compile Include="DockManager\ToolContainer.cs" />
     <Compile Include="DockManager\DocumentContainer.cs" />
     <Compile Include="DockManager\DocumentPane.cs" />
@@ -81,6 +84,11 @@
     <Compile Include="DockManager\IDocument.cs" />
     <Compile Include="DockManager\InsertionIndicatorManager.cs" />
     <Compile Include="DockManager\IView.cs" />
+    <Compile Include="DockManager\ToolList.cs" />
+    <Compile Include="DockManager\ToolListControl.xaml.cs">
+      <DependentUpon>ToolListControl.xaml</DependentUpon>
+    </Compile>
+    <Compile Include="DockManager\ToolListItem.cs" />
     <Compile Include="DockManager\ToolPane.cs" />
     <Compile Include="DockManager\ViewType.cs" />
     <Compile Include="DockManager\WindowLocationPane.xaml.cs">
@@ -135,6 +143,14 @@
     <Page Include="DockManager\FloatingPane.xaml">
       <SubType>Designer</SubType>
       <Generator>XamlIntelliSenseFileGenerator</Generator>
+    </Page>
+    <Page Include="DockManager\EdgeToolPane.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
+    <Page Include="DockManager\ToolListControl.xaml">
+      <Generator>MSBuild:Compile</Generator>
+      <SubType>Designer</SubType>
     </Page>
     <Page Include="DockManager\WindowLocationPane.xaml">
       <SubType>Designer</SubType>

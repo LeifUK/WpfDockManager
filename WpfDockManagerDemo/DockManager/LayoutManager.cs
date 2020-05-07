@@ -29,13 +29,13 @@ namespace WpfDockManagerDemo.DockManager
             FloatingTools = new List<FloatingTool>();
             FloatingDocuments = new List<FloatingDocument>();
 
-            RowDefinitions.Add(new RowDefinition() { Height = new System.Windows.GridLength(20, System.Windows.GridUnitType.Pixel) });
+            RowDefinitions.Add(new RowDefinition() { Height = new System.Windows.GridLength(1, System.Windows.GridUnitType.Auto) });
             RowDefinitions.Add(new RowDefinition() { Height = new System.Windows.GridLength(1, System.Windows.GridUnitType.Star) });
-            RowDefinitions.Add(new RowDefinition() { Height = new System.Windows.GridLength(20, System.Windows.GridUnitType.Pixel) });
+            RowDefinitions.Add(new RowDefinition() { Height = new System.Windows.GridLength(1, System.Windows.GridUnitType.Auto) });
 
-            ColumnDefinitions.Add(new ColumnDefinition() { Width = new System.Windows.GridLength(20, System.Windows.GridUnitType.Pixel) });
+            ColumnDefinitions.Add(new ColumnDefinition() { Width = new System.Windows.GridLength(1, System.Windows.GridUnitType.Auto) });
             ColumnDefinitions.Add(new ColumnDefinition() { Width = new System.Windows.GridLength(1, System.Windows.GridUnitType.Star) });
-            ColumnDefinitions.Add(new ColumnDefinition() { Width = new System.Windows.GridLength(20, System.Windows.GridUnitType.Pixel) });
+            ColumnDefinitions.Add(new ColumnDefinition() { Width = new System.Windows.GridLength(1, System.Windows.GridUnitType.Auto) });
             CreateSidePanes();
 
             Background = System.Windows.Media.Brushes.LightBlue;
@@ -109,10 +109,16 @@ namespace WpfDockManagerDemo.DockManager
 
         internal List<FloatingTool> FloatingTools;
         internal List<FloatingDocument> FloatingDocuments;
-        internal ListView _leftPane;
-        internal ListView _topPane;
-        internal ListView _rightPane;
-        internal ListView _bottomPane;
+
+        System.Collections.ObjectModel.ObservableCollection<ToolListItem> _leftItems;
+        System.Collections.ObjectModel.ObservableCollection<ToolListItem> _rightItems;
+        System.Collections.ObjectModel.ObservableCollection<ToolListItem> _topItems;
+        System.Collections.ObjectModel.ObservableCollection<ToolListItem> _bottomItems;
+
+        internal ToolListControl _leftPane;
+        internal ToolListControl _topPane;
+        internal ToolListControl _rightPane;
+        internal ToolListControl _bottomPane;
         internal Grid _root;
 
         private SelectablePane SelectedPane;
@@ -294,37 +300,47 @@ namespace WpfDockManagerDemo.DockManager
 
         private void CreateSidePanes()
         {
-            _leftPane = new ListView();
-            _leftPane.Items.Add("L");
+            _leftItems = new System.Collections.ObjectModel.ObservableCollection<ToolListItem>();
+            _leftPane = new ToolListControl();
+            _leftPane.ItemsSource = _leftItems;
+            _leftPane.IsHorizontal = false;
+            _leftPane.DisplayMemberPath = "Title";
+            //_leftPane.Items.Add("L");
             Children.Add(_leftPane);
             Grid.SetRow(_leftPane, 1);
             Grid.SetColumn(_leftPane, 0);
-            _leftPane.Height = 50;
-            _leftPane.Width = 50;
+            //_leftPane.Width = 50;
 
-            _rightPane = new ListView();
-            _rightPane.Items.Add("R");
+            _rightItems = new System.Collections.ObjectModel.ObservableCollection<ToolListItem>();
+            _rightPane = new ToolListControl();
+            _rightPane.ItemsSource = _rightItems;
+            _rightPane.IsHorizontal = false;
+            _rightPane.DisplayMemberPath = "Title";
+            //_rightPane.Items.Add("R");
             Children.Add(_rightPane);
             Grid.SetRow(_rightPane, 1);
             Grid.SetColumn(_rightPane, 2);
-            _rightPane.Height = 50;
-            _rightPane.Width = 50;
+            //_rightPane.Width = 50;
 
-            _topPane = new ListView();
-            _topPane.Items.Add("T");
+            _topItems = new System.Collections.ObjectModel.ObservableCollection<ToolListItem>();
+            _topPane = new ToolListControl();
+            _topPane.ItemsSource = _topItems;
+            _topPane.DisplayMemberPath = "Title";
+            //_topPane.Items.Add("T");
             Children.Add(_topPane);
             Grid.SetRow(_topPane, 0);
             Grid.SetColumn(_topPane, 1);
-            _topPane.Height = 50;
-            _topPane.Width = 50;
+            //_topPane.Height = 50;
 
-            _bottomPane = new ListView();
-            _bottomPane.Items.Add("B");
+            _bottomItems = new System.Collections.ObjectModel.ObservableCollection<ToolListItem>();
+            _bottomPane = new ToolListControl();
+            _bottomPane.ItemsSource = _bottomItems;
+            _bottomPane.DisplayMemberPath = "Title";
+            //_bottomPane.Items.Add("B");
             Children.Add(_bottomPane);
             Grid.SetRow(_bottomPane, 2);
             Grid.SetColumn(_bottomPane, 1);
-            _bottomPane.Height = 50;
-            _bottomPane.Width = 50;
+            //_bottomPane.Height = 100;
         }
 
         public void Clear()
@@ -448,7 +464,62 @@ namespace WpfDockManagerDemo.DockManager
         {
             ToolPane toolPane = new ToolPane();
             RegisterDockPane(toolPane);
+            toolPane.UnPin += ToolPane_UnPin;
             return toolPane;
+        }
+
+        private void ToolPane_UnPin(object sender, EventArgs e)
+        {
+            System.Diagnostics.Trace.Assert(sender is ToolPane);
+
+            // Find out which edge ... 
+            ToolListControl _edgePane = null;
+            ToolPane toolPane = sender as ToolPane;
+            FrameworkElement frameworkElement = toolPane;
+            FrameworkElement parentFrameworkElement = toolPane.Parent as FrameworkElement;
+            while (true)
+            {
+                System.Diagnostics.Trace.Assert(parentFrameworkElement is SplitterPane);
+
+                if (parentFrameworkElement.Parent == this)
+                {
+                    SplitterPane splitterPane = parentFrameworkElement as SplitterPane;
+                    if (splitterPane.IsHorizontal)
+                    {
+                        if (Grid.GetRow(frameworkElement) == 0)
+                        {
+                            _edgePane = _topPane;
+                        }
+                        else
+                        {
+                            _edgePane = _bottomPane;
+                        }
+                    }
+                    else
+                    {
+                        if (Grid.GetColumn(frameworkElement) == 0)
+                        {
+                            _edgePane = _leftPane;
+                        }
+                        else
+                        {
+                            _edgePane = _rightPane;
+                        }
+                    }
+                    break;
+                }
+
+                frameworkElement = parentFrameworkElement;
+                parentFrameworkElement = parentFrameworkElement.Parent as FrameworkElement;
+            }
+
+            System.Diagnostics.Trace.Assert(_edgePane != null);
+
+            toolPane = sender as ToolPane;
+            ExtractDockPane(toolPane);
+
+            (_edgePane.ItemsSource as System.Collections.ObjectModel.ObservableCollection<ToolListItem>).Add(new ToolListItem() { ToolPane = toolPane });
+            //string title = _edgePane.Title(_edgePane.Items.Count - 1);
         }
 
         private void SetRootPane(Grid grid)

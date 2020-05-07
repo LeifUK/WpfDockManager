@@ -306,4 +306,8 @@
             </Setter.Value>
         </Setter>
     </Style>
+
+    <ItemsPanelTemplate x:Key="ItemsPanelTemplateToolList">
+            <StackPanel Orientation="Horizontal" />
+    </ItemsPanelTemplate>
 </ResourceDictionary>
