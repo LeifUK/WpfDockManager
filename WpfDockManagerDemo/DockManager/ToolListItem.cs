@@ -9,11 +9,22 @@ namespace WpfDockManagerDemo.DockManager
     internal class ToolListItem
     {
         public ToolPane ToolPane { get; set; }
+        public IViewContainer IViewContainer { get; set; }
+        public int Index { get; set; }
         public string Title
         {
             get
             {
-                return ToolPane == null ? "" : ToolPane.IViewContainer.Title;
+                if (IViewContainer != null)
+                {
+                    IViewModel iViewModel = IViewContainer.GetIViewModel(Index);
+                    if (iViewModel != null)
+                    {
+                        return iViewModel.Title;
+                    }
+                }
+
+                return "";
             }
         }
     }

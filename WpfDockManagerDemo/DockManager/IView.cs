@@ -8,6 +8,6 @@ namespace WpfDockManagerDemo.DockManager
 {
     interface IView
     {
-        DockManager.IDocument IDocument { get; set; }
+        DockManager.IViewModel IViewModel { get; set; }
     }
 }

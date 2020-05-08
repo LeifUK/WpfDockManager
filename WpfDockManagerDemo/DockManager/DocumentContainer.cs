@@ -8,7 +8,7 @@ namespace WpfDockManagerDemo.DockManager
     {
         public DocumentContainer()
         {
-            _items = new System.Collections.ObjectModel.ObservableCollection<System.Collections.Generic.KeyValuePair<UserControl, IDocument>>();
+            _items = new System.Collections.ObjectModel.ObservableCollection<System.Collections.Generic.KeyValuePair<UserControl, IViewModel>>();
             _tabHeaderControl = new WpfControlLibrary.TabHeaderControl();
             _tabHeaderControl.ItemsSource = _items;
             _tabHeaderControl.DisplayMemberPath = "Value.Title";
@@ -52,7 +52,7 @@ namespace WpfDockManagerDemo.DockManager
             _documentButton.Style = FindResource("styleHeaderMenuButton") as Style;
         }
 
-        private System.Collections.ObjectModel.ObservableCollection<System.Collections.Generic.KeyValuePair<UserControl, IDocument>> _items;
+        private System.Collections.ObjectModel.ObservableCollection<System.Collections.Generic.KeyValuePair<UserControl, IViewModel>> _items;
         public Action DisplayGeneralMenu;
 
         private void _tabHeaderControl_SelectionChanged(object sender, EventArgs e)
@@ -78,11 +78,11 @@ namespace WpfDockManagerDemo.DockManager
 
         private void _tabHeaderControl_ItemsChanged(object sender, EventArgs e)
         {
-            var items = new System.Collections.ObjectModel.ObservableCollection<System.Collections.Generic.KeyValuePair<UserControl, IDocument>>();
+            var items = new System.Collections.ObjectModel.ObservableCollection<System.Collections.Generic.KeyValuePair<UserControl, IViewModel>>();
 
             foreach (var item in _tabHeaderControl.Items)
             {
-                items.Add((System.Collections.Generic.KeyValuePair<UserControl, IDocument>)item);
+                items.Add((System.Collections.Generic.KeyValuePair<UserControl, IViewModel>)item);
             }
             int selectedIndex = (_tabHeaderControl.SelectedIndex == -1) ? 0 : _tabHeaderControl.SelectedIndex;
 
@@ -99,7 +99,7 @@ namespace WpfDockManagerDemo.DockManager
                 return;
             }
 
-            System.Collections.Generic.KeyValuePair<UserControl, IDocument> item = (System.Collections.Generic.KeyValuePair<UserControl, IDocument>)sender;
+            System.Collections.Generic.KeyValuePair<UserControl, IViewModel> item = (System.Collections.Generic.KeyValuePair<UserControl, IViewModel>)sender;
             if (item.Value.CanClose)
             {
                 if (item.Value.HasChanged)
@@ -146,7 +146,7 @@ namespace WpfDockManagerDemo.DockManager
         private Button _documentButton;
         private Button _menuButton;
 
-        #region IDocumentContainer
+        #region IViewContainer
 
         public event EventHandler SelectionChanged;
         public event EventHandler TabClosed;
@@ -167,9 +167,9 @@ namespace WpfDockManagerDemo.DockManager
         public void AddUserControl(UserControl userControl)
         {
             System.Diagnostics.Trace.Assert(userControl != null);
-            System.Diagnostics.Trace.Assert(userControl.DataContext is IDocument);
+            System.Diagnostics.Trace.Assert(userControl.DataContext is IViewModel);
 
-            _items.Add(new System.Collections.Generic.KeyValuePair<UserControl, IDocument>(userControl, userControl.DataContext as IDocument));
+            _items.Add(new System.Collections.Generic.KeyValuePair<UserControl, IViewModel>(userControl, userControl.DataContext as IViewModel));
             _tabHeaderControl.SelectedItem = _items[_items.Count - 1];
         }
 
@@ -210,6 +210,17 @@ namespace WpfDockManagerDemo.DockManager
             return _items[index].Key;
         }
 
-        #endregion IDocumentContainer
+        public IViewModel GetIViewModel(int index)
+        {
+            UserControl userControl = GetUserControl(index);
+            if (userControl == null)
+            {
+                return null;
+            }
+
+            return userControl.DataContext as IViewModel;
+        }
+
+        #endregion IViewContainer
     }
 }

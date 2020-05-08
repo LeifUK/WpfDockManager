@@ -3,6 +3,7 @@ using System.Windows;
 using System.Windows.Controls;
 using System.ComponentModel;
 using System.Collections;
+using System.Windows.Media;
 
 namespace WpfDockManagerDemo.DockManager
 {
@@ -16,7 +17,7 @@ namespace WpfDockManagerDemo.DockManager
             InitializeComponent();
         }
 
-        public event EventHandler SelectionChanged;
+        public event EventHandler ItemClick;
 
         #region Dependency properties
 
@@ -180,6 +181,75 @@ namespace WpfDockManagerDemo.DockManager
 
         #endregion
 
+        #region BarBrush dependency property
+
+        [Bindable(true)]
+        [DesignerSerializationVisibility(DesignerSerializationVisibility.Hidden)]
+        public static readonly DependencyProperty BarBrushProperty = DependencyProperty.Register("BarBrush", typeof(Brush), typeof(ToolListControl), new FrameworkPropertyMetadata(Brushes.DarkSlateBlue, null));
+
+        public Brush BarBrush
+        {
+            get
+            {
+                return (Brush)GetValue(BarBrushProperty);
+            }
+            set
+            {
+                if (value != BarBrush)
+                {
+                    SetValue(BarBrushProperty, value);
+                }
+            }
+        }
+
+        #endregion BarBrush dependency property
+
+        #region BarBrushMouseOver dependency property
+
+        [Bindable(true)]
+        [DesignerSerializationVisibility(DesignerSerializationVisibility.Hidden)]
+        public static readonly DependencyProperty BarBrushMouseOverProperty = DependencyProperty.Register("BarBrushMouseOver", typeof(Brush), typeof(ToolListControl), new FrameworkPropertyMetadata(Brushes.LightSteelBlue, null));
+
+        public Brush BarBrushMouseOver
+        {
+            get
+            {
+                return (Brush)GetValue(BarBrushMouseOverProperty);
+            }
+            set
+            {
+                if (value != BarBrushMouseOver)
+                {
+                    SetValue(BarBrushMouseOverProperty, value);
+                }
+            }
+        }
+
+        #endregion BarBrushMouseOver dependency property
+
         #endregion Dependency properties
+
+        private void Border_MouseLeftButtonDown(object sender, System.Windows.Input.MouseButtonEventArgs e)
+        {
+            if (_listBox.ItemContainerGenerator.Status != System.Windows.Controls.Primitives.GeneratorStatus.ContainersGenerated)
+            {
+                return;
+            }
+
+            // SelectedIndex is yet to be set so we must find it outselves ... 
+            Point cursorScreenPosition = WpfControlLibrary.Utilities.GetCursorPosition();
+
+            for (int index = 0; index < _listBox.Items.Count; ++index)
+            {
+                ListBoxItem item = _listBox.ItemContainerGenerator.ContainerFromIndex(index) as ListBoxItem;
+
+                Point cursorItemPosition = item.PointFromScreen(cursorScreenPosition);
+                if ((cursorItemPosition.X >= 0) && (cursorItemPosition.Y >= 0) && (cursorItemPosition.X <= item.ActualWidth) && (cursorItemPosition.Y <= item.ActualHeight))
+                {
+                    ItemClick?.Invoke(this, null);
+                    return;
+                }
+            }
+        }
     }
 }

@@ -7,7 +7,7 @@ namespace WpfDockManagerDemo.DockManager
     internal static class Helpers
     {
         internal static void DisplayItemsMenu(
-            System.Collections.ObjectModel.ObservableCollection<System.Collections.Generic.KeyValuePair<UserControl, IDocument>> items,
+            System.Collections.ObjectModel.ObservableCollection<System.Collections.Generic.KeyValuePair<UserControl, IViewModel>> items,
             WpfControlLibrary.TabHeaderControl tabHeaderControl,
             UserControl selectedUserControl)
         {

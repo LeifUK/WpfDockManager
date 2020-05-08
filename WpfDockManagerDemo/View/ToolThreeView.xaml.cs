@@ -12,6 +12,6 @@ namespace WpfDockManagerDemo.View
             InitializeComponent();
         }
 
-        public DockManager.IDocument IDocument { get; set; }
+        public DockManager.IViewModel IViewModel { get; set; }
     }
 }

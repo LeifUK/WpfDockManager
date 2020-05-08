@@ -6,7 +6,7 @@ using System.Threading.Tasks;
 
 namespace WpfDockManagerDemo.DockManager
 {
-    public interface IDocument
+    public interface IViewModel
     {
         // A unique ID
         long ID { get; }

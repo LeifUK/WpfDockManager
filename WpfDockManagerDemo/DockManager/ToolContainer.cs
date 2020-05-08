@@ -20,7 +20,7 @@ namespace WpfDockManagerDemo.DockManager
             ColumnDefinitions.Add(new ColumnDefinition() { Width = new System.Windows.GridLength(20, System.Windows.GridUnitType.Pixel) });
             ColumnDefinitions.Add(new ColumnDefinition() { Width = new System.Windows.GridLength(4, System.Windows.GridUnitType.Pixel) });
 
-            _items = new System.Collections.ObjectModel.ObservableCollection<System.Collections.Generic.KeyValuePair<UserControl, IDocument>>();
+            _items = new System.Collections.ObjectModel.ObservableCollection<System.Collections.Generic.KeyValuePair<UserControl, IViewModel>>();
 
             _tabHeaderControl = new WpfControlLibrary.TabHeaderControl();
             _tabHeaderControl.SelectionChanged += _tabHeaderControl_SelectionChanged;
@@ -60,7 +60,7 @@ namespace WpfDockManagerDemo.DockManager
         private RowDefinition rowDefinition_TabHeader;
         private RowDefinition rowDefinition_Spacer;
 
-        protected System.Collections.ObjectModel.ObservableCollection<System.Collections.Generic.KeyValuePair<UserControl, IDocument>> _items;
+        protected System.Collections.ObjectModel.ObservableCollection<System.Collections.Generic.KeyValuePair<UserControl, IViewModel>> _items;
         public WpfControlLibrary.TabHeaderControl _tabHeaderControl;
         protected UserControl _selectedUserControl;
         private Button _button;
@@ -85,11 +85,11 @@ namespace WpfDockManagerDemo.DockManager
 
         private void _tabHeaderControl_ItemsChanged(object sender, System.EventArgs e)
         {
-            var items = new System.Collections.ObjectModel.ObservableCollection<System.Collections.Generic.KeyValuePair<UserControl, IDocument>>();
+            var items = new System.Collections.ObjectModel.ObservableCollection<System.Collections.Generic.KeyValuePair<UserControl, IViewModel>>();
 
             foreach (var item in _tabHeaderControl.Items)
             {
-                items.Add((System.Collections.Generic.KeyValuePair<UserControl, IDocument>)item);
+                items.Add((System.Collections.Generic.KeyValuePair<UserControl, IViewModel>)item);
             }
             int selectedIndex = (_tabHeaderControl.SelectedIndex == -1) ? 0 : _tabHeaderControl.SelectedIndex;
 
@@ -106,7 +106,7 @@ namespace WpfDockManagerDemo.DockManager
                 return;
             }
 
-            System.Collections.Generic.KeyValuePair<UserControl, IDocument> item = (System.Collections.Generic.KeyValuePair<UserControl, IDocument>)sender;
+            System.Collections.Generic.KeyValuePair<UserControl, IViewModel> item = (System.Collections.Generic.KeyValuePair<UserControl, IViewModel>)sender;
             if (item.Value.CanClose)
             {
                 if (item.Value.HasChanged)
@@ -175,7 +175,7 @@ namespace WpfDockManagerDemo.DockManager
             SelectionChanged?.Invoke(sender, e);
         }
 
-        #region IDocumentContainer
+        #region IViewContainer
 
         public event EventHandler SelectionChanged;
         public event EventHandler TabClosed;
@@ -196,9 +196,9 @@ namespace WpfDockManagerDemo.DockManager
         public void AddUserControl(UserControl userControl)
         {
             System.Diagnostics.Trace.Assert(userControl != null);
-            System.Diagnostics.Trace.Assert(userControl.DataContext is IDocument);
+            System.Diagnostics.Trace.Assert(userControl.DataContext is IViewModel);
 
-            _items.Add(new System.Collections.Generic.KeyValuePair<UserControl, IDocument>(userControl, userControl.DataContext as IDocument));
+            _items.Add(new System.Collections.Generic.KeyValuePair<UserControl, IViewModel>(userControl, userControl.DataContext as IViewModel));
             if ((_selectedUserControl != null) && Children.Contains(_selectedUserControl))
             {
                 Children.Remove(_selectedUserControl);
@@ -257,6 +257,17 @@ namespace WpfDockManagerDemo.DockManager
             return _items[index].Key;
         }
 
-        #endregion IDocumentContainer
+        public IViewModel GetIViewModel(int index)
+        {
+            UserControl userControl = GetUserControl(index);
+            if (userControl == null)
+            {
+                return null;
+            }
+            
+            return userControl.DataContext as IViewModel;
+        }
+
+        #endregion IViewContainer
     }
 }

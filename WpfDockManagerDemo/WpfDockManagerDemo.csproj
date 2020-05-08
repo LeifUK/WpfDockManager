@@ -69,6 +69,7 @@
     <Compile Include="DockManager\FloatingTool.cs" />
     <Compile Include="DockManager\Helpers.cs" />
     <Compile Include="DockManager\IViewContainer.cs" />
+    <Compile Include="DockManager\IViewModel.cs" />
     <Compile Include="DockManager\SelectablePane.cs" />
     <Compile Include="DockManager\EdgeToolPane.xaml.cs">
       <DependentUpon>EdgeToolPane.xaml</DependentUpon>
@@ -81,10 +82,8 @@
       <DependentUpon>EdgeLocationPane.xaml</DependentUpon>
     </Compile>
     <Compile Include="DockManager\ExtensionMethods.cs" />
-    <Compile Include="DockManager\IDocument.cs" />
     <Compile Include="DockManager\InsertionIndicatorManager.cs" />
     <Compile Include="DockManager\IView.cs" />
-    <Compile Include="DockManager\ToolList.cs" />
     <Compile Include="DockManager\ToolListControl.xaml.cs">
       <DependentUpon>ToolListControl.xaml</DependentUpon>
     </Compile>

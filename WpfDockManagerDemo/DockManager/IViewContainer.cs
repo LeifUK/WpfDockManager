@@ -11,6 +11,7 @@ namespace WpfDockManagerDemo.DockManager
         int GetUserControlCount();
         int GetCurrentTabIndex();
         UserControl GetUserControl(int index);
+        IViewModel GetIViewModel(int index);
 
         event EventHandler SelectionChanged;
         event EventHandler TabClosed;

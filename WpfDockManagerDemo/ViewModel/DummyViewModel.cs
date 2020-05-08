@@ -6,7 +6,7 @@ using System.Threading.Tasks;
 
 namespace WpfDockManagerDemo.ViewModel
 {
-    class DummyViewModel : WpfDockManagerDemo.DockManager.IDocument
+    class DummyViewModel : WpfDockManagerDemo.DockManager.IViewModel
     {
         public long ID { get; set; }
 

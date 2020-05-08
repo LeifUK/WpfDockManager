@@ -18,7 +18,9 @@
                     <Setter Property="Template">
                         <Setter.Value>
                             <ControlTemplate TargetType="ListBoxItem">
-                                <Border Name="Border" Padding="2" SnapsToDevicePixels="true" BorderThickness="0">
+                                <Border Name="Border" Padding="2" SnapsToDevicePixels="true" BorderThickness="0" 
+                                        Background="{Binding Path=Background, RelativeSource={RelativeSource AncestorType={x:Type local:ToolListControl}}}"
+                                        MouseLeftButtonDown="Border_MouseLeftButtonDown">
                                     <Grid>
                                         <Grid.RowDefinitions>
                                             <RowDefinition Height="Auto"/>
@@ -30,19 +32,22 @@
                                             <ColumnDefinition Width="4"/>
                                         </Grid.ColumnDefinitions>
                                         <Rectangle Grid.Row="1" Grid.Column="1" x:Name="_rectangle" Fill="Navy" Height="4" HorizontalAlignment="Stretch"/>
-                                        <Label Grid.Row="0" Grid.Column="1" x:Name="Label" FontSize="{Binding Path=FontSize, RelativeSource={RelativeSource AncestorType={x:Type local:ToolListControl}}}" FontFamily="{Binding Path=FontFamily, RelativeSource={RelativeSource AncestorType={x:Type local:ToolListControl}}}" FontStyle="{Binding Path=FontStyle, RelativeSource={RelativeSource AncestorType={x:Type local:ToolListControl}}}" Foreground="Black" Width="Auto" Padding="2,0,2,0" Margin="0" VerticalAlignment="Center">
+                                        <Label Grid.Row="0" Grid.Column="1" x:Name="Label" 
+                                               FontSize="{Binding Path=FontSize, RelativeSource={RelativeSource AncestorType={x:Type local:ToolListControl}}}" 
+                                               FontFamily="{Binding Path=FontFamily, RelativeSource={RelativeSource AncestorType={x:Type local:ToolListControl}}}" 
+                                               FontStyle="{Binding Path=FontStyle, RelativeSource={RelativeSource AncestorType={x:Type local:ToolListControl}}}" 
+                                               Foreground="{Binding Path=Foreground, RelativeSource={RelativeSource AncestorType={x:Type local:ToolListControl}}}" 
+                                               Width="Auto" Padding="2,0,2,0" Margin="0" VerticalAlignment="Center">
                                             <ContentPresenter />
                                         </Label>
                                     </Grid>
                                 </Border>
                                 <ControlTemplate.Triggers>
-                                    <Trigger Property="IsSelected" Value="true">
-                                        <Setter TargetName="_rectangle" Property="Visibility" Value="Visible"/>
-                                        <Setter TargetName="Label" Property="Foreground" Value="{Binding Path=SelectedTabForeground, RelativeSource={RelativeSource AncestorType={x:Type local:ToolListControl}}}"/>
+                                    <Trigger Property="IsMouseOver" Value="true">
+                                        <Setter TargetName="_rectangle" Property="Fill" Value="{Binding Path=BarBrushMouseOver, RelativeSource={RelativeSource AncestorType={x:Type local:ToolListControl}}}"/>
                                     </Trigger>
-                                    <Trigger Property="IsSelected" Value="false">
-                                        <Setter TargetName="_rectangle" Property="Visibility" Value="Hidden"/>
-                                        <Setter TargetName="Label" Property="Foreground" Value="{Binding Path=UnselectedTabForeground, RelativeSource={RelativeSource AncestorType={x:Type local:ToolListControl}}}"/>
+                                    <Trigger Property="IsMouseOver" Value="false">
+                                        <Setter TargetName="_rectangle" Property="Fill" Value="{Binding Path=BarBrush, RelativeSource={RelativeSource AncestorType={x:Type local:ToolListControl}}}"/>
                                     </Trigger>
                                 </ControlTemplate.Triggers>
                             </ControlTemplate>

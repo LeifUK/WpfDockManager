@@ -36,9 +36,14 @@ namespace WpfDockManagerDemo.DockManager
             ColumnDefinitions.Add(new ColumnDefinition() { Width = new System.Windows.GridLength(1, System.Windows.GridUnitType.Auto) });
             ColumnDefinitions.Add(new ColumnDefinition() { Width = new System.Windows.GridLength(1, System.Windows.GridUnitType.Star) });
             ColumnDefinitions.Add(new ColumnDefinition() { Width = new System.Windows.GridLength(1, System.Windows.GridUnitType.Auto) });
-            CreateSidePanes();
+            CreateToolLists();
 
             Background = System.Windows.Media.Brushes.LightBlue;
+        }
+
+        public LayoutManager(ToolListControl rightPane)
+        {
+            _rightToolList = rightPane;
         }
 
         ~LayoutManager()
@@ -115,10 +120,10 @@ namespace WpfDockManagerDemo.DockManager
         System.Collections.ObjectModel.ObservableCollection<ToolListItem> _topItems;
         System.Collections.ObjectModel.ObservableCollection<ToolListItem> _bottomItems;
 
-        internal ToolListControl _leftPane;
-        internal ToolListControl _topPane;
-        internal ToolListControl _rightPane;
-        internal ToolListControl _bottomPane;
+        internal ToolListControl _leftToolList;
+        internal ToolListControl _topToolList;
+        internal ToolListControl _rightToolList;
+        internal ToolListControl _bottomToolList;
         internal Grid _root;
 
         private SelectablePane SelectedPane;
@@ -129,13 +134,13 @@ namespace WpfDockManagerDemo.DockManager
 
         [Bindable(true)]
         [DesignerSerializationVisibility(DesignerSerializationVisibility.Hidden)]
-        public static readonly DependencyProperty DocumentsSourceProperty = DependencyProperty.Register("DocumentsSource", typeof(System.Collections.Generic.IEnumerable<IDocument>), typeof(LayoutManager), new FrameworkPropertyMetadata(null, new PropertyChangedCallback(OnDocumentsSourceChanged)));
+        public static readonly DependencyProperty DocumentsSourceProperty = DependencyProperty.Register("DocumentsSource", typeof(System.Collections.Generic.IEnumerable<IViewModel>), typeof(LayoutManager), new FrameworkPropertyMetadata(null, new PropertyChangedCallback(OnDocumentsSourceChanged)));
 
-        public System.Collections.Generic.IEnumerable<IDocument> DocumentsSource
+        public System.Collections.Generic.IEnumerable<IViewModel> DocumentsSource
         {
             get
             {
-                return (System.Collections.Generic.IEnumerable<IDocument>)GetValue(DocumentsSourceProperty);
+                return (System.Collections.Generic.IEnumerable<IViewModel>)GetValue(DocumentsSourceProperty);
             }
             set
             {
@@ -152,7 +157,7 @@ namespace WpfDockManagerDemo.DockManager
         {
             if (e.NewValue != null)
             {
-                DocumentsSource = (System.Collections.Generic.IEnumerable<IDocument>)e.NewValue;
+                DocumentsSource = (System.Collections.Generic.IEnumerable<IViewModel>)e.NewValue;
                 Create();
             }
         }
@@ -298,55 +303,34 @@ namespace WpfDockManagerDemo.DockManager
 
         #endregion
 
-        private void CreateSidePanes()
+        private void CreateToolList(out System.Collections.ObjectModel.ObservableCollection<ToolListItem> items, out ToolListControl toolListControl, int row, int column, bool isHorizontal)
         {
-            _leftItems = new System.Collections.ObjectModel.ObservableCollection<ToolListItem>();
-            _leftPane = new ToolListControl();
-            _leftPane.ItemsSource = _leftItems;
-            _leftPane.IsHorizontal = false;
-            _leftPane.DisplayMemberPath = "Title";
-            //_leftPane.Items.Add("L");
-            Children.Add(_leftPane);
-            Grid.SetRow(_leftPane, 1);
-            Grid.SetColumn(_leftPane, 0);
-            //_leftPane.Width = 50;
+            items = new System.Collections.ObjectModel.ObservableCollection<ToolListItem>();
+            toolListControl = new ToolListControl();
+            toolListControl.Foreground = System.Windows.Media.Brushes.Black;
+            toolListControl.Background = System.Windows.Media.Brushes.Transparent;
+            toolListControl.ItemsSource = items;
+            toolListControl.IsHorizontal = isHorizontal;
+            toolListControl.DisplayMemberPath = "Title";
+            toolListControl.BarBrush = System.Windows.Media.Brushes.DarkSlateBlue;
+            toolListControl.BarBrushMouseOver = System.Windows.Media.Brushes.Orange;
+            Children.Add(toolListControl);
+            Grid.SetRow(toolListControl, row);
+            Grid.SetColumn(toolListControl, column);
+        }
 
-            _rightItems = new System.Collections.ObjectModel.ObservableCollection<ToolListItem>();
-            _rightPane = new ToolListControl();
-            _rightPane.ItemsSource = _rightItems;
-            _rightPane.IsHorizontal = false;
-            _rightPane.DisplayMemberPath = "Title";
-            //_rightPane.Items.Add("R");
-            Children.Add(_rightPane);
-            Grid.SetRow(_rightPane, 1);
-            Grid.SetColumn(_rightPane, 2);
-            //_rightPane.Width = 50;
-
-            _topItems = new System.Collections.ObjectModel.ObservableCollection<ToolListItem>();
-            _topPane = new ToolListControl();
-            _topPane.ItemsSource = _topItems;
-            _topPane.DisplayMemberPath = "Title";
-            //_topPane.Items.Add("T");
-            Children.Add(_topPane);
-            Grid.SetRow(_topPane, 0);
-            Grid.SetColumn(_topPane, 1);
-            //_topPane.Height = 50;
-
-            _bottomItems = new System.Collections.ObjectModel.ObservableCollection<ToolListItem>();
-            _bottomPane = new ToolListControl();
-            _bottomPane.ItemsSource = _bottomItems;
-            _bottomPane.DisplayMemberPath = "Title";
-            //_bottomPane.Items.Add("B");
-            Children.Add(_bottomPane);
-            Grid.SetRow(_bottomPane, 2);
-            Grid.SetColumn(_bottomPane, 1);
-            //_bottomPane.Height = 100;
+        private void CreateToolLists()
+        {
+            CreateToolList(out _leftItems, out _leftToolList, 1, 0, false);
+            CreateToolList(out _rightItems, out _rightToolList, 1, 2, false);
+            CreateToolList(out _topItems, out _topToolList, 0, 1, true);
+            CreateToolList(out _bottomItems, out _bottomToolList, 2, 1, true);
         }
 
         public void Clear()
         {
             Children.Clear();
-            CreateSidePanes();
+            CreateToolLists();
             while (FloatingTools.Count > 0)
             {
                 FloatingTools[0].Close();
@@ -385,7 +369,7 @@ namespace WpfDockManagerDemo.DockManager
                             {
                                 IView iToolView = (view as IView);
                                 System.Diagnostics.Trace.Assert(iToolView != null, System.Reflection.MethodBase.GetCurrentMethod().Name + ": the UserControl must implement interface IView");
-                                iToolView.IDocument = viewModel as IDocument;
+                                iToolView.IViewModel = viewModel as IViewModel;
                                 view.DataContext = viewModel;
                                 view.HorizontalAlignment = HorizontalAlignment.Stretch;
                                 view.VerticalAlignment = VerticalAlignment.Stretch;
@@ -488,22 +472,22 @@ namespace WpfDockManagerDemo.DockManager
                     {
                         if (Grid.GetRow(frameworkElement) == 0)
                         {
-                            _edgePane = _topPane;
+                            _edgePane = _topToolList;
                         }
                         else
                         {
-                            _edgePane = _bottomPane;
+                            _edgePane = _bottomToolList;
                         }
                     }
                     else
                     {
                         if (Grid.GetColumn(frameworkElement) == 0)
                         {
-                            _edgePane = _leftPane;
+                            _edgePane = _leftToolList;
                         }
                         else
                         {
-                            _edgePane = _rightPane;
+                            _edgePane = _rightToolList;
                         }
                     }
                     break;
@@ -518,8 +502,11 @@ namespace WpfDockManagerDemo.DockManager
             toolPane = sender as ToolPane;
             ExtractDockPane(toolPane);
 
-            (_edgePane.ItemsSource as System.Collections.ObjectModel.ObservableCollection<ToolListItem>).Add(new ToolListItem() { ToolPane = toolPane });
-            //string title = _edgePane.Title(_edgePane.Items.Count - 1);
+            int count = toolPane.IViewContainer.GetUserControlCount();
+            for (int i = 0; i < count; ++i)
+            {
+                (_edgePane.ItemsSource as System.Collections.ObjectModel.ObservableCollection<ToolListItem>).Add(new ToolListItem() { ToolPane = toolPane, Index = i, IViewContainer = toolPane.IViewContainer });
+            }
         }
 
         private void SetRootPane(Grid grid)
@@ -671,19 +658,19 @@ namespace WpfDockManagerDemo.DockManager
             return xmlToolGroup;
         }
 
-        private XmlElement SaveToolNode(XmlDocument xmlDocument, XmlNode xmlNode, IDocument iDocument, string contentId)
+        private XmlElement SaveToolNode(XmlDocument xmlDocument, XmlNode xmlNode, IViewModel iViewModel, string contentId)
         {
             System.Diagnostics.Trace.Assert(xmlDocument != null);
             System.Diagnostics.Trace.Assert(xmlNode != null);
-            System.Diagnostics.Trace.Assert(iDocument != null);
+            System.Diagnostics.Trace.Assert(iViewModel != null);
 
             XmlElement xmlElement = xmlDocument.CreateElement("Tool");
             XmlAttribute xmlAttribute = xmlDocument.CreateAttribute("Title");
-            xmlAttribute.Value = iDocument.Title;
+            xmlAttribute.Value = iViewModel.Title;
             xmlElement.Attributes.Append(xmlAttribute);
 
             xmlAttribute = xmlDocument.CreateAttribute("ID");
-            xmlAttribute.Value = iDocument.ID.ToString();
+            xmlAttribute.Value = iViewModel.ID.ToString();
             xmlElement.Attributes.Append(xmlAttribute);
 
             xmlAttribute = xmlDocument.CreateAttribute("ContentId");
@@ -762,19 +749,19 @@ namespace WpfDockManagerDemo.DockManager
             return xmlDocumentGroup;
         }
 
-        private XmlElement SaveDocumentNode(XmlDocument xmlDocument, XmlNode xmlNode, IDocument iDocument, string contentId)
+        private XmlElement SaveDocumentNode(XmlDocument xmlDocument, XmlNode xmlNode, IViewModel iViewModel, string contentId)
         {
             System.Diagnostics.Trace.Assert(xmlDocument != null);
             System.Diagnostics.Trace.Assert(xmlNode != null);
-            System.Diagnostics.Trace.Assert(iDocument != null);
+            System.Diagnostics.Trace.Assert(iViewModel != null);
 
             XmlElement xmlElement = xmlDocument.CreateElement("Document");
             XmlAttribute xmlAttribute = xmlDocument.CreateAttribute("Title");
-            xmlAttribute.Value = iDocument.Title;
+            xmlAttribute.Value = iViewModel.Title;
             xmlElement.Attributes.Append(xmlAttribute);
 
             xmlAttribute = xmlDocument.CreateAttribute("ID");
-            xmlAttribute.Value = iDocument.ID.ToString();
+            xmlAttribute.Value = iViewModel.ID.ToString();
             xmlElement.Attributes.Append(xmlAttribute);
 
             xmlAttribute = xmlDocument.CreateAttribute("ContentId");
@@ -863,7 +850,7 @@ namespace WpfDockManagerDemo.DockManager
                     {
                         break;
                     }
-                    SaveDocumentNode(xmlDocument, xmlNodeParent, userControl.DataContext as IDocument, userControl.Name);
+                    SaveDocumentNode(xmlDocument, xmlNodeParent, userControl.DataContext as IViewModel, userControl.Name);
                 }
             }
             else if (node is ToolPane)
@@ -884,7 +871,7 @@ namespace WpfDockManagerDemo.DockManager
                     {
                         break;
                     }
-                    SaveToolNode(xmlDocument, xmlNodeParent, userControl.DataContext as IDocument, userControl.Name);
+                    SaveToolNode(xmlDocument, xmlNodeParent, userControl.DataContext as IViewModel, userControl.Name);
                 }
             }
             else if (node is Grid)
@@ -923,7 +910,7 @@ namespace WpfDockManagerDemo.DockManager
                     {
                         break;
                     }
-                    SaveToolNode(xmlDocument, xmlNodeParent, userControl.DataContext as IDocument, userControl.Name);
+                    SaveToolNode(xmlDocument, xmlNodeParent, userControl.DataContext as IViewModel, userControl.Name);
                 }
             }
             xmlDocument.Save(fileNameAndPath);

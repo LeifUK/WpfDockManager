@@ -12,21 +12,21 @@ namespace WpfDockManagerDemo.ViewModel
         public MainViewModel()
         {
             long id = 0;
-            Tools = new System.Collections.ObjectModel.ObservableCollection<DockManager.IDocument>();
+            Tools = new System.Collections.ObjectModel.ObservableCollection<DockManager.IViewModel>();
             Tools.Add(new ViewModel.ToolOneViewModel() { ID = id++ });
             Tools.Add(new ViewModel.ToolTwoViewModel() { ID = id++ });
             Tools.Add(new ViewModel.ToolThreeViewModel() { ID = id++ });
             Tools.Add(new ViewModel.ToolFourViewModel() { ID = id++ });
             Tools.Add(new ViewModel.ToolFiveViewModel() { ID = id++ });
 
-            Documents = new System.Collections.ObjectModel.ObservableCollection<DockManager.IDocument>();
+            Documents = new System.Collections.ObjectModel.ObservableCollection<DockManager.IViewModel>();
             Documents.Add(new ViewModel.DocumentOneViewModel());
             Documents.Add(new ViewModel.DocumentTwoViewModel());
             Documents.Add(new ViewModel.DocumentThreeViewModel());
         }
 
-        private System.Collections.ObjectModel.ObservableCollection<DockManager.IDocument> _documents;
-        public System.Collections.ObjectModel.ObservableCollection<DockManager.IDocument> Documents
+        private System.Collections.ObjectModel.ObservableCollection<DockManager.IViewModel> _documents;
+        public System.Collections.ObjectModel.ObservableCollection<DockManager.IViewModel> Documents
         {
             get
             {
@@ -42,8 +42,8 @@ namespace WpfDockManagerDemo.ViewModel
             }
         }
 
-        private System.Collections.ObjectModel.ObservableCollection<DockManager.IDocument> _tools;
-        public System.Collections.ObjectModel.ObservableCollection<DockManager.IDocument> Tools
+        private System.Collections.ObjectModel.ObservableCollection<DockManager.IViewModel> _tools;
+        public System.Collections.ObjectModel.ObservableCollection<DockManager.IViewModel> Tools
         {
             get
             {
