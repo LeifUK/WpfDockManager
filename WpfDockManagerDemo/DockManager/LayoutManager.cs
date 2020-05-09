@@ -7,6 +7,7 @@ using System.ComponentModel;
 using System.Xml;
 using System.Windows.Input;
 
+
 /*
  * Note: I have placed most of the intelligence in this class rather than spreading 
  * it around multiple classes. 
@@ -39,6 +40,14 @@ namespace WpfDockManagerDemo.DockManager
             CreateToolLists();
 
             Background = System.Windows.Media.Brushes.LightBlue;
+
+            App.Current.MainWindow.LocationChanged += MainWindow_LocationChanged;
+            PreviewMouseDown += LayoutManager_PreviewMouseDown;
+        }
+
+        private void LayoutManager_PreviewMouseDown(object sender, MouseButtonEventArgs e)
+        {
+            HideSideToolPane();
         }
 
         public LayoutManager(ToolListControl rightPane)
@@ -66,8 +75,8 @@ namespace WpfDockManagerDemo.DockManager
             try
             {
 
-                _edgeLocationPane?.Close();
-                _edgeLocationPane = null;
+                _sideLocationPane?.Close();
+                _sideLocationPane = null;
             }
             catch
             {
@@ -323,17 +332,29 @@ namespace WpfDockManagerDemo.DockManager
             Grid.SetRow(toolListControl, row);
             Grid.SetColumn(toolListControl, column);
         }
+        
+        private void HideSideToolPane()
+        {
+            if (_displayedSideToolPane != null)
+            {
+                UserControl userControl = _displayedSideToolPane.ToolPane.IViewContainer.ExtractUserControl(0);
+                _displayedToolListItem.ToolPane.IViewContainer.InsertUserControl(_displayedToolListItem.Index, userControl);
+                _displayedSideToolPane.Close();
+                _displayedSideToolPane = null;
+                _displayedToolListItem = null;
+            }
+        }
 
         private void ToolListControl_ItemClick(object sender, EventArgs e)
         {
-            UserControl userControl = null;
+            System.Diagnostics.Trace.Assert(sender is ToolListItem);
 
-            if (_displayedSideToolPane != null)
+            if (_displayedToolListItem == (sender as ToolListItem))
             {
-                userControl = _displayedSideToolPane.ToolPane.IViewContainer.ExtractUserControl(0);
-                _displayedToolListItem.ToolPane.IViewContainer.InsertUserControl(_displayedToolListItem.Index, userControl);
-                _displayedSideToolPane.Close();
+                return;
             }
+
+            HideSideToolPane();
 
             _displayedToolListItem = sender as ToolListItem;
             if (_displayedToolListItem == null)
@@ -342,47 +363,78 @@ namespace WpfDockManagerDemo.DockManager
             }
 
             _displayedSideToolPane = new SideToolPane();
-            userControl = _displayedToolListItem.IViewContainer.ExtractUserControl(_displayedToolListItem.Index);
+            UserControl userControl = _displayedToolListItem.IViewContainer.ExtractUserControl(_displayedToolListItem.Index);
             _displayedSideToolPane.ToolPane.IViewContainer.AddUserControl(userControl);
-            if ((_displayedToolListItem.WindowLocation == WindowLocation.TopEdge) || (_displayedToolListItem.WindowLocation == WindowLocation.BottomEdge))
+            Point topLeftPoint = _root.PointToScreen(new Point(0, 0));
+            _displayedSideToolPane.Left = topLeftPoint.X;
+            _displayedSideToolPane.Top = topLeftPoint.Y;
+            if ((_displayedToolListItem.WindowLocation == WindowLocation.TopSide) || (_displayedToolListItem.WindowLocation == WindowLocation.BottomSide))
             {
-                _displayedSideToolPane.Width = ActualWidth;
-                double height = 0.0;
-                if (_displayedSideToolPane.Height == 0.0)
+                _displayedSideToolPane.Width = _root.ActualWidth;
+                double height = _displayedToolListItem.Height;
+                if (height == 0.0)
                 {
-                    height = ActualHeight / 3;
-                }
-                else
-                {
-                    height = _displayedSideToolPane.Height;
+                    height = _root.ActualHeight / 3;
                 }
                 _displayedSideToolPane.Height = height;
-                Point topLeftPoint = PointToScreen(new Point(0, 0));
-                _displayedSideToolPane.Left = topLeftPoint.X;
-                _displayedSideToolPane.Top = topLeftPoint.Y;
-                if (_displayedToolListItem.WindowLocation == WindowLocation.BottomEdge)
+                if (_displayedToolListItem.WindowLocation == WindowLocation.BottomSide)
                 {
-                    _displayedSideToolPane.Top += ActualHeight - height;
+                    _displayedSideToolPane.Top += _root.ActualHeight - height;
                 }
             }
             else
             {
-                _displayedSideToolPane.Height = ActualHeight;
-                double width = _displayedSideToolPane.Width;
+                _displayedSideToolPane.Height = _root.ActualHeight;
+                double width = _displayedToolListItem.Width;
                 if (width == 0.0)
                 {
-                    width = ActualWidth / 3;
+                    width = _root.ActualWidth / 3;
                 }
                 _displayedSideToolPane.Width = width;
-                Point topLeftPoint = PointToScreen(new Point(0, 0));
-                _displayedSideToolPane.Top = topLeftPoint.Y;
-                _displayedSideToolPane.Left = topLeftPoint.X;
-                if (_displayedToolListItem.WindowLocation == WindowLocation.RightEdge)
+                if (_displayedToolListItem.WindowLocation == WindowLocation.RightSide)
                 {
-                    _displayedSideToolPane.Left += ActualWidth - width;
+                    _displayedSideToolPane.Left += _root.ActualWidth - width;
                 }
             }
+            _displayedSideToolPane.Closed += _displayedSideToolPane_Closed;
+            _displayedSideToolPane.WindowLocation = _displayedToolListItem.WindowLocation;
+            _displayedSideToolPane.Owner = App.Current.MainWindow;
+
             _displayedSideToolPane.Show();
+        }
+
+        private void MainWindow_LocationChanged(object sender, EventArgs e)
+        {
+            if (_displayedSideToolPane != null)
+            {
+                Point topLeftPoint = _root.PointToScreen(new Point(0, 0));
+                double left = topLeftPoint.X;
+                double top = topLeftPoint.Y;
+                switch (_displayedToolListItem.WindowLocation)
+                {
+                    case WindowLocation.TopSide:
+                        break;
+
+                    case WindowLocation.BottomSide:
+                        top += _root.ActualHeight - _displayedSideToolPane.ActualHeight;
+                        break;
+                    case WindowLocation.LeftSide:
+                        break;
+                    case WindowLocation.RightSide:
+                        left += _root.ActualWidth - _displayedSideToolPane.ActualWidth;
+                        break;
+                }
+                _displayedSideToolPane.Left = left;
+                _displayedSideToolPane.Top = top;
+            }
+        }
+
+        private void _displayedSideToolPane_Closed(object sender, EventArgs e)
+        {
+            System.Diagnostics.Trace.Assert(_displayedSideToolPane == sender);
+
+            _displayedToolListItem.Width = (sender as SideToolPane).ActualWidth;
+            _displayedToolListItem.Height = (sender as SideToolPane).ActualHeight;
         }
 
         private void ToolPane_UnPinClick(object sender, EventArgs e)
@@ -406,12 +458,12 @@ namespace WpfDockManagerDemo.DockManager
                         if (Grid.GetRow(frameworkElement) == 0)
                         {
                             toolListControl = _topToolList;
-                            windowLocation = WindowLocation.TopEdge;
+                            windowLocation = WindowLocation.TopSide;
                         }
                         else
                         {
                             toolListControl = _bottomToolList;
-                            windowLocation = WindowLocation.BottomEdge;
+                            windowLocation = WindowLocation.BottomSide;
                         }
                     }
                     else
@@ -419,12 +471,12 @@ namespace WpfDockManagerDemo.DockManager
                         if (Grid.GetColumn(frameworkElement) == 0)
                         {
                             toolListControl = _leftToolList;
-                            windowLocation = WindowLocation.LeftEdge;
+                            windowLocation = WindowLocation.LeftSide;
                         }
                         else
                         {
                             toolListControl = _rightToolList;
-                            windowLocation = WindowLocation.RightEdge;
+                            windowLocation = WindowLocation.RightSide;
                         }
                     }
                     break;
@@ -1516,8 +1568,8 @@ namespace WpfDockManagerDemo.DockManager
             _insertionIndicatorManager?.HideInsertionIndicator();
             _windowLocationPane?.Close();
             _windowLocationPane = null;
-            _edgeLocationPane?.Close();
-            _edgeLocationPane = null;
+            _sideLocationPane?.Close();
+            _sideLocationPane = null;
         }
 
         private void ExtractDocuments(FloatingPane floatingPane, DockPane toolPane)
@@ -1568,10 +1620,10 @@ namespace WpfDockManagerDemo.DockManager
 
                 switch (windowLocation)
                 {
-                    case WindowLocation.BottomEdge:
-                    case WindowLocation.TopEdge:
-                    case WindowLocation.LeftEdge:
-                    case WindowLocation.RightEdge:
+                    case WindowLocation.BottomSide:
+                    case WindowLocation.TopSide:
+                    case WindowLocation.LeftSide:
+                    case WindowLocation.RightSide:
 
                         if (sender is FloatingTool)
                         {
@@ -1583,8 +1635,8 @@ namespace WpfDockManagerDemo.DockManager
                         }
                         ExtractDocuments(floatingPane, dockPane);
 
-                        parentSplitterPane = new SplitterPane((windowLocation == WindowLocation.TopEdge) || (windowLocation == WindowLocation.BottomEdge));
-                        bool isFirst = (windowLocation == WindowLocation.TopEdge) || (windowLocation == WindowLocation.LeftEdge);
+                        parentSplitterPane = new SplitterPane((windowLocation == WindowLocation.TopSide) || (windowLocation == WindowLocation.BottomSide));
+                        bool isFirst = (windowLocation == WindowLocation.TopSide) || (windowLocation == WindowLocation.LeftSide);
                         parentSplitterPane.AddChild(dockPane, isFirst);
 
                         if (Children.Count == 0)
@@ -1698,7 +1750,7 @@ namespace WpfDockManagerDemo.DockManager
         }
 
         private WindowLocationPane _windowLocationPane;
-        private EdgeLocationPane _edgeLocationPane;
+        private SideLocationPane _sideLocationPane;
         private InsertionIndicatorManager _insertionIndicatorManager;
 
         private void FloatingWindow_LocationChanged(object sender, EventArgs e)
@@ -1747,22 +1799,22 @@ namespace WpfDockManagerDemo.DockManager
                         _windowLocationPane.Height = SelectedPane.ActualHeight;
                     }
 
-                    if (_edgeLocationPane != null)
+                    if (_sideLocationPane != null)
                     {
-                        _edgeLocationPane.Close();
-                        _edgeLocationPane = null;
+                        _sideLocationPane.Close();
+                        _sideLocationPane = null;
                     }
 
                     if (sender is FloatingTool)
                     {
-                        _edgeLocationPane = new EdgeLocationPane();
-                        _edgeLocationPane.AllowsTransparency = true;
-                        _edgeLocationPane.Show();
+                        _sideLocationPane = new SideLocationPane();
+                        _sideLocationPane.AllowsTransparency = true;
+                        _sideLocationPane.Show();
                         Point topLeftPoint = _root.PointToScreen(new Point(0, 0));
-                        _edgeLocationPane.Left = topLeftPoint.X;
-                        _edgeLocationPane.Top = topLeftPoint.Y;
-                        _edgeLocationPane.Width = _root.ActualWidth;
-                        _edgeLocationPane.Height = _root.ActualHeight;
+                        _sideLocationPane.Left = topLeftPoint.X;
+                        _sideLocationPane.Top = topLeftPoint.Y;
+                        _sideLocationPane.Width = _root.ActualWidth;
+                        _sideLocationPane.Height = _root.ActualHeight;
                     }
                 }
             }
@@ -1781,10 +1833,10 @@ namespace WpfDockManagerDemo.DockManager
                     _windowLocationPane.Close();
                     _windowLocationPane = null;
                 }
-                if (_edgeLocationPane != null)
+                if (_sideLocationPane != null)
                 {
-                    _edgeLocationPane.Close();
-                    _edgeLocationPane = null;
+                    _sideLocationPane.Close();
+                    _sideLocationPane = null;
                 }
             }
 
@@ -1795,15 +1847,15 @@ namespace WpfDockManagerDemo.DockManager
 
             WindowLocation windowLocation = WindowLocation.None;
 
-            if (_edgeLocationPane != null)
+            if (_sideLocationPane != null)
             {
-                windowLocation = _edgeLocationPane.TrySelectIndicator(cursorPositionOnScreen);
+                windowLocation = _sideLocationPane.TrySelectIndicator(cursorPositionOnScreen);
                 switch (windowLocation)
                 {
-                    case WindowLocation.LeftEdge:
-                    case WindowLocation.RightEdge:
-                    case WindowLocation.TopEdge:
-                    case WindowLocation.BottomEdge:
+                    case WindowLocation.LeftSide:
+                    case WindowLocation.RightSide:
+                    case WindowLocation.TopSide:
+                    case WindowLocation.BottomSide:
                         if ((_insertionIndicatorManager != null) && (_insertionIndicatorManager.ParentGrid != this))
                         {
                             _insertionIndicatorManager.HideInsertionIndicator();

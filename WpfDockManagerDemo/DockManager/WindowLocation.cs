@@ -16,9 +16,9 @@ namespace WpfDockManagerDemo.DockManager
         Top = 0x008,
         Bottom = 0x010,
 
-        RightEdge = 0x020,
-        LeftEdge = 0x040,
-        TopEdge = 0x080,
-        BottomEdge = 0x100,
+        RightSide = 0x020,
+        LeftSide = 0x040,
+        TopSide = 0x080,
+        BottomSide = 0x100,
     }
 }

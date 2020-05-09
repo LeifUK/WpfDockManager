@@ -7,7 +7,7 @@
         mc:Ignorable="d"
         Title="SidePane" Height="450" Width="800">
     <WindowChrome.WindowChrome>
-        <WindowChrome CaptionHeight="34" ResizeBorderThickness="0,4,0,0"/>
+        <WindowChrome x:Name="_windowChrome" CaptionHeight="34" ResizeBorderThickness="0,4,0,0"/>
     </WindowChrome.WindowChrome>
 
     <Window.Resources>
@@ -19,29 +19,5 @@
     </Window.Resources>
     <Grid>
         <local:ToolPane x:Name="_toolPane"/>
-        <!--<Grid.RowDefinitions>
-            <RowDefinition Height="Auto"/>
-            <RowDefinition Height="*"/>
-        </Grid.RowDefinitions>
-        <Grid Grid.Row="0" Height="30" Background="Transparent" VerticalAlignment="Top">
-            <Grid.ColumnDefinitions>
-                <ColumnDefinition Width="*"/>
-                <ColumnDefinition Width="Auto"/>
-                <ColumnDefinition Width="Auto"/>
-                <ColumnDefinition Width="Auto"/>
-            </Grid.ColumnDefinitions>
-
-            <TextBlock Grid.Row="0" Grid.Column="0" Text="{Binding Title}" Foreground="Black" FontFamily="Arial" Margin="4 0 0 0" VerticalAlignment="Center" WindowChrome.IsHitTestVisibleInChrome="False"/>
-
-            <Button Grid.Row="0" Grid.Column="1" Name="_buttonMenu" Style="{StaticResource MenuButtonStyle}" WindowChrome.IsHitTestVisibleInChrome="True" VerticalAlignment="Center" Background="LightSteelBlue" Foreground="Black" Click="_buttonMenu_Click">
-                <Button.RenderTransform>
-                    <ScaleTransform ScaleX="1." ScaleY="1."/>
-                </Button.RenderTransform>
-            </Button>
-            --><!--<Button x:Name="_buttonMenu" Style="{StaticResource styleHeaderMenuButton}" WindowChrome.IsHitTestVisibleInChrome="True"/>--><!--
-            <Button Grid.Row="0" Grid.Column="2" x:Name="_buttonPin" Style="{StaticResource styleHeaderPinButton}" WindowChrome.IsHitTestVisibleInChrome="True"/>
-            <Button Grid.Row="0" Grid.Column="3" x:Name="_buttonClose" Style="{StaticResource styleHeaderCloseButton}" WindowChrome.IsHitTestVisibleInChrome="True" ToolTip="Close"/>
-        </Grid>
-        <local:ToolContainer Grid.Row="1" x:Name="_toolContainer"/>-->
     </Grid>
 </Window>

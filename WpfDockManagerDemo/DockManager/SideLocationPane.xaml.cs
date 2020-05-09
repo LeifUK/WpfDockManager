@@ -17,9 +17,9 @@ namespace WpfDockManagerDemo.DockManager
     /// <summary>
     /// Interaction logic for EdgeLocationPane.xaml
     /// </summary>
-    public partial class EdgeLocationPane : Window
+    public partial class SideLocationPane : Window
     {
-        public EdgeLocationPane()
+        public SideLocationPane()
         {
             InitializeComponent();
         }
@@ -28,22 +28,22 @@ namespace WpfDockManagerDemo.DockManager
         {
             if (_buttonTopEdge.InputHitTest(_buttonTopEdge.PointFromScreen(cursorPositionOnScreen)) != null)
             {
-                return WindowLocation.TopEdge;
+                return WindowLocation.TopSide;
             }
 
             if (_buttonLeftEdge.InputHitTest(_buttonLeftEdge.PointFromScreen(cursorPositionOnScreen)) != null)
             {
-                return WindowLocation.LeftEdge;
+                return WindowLocation.LeftSide;
             }
 
             if (_buttonRightEdge.InputHitTest(_buttonRightEdge.PointFromScreen(cursorPositionOnScreen)) != null)
             {
-                return WindowLocation.RightEdge;
+                return WindowLocation.RightSide;
             }
 
             if (_buttonBottomEdge.InputHitTest(_buttonBottomEdge.PointFromScreen(cursorPositionOnScreen)) != null)
             {
-                return WindowLocation.BottomEdge;
+                return WindowLocation.BottomSide;
             }
 
             return WindowLocation.None;

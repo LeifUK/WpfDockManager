@@ -71,6 +71,9 @@
     <Compile Include="DockManager\IViewContainer.cs" />
     <Compile Include="DockManager\IViewModel.cs" />
     <Compile Include="DockManager\SelectablePane.cs" />
+    <Compile Include="DockManager\SideLocationPane.xaml.cs">
+      <DependentUpon>SideLocationPane.xaml</DependentUpon>
+    </Compile>
     <Compile Include="DockManager\SideToolPane.xaml.cs">
       <DependentUpon>SideToolPane.xaml</DependentUpon>
     </Compile>
@@ -78,9 +81,6 @@
     <Compile Include="DockManager\DocumentContainer.cs" />
     <Compile Include="DockManager\DocumentPane.cs" />
     <Compile Include="DockManager\DocumentPanel.cs" />
-    <Compile Include="DockManager\EdgeLocationPane.xaml.cs">
-      <DependentUpon>EdgeLocationPane.xaml</DependentUpon>
-    </Compile>
     <Compile Include="DockManager\ExtensionMethods.cs" />
     <Compile Include="DockManager\InsertionIndicatorManager.cs" />
     <Compile Include="DockManager\IView.cs" />
@@ -135,13 +135,13 @@
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
     </Page>
-    <Page Include="DockManager\EdgeLocationPane.xaml">
-      <SubType>Designer</SubType>
-      <Generator>MSBuild:Compile</Generator>
-    </Page>
     <Page Include="DockManager\FloatingPane.xaml">
       <SubType>Designer</SubType>
       <Generator>XamlIntelliSenseFileGenerator</Generator>
+    </Page>
+    <Page Include="DockManager\SideLocationPane.xaml">
+      <Generator>MSBuild:Compile</Generator>
+      <SubType>Designer</SubType>
     </Page>
     <Page Include="DockManager\SideToolPane.xaml">
       <SubType>Designer</SubType>

@@ -64,25 +64,25 @@ namespace WpfDockManagerDemo.DockManager
                 switch (windowLocation)
                 {
                     case WindowLocation.Left:
-                    case WindowLocation.LeftEdge:
+                    case WindowLocation.LeftSide:
                         Grid.SetRow(border, 0);
                         Grid.SetRowSpan(border, 2);
                         Grid.SetColumn(border, 0);
                         break;
                     case WindowLocation.Right:
-                    case WindowLocation.RightEdge:
+                    case WindowLocation.RightSide:
                         Grid.SetRow(border, 0);
                         Grid.SetRowSpan(border, 2);
                         Grid.SetColumn(border, 1);
                         break;
                     case WindowLocation.Top:
-                    case WindowLocation.TopEdge:
+                    case WindowLocation.TopSide:
                         Grid.SetRow(border, 0);
                         Grid.SetColumn(border, 0);
                         Grid.SetColumnSpan(border, 2);
                         break;
                     case WindowLocation.Bottom:
-                    case WindowLocation.BottomEdge:
+                    case WindowLocation.BottomSide:
                         Grid.SetRow(border, 1);
                         Grid.SetColumn(border, 0);
                         Grid.SetColumnSpan(border, 2);
