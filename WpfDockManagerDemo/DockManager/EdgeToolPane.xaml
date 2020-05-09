@@ -7,7 +7,7 @@
         mc:Ignorable="d"
         Title="SidePane" Height="450" Width="800">
     <WindowChrome.WindowChrome>
-        <WindowChrome CaptionHeight="34" />
+        <WindowChrome CaptionHeight="34" ResizeBorderThickness="0,4,0,0"/>
     </WindowChrome.WindowChrome>
 
     <Window.Resources>
@@ -18,7 +18,8 @@
         </ResourceDictionary>
     </Window.Resources>
     <Grid>
-        <Grid.RowDefinitions>
+        <local:ToolPane x:Name="_toolPane"/>
+        <!--<Grid.RowDefinitions>
             <RowDefinition Height="Auto"/>
             <RowDefinition Height="*"/>
         </Grid.RowDefinitions>
@@ -37,10 +38,10 @@
                     <ScaleTransform ScaleX="1." ScaleY="1."/>
                 </Button.RenderTransform>
             </Button>
-            <!--<Button x:Name="_buttonMenu" Style="{StaticResource styleHeaderMenuButton}" WindowChrome.IsHitTestVisibleInChrome="True"/>-->
+            --><!--<Button x:Name="_buttonMenu" Style="{StaticResource styleHeaderMenuButton}" WindowChrome.IsHitTestVisibleInChrome="True"/>--><!--
             <Button Grid.Row="0" Grid.Column="2" x:Name="_buttonPin" Style="{StaticResource styleHeaderPinButton}" WindowChrome.IsHitTestVisibleInChrome="True"/>
             <Button Grid.Row="0" Grid.Column="3" x:Name="_buttonClose" Style="{StaticResource styleHeaderCloseButton}" WindowChrome.IsHitTestVisibleInChrome="True" ToolTip="Close"/>
         </Grid>
-        <local:ToolContainer Grid.Row="1" x:Name="_toolContainer"/>
+        <local:ToolContainer Grid.Row="1" x:Name="_toolContainer"/>-->
     </Grid>
 </Window>

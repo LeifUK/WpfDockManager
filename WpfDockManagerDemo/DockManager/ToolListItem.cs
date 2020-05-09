@@ -27,5 +27,7 @@ namespace WpfDockManagerDemo.DockManager
                 return "";
             }
         }
+        public double Height;
+        public double Width;
     }
 }

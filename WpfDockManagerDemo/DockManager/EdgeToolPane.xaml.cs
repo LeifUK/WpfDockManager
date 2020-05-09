@@ -22,11 +22,15 @@ namespace WpfDockManagerDemo.DockManager
         public EdgeToolPane()
         {
             InitializeComponent();
+            _toolPane.ShowAsUnPinned();
         }
 
         private void _buttonMenu_Click(object sender, RoutedEventArgs e)
         {
 
         }
+
+        internal ToolPane ToolPane { get { return _toolPane; } }
+
     }
 }

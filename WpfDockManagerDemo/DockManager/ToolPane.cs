@@ -65,12 +65,13 @@ namespace WpfDockManagerDemo.DockManager
             Grid.SetColumn(menuButton, 2);
             Children.Add(menuButton);
 
-            Button pinButton = new Button();
-            pinButton.Style = FindResource("styleHeaderPinButton") as Style;
-            pinButton.Click += PinButton_Click;
-            Grid.SetRow(pinButton, 0);
-            Grid.SetColumn(pinButton, 3);
-            Children.Add(pinButton);
+            _pinButton = new Button();
+            _pinButton.LayoutTransform = new System.Windows.Media.RotateTransform();
+            _pinButton.Style = FindResource("styleHeaderPinButton") as Style;
+            _pinButton.Click += PinButton_Click;
+            Grid.SetRow(_pinButton, 0);
+            Grid.SetColumn(_pinButton, 3);
+            Children.Add(_pinButton);
 
             Button closeButton = new Button();
             closeButton.Style = FindResource("styleHeaderCloseButton") as Style;
@@ -86,11 +87,18 @@ namespace WpfDockManagerDemo.DockManager
             Grid.SetColumnSpan(IViewContainer as System.Windows.UIElement, ColumnDefinitions.Count);
         }
 
-        public event EventHandler UnPin;
+        public void ShowAsUnPinned()
+        {
+            (_pinButton.LayoutTransform as System.Windows.Media.RotateTransform).Angle = 90.0;
+            (_pinButton.LayoutTransform as System.Windows.Media.RotateTransform).CenterX = 0.5;
+            (_pinButton.LayoutTransform as System.Windows.Media.RotateTransform).CenterY = 0.5;
+        }
+
+        public event EventHandler UnPinClick;
 
         private void PinButton_Click(object sender, RoutedEventArgs e)
         {
-            UnPin?.Invoke(this, null);
+            UnPinClick?.Invoke(this, null);
         }
 
         private void DocumentContainer_SelectionChanged(object sender, EventArgs e)
@@ -103,6 +111,7 @@ namespace WpfDockManagerDemo.DockManager
         public string Title { get { return IViewContainer.Title; } }
 
         public Border Border { get; private set; }
+        Button _pinButton;
 
         private bool _isHighlighted;
         public override bool IsHighlighted

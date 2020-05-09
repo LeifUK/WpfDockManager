@@ -124,6 +124,10 @@ namespace WpfDockManagerDemo.DockManager
         internal ToolListControl _topToolList;
         internal ToolListControl _rightToolList;
         internal ToolListControl _bottomToolList;
+        
+        internal ToolListItem _displayedToolListItem;
+        internal EdgeToolPane _displayedEdgeToolPane;
+
         internal Grid _root;
 
         private SelectablePane SelectedPane;
@@ -314,9 +318,38 @@ namespace WpfDockManagerDemo.DockManager
             toolListControl.DisplayMemberPath = "Title";
             toolListControl.BarBrush = System.Windows.Media.Brushes.DarkSlateBlue;
             toolListControl.BarBrushMouseOver = System.Windows.Media.Brushes.Orange;
+            toolListControl.ItemClick += ToolListControl_ItemClick;
             Children.Add(toolListControl);
             Grid.SetRow(toolListControl, row);
             Grid.SetColumn(toolListControl, column);
+        }
+
+        private void ToolListControl_ItemClick(object sender, EventArgs e)
+        {
+            UserControl userControl = null;
+
+            if (_displayedEdgeToolPane != null)
+            {
+                userControl = _displayedEdgeToolPane.ToolPane.IViewContainer.ExtractUserControl(0);
+                _displayedToolListItem.ToolPane.IViewContainer.InsertUserControl(_displayedToolListItem.Index, userControl);
+                _displayedEdgeToolPane.Close();
+            }
+
+            _displayedToolListItem = sender as ToolListItem;
+            if (_displayedToolListItem == null)
+            {
+                return;
+            }
+
+            _displayedEdgeToolPane = new EdgeToolPane();
+            userControl = _displayedToolListItem.IViewContainer.ExtractUserControl(_displayedToolListItem.Index);
+            _displayedEdgeToolPane.ToolPane.IViewContainer.AddUserControl(userControl);
+            _displayedEdgeToolPane.Width = ActualWidth;
+            _displayedEdgeToolPane.Height = ActualHeight / 3;
+            Point topLeftPoint = PointToScreen(new Point(0, 0));
+            _displayedEdgeToolPane.Left = topLeftPoint.X;
+            _displayedEdgeToolPane.Top = topLeftPoint.Y + (2 * ActualHeight) / 3;
+            _displayedEdgeToolPane.Show();
         }
 
         private void CreateToolLists()
@@ -448,11 +481,11 @@ namespace WpfDockManagerDemo.DockManager
         {
             ToolPane toolPane = new ToolPane();
             RegisterDockPane(toolPane);
-            toolPane.UnPin += ToolPane_UnPin;
+            toolPane.UnPinClick += ToolPane_UnPinClick;
             return toolPane;
         }
 
-        private void ToolPane_UnPin(object sender, EventArgs e)
+        private void ToolPane_UnPinClick(object sender, EventArgs e)
         {
             System.Diagnostics.Trace.Assert(sender is ToolPane);
 

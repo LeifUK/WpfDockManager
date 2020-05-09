@@ -7,6 +7,7 @@ namespace WpfDockManagerDemo.DockManager
     {
         string Title { get; }
         void AddUserControl(UserControl userControl);
+        void InsertUserControl(int index, UserControl userControl);
         UserControl ExtractUserControl(int index);
         int GetUserControlCount();
         int GetCurrentTabIndex();

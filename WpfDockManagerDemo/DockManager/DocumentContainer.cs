@@ -172,6 +172,16 @@ namespace WpfDockManagerDemo.DockManager
             _items.Add(new System.Collections.Generic.KeyValuePair<UserControl, IViewModel>(userControl, userControl.DataContext as IViewModel));
             _tabHeaderControl.SelectedItem = _items[_items.Count - 1];
         }
+        
+        public void InsertUserControl(int index, UserControl userControl)
+        {
+            System.Diagnostics.Trace.Assert(index > -1);
+            System.Diagnostics.Trace.Assert(index < _items.Count);
+            System.Diagnostics.Trace.Assert(userControl != null);
+            System.Diagnostics.Trace.Assert(userControl.DataContext is IViewModel);
+
+            _items.Insert(index, new System.Collections.Generic.KeyValuePair<UserControl, IViewModel>(userControl, userControl.DataContext as IViewModel));
+        }
 
         public UserControl ExtractUserControl(int index)
         {

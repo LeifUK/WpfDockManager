@@ -246,7 +246,7 @@ namespace WpfDockManagerDemo.DockManager
                 Point cursorItemPosition = item.PointFromScreen(cursorScreenPosition);
                 if ((cursorItemPosition.X >= 0) && (cursorItemPosition.Y >= 0) && (cursorItemPosition.X <= item.ActualWidth) && (cursorItemPosition.Y <= item.ActualHeight))
                 {
-                    ItemClick?.Invoke(this, null);
+                    ItemClick?.Invoke(item.DataContext, null);
                     return;
                 }
             }

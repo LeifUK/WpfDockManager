@@ -214,6 +214,16 @@ namespace WpfDockManagerDemo.DockManager
             CheckTabCount();
         }
 
+        public void InsertUserControl(int index, UserControl userControl)
+        {
+            System.Diagnostics.Trace.Assert(index > -1);
+            System.Diagnostics.Trace.Assert(index <= _items.Count);
+            System.Diagnostics.Trace.Assert(userControl != null);
+            System.Diagnostics.Trace.Assert(userControl.DataContext is IViewModel);
+
+            _items.Insert(index, new System.Collections.Generic.KeyValuePair<UserControl, IViewModel>(userControl, userControl.DataContext as IViewModel));
+        }
+
         public UserControl ExtractUserControl(int index)
         {
             if ((index < 0) || (index >= _items.Count))
