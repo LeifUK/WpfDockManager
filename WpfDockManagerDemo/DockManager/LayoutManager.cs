@@ -126,7 +126,7 @@ namespace WpfDockManagerDemo.DockManager
         internal ToolListControl _bottomToolList;
         
         internal ToolListItem _displayedToolListItem;
-        internal EdgeToolPane _displayedEdgeToolPane;
+        internal SideToolPane _displayedSideToolPane;
 
         internal Grid _root;
 
@@ -328,11 +328,11 @@ namespace WpfDockManagerDemo.DockManager
         {
             UserControl userControl = null;
 
-            if (_displayedEdgeToolPane != null)
+            if (_displayedSideToolPane != null)
             {
-                userControl = _displayedEdgeToolPane.ToolPane.IViewContainer.ExtractUserControl(0);
+                userControl = _displayedSideToolPane.ToolPane.IViewContainer.ExtractUserControl(0);
                 _displayedToolListItem.ToolPane.IViewContainer.InsertUserControl(_displayedToolListItem.Index, userControl);
-                _displayedEdgeToolPane.Close();
+                _displayedSideToolPane.Close();
             }
 
             _displayedToolListItem = sender as ToolListItem;
@@ -341,15 +341,116 @@ namespace WpfDockManagerDemo.DockManager
                 return;
             }
 
-            _displayedEdgeToolPane = new EdgeToolPane();
+            _displayedSideToolPane = new SideToolPane();
             userControl = _displayedToolListItem.IViewContainer.ExtractUserControl(_displayedToolListItem.Index);
-            _displayedEdgeToolPane.ToolPane.IViewContainer.AddUserControl(userControl);
-            _displayedEdgeToolPane.Width = ActualWidth;
-            _displayedEdgeToolPane.Height = ActualHeight / 3;
-            Point topLeftPoint = PointToScreen(new Point(0, 0));
-            _displayedEdgeToolPane.Left = topLeftPoint.X;
-            _displayedEdgeToolPane.Top = topLeftPoint.Y + (2 * ActualHeight) / 3;
-            _displayedEdgeToolPane.Show();
+            _displayedSideToolPane.ToolPane.IViewContainer.AddUserControl(userControl);
+            if ((_displayedToolListItem.WindowLocation == WindowLocation.TopEdge) || (_displayedToolListItem.WindowLocation == WindowLocation.BottomEdge))
+            {
+                _displayedSideToolPane.Width = ActualWidth;
+                double height = 0.0;
+                if (_displayedSideToolPane.Height == 0.0)
+                {
+                    height = ActualHeight / 3;
+                }
+                else
+                {
+                    height = _displayedSideToolPane.Height;
+                }
+                _displayedSideToolPane.Height = height;
+                Point topLeftPoint = PointToScreen(new Point(0, 0));
+                _displayedSideToolPane.Left = topLeftPoint.X;
+                _displayedSideToolPane.Top = topLeftPoint.Y;
+                if (_displayedToolListItem.WindowLocation == WindowLocation.BottomEdge)
+                {
+                    _displayedSideToolPane.Top += ActualHeight - height;
+                }
+            }
+            else
+            {
+                _displayedSideToolPane.Height = ActualHeight;
+                double width = _displayedSideToolPane.Width;
+                if (width == 0.0)
+                {
+                    width = ActualWidth / 3;
+                }
+                _displayedSideToolPane.Width = width;
+                Point topLeftPoint = PointToScreen(new Point(0, 0));
+                _displayedSideToolPane.Top = topLeftPoint.Y;
+                _displayedSideToolPane.Left = topLeftPoint.X;
+                if (_displayedToolListItem.WindowLocation == WindowLocation.RightEdge)
+                {
+                    _displayedSideToolPane.Left += ActualWidth - width;
+                }
+            }
+            _displayedSideToolPane.Show();
+        }
+
+        private void ToolPane_UnPinClick(object sender, EventArgs e)
+        {
+            System.Diagnostics.Trace.Assert(sender is ToolPane);
+
+            ToolListControl toolListControl = null;
+            ToolPane toolPane = sender as ToolPane;
+            FrameworkElement frameworkElement = toolPane;
+            FrameworkElement parentFrameworkElement = toolPane.Parent as FrameworkElement;
+            WindowLocation windowLocation = WindowLocation.None;
+            while (true)
+            {
+                System.Diagnostics.Trace.Assert(parentFrameworkElement is SplitterPane);
+
+                if (parentFrameworkElement.Parent == this)
+                {
+                    SplitterPane splitterPane = parentFrameworkElement as SplitterPane;
+                    if (splitterPane.IsHorizontal)
+                    {
+                        if (Grid.GetRow(frameworkElement) == 0)
+                        {
+                            toolListControl = _topToolList;
+                            windowLocation = WindowLocation.TopEdge;
+                        }
+                        else
+                        {
+                            toolListControl = _bottomToolList;
+                            windowLocation = WindowLocation.BottomEdge;
+                        }
+                    }
+                    else
+                    {
+                        if (Grid.GetColumn(frameworkElement) == 0)
+                        {
+                            toolListControl = _leftToolList;
+                            windowLocation = WindowLocation.LeftEdge;
+                        }
+                        else
+                        {
+                            toolListControl = _rightToolList;
+                            windowLocation = WindowLocation.RightEdge;
+                        }
+                    }
+                    break;
+                }
+
+                frameworkElement = parentFrameworkElement;
+                parentFrameworkElement = parentFrameworkElement.Parent as FrameworkElement;
+            }
+
+            System.Diagnostics.Trace.Assert(toolListControl != null);
+
+            toolPane = sender as ToolPane;
+            ExtractDockPane(toolPane);
+
+            int count = toolPane.IViewContainer.GetUserControlCount();
+            for (int i = 0; i < count; ++i)
+            {
+                (toolListControl.ItemsSource as System.Collections.ObjectModel.ObservableCollection<ToolListItem>).Add(
+                    new ToolListItem() 
+                    { 
+                        ToolPane = toolPane, 
+                        Index = i, 
+                        IViewContainer = toolPane.IViewContainer, 
+                        WindowLocation = windowLocation 
+                    });
+            }
         }
 
         private void CreateToolLists()
@@ -483,63 +584,6 @@ namespace WpfDockManagerDemo.DockManager
             RegisterDockPane(toolPane);
             toolPane.UnPinClick += ToolPane_UnPinClick;
             return toolPane;
-        }
-
-        private void ToolPane_UnPinClick(object sender, EventArgs e)
-        {
-            System.Diagnostics.Trace.Assert(sender is ToolPane);
-
-            // Find out which edge ... 
-            ToolListControl _edgePane = null;
-            ToolPane toolPane = sender as ToolPane;
-            FrameworkElement frameworkElement = toolPane;
-            FrameworkElement parentFrameworkElement = toolPane.Parent as FrameworkElement;
-            while (true)
-            {
-                System.Diagnostics.Trace.Assert(parentFrameworkElement is SplitterPane);
-
-                if (parentFrameworkElement.Parent == this)
-                {
-                    SplitterPane splitterPane = parentFrameworkElement as SplitterPane;
-                    if (splitterPane.IsHorizontal)
-                    {
-                        if (Grid.GetRow(frameworkElement) == 0)
-                        {
-                            _edgePane = _topToolList;
-                        }
-                        else
-                        {
-                            _edgePane = _bottomToolList;
-                        }
-                    }
-                    else
-                    {
-                        if (Grid.GetColumn(frameworkElement) == 0)
-                        {
-                            _edgePane = _leftToolList;
-                        }
-                        else
-                        {
-                            _edgePane = _rightToolList;
-                        }
-                    }
-                    break;
-                }
-
-                frameworkElement = parentFrameworkElement;
-                parentFrameworkElement = parentFrameworkElement.Parent as FrameworkElement;
-            }
-
-            System.Diagnostics.Trace.Assert(_edgePane != null);
-
-            toolPane = sender as ToolPane;
-            ExtractDockPane(toolPane);
-
-            int count = toolPane.IViewContainer.GetUserControlCount();
-            for (int i = 0; i < count; ++i)
-            {
-                (_edgePane.ItemsSource as System.Collections.ObjectModel.ObservableCollection<ToolListItem>).Add(new ToolListItem() { ToolPane = toolPane, Index = i, IViewContainer = toolPane.IViewContainer });
-            }
         }
 
         private void SetRootPane(Grid grid)

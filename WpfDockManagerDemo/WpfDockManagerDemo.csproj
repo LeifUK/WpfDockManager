@@ -71,8 +71,8 @@
     <Compile Include="DockManager\IViewContainer.cs" />
     <Compile Include="DockManager\IViewModel.cs" />
     <Compile Include="DockManager\SelectablePane.cs" />
-    <Compile Include="DockManager\EdgeToolPane.xaml.cs">
-      <DependentUpon>EdgeToolPane.xaml</DependentUpon>
+    <Compile Include="DockManager\SideToolPane.xaml.cs">
+      <DependentUpon>SideToolPane.xaml</DependentUpon>
     </Compile>
     <Compile Include="DockManager\ToolContainer.cs" />
     <Compile Include="DockManager\DocumentContainer.cs" />
@@ -143,9 +143,9 @@
       <SubType>Designer</SubType>
       <Generator>XamlIntelliSenseFileGenerator</Generator>
     </Page>
-    <Page Include="DockManager\EdgeToolPane.xaml">
+    <Page Include="DockManager\SideToolPane.xaml">
       <SubType>Designer</SubType>
-      <Generator>MSBuild:Compile</Generator>
+      <Generator>XamlIntelliSenseFileGenerator</Generator>
     </Page>
     <Page Include="DockManager\ToolListControl.xaml">
       <Generator>MSBuild:Compile</Generator>

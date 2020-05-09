@@ -27,7 +27,8 @@ namespace WpfDockManagerDemo.DockManager
                 return "";
             }
         }
-        public double Height;
-        public double Width;
+        public WindowLocation WindowLocation { get; set; }
+        public double Height { get; set; }
+        public double Width { get; set; }
     }
 }

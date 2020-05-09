@@ -17,9 +17,9 @@ namespace WpfDockManagerDemo.DockManager
     /// <summary>
     /// Interaction logic for SidePane.xaml
     /// </summary>
-    public partial class EdgeToolPane : Window
+    public partial class SideToolPane : Window
     {
-        public EdgeToolPane()
+        public SideToolPane()
         {
             InitializeComponent();
             _toolPane.ShowAsUnPinned();
