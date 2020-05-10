@@ -1,27 +1,32 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
-
-namespace WpfDockManagerDemo.DockManager
+﻿namespace WpfDockManagerDemo.DockManager
 {
     internal class ToolListItem
     {
-        public ToolPane ToolPane { get; set; }
-        public IViewContainer IViewContainer { get; set; }
+        public UnpinnedToolPaneData UnpinnedToolPaneData;
         public int Index { get; set; }
+        public IViewContainer IViewContainer
+        {
+            get
+            {
+                System.Diagnostics.Trace.Assert(UnpinnedToolPaneData != null);
+                System.Diagnostics.Trace.Assert(UnpinnedToolPaneData.ToolPane != null);
+                System.Diagnostics.Trace.Assert(UnpinnedToolPaneData.ToolPane.IViewContainer != null);
+
+                return UnpinnedToolPaneData.ToolPane.IViewContainer;
+            }
+        }
         public string Title
         {
             get
             {
-                if (IViewContainer != null)
+                System.Diagnostics.Trace.Assert(UnpinnedToolPaneData != null);
+                System.Diagnostics.Trace.Assert(UnpinnedToolPaneData.ToolPane != null);
+                System.Diagnostics.Trace.Assert(UnpinnedToolPaneData.ToolPane.IViewContainer != null);
+
+                IViewModel iViewModel = UnpinnedToolPaneData.ToolPane.IViewContainer.GetIViewModel(Index);
+                if (iViewModel != null)
                 {
-                    IViewModel iViewModel = IViewContainer.GetIViewModel(Index);
-                    if (iViewModel != null)
-                    {
-                        return iViewModel.Title;
-                    }
+                    return iViewModel.Title;
                 }
 
                 return "";

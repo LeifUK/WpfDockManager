@@ -43,6 +43,8 @@ namespace WpfDockManagerDemo.DockManager
 
             App.Current.MainWindow.LocationChanged += MainWindow_LocationChanged;
             PreviewMouseDown += LayoutManager_PreviewMouseDown;
+
+            _listUnpinnedToolPaneData = new List<UnpinnedToolPaneData>();
         }
 
         private void LayoutManager_PreviewMouseDown(object sender, MouseButtonEventArgs e)
@@ -351,7 +353,7 @@ namespace WpfDockManagerDemo.DockManager
             if (_displayedSideToolPane != null)
             {
                 UserControl userControl = _displayedSideToolPane.ToolPane.IViewContainer.ExtractUserControl(0);
-                _displayedToolListItem.ToolPane.IViewContainer.InsertUserControl(_displayedToolListItem.Index, userControl);
+                _displayedToolListItem.IViewContainer.InsertUserControl(_displayedToolListItem.Index, userControl);
                 _displayedSideToolPane.Close();
                 _displayedSideToolPane = null;
                 _displayedToolListItem = null;
@@ -447,6 +449,9 @@ namespace WpfDockManagerDemo.DockManager
             _displayedToolListItem.Height = (sender as SideToolPane).ActualHeight;
         }
 
+        // Warning warning
+        private List<UnpinnedToolPaneData> _listUnpinnedToolPaneData;
+
         private void ToolPane_UnPinClick(object sender, EventArgs e)
         {
             System.Diagnostics.Trace.Assert(sender is ToolPane);
@@ -499,7 +504,18 @@ namespace WpfDockManagerDemo.DockManager
             System.Diagnostics.Trace.Assert(toolListControl != null);
 
             toolPane = sender as ToolPane;
-            ExtractDockPane(toolPane);
+            int row = Grid.GetRow(toolPane);
+            int column = Grid.GetColumn(toolPane);
+            ExtractDockPane(toolPane, out frameworkElement);
+
+            System.Diagnostics.Trace.Assert(frameworkElement != null);
+
+            UnpinnedToolPaneData unpinnedToolPaneData = new UnpinnedToolPaneData();
+            _listUnpinnedToolPaneData.Add(unpinnedToolPaneData);
+            unpinnedToolPaneData.ToolPane = toolPane;
+            unpinnedToolPaneData.Row = row;
+            unpinnedToolPaneData.Column = column;
+            unpinnedToolPaneData.Sibling = frameworkElement as SelectablePane;
 
             int count = toolPane.IViewContainer.GetUserControlCount();
             for (int i = 0; i < count; ++i)
@@ -507,9 +523,8 @@ namespace WpfDockManagerDemo.DockManager
                 (toolListControl.ItemsSource as System.Collections.ObjectModel.ObservableCollection<ToolListItem>).Add(
                     new ToolListItem() 
                     { 
-                        ToolPane = toolPane, 
+                        UnpinnedToolPaneData = unpinnedToolPaneData, 
                         Index = i, 
-                        IViewContainer = toolPane.IViewContainer, 
                         WindowLocation = windowLocation 
                     });
             }
@@ -1307,8 +1322,10 @@ namespace WpfDockManagerDemo.DockManager
         /*
          * Remove a dock pane from the tree
          */
-        private DockPane ExtractDockPane(DockPane dockPane)
+        private DockPane ExtractDockPane(DockPane dockPane, out FrameworkElement frameworkElement)
         {
+            frameworkElement = null;
+
             if (dockPane == null)
             {
                 return null;
@@ -1330,7 +1347,6 @@ namespace WpfDockManagerDemo.DockManager
 
                 if (!(parentGrid is DocumentPanel))
                 {
-                    FrameworkElement frameworkElement = null;
                     foreach (var item in parentGrid.Children)
                     {
                         if (!(item is GridSplitter))
@@ -1439,7 +1455,7 @@ namespace WpfDockManagerDemo.DockManager
 
             Point mainWindowLocation = App.Current.MainWindow.PointToScreen(new Point(0, 0));
 
-            ExtractDockPane(dockPane);
+            ExtractDockPane(dockPane, out FrameworkElement frameworkElement);
 
             FloatingPane floatingPane = null;
             if (dockPane is ToolPane)
@@ -1484,7 +1500,7 @@ namespace WpfDockManagerDemo.DockManager
                 return;
             }
 
-            ExtractDockPane(dockPane);
+            ExtractDockPane(dockPane, out FrameworkElement frameworkElement);
 
             if (dockPane is DocumentPane)
             {

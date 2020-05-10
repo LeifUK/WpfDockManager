@@ -89,6 +89,7 @@
     </Compile>
     <Compile Include="DockManager\ToolListItem.cs" />
     <Compile Include="DockManager\ToolPane.cs" />
+    <Compile Include="DockManager\UnpinnedToolPaneData.cs" />
     <Compile Include="DockManager\ViewType.cs" />
     <Compile Include="DockManager\WindowLocationPane.xaml.cs">
       <DependentUpon>WindowLocationPane.xaml</DependentUpon>
