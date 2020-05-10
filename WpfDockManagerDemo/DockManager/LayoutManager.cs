@@ -6,7 +6,7 @@ using System.Windows.Controls;
 using System.ComponentModel;
 using System.Xml;
 using System.Windows.Input;
-
+using WpfControlLibrary;
 
 /*
  * Note: I have placed most of the intelligence in this class rather than spreading 
@@ -47,7 +47,17 @@ namespace WpfDockManagerDemo.DockManager
 
         private void LayoutManager_PreviewMouseDown(object sender, MouseButtonEventArgs e)
         {
-            HideSideToolPane();
+            Point cursorPoint = Utilities.GetCursorPosition();
+            Point topLeftPoint = _root.PointToScreen(new Point(0, 0));
+            if (
+                    (cursorPoint.X > topLeftPoint.X) && 
+                    (cursorPoint.Y > topLeftPoint.Y) &&
+                    (cursorPoint.X < (topLeftPoint.X + _root.ActualWidth)) && 
+                    (cursorPoint.Y < (topLeftPoint.Y + _root.ActualHeight))
+                )
+            {
+                HideSideToolPane();
+            }
         }
 
         public LayoutManager(ToolListControl rightPane)
@@ -120,6 +130,9 @@ namespace WpfDockManagerDemo.DockManager
         public DataTemplate ToolPaneHeaderTemplate { get; set; }
         public DataTemplate DocumentPaneTitleTemplate { get; set; }
         public DataTemplate DocumentPaneHeaderTemplate { get; set; }
+
+        public event EventHandler DocumentClosed;
+        public event EventHandler ToolClosed;
 
         internal List<FloatingTool> FloatingTools;
         internal List<FloatingDocument> FloatingDocuments;
@@ -349,18 +362,15 @@ namespace WpfDockManagerDemo.DockManager
         {
             System.Diagnostics.Trace.Assert(sender is ToolListItem);
 
-            if (_displayedToolListItem == (sender as ToolListItem))
-            {
-                return;
-            }
-
+            ToolListItem toolListItem = _displayedToolListItem;
             HideSideToolPane();
 
-            _displayedToolListItem = sender as ToolListItem;
-            if (_displayedToolListItem == null)
+            if (toolListItem == (sender as ToolListItem))
             {
                 return;
             }
+
+            _displayedToolListItem = sender as ToolListItem;
 
             _displayedSideToolPane = new SideToolPane();
             UserControl userControl = _displayedToolListItem.IViewContainer.ExtractUserControl(_displayedToolListItem.Index);
@@ -650,23 +660,34 @@ namespace WpfDockManagerDemo.DockManager
             Grid.SetColumn(_root, 1);
         }
 
-        // Warning warning => as per floating tool!
+        private void RegisterFloatingPane(FloatingPane floatingPane)
+        {
+            floatingPane.LocationChanged += FloatingWindow_LocationChanged;
+            floatingPane.Closed += FloatingPane_Closed;
+            floatingPane.Ungroup += FloatingPane_Ungroup;
+            floatingPane.UngroupCurrent += FloatingPane_UngroupCurrent;
+            floatingPane.DataContext = new FloatingViewModel();
+            (floatingPane.DataContext as FloatingViewModel).Title = floatingPane.Title;
+            floatingPane.EndDrag += FloatingPane_EndDrag;
+            // Ensure the window remains on top of the main window
+            floatingPane.Owner = App.Current.MainWindow;
+            floatingPane.Show();
+        }
+
         private FloatingDocument CreateFloatingDocument()
         {
             FloatingDocument floatingDocument = new FloatingDocument();
-            floatingDocument.LocationChanged += FloatingWindow_LocationChanged;
-            // Warning warning
-            floatingDocument.Closed += FloatingTool_Closed;
-            floatingDocument.Ungroup += FloatingPane_Ungroup;
-            floatingDocument.UngroupCurrent += FloatingPane_UngroupCurrent;
-            floatingDocument.DataContext = new FloatingViewModel();
-            (floatingDocument.DataContext as FloatingViewModel).Title = floatingDocument.Title;
-            floatingDocument.EndDrag += FloatingPane_EndDrag;
-            // Ensure the window remains on top of the main window
-            floatingDocument.Owner = App.Current.MainWindow;
-            floatingDocument.Show();
+            RegisterFloatingPane(floatingDocument);
             FloatingDocuments.Add(floatingDocument);
             return floatingDocument;
+        }
+
+        private FloatingTool CreateFloatingTool()
+        {
+            FloatingTool floatingTool = new FloatingTool();
+            RegisterFloatingPane(floatingTool);
+            FloatingTools.Add(floatingTool);
+            return floatingTool;
         }
 
         private void Create()
@@ -1406,23 +1427,6 @@ namespace WpfDockManagerDemo.DockManager
             }
         }
 
-        private FloatingTool CreateFloatingTool()
-        {
-            FloatingTool floatingTool = new FloatingTool();
-            floatingTool.LocationChanged += FloatingWindow_LocationChanged;
-            floatingTool.Closed += FloatingTool_Closed;
-            floatingTool.Ungroup += FloatingPane_Ungroup;
-            floatingTool.UngroupCurrent += FloatingPane_UngroupCurrent;
-            floatingTool.DataContext = new FloatingViewModel();
-            (floatingTool.DataContext as FloatingViewModel).Title = floatingTool.Title;
-            floatingTool.EndDrag += FloatingPane_EndDrag;
-            // Ensure the window remains on top of the main window
-            floatingTool.Owner = App.Current.MainWindow;
-            floatingTool.Show();
-            FloatingTools.Add(floatingTool);
-            return floatingTool;
-        }
-
         private void DockPane_Float(object sender, FloatEventArgs e)
         {
             System.Diagnostics.Trace.Assert(sender is DockPane);
@@ -1471,7 +1475,6 @@ namespace WpfDockManagerDemo.DockManager
             }
         }
 
-        // Warning warning => what about the view model? Remove from list???
         private void DockPane_Close(object sender, EventArgs e)
         {
             DockPane dockPane = sender as DockPane;
@@ -1482,13 +1485,27 @@ namespace WpfDockManagerDemo.DockManager
             }
 
             ExtractDockPane(dockPane);
+
+            if (dockPane is DocumentPane)
+            {
+                DocumentClosed?.Invoke(sender, null);
+            }
+            else if (dockPane is ToolPane)
+            {
+                ToolClosed?.Invoke(sender, null);
+            }
         }
 
-        private void FloatingTool_Closed(object sender, EventArgs e)
+        private void FloatingPane_Closed(object sender, EventArgs e)
         {
-            if (FloatingTools.Contains(sender as FloatingTool))
+            if ((sender is FloatingTool) && (FloatingTools.Contains(sender as FloatingTool)))
             {
                 FloatingTools.Remove(sender as FloatingTool);
+            }
+
+            if ((sender is FloatingDocument) && (FloatingDocuments.Contains(sender as FloatingDocument)))
+            {
+                FloatingDocuments.Remove(sender as FloatingDocument);
             }
         }
 

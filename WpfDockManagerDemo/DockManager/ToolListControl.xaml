@@ -7,7 +7,7 @@
              mc:Ignorable="d" 
              d:DesignHeight="450" d:DesignWidth="800">
     <Grid>
-        <ListBox x:Name="_listBox" ScrollViewer.HorizontalScrollBarVisibility="Hidden" Background="Transparent" Padding="0,-2,0,-2" BorderThickness="0">
+        <ListBox x:Name="_listBox" ScrollViewer.HorizontalScrollBarVisibility="Hidden" Background="Transparent" Padding="0,-2,0,-2" BorderThickness="0" MouseLeftButtonDown="_listBox_MouseLeftButtonDown">
             <ListBox.ItemContainerStyle>
                 <Style TargetType="ListBoxItem">
                     <Setter Property="FrameworkElement.Margin" Value="0"/>

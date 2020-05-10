@@ -251,5 +251,10 @@ namespace WpfDockManagerDemo.DockManager
                 }
             }
         }
+
+        private void _listBox_MouseLeftButtonDown(object sender, System.Windows.Input.MouseButtonEventArgs e)
+        {
+            // Warning warning TBD
+        }
     }
 }
