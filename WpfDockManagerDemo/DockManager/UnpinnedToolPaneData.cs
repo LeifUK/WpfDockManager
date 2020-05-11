@@ -10,6 +10,7 @@ namespace WpfDockManagerDemo.DockManager
     internal class UnpinnedToolPaneData
     {
         public ToolListControl ToolListControl { get; set; }
+        // These are the tool list control items ... warning warning
         public System.Collections.ObjectModel.ObservableCollection<ToolListItem> ToolListItems { get; set; }
         public ToolPane ToolPane { get; set; }
         public FrameworkElement Sibling { get; set; }

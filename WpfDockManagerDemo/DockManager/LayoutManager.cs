@@ -148,10 +148,11 @@ namespace WpfDockManagerDemo.DockManager
         internal ToolListControl _topToolList;
         internal ToolListControl _rightToolList;
         internal ToolListControl _bottomToolList;
-        
+
+        private Dictionary<UnpinnedToolPaneData, List<ToolListItem>> _dictionaryUnpinnedToolPaneData;
+
         internal ToolListItem _displayedToolListItem;
         internal SideToolPane _displayedSideToolPane;
-        private Dictionary<UnpinnedToolPaneData, List<ToolListItem>> _dictionaryUnpinnedToolPaneData;
 
         internal Grid _root;
 
@@ -341,13 +342,8 @@ namespace WpfDockManagerDemo.DockManager
                 double top = topLeftPoint.Y;
                 switch (_displayedToolListItem.WindowLocation)
                 {
-                    case WindowLocation.TopSide:
-                        break;
-
                     case WindowLocation.BottomSide:
                         top += _root.ActualHeight - _displayedSideToolPane.ActualHeight;
-                        break;
-                    case WindowLocation.LeftSide:
                         break;
                     case WindowLocation.RightSide:
                         left += _root.ActualWidth - _displayedSideToolPane.ActualWidth;
@@ -458,27 +454,53 @@ namespace WpfDockManagerDemo.DockManager
              * Restore the pane in the view tree
              */
             
-            SplitterPane newSplitterPane = new SplitterPane(_displayedToolListItem.UnpinnedToolPaneData.IsHorizontal);
-
             if (_displayedToolListItem.UnpinnedToolPaneData.Sibling == this)
             {
-                IEnumerable<DocumentPanel> enumerableDocumentPanels = Children.OfType<DocumentPanel>();
-                System.Diagnostics.Trace.Assert(enumerableDocumentPanels.Count() == 1);
+                bool isHorizontal = (_displayedToolListItem.WindowLocation == WindowLocation.TopSide) || (_displayedToolListItem.WindowLocation == WindowLocation.BottomSide);
 
-                DocumentPanel documentPanel = enumerableDocumentPanels.First();
+                SplitterPane newSplitterPane = new SplitterPane(isHorizontal);
+                // Could be a splitter and a document panel ... 
+                IEnumerable<SplitterPane> enumerableSplitterPanes = Children.OfType<SplitterPane>();
+                if (enumerableSplitterPanes.Count() == 1)
+                {
+                    SplitterPane parentSplitterPane = enumerableSplitterPanes.First();
 
-                SetRootPane(newSplitterPane);
-                newSplitterPane.AddChild(documentPanel, !_displayedToolListItem.UnpinnedToolPaneData.IsFirst);
-                newSplitterPane.AddChild(_displayedToolListItem.UnpinnedToolPaneData.ToolPane, _displayedToolListItem.UnpinnedToolPaneData.IsFirst);
+                    IEnumerable<ToolPane> enumerableToolPanes = parentSplitterPane.Children.OfType<ToolPane>();
+
+                    ToolPane toolPane = enumerableToolPanes.First();
+                    parentSplitterPane.Children.Remove(toolPane);
+
+                    bool isFirst = (_displayedToolListItem.WindowLocation == WindowLocation.TopSide) || (_displayedToolListItem.WindowLocation == WindowLocation.LeftSide);
+                    newSplitterPane.AddChild(toolPane, !isFirst);
+                    newSplitterPane.AddChild(_displayedToolListItem.UnpinnedToolPaneData.ToolPane, isFirst);
+
+                    parentSplitterPane.AddChild(newSplitterPane, isFirst);
+                }
+                else
+                {
+                    IEnumerable<DocumentPanel> enumerableDocumentPanels = Children.OfType<DocumentPanel>();
+                    System.Diagnostics.Trace.Assert(enumerableDocumentPanels.Count() == 1);
+
+                    DocumentPanel documentPanel = enumerableDocumentPanels.First();
+
+                    SetRootPane(newSplitterPane);
+                    newSplitterPane.AddChild(documentPanel, !_displayedToolListItem.UnpinnedToolPaneData.IsFirst);
+                    newSplitterPane.AddChild(_displayedToolListItem.UnpinnedToolPaneData.ToolPane, _displayedToolListItem.UnpinnedToolPaneData.IsFirst);
+                }
             }
             else if (_displayedToolListItem.UnpinnedToolPaneData.Sibling.Parent == this)
             {
+                bool isHorizontal = (_displayedToolListItem.WindowLocation == WindowLocation.TopSide) || (_displayedToolListItem.WindowLocation == WindowLocation.BottomSide);
+                bool isFirst = (_displayedToolListItem.WindowLocation == WindowLocation.TopSide) || (_displayedToolListItem.WindowLocation == WindowLocation.LeftSide);
+
+                SplitterPane newSplitterPane = new SplitterPane(isHorizontal);
                 SetRootPane(newSplitterPane);
-                newSplitterPane.AddChild(_displayedToolListItem.UnpinnedToolPaneData.Sibling, !_displayedToolListItem.UnpinnedToolPaneData.IsFirst);
-                newSplitterPane.AddChild(_displayedToolListItem.UnpinnedToolPaneData.ToolPane, _displayedToolListItem.UnpinnedToolPaneData.IsFirst);
+                newSplitterPane.AddChild(_displayedToolListItem.UnpinnedToolPaneData.Sibling, !isFirst);
+                newSplitterPane.AddChild(_displayedToolListItem.UnpinnedToolPaneData.ToolPane, isFirst);
             }
             else
             {
+                SplitterPane newSplitterPane = new SplitterPane(_displayedToolListItem.UnpinnedToolPaneData.IsHorizontal);
                 SplitterPane parentSplitterPane = _displayedToolListItem.UnpinnedToolPaneData.Sibling.Parent as SplitterPane;
                 int row = Grid.GetRow(_displayedToolListItem.UnpinnedToolPaneData.Sibling);
                 int column = Grid.GetColumn(_displayedToolListItem.UnpinnedToolPaneData.Sibling);
