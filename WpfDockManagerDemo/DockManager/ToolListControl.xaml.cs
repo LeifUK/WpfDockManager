@@ -51,8 +51,10 @@ namespace WpfDockManagerDemo.DockManager
             {
                 _listBox.Items.Add(item);
             }
-
-            _listBox.SelectedIndex = 0;
+            if (_listBox.Items.Count > 0)
+            {
+                _listBox.SelectedIndex = 0;
+            }
         }
 
         protected virtual void OnItemsSourceChanged(DependencyPropertyChangedEventArgs e)

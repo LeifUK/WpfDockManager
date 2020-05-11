@@ -222,6 +222,7 @@ namespace WpfDockManagerDemo.DockManager
             System.Diagnostics.Trace.Assert(userControl.DataContext is IViewModel);
 
             _items.Insert(index, new System.Collections.Generic.KeyValuePair<UserControl, IViewModel>(userControl, userControl.DataContext as IViewModel));
+            CheckTabCount();
         }
 
         public UserControl ExtractUserControl(int index)

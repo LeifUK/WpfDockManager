@@ -1,4 +1,5 @@
-﻿using System.Windows;
+﻿using System;
+using System.Windows;
 
 namespace WpfDockManagerDemo.DockManager
 {
@@ -10,7 +11,16 @@ namespace WpfDockManagerDemo.DockManager
         public SideToolPane()
         {
             InitializeComponent();
+            _windowChrome.GlassFrameThickness = new Thickness(0);
             _toolPane.ShowAsUnPinned();
+            _toolPane.UnPinClick += _toolPane_UnPinClick;
+        }
+
+        public event EventHandler PinClick;
+
+        private void _toolPane_UnPinClick(object sender, System.EventArgs e)
+        {
+            PinClick?.Invoke(this, null);
         }
 
         private void _buttonMenu_Click(object sender, RoutedEventArgs e)

@@ -7,7 +7,7 @@
         mc:Ignorable="d"
         Title="SidePane" Height="450" Width="800">
     <WindowChrome.WindowChrome>
-        <WindowChrome x:Name="_windowChrome" CaptionHeight="34" ResizeBorderThickness="0,4,0,0"/>
+        <WindowChrome x:Name="_windowChrome" CaptionHeight="0" ResizeBorderThickness="0,4,0,0"/>
     </WindowChrome.WindowChrome>
 
     <Window.Resources>

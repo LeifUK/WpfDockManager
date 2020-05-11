@@ -3,14 +3,19 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
+using System.Windows;
 
 namespace WpfDockManagerDemo.DockManager
 {
     internal class UnpinnedToolPaneData
     {
+        public ToolListControl ToolListControl { get; set; }
+        public System.Collections.ObjectModel.ObservableCollection<ToolListItem> ToolListItems { get; set; }
         public ToolPane ToolPane { get; set; }
-        public SelectablePane Sibling { get; set; }
-        public int Row { get; set; }
-        public int Column { get; set; }
+        public FrameworkElement Sibling { get; set; }
+
+        // These define the original location relative to the Sibling pane
+        public bool IsHorizontal { get; set; }
+        public bool IsFirst { get; set; }
     }
 }

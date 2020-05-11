@@ -35,5 +35,12 @@
         public WindowLocation WindowLocation { get; set; }
         public double Height { get; set; }
         public double Width { get; set; }
+
+        public bool Equals(ToolListItem other)
+        {
+            return
+                (UnpinnedToolPaneData.ToolPane == other.UnpinnedToolPaneData.ToolPane) &&
+                (Index == other.Index);
+        }
     }
 }
