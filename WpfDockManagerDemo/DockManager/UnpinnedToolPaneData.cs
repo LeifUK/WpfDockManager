@@ -1,17 +1,13 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
-using System.Windows;
+﻿using System.Windows;
 
 namespace WpfDockManagerDemo.DockManager
 {
+    /*
+     * Stores information for a ToolPane that has been unpinned
+     */
     internal class UnpinnedToolPaneData
     {
         public ToolListControl ToolListControl { get; set; }
-        // These are the tool list control items ... warning warning
-        public System.Collections.ObjectModel.ObservableCollection<ToolListItem> ToolListItems { get; set; }
         public ToolPane ToolPane { get; set; }
         public FrameworkElement Sibling { get; set; }
 

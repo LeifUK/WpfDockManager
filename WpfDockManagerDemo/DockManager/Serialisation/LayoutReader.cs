@@ -4,10 +4,9 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace WpfDockManagerDemo.DockManager
+namespace WpfDockManagerDemo.DockManager.Serialisation
 {
-    internal interface IToolFactory
+    class LayoutReader
     {
-        ToolPane CreateToolPane();
     }
 }

@@ -25,13 +25,13 @@ namespace WpfDockManagerDemo.DockManager
 
         [Bindable(true)]
         [DesignerSerializationVisibility(DesignerSerializationVisibility.Hidden)]
-        public static readonly DependencyProperty ItemsSourceProperty = DependencyProperty.Register("ItemsSource", typeof(IEnumerable), typeof(ToolListControl), new FrameworkPropertyMetadata((IEnumerable)null, new PropertyChangedCallback(OnItemsSourceChanged)));
+        public static readonly DependencyProperty ItemsSourceProperty = DependencyProperty.Register("ItemsSource", typeof(System.Collections.ObjectModel.ObservableCollection<ToolListItem>), typeof(ToolListControl), new FrameworkPropertyMetadata((System.Collections.ObjectModel.ObservableCollection<ToolListItem>)null, new PropertyChangedCallback(OnItemsSourceChanged)));
 
-        public IEnumerable ItemsSource
+        internal System.Collections.ObjectModel.ObservableCollection<ToolListItem> ItemsSource
         {
             get
             {
-                return (IEnumerable)GetValue(ItemsSourceProperty);
+                return (System.Collections.ObjectModel.ObservableCollection<ToolListItem>)GetValue(ItemsSourceProperty);
             }
             set
             {
@@ -44,7 +44,7 @@ namespace WpfDockManagerDemo.DockManager
             ((ToolListControl)d).OnItemsSourceChanged(e);
         }
 
-        private void PrepareItemsSource(IEnumerable itemsSource)
+        private void PrepareItemsSource(System.Collections.ObjectModel.ObservableCollection<ToolListItem> itemsSource)
         {
             _listBox.Items.Clear();
             foreach (var item in itemsSource)
@@ -61,7 +61,7 @@ namespace WpfDockManagerDemo.DockManager
         {
             if (e.NewValue != null)
             {
-                PrepareItemsSource(e.NewValue as IEnumerable);
+                PrepareItemsSource(e.NewValue as System.Collections.ObjectModel.ObservableCollection<ToolListItem>);
 
                 if (ItemsSource is System.Collections.Specialized.INotifyCollectionChanged)
                 {

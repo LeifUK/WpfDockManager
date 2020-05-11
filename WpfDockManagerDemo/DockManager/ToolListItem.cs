@@ -2,28 +2,13 @@
 {
     internal class ToolListItem
     {
-        public UnpinnedToolPaneData UnpinnedToolPaneData;
         public int Index { get; set; }
-        public IViewContainer IViewContainer
-        {
-            get
-            {
-                System.Diagnostics.Trace.Assert(UnpinnedToolPaneData != null);
-                System.Diagnostics.Trace.Assert(UnpinnedToolPaneData.ToolPane != null);
-                System.Diagnostics.Trace.Assert(UnpinnedToolPaneData.ToolPane.IViewContainer != null);
-
-                return UnpinnedToolPaneData.ToolPane.IViewContainer;
-            }
-        }
+        public IViewContainer IViewContainer { get; set; }
         public string Title
         {
             get
             {
-                System.Diagnostics.Trace.Assert(UnpinnedToolPaneData != null);
-                System.Diagnostics.Trace.Assert(UnpinnedToolPaneData.ToolPane != null);
-                System.Diagnostics.Trace.Assert(UnpinnedToolPaneData.ToolPane.IViewContainer != null);
-
-                IViewModel iViewModel = UnpinnedToolPaneData.ToolPane.IViewContainer.GetIViewModel(Index);
+                IViewModel iViewModel = IViewContainer.GetIViewModel(Index);
                 if (iViewModel != null)
                 {
                     return iViewModel.Title;
@@ -39,7 +24,7 @@
         public bool Equals(ToolListItem other)
         {
             return
-                (UnpinnedToolPaneData.ToolPane == other.UnpinnedToolPaneData.ToolPane) &&
+                (IViewContainer == other.IViewContainer) &&
                 (Index == other.Index);
         }
     }

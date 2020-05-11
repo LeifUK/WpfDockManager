@@ -68,9 +68,12 @@
     </Compile>
     <Compile Include="DockManager\FloatingTool.cs" />
     <Compile Include="DockManager\Helpers.cs" />
+    <Compile Include="DockManager\ILayoutFactory.cs" />
     <Compile Include="DockManager\IViewContainer.cs" />
     <Compile Include="DockManager\IViewModel.cs" />
     <Compile Include="DockManager\SelectablePane.cs" />
+    <Compile Include="DockManager\Serialisation\LayoutReader.cs" />
+    <Compile Include="DockManager\Serialisation\LayoutWriter.cs" />
     <Compile Include="DockManager\SideLocationPane.xaml.cs">
       <DependentUpon>SideLocationPane.xaml</DependentUpon>
     </Compile>
@@ -232,6 +235,9 @@
       <Project>{460c09de-de0d-4d2b-b1ec-f2bbd72022c6}</Project>
       <Name>WpfControlLibrary</Name>
     </ProjectReference>
+  </ItemGroup>
+  <ItemGroup>
+    <Folder Include="DockManager\Controls\" />
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
 </Project>
