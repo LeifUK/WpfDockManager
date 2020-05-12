@@ -11,7 +11,7 @@ namespace WpfDockManagerDemo.DockManager
         public UnpinnedToolPane()
         {
             InitializeComponent();
-            _windowChrome.GlassFrameThickness = new Thickness(0);
+            _windowChrome.GlassFrameThickness = new Thickness(1);
             _toolPane.ShowAsUnPinned();
             _toolPane.UnPinClick += _toolPane_UnPinClick;
         }

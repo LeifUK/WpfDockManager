@@ -31,8 +31,8 @@ namespace WpfDockManagerDemo.DockManager
             App.Current.MainWindow.LocationChanged += MainWindow_LocationChanged;
             PreviewMouseDown += LayoutManager_PreviewMouseDown;
             SizeChanged += LayoutManager_SizeChanged;
-
-            _dictionaryUnpinnedToolData = new Dictionary<UnpinnedToolData, List<ToolListBoxItem>>();
+            
+            _listUnpinnedToolData = new List<UnpinnedToolData>();
         }
 
         private void LayoutManager_PreviewMouseDown(object sender, MouseButtonEventArgs e)
@@ -122,21 +122,22 @@ namespace WpfDockManagerDemo.DockManager
         internal Controls.ToolListBox _rightToolListBox;
         internal Controls.ToolListBox _bottomToolListBox;
 
-        private Dictionary<UnpinnedToolData, List<ToolListBoxItem>> _dictionaryUnpinnedToolData;
+        private List<UnpinnedToolData> _listUnpinnedToolData;
 
         internal ToolListBoxItem _activeToolListBoxItem;
         internal UnpinnedToolPane _activeUnpinnedToolPane;
+        internal UnpinnedToolData _activeUnpinnedToolData;
         internal Controls.ToolListBox _activeToolListBox;
 
         private UnpinnedToolData GetUnpinnedToolData(ToolListBoxItem toolListBoxItem)
         {
-            foreach (var keyValuePair in _dictionaryUnpinnedToolData)
+            foreach (UnpinnedToolData unpinnedToolData in _listUnpinnedToolData)
             {
-                foreach (var item in keyValuePair.Value)
+                foreach (var item in unpinnedToolData.Items)
                 {
                     if (item == toolListBoxItem)
                     {
-                        return keyValuePair.Key;
+                        return unpinnedToolData;
                     }
                 }
             }
@@ -314,8 +315,6 @@ namespace WpfDockManagerDemo.DockManager
             if (e.NewValue != null)
             {
                 CloseControlTemplate = (System.Windows.Controls.ControlTemplate)e.NewValue;
-                // Warning warning
-                //CreateControl();
             }
         }
 
@@ -452,6 +451,7 @@ namespace WpfDockManagerDemo.DockManager
 
             _activeToolListBox = e.ToolListBox;
             _activeToolListBoxItem = sender as ToolListBoxItem;
+            _activeUnpinnedToolData = GetUnpinnedToolData(_activeToolListBoxItem);
             _activeUnpinnedToolPane = CreateUnpinnedToolPane(sender as ToolListBoxItem);
         }
 
@@ -520,14 +520,11 @@ namespace WpfDockManagerDemo.DockManager
         private void UnpinnedToolPane_PinClick(object sender, EventArgs e)
         {
             System.Diagnostics.Trace.Assert(_activeUnpinnedToolPane == sender);
+            System.Diagnostics.Trace.Assert(_activeUnpinnedToolData != null);
 
             /*
              * Put the view back into its ToolPane  
              */
-
-            UnpinnedToolData unpinnedToolData = GetUnpinnedToolData(_activeToolListBoxItem);
-
-            System.Diagnostics.Trace.Assert(unpinnedToolData != null);
 
             UserControl userControl = _activeUnpinnedToolPane.ToolPane.IViewContainer.ExtractUserControl(0);
             _activeToolListBoxItem.IViewContainer.InsertUserControl(_activeToolListBoxItem.Index, userControl);
@@ -536,15 +533,13 @@ namespace WpfDockManagerDemo.DockManager
              * Restore the pane in the view tree
              */
 
-            PinToolPane(unpinnedToolData);
-
-            System.Diagnostics.Trace.Assert(_dictionaryUnpinnedToolData.ContainsKey(unpinnedToolData));
+            PinToolPane(_activeUnpinnedToolData);
 
             /*
              * Remove the tool list items from the side bar
              */
 
-            List<ToolListBoxItem> toolListBoxItems = _dictionaryUnpinnedToolData[unpinnedToolData];
+            List<ToolListBoxItem> toolListBoxItems = _activeUnpinnedToolData.Items;
             IEnumerable<Controls.IToolListBoxItem> iEnumerable = _activeToolListBox.ItemsSource.Except(toolListBoxItems);
             _activeToolListBox.ItemsSource = new System.Collections.ObjectModel.ObservableCollection<Controls.IToolListBoxItem>(iEnumerable);
 
@@ -552,6 +547,7 @@ namespace WpfDockManagerDemo.DockManager
             _activeUnpinnedToolPane = null;
             _activeToolListBoxItem = null;
             _activeToolListBox = null;
+            _activeUnpinnedToolData = null;
         }
 
         // Warning warning => this should close the tool pane!
@@ -622,12 +618,12 @@ namespace WpfDockManagerDemo.DockManager
 
             UnpinnedToolData unpinnedToolData = new UnpinnedToolData();
             unpinnedToolData.ToolPane = toolPane;
+            unpinnedToolData.Items = new List<ToolListBoxItem>();
             unpinnedToolData.IsHorizontal = parentSplitterPane.IsHorizontal;
             unpinnedToolData.IsFirst = (Grid.GetRow(toolPane) == 0) && (Grid.GetColumn(toolPane) == 0);
             unpinnedToolData.Sibling = frameworkElement;
 
-            List<ToolListBoxItem> listTooListItem = new List<ToolListBoxItem>();
-            _dictionaryUnpinnedToolData.Add(unpinnedToolData, listTooListItem);
+            _listUnpinnedToolData.Add(unpinnedToolData);
 
             int count = toolPane.IViewContainer.GetUserControlCount();
             for (int i = 0; i < count; ++i)
@@ -639,17 +635,17 @@ namespace WpfDockManagerDemo.DockManager
                     WindowLocation = windowLocation
                 };
                 (ToolListBox.ItemsSource as System.Collections.ObjectModel.ObservableCollection<Controls.IToolListBoxItem>).Add(toolListBoxItem);
-                listTooListItem.Add(toolListBoxItem);
+                unpinnedToolData.Items.Add(toolListBoxItem);
             }
         }
 
         private void FrameworkElementRemoved(FrameworkElement frameworkElement)
         {
-            foreach (var keyValuePair in _dictionaryUnpinnedToolData)
+            foreach (var item in _listUnpinnedToolData)
             {
-                if (keyValuePair.Key.Sibling == frameworkElement)
+                if (item.Sibling == frameworkElement)
                 {
-                    keyValuePair.Key.Sibling = frameworkElement.Parent as FrameworkElement;
+                    item.Sibling = frameworkElement.Parent as FrameworkElement;
                 }
             }
         }

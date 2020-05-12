@@ -1,4 +1,5 @@
 ﻿using System.Windows;
+using System.Collections.Generic;
 
 namespace WpfDockManagerDemo.DockManager
 {
@@ -9,6 +10,8 @@ namespace WpfDockManagerDemo.DockManager
     {
         public ToolPane ToolPane { get; set; }
         public FrameworkElement Sibling { get; set; }
+
+        public List<ToolListBoxItem> Items;
 
         // These define the original location relative to the Sibling pane
         public bool IsHorizontal { get; set; }
