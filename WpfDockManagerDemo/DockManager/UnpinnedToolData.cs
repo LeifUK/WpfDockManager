@@ -7,7 +7,6 @@ namespace WpfDockManagerDemo.DockManager
      */
     internal class UnpinnedToolData
     {
-        public Controls.UnpinnedToolsControl UnpinnedToolsControl { get; set; }
         public ToolPane ToolPane { get; set; }
         public FrameworkElement Sibling { get; set; }
 

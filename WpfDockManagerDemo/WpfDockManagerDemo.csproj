@@ -59,9 +59,11 @@
       <SubType>Designer</SubType>
     </ApplicationDefinition>
     <Compile Include="DockManager\Command.cs" />
-    <Compile Include="DockManager\Controls\IUnpinnedTool.cs" />
-    <Compile Include="DockManager\Controls\UnpinnedToolsControl.xaml.cs">
-      <DependentUpon>UnpinnedToolsControl.xaml</DependentUpon>
+    <Compile Include="DockManager\Controls\ItemClickEventArgs.cs" />
+    <Compile Include="DockManager\Controls\ItemClickEventHandler.cs" />
+    <Compile Include="DockManager\Controls\IToolListBoxItem.cs" />
+    <Compile Include="DockManager\Controls\ToolListBox.xaml.cs">
+      <DependentUpon>ToolListBox.xaml</DependentUpon>
     </Compile>
     <Compile Include="DockManager\DockPane.cs" />
     <Compile Include="DockManager\FloatEventArgs.cs" />
@@ -88,13 +90,12 @@
     <Compile Include="DockManager\ExtensionMethods.cs" />
     <Compile Include="DockManager\InsertionIndicatorManager.cs" />
     <Compile Include="DockManager\IView.cs" />
-    <Compile Include="DockManager\ToolListItem.cs" />
+    <Compile Include="DockManager\ToolListBoxItem.cs" />
     <Compile Include="DockManager\ToolPane.cs" />
     <Compile Include="DockManager\UnpinnedToolData.cs" />
     <Compile Include="DockManager\UnpinnedToolPane.xaml.cs">
       <DependentUpon>UnpinnedToolPane.xaml</DependentUpon>
     </Compile>
-    <Compile Include="DockManager\ViewType.cs" />
     <Compile Include="DockManager\WindowLocationPane.xaml.cs">
       <DependentUpon>WindowLocationPane.xaml</DependentUpon>
     </Compile>
@@ -136,7 +137,7 @@
     <Compile Include="View\ToolTwoView.xaml.cs">
       <DependentUpon>ToolTwoView.xaml</DependentUpon>
     </Compile>
-    <Page Include="DockManager\Controls\UnpinnedToolsControl.xaml">
+    <Page Include="DockManager\Controls\ToolListBox.xaml">
       <Generator>MSBuild:Compile</Generator>
       <SubType>Designer</SubType>
     </Page>

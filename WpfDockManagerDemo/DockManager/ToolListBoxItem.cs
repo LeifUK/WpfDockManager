@@ -1,6 +1,6 @@
 ﻿namespace WpfDockManagerDemo.DockManager
 {
-    internal class ToolListItem : Controls.IUnpinnedTool
+    internal class ToolListBoxItem : Controls.IToolListBoxItem
     {
         public int Index { get; set; }
         public IViewContainer IViewContainer { get; set; }
@@ -8,6 +8,8 @@
         {
             get
             {
+                System.Diagnostics.Trace.Assert(IViewContainer != null);
+
                 IViewModel iViewModel = IViewContainer.GetIViewModel(Index);
                 if (iViewModel != null)
                 {
@@ -21,7 +23,7 @@
         public double Height { get; set; }
         public double Width { get; set; }
 
-        public bool Equals(ToolListItem other)
+        public bool Equals(ToolListBoxItem other)
         {
             return
                 (IViewContainer == other.IViewContainer) &&
