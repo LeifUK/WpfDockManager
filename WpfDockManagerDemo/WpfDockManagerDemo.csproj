@@ -96,6 +96,7 @@
     <Compile Include="DockManager\UnpinnedToolPane.xaml.cs">
       <DependentUpon>UnpinnedToolPane.xaml</DependentUpon>
     </Compile>
+    <Compile Include="DockManager\ViewContainer.cs" />
     <Compile Include="DockManager\WindowLocationPane.xaml.cs">
       <DependentUpon>WindowLocationPane.xaml</DependentUpon>
     </Compile>

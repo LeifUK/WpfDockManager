@@ -4,7 +4,7 @@ using System.Windows.Controls;
 
 namespace WpfDockManagerDemo.DockManager
 {
-    internal class ToolContainer : Grid, IViewContainer
+    internal class ToolContainer : ViewContainer
     {
         public ToolContainer()
         {
@@ -60,13 +60,11 @@ namespace WpfDockManagerDemo.DockManager
         private RowDefinition rowDefinition_TabHeader;
         private RowDefinition rowDefinition_Spacer;
 
-        protected System.Collections.ObjectModel.ObservableCollection<System.Collections.Generic.KeyValuePair<UserControl, IViewModel>> _items;
-        public WpfControlLibrary.TabHeaderControl _tabHeaderControl;
         protected UserControl _selectedUserControl;
         private Button _button;
         private Border _border;
 
-        private void _tabHeaderControl_SelectionChanged(object sender, System.EventArgs e)
+        protected override void _tabHeaderControl_SelectionChanged(object sender, System.EventArgs e)
         {
             if (_selectedUserControl != null)
             {
@@ -81,22 +79,6 @@ namespace WpfDockManagerDemo.DockManager
             }
 
             SelectionChanged?.Invoke(sender, e);
-        }
-
-        private void _tabHeaderControl_ItemsChanged(object sender, System.EventArgs e)
-        {
-            var items = new System.Collections.ObjectModel.ObservableCollection<System.Collections.Generic.KeyValuePair<UserControl, IViewModel>>();
-
-            foreach (var item in _tabHeaderControl.Items)
-            {
-                items.Add((System.Collections.Generic.KeyValuePair<UserControl, IViewModel>)item);
-            }
-            int selectedIndex = (_tabHeaderControl.SelectedIndex == -1) ? 0 : _tabHeaderControl.SelectedIndex;
-
-            _items = items;
-            _tabHeaderControl.SelectedIndex = selectedIndex;
-
-            _tabHeaderControl_SelectionChanged(this, null);
         }
 
         private void _tabHeaderControl_CloseTabRequest(object sender, EventArgs e)
@@ -151,7 +133,7 @@ namespace WpfDockManagerDemo.DockManager
             }
         }
 
-        private void CheckTabCount()
+        protected override void CheckTabCount()
         {
             if (_items.Count == 1)
             {
@@ -175,25 +157,10 @@ namespace WpfDockManagerDemo.DockManager
             SelectionChanged?.Invoke(sender, e);
         }
 
-        #region IViewContainer
+        public override event EventHandler SelectionChanged;
+        public override event EventHandler TabClosed;
 
-        public event EventHandler SelectionChanged;
-        public event EventHandler TabClosed;
-
-        public string Title
-        {
-            get
-            {
-                if ((_items.Count == 0) || (_tabHeaderControl.SelectedIndex == -1))
-                {
-                    return null;
-                }
-
-                return _items[_tabHeaderControl.SelectedIndex].Value.Title;
-            }
-        }
-
-        public void AddUserControl(UserControl userControl)
+        public override void AddUserControl(UserControl userControl)
         {
             System.Diagnostics.Trace.Assert(userControl != null);
             System.Diagnostics.Trace.Assert(userControl.DataContext is IViewModel);
@@ -213,72 +180,5 @@ namespace WpfDockManagerDemo.DockManager
 
             CheckTabCount();
         }
-
-        public void InsertUserControl(int index, UserControl userControl)
-        {
-            System.Diagnostics.Trace.Assert(index > -1);
-            System.Diagnostics.Trace.Assert(index <= _items.Count);
-            System.Diagnostics.Trace.Assert(userControl != null);
-            System.Diagnostics.Trace.Assert(userControl.DataContext is IViewModel);
-
-            _items.Insert(index, new System.Collections.Generic.KeyValuePair<UserControl, IViewModel>(userControl, userControl.DataContext as IViewModel));
-            CheckTabCount();
-        }
-
-        public UserControl ExtractUserControl(int index)
-        {
-            if ((index < 0) || (index >= _items.Count))
-            {
-                return null;
-            }
-
-            UserControl userControl = _items[index].Key;
-            _items.RemoveAt(index);
-            if (Children.Contains(userControl))
-            {
-                Children.Remove(userControl);
-            }
-            CheckTabCount();
-
-            return userControl;
-        }
-
-        public int GetUserControlCount()
-        {
-            return _items.Count;
-        }
-
-        public int GetCurrentTabIndex()
-        {
-            if (_items.Count == 0)
-            {
-                return -1;
-            }
-
-            return _tabHeaderControl.SelectedIndex;
-        }
-
-        public UserControl GetUserControl(int index)
-        {
-            if ((index < 0) || (index >= _items.Count))
-            {
-                return null;
-            }
-
-            return _items[index].Key;
-        }
-
-        public IViewModel GetIViewModel(int index)
-        {
-            UserControl userControl = GetUserControl(index);
-            if (userControl == null)
-            {
-                return null;
-            }
-            
-            return userControl.DataContext as IViewModel;
-        }
-
-        #endregion IViewContainer
     }
 }
