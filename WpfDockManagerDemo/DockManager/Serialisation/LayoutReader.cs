@@ -1,5 +1,4 @@
-﻿using System;
-using System.Collections.Generic;
+﻿using System.Collections.Generic;
 using System.Xml;
 using System.Windows.Controls;
 using System.Windows;
@@ -11,17 +10,15 @@ namespace WpfDockManagerDemo.DockManager.Serialisation
         private static void SetWidthOrHeight(XmlElement xmlElement, FrameworkElement parentFrameworkElement, bool isParentHorizontal, int row, int column)
         {
             XmlAttribute xmlAttribute = xmlElement.Attributes.GetNamedItem("width") as XmlAttribute;
-            if (xmlAttribute == null)
-            {
-                throw new Exception(System.Reflection.MethodBase.GetCurrentMethod().Name + ": unable to load layout: a " + xmlElement.Name + " element must have a width attribute");
-            }
+
+            System.Diagnostics.Trace.Assert(xmlAttribute != null, xmlElement.Name + " element does not have a width attribute");
+
             double width = System.Convert.ToDouble(xmlAttribute.Value);
 
             xmlAttribute = xmlElement.Attributes.GetNamedItem("height") as XmlAttribute;
-            if (xmlAttribute == null)
-            {
-                throw new Exception(System.Reflection.MethodBase.GetCurrentMethod().Name + ": unable to load layout: a " + xmlElement.Name + " element must have a height attribute");
-            }
+
+            System.Diagnostics.Trace.Assert(xmlAttribute != null, xmlElement.Name + " element does not have a height attribute");
+
             double height = System.Convert.ToDouble(xmlAttribute.Value);
 
             Grid grid = parentFrameworkElement as Grid;
@@ -55,10 +52,8 @@ namespace WpfDockManagerDemo.DockManager.Serialisation
                         XmlElement xmlToolElement = xmlToolGroupNode as XmlElement;
 
                         XmlAttribute xmlAttribute = xmlToolElement.Attributes.GetNamedItem("ContentId") as XmlAttribute;
-                        if (xmlAttribute == null)
-                        {
-                            throw new Exception(System.Reflection.MethodBase.GetCurrentMethod().Name + ": a Tool element must have an ID attribute");
-                        }
+
+                        System.Diagnostics.Trace.Assert(xmlAttribute != null, "Tool element does not have an ID attribute");
 
                         if (viewsMap.ContainsKey(xmlAttribute.Value))
                         {
@@ -81,10 +76,9 @@ namespace WpfDockManagerDemo.DockManager.Serialisation
                         XmlElement xmlToolElement = xmlDocumentGroupNode as XmlElement;
 
                         XmlAttribute xmlAttribute = xmlToolElement.Attributes.GetNamedItem("ContentId") as XmlAttribute;
-                        if (xmlAttribute == null)
-                        {
-                            throw new Exception(System.Reflection.MethodBase.GetCurrentMethod().Name + ": a Document element must have an ID attribute");
-                        }
+
+                        // Warning warning ID needed?
+                        System.Diagnostics.Trace.Assert(xmlAttribute != null, "Document element does not have an ID attribute");
 
                         if (viewsMap.ContainsKey(xmlAttribute.Value))
                         {
@@ -112,10 +106,8 @@ namespace WpfDockManagerDemo.DockManager.Serialisation
                         XmlElement xmlSplitterPane = xmlChildNode as XmlElement;
 
                         XmlAttribute xmlAttribute = xmlSplitterPane.Attributes.GetNamedItem("Orientation") as XmlAttribute;
-                        if (xmlAttribute == null)
-                        {
-                            throw new Exception(System.Reflection.MethodBase.GetCurrentMethod().Name + ": a SplitterPane element must have an orientation attribute");
-                        }
+
+                        System.Diagnostics.Trace.Assert(xmlAttribute != null, "SplitterPane element does not have an orientation attribute");
 
                         bool isChildHorizontal = xmlAttribute.Value == "Horizontal";
 

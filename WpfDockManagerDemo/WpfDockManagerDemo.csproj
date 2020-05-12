@@ -59,6 +59,10 @@
       <SubType>Designer</SubType>
     </ApplicationDefinition>
     <Compile Include="DockManager\Command.cs" />
+    <Compile Include="DockManager\Controls\IToolListItem.cs" />
+    <Compile Include="DockManager\Controls\ToolListControl.xaml.cs">
+      <DependentUpon>ToolListControl.xaml</DependentUpon>
+    </Compile>
     <Compile Include="DockManager\DockPane.cs" />
     <Compile Include="DockManager\FloatEventArgs.cs" />
     <Compile Include="DockManager\FloatEventHandler.cs" />
@@ -77,9 +81,6 @@
     <Compile Include="DockManager\SideLocationPane.xaml.cs">
       <DependentUpon>SideLocationPane.xaml</DependentUpon>
     </Compile>
-    <Compile Include="DockManager\SideToolPane.xaml.cs">
-      <DependentUpon>SideToolPane.xaml</DependentUpon>
-    </Compile>
     <Compile Include="DockManager\ToolContainer.cs" />
     <Compile Include="DockManager\DocumentContainer.cs" />
     <Compile Include="DockManager\DocumentPane.cs" />
@@ -87,12 +88,12 @@
     <Compile Include="DockManager\ExtensionMethods.cs" />
     <Compile Include="DockManager\InsertionIndicatorManager.cs" />
     <Compile Include="DockManager\IView.cs" />
-    <Compile Include="DockManager\ToolListControl.xaml.cs">
-      <DependentUpon>ToolListControl.xaml</DependentUpon>
-    </Compile>
     <Compile Include="DockManager\ToolListItem.cs" />
     <Compile Include="DockManager\ToolPane.cs" />
-    <Compile Include="DockManager\UnpinnedToolPaneData.cs" />
+    <Compile Include="DockManager\UnpinnedToolData.cs" />
+    <Compile Include="DockManager\UnpinnedToolPane.xaml.cs">
+      <DependentUpon>UnpinnedToolPane.xaml</DependentUpon>
+    </Compile>
     <Compile Include="DockManager\ViewType.cs" />
     <Compile Include="DockManager\WindowLocationPane.xaml.cs">
       <DependentUpon>WindowLocationPane.xaml</DependentUpon>
@@ -135,6 +136,10 @@
     <Compile Include="View\ToolTwoView.xaml.cs">
       <DependentUpon>ToolTwoView.xaml</DependentUpon>
     </Compile>
+    <Page Include="DockManager\Controls\ToolListControl.xaml">
+      <Generator>MSBuild:Compile</Generator>
+      <SubType>Designer</SubType>
+    </Page>
     <Page Include="DockManager\Dictionary.xaml">
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
@@ -147,11 +152,7 @@
       <Generator>MSBuild:Compile</Generator>
       <SubType>Designer</SubType>
     </Page>
-    <Page Include="DockManager\SideToolPane.xaml">
-      <SubType>Designer</SubType>
-      <Generator>XamlIntelliSenseFileGenerator</Generator>
-    </Page>
-    <Page Include="DockManager\ToolListControl.xaml">
+    <Page Include="DockManager\UnpinnedToolPane.xaml">
       <Generator>MSBuild:Compile</Generator>
       <SubType>Designer</SubType>
     </Page>
@@ -236,8 +237,6 @@
       <Name>WpfControlLibrary</Name>
     </ProjectReference>
   </ItemGroup>
-  <ItemGroup>
-    <Folder Include="DockManager\Controls\" />
-  </ItemGroup>
+  <ItemGroup />
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
 </Project>

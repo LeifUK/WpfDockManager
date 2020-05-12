@@ -31,7 +31,7 @@ namespace WpfDockManagerDemo.DockManager
             App.Current.MainWindow.LocationChanged += MainWindow_LocationChanged;
             PreviewMouseDown += LayoutManager_PreviewMouseDown;
 
-            _dictionaryUnpinnedToolPaneData = new Dictionary<UnpinnedToolPaneData, List<ToolListItem>>();
+            _dictionaryUnpinnedToolData = new Dictionary<UnpinnedToolData, List<ToolListItem>>();
         }
 
         private void LayoutManager_PreviewMouseDown(object sender, MouseButtonEventArgs e)
@@ -49,7 +49,7 @@ namespace WpfDockManagerDemo.DockManager
             }
         }
 
-        public LayoutManager(ToolListControl rightPane)
+        public LayoutManager(Controls.ToolListControl rightPane)
         {
             _rightToolList = rightPane;
         }
@@ -69,9 +69,10 @@ namespace WpfDockManagerDemo.DockManager
 
         public void Shutdown()
         {
+            HideSideToolPane();
+
             try
             {
-
                 _windowLocationPane?.Close();
                 _windowLocationPane = null;
             }
@@ -109,20 +110,6 @@ namespace WpfDockManagerDemo.DockManager
             //src.AddHook(WndProc);
         }
 
-        /*
-         * Note: 
-         * 
-         *  The application is responsible for instantiating the view models
-         * 
-         */
-
-        // The Resources property is in a base class
-
-        /*
-         * These can override default appearance
-         * They bind to a Title property
-         */
-
         public DataTemplate ToolPaneTitleTemplate { get; set; }
         public DataTemplate ToolPaneHeaderTemplate { get; set; }
         public DataTemplate DocumentPaneTitleTemplate { get; set; }
@@ -134,19 +121,19 @@ namespace WpfDockManagerDemo.DockManager
         internal List<FloatingTool> FloatingTools;
         internal List<FloatingDocument> FloatingDocuments;
 
-        internal ToolListControl _leftToolList;
-        internal ToolListControl _topToolList;
-        internal ToolListControl _rightToolList;
-        internal ToolListControl _bottomToolList;
+        internal Controls.ToolListControl _leftToolList;
+        internal Controls.ToolListControl _topToolList;
+        internal Controls.ToolListControl _rightToolList;
+        internal Controls.ToolListControl _bottomToolList;
 
-        private Dictionary<UnpinnedToolPaneData, List<ToolListItem>> _dictionaryUnpinnedToolPaneData;
+        private Dictionary<UnpinnedToolData, List<ToolListItem>> _dictionaryUnpinnedToolData;
 
         internal ToolListItem _activeToolListItem;
-        internal SideToolPane _activeSideToolPane;
+        internal UnpinnedToolPane _activeUnpinnedToolPane;
 
-        private UnpinnedToolPaneData GetUnpinnedToolPaneData(ToolListItem toolListItem)
+        private UnpinnedToolData GetUnpinnedToolData(ToolListItem toolListItem)
         {
-            foreach (var keyValuePair in _dictionaryUnpinnedToolPaneData)
+            foreach (var keyValuePair in _dictionaryUnpinnedToolData)
             {
                 foreach (var item in keyValuePair.Value)
                 {
@@ -341,7 +328,7 @@ namespace WpfDockManagerDemo.DockManager
 
         private void MainWindow_LocationChanged(object sender, EventArgs e)
         {
-            if (_activeSideToolPane != null)
+            if (_activeUnpinnedToolPane != null)
             {
                 Point topLeftPoint = _root.PointToScreen(new Point(0, 0));
                 double left = topLeftPoint.X;
@@ -349,21 +336,21 @@ namespace WpfDockManagerDemo.DockManager
                 switch (_activeToolListItem.WindowLocation)
                 {
                     case WindowLocation.BottomSide:
-                        top += _root.ActualHeight - _activeSideToolPane.ActualHeight;
+                        top += _root.ActualHeight - _activeUnpinnedToolPane.ActualHeight;
                         break;
                     case WindowLocation.RightSide:
-                        left += _root.ActualWidth - _activeSideToolPane.ActualWidth;
+                        left += _root.ActualWidth - _activeUnpinnedToolPane.ActualWidth;
                         break;
                 }
-                _activeSideToolPane.Left = left;
-                _activeSideToolPane.Top = top;
+                _activeUnpinnedToolPane.Left = left;
+                _activeUnpinnedToolPane.Top = top;
             }
         }
 
-        private void CreateToolList(out ToolListControl toolListControl, int row, int column, bool isHorizontal)
+        private void CreateToolList(out Controls.ToolListControl toolListControl, int row, int column, bool isHorizontal)
         {
-            System.Collections.ObjectModel.ObservableCollection<ToolListItem> items = new System.Collections.ObjectModel.ObservableCollection<ToolListItem>();
-            toolListControl = new ToolListControl();
+            System.Collections.ObjectModel.ObservableCollection<Controls.IToolListItem> items = new System.Collections.ObjectModel.ObservableCollection<Controls.IToolListItem>();
+            toolListControl = new Controls.ToolListControl();
             toolListControl.Foreground = System.Windows.Media.Brushes.Black;
             toolListControl.Background = System.Windows.Media.Brushes.Transparent;
             toolListControl.ItemsSource = items;
@@ -379,16 +366,17 @@ namespace WpfDockManagerDemo.DockManager
         
         private void HideSideToolPane()
         {
-            if (_activeSideToolPane != null)
+            if (_activeUnpinnedToolPane != null)
             {
-                UserControl userControl = _activeSideToolPane.ToolPane.IViewContainer.ExtractUserControl(0);
+                UserControl userControl = _activeUnpinnedToolPane.ToolPane.IViewContainer.ExtractUserControl(0);
                 _activeToolListItem.IViewContainer.InsertUserControl(_activeToolListItem.Index, userControl);
-                _activeSideToolPane.Close();
-                _activeSideToolPane = null;
+                _activeUnpinnedToolPane.Close();
+                _activeUnpinnedToolPane = null;
                 _activeToolListItem = null;
             }
         }
 
+        // Warning warning => move to ToolListItem
         private void ToolListControl_ItemClick(object sender, EventArgs e)
         {
             System.Diagnostics.Trace.Assert(sender is ToolListItem);
@@ -403,68 +391,51 @@ namespace WpfDockManagerDemo.DockManager
 
             _activeToolListItem = sender as ToolListItem;
 
-            _activeSideToolPane = new SideToolPane();
+            _activeUnpinnedToolPane = new UnpinnedToolPane();
             UserControl userControl = _activeToolListItem.IViewContainer.ExtractUserControl(_activeToolListItem.Index);
-            _activeSideToolPane.ToolPane.IViewContainer.AddUserControl(userControl);
+            _activeUnpinnedToolPane.ToolPane.IViewContainer.AddUserControl(userControl);
             Point topLeftPoint = _root.PointToScreen(new Point(0, 0));
-            _activeSideToolPane.Left = topLeftPoint.X;
-            _activeSideToolPane.Top = topLeftPoint.Y;
+            _activeUnpinnedToolPane.Left = topLeftPoint.X;
+            _activeUnpinnedToolPane.Top = topLeftPoint.Y;
             if ((_activeToolListItem.WindowLocation == WindowLocation.TopSide) || (_activeToolListItem.WindowLocation == WindowLocation.BottomSide))
             {
-                _activeSideToolPane.Width = _root.ActualWidth;
+                _activeUnpinnedToolPane.Width = _root.ActualWidth;
                 double height = _activeToolListItem.Height;
                 if (height == 0.0)
                 {
                     height = _root.ActualHeight / 3;
                 }
-                _activeSideToolPane.Height = height;
+                _activeUnpinnedToolPane.Height = height;
                 if (_activeToolListItem.WindowLocation == WindowLocation.BottomSide)
                 {
-                    _activeSideToolPane.Top += _root.ActualHeight - height;
+                    _activeUnpinnedToolPane.Top += _root.ActualHeight - height;
                 }
             }
             else
             {
-                _activeSideToolPane.Height = _root.ActualHeight;
+                _activeUnpinnedToolPane.Height = _root.ActualHeight;
                 double width = _activeToolListItem.Width;
                 if (width == 0.0)
                 {
                     width = _root.ActualWidth / 3;
                 }
-                _activeSideToolPane.Width = width;
+                _activeUnpinnedToolPane.Width = width;
                 if (_activeToolListItem.WindowLocation == WindowLocation.RightSide)
                 {
-                    _activeSideToolPane.Left += _root.ActualWidth - width;
+                    _activeUnpinnedToolPane.Left += _root.ActualWidth - width;
                 }
             }
-            _activeSideToolPane.Closed += _displayedSideToolPane_Closed;
-            _activeSideToolPane.PinClick += _displayedSideToolPane_PinClick;
-            _activeSideToolPane.WindowLocation = _activeToolListItem.WindowLocation;
-            _activeSideToolPane.Owner = App.Current.MainWindow;
+            _activeUnpinnedToolPane.Closed += _displayedSideToolPane_Closed;
+            _activeUnpinnedToolPane.PinClick += _displayedSideToolPane_PinClick;
+            _activeUnpinnedToolPane.WindowLocation = _activeToolListItem.WindowLocation;
+            _activeUnpinnedToolPane.Owner = App.Current.MainWindow;
 
-            _activeSideToolPane.Show();
+            _activeUnpinnedToolPane.Show();
         }
 
-        private void _displayedSideToolPane_PinClick(object sender, EventArgs e)
+        private void PinToolPane(UnpinnedToolData unpinnedToolData)
         {
-            System.Diagnostics.Trace.Assert(_activeSideToolPane == sender);
-
-            /*
-             * Put the view back into its ToolPane  
-             */
-
-            UnpinnedToolPaneData unpinnedToolPaneData = GetUnpinnedToolPaneData(_activeToolListItem);
-
-            System.Diagnostics.Trace.Assert(unpinnedToolPaneData != null);
-
-            UserControl userControl = _activeSideToolPane.ToolPane.IViewContainer.ExtractUserControl(0);
-            _activeToolListItem.IViewContainer.InsertUserControl(_activeToolListItem.Index, userControl);
-
-            /*
-             * Restore the pane in the view tree
-             */
-            
-            if (unpinnedToolPaneData.Sibling == this)
+            if (unpinnedToolData.Sibling == this)
             {
                 bool isHorizontal = (_activeToolListItem.WindowLocation == WindowLocation.TopSide) || (_activeToolListItem.WindowLocation == WindowLocation.BottomSide);
 
@@ -482,7 +453,7 @@ namespace WpfDockManagerDemo.DockManager
 
                     bool isFirst = (_activeToolListItem.WindowLocation == WindowLocation.TopSide) || (_activeToolListItem.WindowLocation == WindowLocation.LeftSide);
                     newSplitterPane.AddChild(toolPane, !isFirst);
-                    newSplitterPane.AddChild(unpinnedToolPaneData.ToolPane, isFirst);
+                    newSplitterPane.AddChild(unpinnedToolData.ToolPane, isFirst);
 
                     parentSplitterPane.AddChild(newSplitterPane, isFirst);
                 }
@@ -494,63 +465,86 @@ namespace WpfDockManagerDemo.DockManager
                     DocumentPanel documentPanel = enumerableDocumentPanels.First();
 
                     SetRootPane(newSplitterPane);
-                    newSplitterPane.AddChild(documentPanel, !unpinnedToolPaneData.IsFirst);
-                    newSplitterPane.AddChild(unpinnedToolPaneData.ToolPane, unpinnedToolPaneData.IsFirst);
+                    newSplitterPane.AddChild(documentPanel, !unpinnedToolData.IsFirst);
+                    newSplitterPane.AddChild(unpinnedToolData.ToolPane, unpinnedToolData.IsFirst);
                 }
             }
-            else if (unpinnedToolPaneData.Sibling.Parent == this)
+            else if (unpinnedToolData.Sibling.Parent == this)
             {
                 bool isHorizontal = (_activeToolListItem.WindowLocation == WindowLocation.TopSide) || (_activeToolListItem.WindowLocation == WindowLocation.BottomSide);
                 bool isFirst = (_activeToolListItem.WindowLocation == WindowLocation.TopSide) || (_activeToolListItem.WindowLocation == WindowLocation.LeftSide);
 
                 SplitterPane newSplitterPane = new SplitterPane(isHorizontal);
                 SetRootPane(newSplitterPane);
-                newSplitterPane.AddChild(unpinnedToolPaneData.Sibling, !isFirst);
-                newSplitterPane.AddChild(unpinnedToolPaneData.ToolPane, isFirst);
+                newSplitterPane.AddChild(unpinnedToolData.Sibling, !isFirst);
+                newSplitterPane.AddChild(unpinnedToolData.ToolPane, isFirst);
             }
             else
             {
-                SplitterPane newSplitterPane = new SplitterPane(unpinnedToolPaneData.IsHorizontal);
-                SplitterPane parentSplitterPane = unpinnedToolPaneData.Sibling.Parent as SplitterPane;
-                int row = Grid.GetRow(unpinnedToolPaneData.Sibling);
-                int column = Grid.GetColumn(unpinnedToolPaneData.Sibling);
+                SplitterPane newSplitterPane = new SplitterPane(unpinnedToolData.IsHorizontal);
+                SplitterPane parentSplitterPane = unpinnedToolData.Sibling.Parent as SplitterPane;
+                int row = Grid.GetRow(unpinnedToolData.Sibling);
+                int column = Grid.GetColumn(unpinnedToolData.Sibling);
                 bool isFirst = (parentSplitterPane.IsHorizontal && (row == 0)) || (!parentSplitterPane.IsHorizontal && (column == 0));
-                parentSplitterPane.Children.Remove(unpinnedToolPaneData.Sibling);
+                parentSplitterPane.Children.Remove(unpinnedToolData.Sibling);
 
                 parentSplitterPane.AddChild(newSplitterPane, isFirst);
 
-                newSplitterPane.AddChild(unpinnedToolPaneData.Sibling, !unpinnedToolPaneData.IsFirst);
-                newSplitterPane.AddChild(unpinnedToolPaneData.ToolPane, unpinnedToolPaneData.IsFirst);
+                newSplitterPane.AddChild(unpinnedToolData.Sibling, !unpinnedToolData.IsFirst);
+                newSplitterPane.AddChild(unpinnedToolData.ToolPane, unpinnedToolData.IsFirst);
             }
+        }
 
-            System.Diagnostics.Trace.Assert(_dictionaryUnpinnedToolPaneData.ContainsKey(unpinnedToolPaneData));
+        private void _displayedSideToolPane_PinClick(object sender, EventArgs e)
+        {
+            System.Diagnostics.Trace.Assert(_activeUnpinnedToolPane == sender);
+
+            /*
+             * Put the view back into its ToolPane  
+             */
+
+            UnpinnedToolData unpinnedToolData = GetUnpinnedToolData(_activeToolListItem);
+
+            System.Diagnostics.Trace.Assert(unpinnedToolData != null);
+
+            UserControl userControl = _activeUnpinnedToolPane.ToolPane.IViewContainer.ExtractUserControl(0);
+            _activeToolListItem.IViewContainer.InsertUserControl(_activeToolListItem.Index, userControl);
+
+            /*
+             * Restore the pane in the view tree
+             */
+
+            PinToolPane(unpinnedToolData);
+
+            System.Diagnostics.Trace.Assert(_dictionaryUnpinnedToolData.ContainsKey(unpinnedToolData));
 
             /*
              * Remove the tool list items from the side bar
              */
 
-            List<ToolListItem> toolListItems = _dictionaryUnpinnedToolPaneData[unpinnedToolPaneData];
-            IEnumerable<ToolListItem> iEnumerable = unpinnedToolPaneData.ToolListControl.ItemsSource.Except(toolListItems);
-            unpinnedToolPaneData.ToolListControl.ItemsSource = new System.Collections.ObjectModel.ObservableCollection<ToolListItem>(iEnumerable);
+            List<ToolListItem> toolListItems = _dictionaryUnpinnedToolData[unpinnedToolData];
+            IEnumerable<Controls.IToolListItem> iEnumerable = unpinnedToolData.ToolListControl.ItemsSource.Except(toolListItems);
+            unpinnedToolData.ToolListControl.ItemsSource = new System.Collections.ObjectModel.ObservableCollection<Controls.IToolListItem>(iEnumerable);
 
-            _activeSideToolPane.Close();
-            _activeSideToolPane = null;
+            _activeUnpinnedToolPane.Close();
+            _activeUnpinnedToolPane = null;
             _activeToolListItem = null;
         }
 
+        // Warning warning => this should close the tool pane!
         private void _displayedSideToolPane_Closed(object sender, EventArgs e)
         {
-            System.Diagnostics.Trace.Assert(_activeSideToolPane == sender);
+            System.Diagnostics.Trace.Assert(_activeUnpinnedToolPane == sender);
 
-            _activeToolListItem.Width = (sender as SideToolPane).ActualWidth;
-            _activeToolListItem.Height = (sender as SideToolPane).ActualHeight;
+            _activeToolListItem.Width = (sender as UnpinnedToolPane).ActualWidth;
+            _activeToolListItem.Height = (sender as UnpinnedToolPane).ActualHeight;
         }
 
         private void ToolPane_UnPinClick(object sender, EventArgs e)
         {
             System.Diagnostics.Trace.Assert(sender is ToolPane);
 
-            ToolListControl toolListControl = null;
+            Controls.ToolListControl toolListControl = null;
             ToolPane toolPane = sender as ToolPane;
             FrameworkElement frameworkElement = toolPane;
             FrameworkElement parentFrameworkElement = toolPane.Parent as FrameworkElement;
@@ -603,37 +597,35 @@ namespace WpfDockManagerDemo.DockManager
 
             System.Diagnostics.Trace.Assert(frameworkElement != null);
 
-            UnpinnedToolPaneData unpinnedToolPaneData = new UnpinnedToolPaneData();
-            unpinnedToolPaneData.ToolListControl = toolListControl;
-            unpinnedToolPaneData.ToolPane = toolPane;
-            unpinnedToolPaneData.IsHorizontal = parentSplitterPane.IsHorizontal;
-            unpinnedToolPaneData.IsFirst =
+            UnpinnedToolData unpinnedToolData = new UnpinnedToolData();
+            unpinnedToolData.ToolListControl = toolListControl;
+            unpinnedToolData.ToolPane = toolPane;
+            unpinnedToolData.IsHorizontal = parentSplitterPane.IsHorizontal;
+            unpinnedToolData.IsFirst =
                 (parentSplitterPane.IsHorizontal && (Grid.GetRow(toolPane) == 0)) ||
                 (!parentSplitterPane.IsHorizontal && (Grid.GetColumn(toolPane) == 0));
-            unpinnedToolPaneData.Sibling = frameworkElement;
+            unpinnedToolData.Sibling = frameworkElement;
 
             List<ToolListItem> listTooListItem = new List<ToolListItem>();
-            _dictionaryUnpinnedToolPaneData.Add(unpinnedToolPaneData, listTooListItem);
+            _dictionaryUnpinnedToolData.Add(unpinnedToolData, listTooListItem);
 
             int count = toolPane.IViewContainer.GetUserControlCount();
             for (int i = 0; i < count; ++i)
             {
                 ToolListItem toolListItem = new ToolListItem()
                 {
-                    // Warning warning
-                    //UnpinnedToolPaneData = unpinnedToolPaneData,
-                    IViewContainer = unpinnedToolPaneData.ToolPane.IViewContainer,
+                    IViewContainer = unpinnedToolData.ToolPane.IViewContainer,
                     Index = i,
                     WindowLocation = windowLocation
                 };
-                (toolListControl.ItemsSource as System.Collections.ObjectModel.ObservableCollection<ToolListItem>).Add(toolListItem);
+                (toolListControl.ItemsSource as System.Collections.ObjectModel.ObservableCollection<Controls.IToolListItem>).Add(toolListItem);
                 listTooListItem.Add(toolListItem);
             }
         }
 
         private void FrameworkElementRemoved(FrameworkElement frameworkElement)
         {
-            foreach (var keyValuePair in _dictionaryUnpinnedToolPaneData)
+            foreach (var keyValuePair in _dictionaryUnpinnedToolData)
             {
                 if (keyValuePair.Key.Sibling == frameworkElement)
                 {
@@ -691,7 +683,7 @@ namespace WpfDockManagerDemo.DockManager
                             if (view != null)
                             {
                                 IView iToolView = (view as IView);
-                                System.Diagnostics.Trace.Assert(iToolView != null, System.Reflection.MethodBase.GetCurrentMethod().Name + ": the UserControl must implement interface IView");
+                                System.Diagnostics.Trace.Assert(iToolView != null, "The UserControl must implement interface IView");
                                 iToolView.IViewModel = viewModel as IViewModel;
                                 view.DataContext = viewModel;
                                 view.HorizontalAlignment = HorizontalAlignment.Stretch;
@@ -791,7 +783,6 @@ namespace WpfDockManagerDemo.DockManager
             floatingPane.Show();
         }
 
-        // Warning warning
         FloatingDocument ILayoutFactory.CreateFloatingDocument()
         {
             FloatingDocument floatingDocument = new FloatingDocument();

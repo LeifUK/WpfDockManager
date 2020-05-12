@@ -215,10 +215,8 @@ namespace WpfDockManagerDemo.DockManager.Serialisation
             {
                 DocumentPane documentPane = node as DocumentPane;
                 int count = documentPane.IViewContainer.GetUserControlCount();
-                if (count < 1)
-                {
-                    throw new Exception(System.Reflection.MethodBase.GetCurrentMethod().Name + ": no documents");
-                }
+
+                System.Diagnostics.Trace.Assert(count > 0, "Document pane has no documents");
 
                 XmlNode xmlNodeParent = SaveDocumentGroupNode(xmlDocument, xmlParentPane, documentPane);
 
@@ -236,10 +234,8 @@ namespace WpfDockManagerDemo.DockManager.Serialisation
             {
                 ToolPane toolPane = node as ToolPane;
                 int count = toolPane.IViewContainer.GetUserControlCount();
-                if (count < 1)
-                {
-                    throw new Exception(System.Reflection.MethodBase.GetCurrentMethod().Name + ": no tools");
-                }
+
+                System.Diagnostics.Trace.Assert(count > 0, "Too pane has no tools");
 
                 XmlNode xmlNodeParent = SaveToolGroupNode(xmlDocument, xmlParentPane, toolPane);
 
@@ -269,10 +265,8 @@ namespace WpfDockManagerDemo.DockManager.Serialisation
             foreach (FloatingTool floatingTool in floatingTools)
             {
                 int count = floatingTool.IViewContainer.GetUserControlCount();
-                if (count < 1)
-                {
-                    throw new Exception(System.Reflection.MethodBase.GetCurrentMethod().Name + ": no documents");
-                }
+                
+                System.Diagnostics.Trace.Assert(count > 0, "Floating tool pane has no tools");
 
                 XmlElement xmlNodeParent = SaveFloatingToolNode(xmlDocument, xmlLayoutManager, floatingTool);
 

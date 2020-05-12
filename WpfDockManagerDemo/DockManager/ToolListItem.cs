@@ -1,6 +1,6 @@
 ﻿namespace WpfDockManagerDemo.DockManager
 {
-    internal class ToolListItem
+    internal class ToolListItem : Controls.IToolListItem
     {
         public int Index { get; set; }
         public IViewContainer IViewContainer { get; set; }

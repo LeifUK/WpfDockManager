@@ -5,7 +5,7 @@ using System.ComponentModel;
 using System.Collections;
 using System.Windows.Media;
 
-namespace WpfDockManagerDemo.DockManager
+namespace WpfDockManagerDemo.DockManager.Controls
 {
     /// <summary>
     /// Interaction logic for ToolListControl.xaml
@@ -25,13 +25,13 @@ namespace WpfDockManagerDemo.DockManager
 
         [Bindable(true)]
         [DesignerSerializationVisibility(DesignerSerializationVisibility.Hidden)]
-        public static readonly DependencyProperty ItemsSourceProperty = DependencyProperty.Register("ItemsSource", typeof(System.Collections.ObjectModel.ObservableCollection<ToolListItem>), typeof(ToolListControl), new FrameworkPropertyMetadata((System.Collections.ObjectModel.ObservableCollection<ToolListItem>)null, new PropertyChangedCallback(OnItemsSourceChanged)));
+        public static readonly DependencyProperty ItemsSourceProperty = DependencyProperty.Register("ItemsSource", typeof(System.Collections.ObjectModel.ObservableCollection<IToolListItem>), typeof(ToolListControl), new FrameworkPropertyMetadata((System.Collections.ObjectModel.ObservableCollection<IToolListItem>)null, new PropertyChangedCallback(OnItemsSourceChanged)));
 
-        internal System.Collections.ObjectModel.ObservableCollection<ToolListItem> ItemsSource
+        internal System.Collections.ObjectModel.ObservableCollection<IToolListItem> ItemsSource
         {
             get
             {
-                return (System.Collections.ObjectModel.ObservableCollection<ToolListItem>)GetValue(ItemsSourceProperty);
+                return (System.Collections.ObjectModel.ObservableCollection<IToolListItem>)GetValue(ItemsSourceProperty);
             }
             set
             {
@@ -44,7 +44,7 @@ namespace WpfDockManagerDemo.DockManager
             ((ToolListControl)d).OnItemsSourceChanged(e);
         }
 
-        private void PrepareItemsSource(System.Collections.ObjectModel.ObservableCollection<ToolListItem> itemsSource)
+        private void PrepareItemsSource(System.Collections.ObjectModel.ObservableCollection<IToolListItem> itemsSource)
         {
             _listBox.Items.Clear();
             foreach (var item in itemsSource)
@@ -61,7 +61,7 @@ namespace WpfDockManagerDemo.DockManager
         {
             if (e.NewValue != null)
             {
-                PrepareItemsSource(e.NewValue as System.Collections.ObjectModel.ObservableCollection<ToolListItem>);
+                PrepareItemsSource(e.NewValue as System.Collections.ObjectModel.ObservableCollection<IToolListItem>);
 
                 if (ItemsSource is System.Collections.Specialized.INotifyCollectionChanged)
                 {

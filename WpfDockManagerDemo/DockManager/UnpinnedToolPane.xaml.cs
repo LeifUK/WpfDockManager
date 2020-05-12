@@ -6,9 +6,9 @@ namespace WpfDockManagerDemo.DockManager
     /// <summary>
     /// Interaction logic for SidePane.xaml
     /// </summary>
-    public partial class SideToolPane : Window
+    public partial class UnpinnedToolPane : Window
     {
-        public SideToolPane()
+        public UnpinnedToolPane()
         {
             InitializeComponent();
             _windowChrome.GlassFrameThickness = new Thickness(0);
