@@ -59,9 +59,9 @@
       <SubType>Designer</SubType>
     </ApplicationDefinition>
     <Compile Include="DockManager\Command.cs" />
-    <Compile Include="DockManager\Controls\IToolListItem.cs" />
-    <Compile Include="DockManager\Controls\ToolListControl.xaml.cs">
-      <DependentUpon>ToolListControl.xaml</DependentUpon>
+    <Compile Include="DockManager\Controls\IUnpinnedTool.cs" />
+    <Compile Include="DockManager\Controls\UnpinnedToolsControl.xaml.cs">
+      <DependentUpon>UnpinnedToolsControl.xaml</DependentUpon>
     </Compile>
     <Compile Include="DockManager\DockPane.cs" />
     <Compile Include="DockManager\FloatEventArgs.cs" />
@@ -136,7 +136,7 @@
     <Compile Include="View\ToolTwoView.xaml.cs">
       <DependentUpon>ToolTwoView.xaml</DependentUpon>
     </Compile>
-    <Page Include="DockManager\Controls\ToolListControl.xaml">
+    <Page Include="DockManager\Controls\UnpinnedToolsControl.xaml">
       <Generator>MSBuild:Compile</Generator>
       <SubType>Designer</SubType>
     </Page>

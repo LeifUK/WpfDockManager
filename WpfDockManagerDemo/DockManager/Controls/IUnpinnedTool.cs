@@ -6,7 +6,7 @@ using System.Threading.Tasks;
 
 namespace WpfDockManagerDemo.DockManager.Controls
 {
-    interface IToolListItem
+    interface IUnpinnedTool
     {
         string Title { get; }
     }

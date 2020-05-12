@@ -10,9 +10,9 @@ namespace WpfDockManagerDemo.DockManager.Controls
     /// <summary>
     /// Interaction logic for ToolListControl.xaml
     /// </summary>
-    public partial class ToolListControl : UserControl
+    public partial class UnpinnedToolsControl : UserControl
     {
-        public ToolListControl()
+        public UnpinnedToolsControl()
         {
             InitializeComponent();
         }
@@ -25,13 +25,13 @@ namespace WpfDockManagerDemo.DockManager.Controls
 
         [Bindable(true)]
         [DesignerSerializationVisibility(DesignerSerializationVisibility.Hidden)]
-        public static readonly DependencyProperty ItemsSourceProperty = DependencyProperty.Register("ItemsSource", typeof(System.Collections.ObjectModel.ObservableCollection<IToolListItem>), typeof(ToolListControl), new FrameworkPropertyMetadata((System.Collections.ObjectModel.ObservableCollection<IToolListItem>)null, new PropertyChangedCallback(OnItemsSourceChanged)));
+        public static readonly DependencyProperty ItemsSourceProperty = DependencyProperty.Register("ItemsSource", typeof(System.Collections.ObjectModel.ObservableCollection<IUnpinnedTool>), typeof(UnpinnedToolsControl), new FrameworkPropertyMetadata((System.Collections.ObjectModel.ObservableCollection<IUnpinnedTool>)null, new PropertyChangedCallback(OnItemsSourceChanged)));
 
-        internal System.Collections.ObjectModel.ObservableCollection<IToolListItem> ItemsSource
+        internal System.Collections.ObjectModel.ObservableCollection<IUnpinnedTool> ItemsSource
         {
             get
             {
-                return (System.Collections.ObjectModel.ObservableCollection<IToolListItem>)GetValue(ItemsSourceProperty);
+                return (System.Collections.ObjectModel.ObservableCollection<IUnpinnedTool>)GetValue(ItemsSourceProperty);
             }
             set
             {
@@ -41,10 +41,10 @@ namespace WpfDockManagerDemo.DockManager.Controls
 
         private static void OnItemsSourceChanged(DependencyObject d, DependencyPropertyChangedEventArgs e)
         {
-            ((ToolListControl)d).OnItemsSourceChanged(e);
+            ((UnpinnedToolsControl)d).OnItemsSourceChanged(e);
         }
 
-        private void PrepareItemsSource(System.Collections.ObjectModel.ObservableCollection<IToolListItem> itemsSource)
+        private void PrepareItemsSource(System.Collections.ObjectModel.ObservableCollection<IUnpinnedTool> itemsSource)
         {
             _listBox.Items.Clear();
             foreach (var item in itemsSource)
@@ -61,7 +61,7 @@ namespace WpfDockManagerDemo.DockManager.Controls
         {
             if (e.NewValue != null)
             {
-                PrepareItemsSource(e.NewValue as System.Collections.ObjectModel.ObservableCollection<IToolListItem>);
+                PrepareItemsSource(e.NewValue as System.Collections.ObjectModel.ObservableCollection<IUnpinnedTool>);
 
                 if (ItemsSource is System.Collections.Specialized.INotifyCollectionChanged)
                 {
@@ -81,7 +81,7 @@ namespace WpfDockManagerDemo.DockManager.Controls
 
         [Bindable(true)]
         [DesignerSerializationVisibility(DesignerSerializationVisibility.Hidden)]
-        public static readonly DependencyProperty SelectedIndexProperty = DependencyProperty.Register("SelectedIndex", typeof(int), typeof(ToolListControl), new FrameworkPropertyMetadata(-1, new PropertyChangedCallback(OnSelectedIndexChanged)));
+        public static readonly DependencyProperty SelectedIndexProperty = DependencyProperty.Register("SelectedIndex", typeof(int), typeof(UnpinnedToolsControl), new FrameworkPropertyMetadata(-1, new PropertyChangedCallback(OnSelectedIndexChanged)));
 
         public int SelectedIndex
         {
@@ -100,7 +100,7 @@ namespace WpfDockManagerDemo.DockManager.Controls
 
         private static void OnSelectedIndexChanged(DependencyObject d, DependencyPropertyChangedEventArgs e)
         {
-            ((ToolListControl)d).OnSelectedIndexChanged(e);
+            ((UnpinnedToolsControl)d).OnSelectedIndexChanged(e);
         }
 
         protected virtual void OnSelectedIndexChanged(DependencyPropertyChangedEventArgs e)
@@ -118,7 +118,7 @@ namespace WpfDockManagerDemo.DockManager.Controls
 
         [Bindable(true)]
         [DesignerSerializationVisibility(DesignerSerializationVisibility.Hidden)]
-        public static readonly DependencyProperty DisplayMemberPathProperty = DependencyProperty.Register("DisplayMemberPath", typeof(string), typeof(ToolListControl), new FrameworkPropertyMetadata((FrameworkElement)null, new PropertyChangedCallback(OnDisplayMemberPathChanged)));
+        public static readonly DependencyProperty DisplayMemberPathProperty = DependencyProperty.Register("DisplayMemberPath", typeof(string), typeof(UnpinnedToolsControl), new FrameworkPropertyMetadata((FrameworkElement)null, new PropertyChangedCallback(OnDisplayMemberPathChanged)));
 
         public string DisplayMemberPath
         {
@@ -137,7 +137,7 @@ namespace WpfDockManagerDemo.DockManager.Controls
 
         private static void OnDisplayMemberPathChanged(DependencyObject d, DependencyPropertyChangedEventArgs e)
         {
-            ((ToolListControl)d).OnDisplayMemberPathChanged(e);
+            ((UnpinnedToolsControl)d).OnDisplayMemberPathChanged(e);
         }
 
         protected virtual void OnDisplayMemberPathChanged(DependencyPropertyChangedEventArgs e)
@@ -154,7 +154,7 @@ namespace WpfDockManagerDemo.DockManager.Controls
 
         [Bindable(true)]
         [DesignerSerializationVisibility(DesignerSerializationVisibility.Hidden)]
-        public static readonly DependencyProperty IsHorizontalProperty = DependencyProperty.Register("IsHorizontal", typeof(bool), typeof(ToolListControl), new FrameworkPropertyMetadata(true, OnIsHorizontalChanged));
+        public static readonly DependencyProperty IsHorizontalProperty = DependencyProperty.Register("IsHorizontal", typeof(bool), typeof(UnpinnedToolsControl), new FrameworkPropertyMetadata(true, OnIsHorizontalChanged));
 
         public bool IsHorizontal
         {
@@ -173,7 +173,7 @@ namespace WpfDockManagerDemo.DockManager.Controls
 
         private static void OnIsHorizontalChanged(DependencyObject d, DependencyPropertyChangedEventArgs e)
         {
-            ((ToolListControl)d).OnIsHorizontalChanged(e);
+            ((UnpinnedToolsControl)d).OnIsHorizontalChanged(e);
         }
 
         protected virtual void OnIsHorizontalChanged(DependencyPropertyChangedEventArgs e)
@@ -187,7 +187,7 @@ namespace WpfDockManagerDemo.DockManager.Controls
 
         [Bindable(true)]
         [DesignerSerializationVisibility(DesignerSerializationVisibility.Hidden)]
-        public static readonly DependencyProperty BarBrushProperty = DependencyProperty.Register("BarBrush", typeof(Brush), typeof(ToolListControl), new FrameworkPropertyMetadata(Brushes.DarkSlateBlue, null));
+        public static readonly DependencyProperty BarBrushProperty = DependencyProperty.Register("BarBrush", typeof(Brush), typeof(UnpinnedToolsControl), new FrameworkPropertyMetadata(Brushes.DarkSlateBlue, null));
 
         public Brush BarBrush
         {
@@ -210,7 +210,7 @@ namespace WpfDockManagerDemo.DockManager.Controls
 
         [Bindable(true)]
         [DesignerSerializationVisibility(DesignerSerializationVisibility.Hidden)]
-        public static readonly DependencyProperty BarBrushMouseOverProperty = DependencyProperty.Register("BarBrushMouseOver", typeof(Brush), typeof(ToolListControl), new FrameworkPropertyMetadata(Brushes.LightSteelBlue, null));
+        public static readonly DependencyProperty BarBrushMouseOverProperty = DependencyProperty.Register("BarBrushMouseOver", typeof(Brush), typeof(UnpinnedToolsControl), new FrameworkPropertyMetadata(Brushes.LightSteelBlue, null));
 
         public Brush BarBrushMouseOver
         {
