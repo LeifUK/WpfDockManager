@@ -18,6 +18,6 @@
         </ResourceDictionary>
     </Window.Resources>
     <Grid>
-        <local:ToolPane x:Name="_toolPane"/>
+        <local:ToolPaneGroup x:Name="_toolPane"/>
     </Grid>
 </Window>

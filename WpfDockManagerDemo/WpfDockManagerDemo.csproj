@@ -66,6 +66,7 @@
       <DependentUpon>ToolListBox.xaml</DependentUpon>
     </Compile>
     <Compile Include="DockManager\DockPane.cs" />
+    <Compile Include="DockManager\DocumentPaneGroup.cs" />
     <Compile Include="DockManager\FloatEventArgs.cs" />
     <Compile Include="DockManager\FloatEventHandler.cs" />
     <Compile Include="DockManager\FloatingDocument.cs" />
@@ -85,13 +86,12 @@
     </Compile>
     <Compile Include="DockManager\ToolContainer.cs" />
     <Compile Include="DockManager\DocumentContainer.cs" />
-    <Compile Include="DockManager\DocumentPane.cs" />
     <Compile Include="DockManager\DocumentPanel.cs" />
     <Compile Include="DockManager\ExtensionMethods.cs" />
     <Compile Include="DockManager\InsertionIndicatorManager.cs" />
     <Compile Include="DockManager\IView.cs" />
     <Compile Include="DockManager\ToolListBoxItem.cs" />
-    <Compile Include="DockManager\ToolPane.cs" />
+    <Compile Include="DockManager\ToolPaneGroup.cs" />
     <Compile Include="DockManager\UnpinnedToolData.cs" />
     <Compile Include="DockManager\UnpinnedToolPane.xaml.cs">
       <DependentUpon>UnpinnedToolPane.xaml</DependentUpon>

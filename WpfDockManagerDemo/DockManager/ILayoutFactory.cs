@@ -4,8 +4,8 @@ namespace WpfDockManagerDemo.DockManager
 {
     internal interface ILayoutFactory
     {
-        DocumentPane CreateDocumentPane();
-        ToolPane CreateToolPane();
+        DocumentPaneGroup CreateDocumentPaneGroup();
+        ToolPaneGroup CreateToolPane();
         FloatingDocument CreateFloatingDocument();
         FloatingTool CreateFloatingTool();
 

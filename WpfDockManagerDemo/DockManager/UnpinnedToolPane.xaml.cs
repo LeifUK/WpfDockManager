@@ -53,6 +53,6 @@ namespace WpfDockManagerDemo.DockManager
             }
         }
 
-        internal ToolPane ToolPane { get { return _toolPane; } }
+        internal ToolPaneGroup ToolPane { get { return _toolPane; } }
     }
 }

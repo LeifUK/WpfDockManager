@@ -5,9 +5,9 @@ using System.Windows.Input;
 
 namespace WpfDockManagerDemo.DockManager
 {
-    internal class DocumentPane : DockPane
+    internal class DocumentPaneGroup : DockPane
     {
-        public DocumentPane() : base(new DocumentContainer())
+        public DocumentPaneGroup() : base(new DocumentContainer())
         {
             (IViewContainer as DocumentContainer).DisplayGeneralMenu = DisplayGeneralMenu;
 

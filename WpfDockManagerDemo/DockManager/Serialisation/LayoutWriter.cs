@@ -9,7 +9,7 @@ namespace WpfDockManagerDemo.DockManager.Serialisation
 {
     internal static class LayoutWriter
     {
-        private static XmlElement SaveToolGroupNode(XmlDocument xmlDocument, XmlNode xmlNode, ToolPane toolPane)
+        private static XmlElement SaveToolGroupNode(XmlDocument xmlDocument, XmlNode xmlNode, ToolPaneGroup toolPane)
         {
             System.Diagnostics.Trace.Assert(xmlDocument != null);
             System.Diagnostics.Trace.Assert(xmlNode != null);
@@ -100,28 +100,28 @@ namespace WpfDockManagerDemo.DockManager.Serialisation
             }
         }
 
-        private static XmlElement SaveDocumentGroupNode(XmlDocument xmlDocument, XmlNode xmlNode, DocumentPane documentPane)
+        private static XmlElement SaveDocumentGroupNode(XmlDocument xmlDocument, XmlNode xmlNode, DocumentPaneGroup documentPaneGroup)
         {
             System.Diagnostics.Trace.Assert(xmlDocument != null);
             System.Diagnostics.Trace.Assert(xmlNode != null);
-            System.Diagnostics.Trace.Assert(documentPane != null);
+            System.Diagnostics.Trace.Assert(documentPaneGroup != null);
 
             XmlElement xmlDocumentGroup = xmlDocument.CreateElement("DocumentGroup");
 
             XmlAttribute xmlAttribute = xmlDocument.CreateAttribute("row");
-            xmlAttribute.Value = Grid.GetRow(documentPane).ToString();
+            xmlAttribute.Value = Grid.GetRow(documentPaneGroup).ToString();
             xmlDocumentGroup.Attributes.Append(xmlAttribute);
 
             xmlAttribute = xmlDocument.CreateAttribute("column");
-            xmlAttribute.Value = Grid.GetColumn(documentPane).ToString();
+            xmlAttribute.Value = Grid.GetColumn(documentPaneGroup).ToString();
             xmlDocumentGroup.Attributes.Append(xmlAttribute);
 
             xmlAttribute = xmlDocument.CreateAttribute("width");
-            xmlAttribute.Value = documentPane.ActualWidth.ToString();
+            xmlAttribute.Value = documentPaneGroup.ActualWidth.ToString();
             xmlDocumentGroup.Attributes.Append(xmlAttribute);
 
             xmlAttribute = xmlDocument.CreateAttribute("height");
-            xmlAttribute.Value = documentPane.ActualHeight.ToString();
+            xmlAttribute.Value = documentPaneGroup.ActualHeight.ToString();
             xmlDocumentGroup.Attributes.Append(xmlAttribute);
 
             xmlNode.AppendChild(xmlDocumentGroup);
@@ -211,18 +211,18 @@ namespace WpfDockManagerDemo.DockManager.Serialisation
             {
                 SaveDocumentPanelNode(xmlDocument, node as DocumentPanel, xmlParentPane);
             }
-            else if (node is DocumentPane)
+            else if (node is DocumentPaneGroup)
             {
-                DocumentPane documentPane = node as DocumentPane;
-                int count = documentPane.IViewContainer.GetUserControlCount();
+                DocumentPaneGroup documentPaneGroup = node as DocumentPaneGroup;
+                int count = documentPaneGroup.IViewContainer.GetUserControlCount();
 
                 System.Diagnostics.Trace.Assert(count > 0, "Document pane has no documents");
 
-                XmlNode xmlNodeParent = SaveDocumentGroupNode(xmlDocument, xmlParentPane, documentPane);
+                XmlNode xmlNodeParent = SaveDocumentGroupNode(xmlDocument, xmlParentPane, documentPaneGroup);
 
                 for (int index = 0; index < count; ++index)
                 {
-                    UserControl userControl = documentPane.IViewContainer.GetUserControl(index);
+                    UserControl userControl = documentPaneGroup.IViewContainer.GetUserControl(index);
                     if (userControl == null)
                     {
                         break;
@@ -230,9 +230,9 @@ namespace WpfDockManagerDemo.DockManager.Serialisation
                     SaveDocumentNode(xmlDocument, xmlNodeParent, userControl.DataContext as IViewModel, userControl.Name);
                 }
             }
-            else if (node is ToolPane)
+            else if (node is ToolPaneGroup)
             {
-                ToolPane toolPane = node as ToolPane;
+                ToolPaneGroup toolPane = node as ToolPaneGroup;
                 int count = toolPane.IViewContainer.GetUserControlCount();
 
                 System.Diagnostics.Trace.Assert(count > 0, "Too pane has no tools");

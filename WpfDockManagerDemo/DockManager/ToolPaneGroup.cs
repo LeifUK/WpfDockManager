@@ -5,9 +5,9 @@ using System.Windows.Input;
 
 namespace WpfDockManagerDemo.DockManager
 {
-    internal class ToolPane : DockPane
+    internal class ToolPaneGroup : DockPane
     {
-        public ToolPane() : base(new ToolContainer())
+        public ToolPaneGroup() : base(new ToolContainer())
         {
             VerticalAlignment = System.Windows.VerticalAlignment.Stretch;
             HorizontalAlignment = HorizontalAlignment.Stretch;

@@ -151,24 +151,24 @@ namespace WpfDockManagerDemo.DockManager.Serialisation
                     }
                     else if ((xmlChildNode as XmlElement).Name == "DocumentGroup")
                     {
-                        DocumentPane documentPane = iLayoutFactory.CreateDocumentPane();
+                        DocumentPaneGroup documentPaneGroup = iLayoutFactory.CreateDocumentPaneGroup();
 
                         System.Windows.Markup.IAddChild parentElement = (System.Windows.Markup.IAddChild)parentFrameworkElement;
-                        parentElement.AddChild(documentPane);
+                        parentElement.AddChild(documentPaneGroup);
 
                         XmlElement xmlDocumentGroup = xmlChildNode as XmlElement;
 
                         SetWidthOrHeight(xmlDocumentGroup, parentFrameworkElement, isParentHorizontal, row, column);
 
-                        LoadDocumentGroup(viewsMap, xmlDocumentGroup, documentPane.IViewContainer);
-                        Grid.SetRow(documentPane, row);
-                        Grid.SetColumn(documentPane, column);
+                        LoadDocumentGroup(viewsMap, xmlDocumentGroup, documentPaneGroup.IViewContainer);
+                        Grid.SetRow(documentPaneGroup, row);
+                        Grid.SetColumn(documentPaneGroup, column);
                         row += rowIncrement;
                         column += columnIncrement;
                     }
                     else if ((xmlChildNode as XmlElement).Name == "ToolGroup")
                     {
-                        ToolPane toolPane = iLayoutFactory.CreateToolPane();
+                        ToolPaneGroup toolPane = iLayoutFactory.CreateToolPane();
 
                         System.Windows.Markup.IAddChild parentElement = (System.Windows.Markup.IAddChild)parentFrameworkElement;
                         parentElement.AddChild(toolPane);

@@ -122,28 +122,12 @@ namespace WpfDockManagerDemo.DockManager
         internal Controls.ToolListBox _rightToolListBox;
         internal Controls.ToolListBox _bottomToolListBox;
 
-        private List<UnpinnedToolData> _listUnpinnedToolData;
-
         internal ToolListBoxItem _activeToolListBoxItem;
         internal UnpinnedToolPane _activeUnpinnedToolPane;
         internal UnpinnedToolData _activeUnpinnedToolData;
         internal Controls.ToolListBox _activeToolListBox;
 
-        private UnpinnedToolData GetUnpinnedToolData(ToolListBoxItem toolListBoxItem)
-        {
-            foreach (UnpinnedToolData unpinnedToolData in _listUnpinnedToolData)
-            {
-                foreach (var item in unpinnedToolData.Items)
-                {
-                    if (item == toolListBoxItem)
-                    {
-                        return unpinnedToolData;
-                    }
-                }
-            }
-
-            return null;
-        }
+        private List<UnpinnedToolData> _listUnpinnedToolData;
 
         internal Grid _root;
 
@@ -451,7 +435,7 @@ namespace WpfDockManagerDemo.DockManager
 
             _activeToolListBox = e.ToolListBox;
             _activeToolListBoxItem = sender as ToolListBoxItem;
-            _activeUnpinnedToolData = GetUnpinnedToolData(_activeToolListBoxItem);
+            _activeUnpinnedToolData = _listUnpinnedToolData.Where(n => n.Items.Contains(_activeToolListBoxItem)).First();
             _activeUnpinnedToolPane = CreateUnpinnedToolPane(sender as ToolListBoxItem);
         }
 
@@ -468,13 +452,13 @@ namespace WpfDockManagerDemo.DockManager
                 {
                     SplitterPane parentSplitterPane = enumerableSplitterPanes.First();
 
-                    IEnumerable<ToolPane> enumerableToolPanes = parentSplitterPane.Children.OfType<ToolPane>();
+                    IEnumerable<ToolPaneGroup> enumerableToolPanes = parentSplitterPane.Children.OfType<ToolPaneGroup>();
 
-                    ToolPane toolPane = enumerableToolPanes.First();
-                    parentSplitterPane.Children.Remove(toolPane);
+                    ToolPaneGroup toolPaneGroup = enumerableToolPanes.First();
+                    parentSplitterPane.Children.Remove(toolPaneGroup);
 
                     bool isFirst = (_activeToolListBoxItem.WindowLocation == WindowLocation.TopSide) || (_activeToolListBoxItem.WindowLocation == WindowLocation.LeftSide);
-                    newSplitterPane.AddChild(toolPane, !isFirst);
+                    newSplitterPane.AddChild(toolPaneGroup, !isFirst);
                     newSplitterPane.AddChild(unpinnedToolData.ToolPane, isFirst);
 
                     parentSplitterPane.AddChild(newSplitterPane, isFirst);
@@ -561,13 +545,13 @@ namespace WpfDockManagerDemo.DockManager
 
         private void ToolPane_UnPinClick(object sender, EventArgs e)
         {
-            System.Diagnostics.Trace.Assert(sender is ToolPane);
+            System.Diagnostics.Trace.Assert(sender is ToolPaneGroup);
 
             Controls.ToolListBox ToolListBox = null;
-            ToolPane toolPane = sender as ToolPane;
-            FrameworkElement frameworkElement = toolPane;
-            FrameworkElement parentFrameworkElement = toolPane.Parent as FrameworkElement;
-            SplitterPane parentSplitterPane = toolPane.Parent as SplitterPane;
+            ToolPaneGroup toolPaneGroup = sender as ToolPaneGroup;
+            FrameworkElement frameworkElement = toolPaneGroup;
+            FrameworkElement parentFrameworkElement = toolPaneGroup.Parent as FrameworkElement;
+            SplitterPane parentSplitterPane = toolPaneGroup.Parent as SplitterPane;
             WindowLocation windowLocation = WindowLocation.None;
             while (true)
             {
@@ -611,21 +595,21 @@ namespace WpfDockManagerDemo.DockManager
 
             System.Diagnostics.Trace.Assert(ToolListBox != null);
 
-            toolPane = sender as ToolPane;
-            ExtractDockPane(toolPane, out frameworkElement);
+            toolPaneGroup = sender as ToolPaneGroup;
+            ExtractDockPane(toolPaneGroup, out frameworkElement);
 
             System.Diagnostics.Trace.Assert(frameworkElement != null);
 
             UnpinnedToolData unpinnedToolData = new UnpinnedToolData();
-            unpinnedToolData.ToolPane = toolPane;
+            unpinnedToolData.ToolPane = toolPaneGroup;
             unpinnedToolData.Items = new List<ToolListBoxItem>();
             unpinnedToolData.IsHorizontal = parentSplitterPane.IsHorizontal;
-            unpinnedToolData.IsFirst = (Grid.GetRow(toolPane) == 0) && (Grid.GetColumn(toolPane) == 0);
+            unpinnedToolData.IsFirst = (Grid.GetRow(toolPaneGroup) == 0) && (Grid.GetColumn(toolPaneGroup) == 0);
             unpinnedToolData.Sibling = frameworkElement;
 
             _listUnpinnedToolData.Add(unpinnedToolData);
 
-            int count = toolPane.IViewContainer.GetUserControlCount();
+            int count = toolPaneGroup.IViewContainer.GetUserControlCount();
             for (int i = 0; i < count; ++i)
             {
                 ToolListBoxItem toolListBoxItem = new ToolListBoxItem()
@@ -770,19 +754,19 @@ namespace WpfDockManagerDemo.DockManager
             dockPane.Ungroup += DockPane_Ungroup;
         }
 
-        DocumentPane ILayoutFactory.CreateDocumentPane()
+        DocumentPaneGroup ILayoutFactory.CreateDocumentPaneGroup()
         {
-            DocumentPane documentPane = new DocumentPane();
-            RegisterDockPane(documentPane);
-            return documentPane;
+            DocumentPaneGroup documentPaneGroup = new DocumentPaneGroup();
+            RegisterDockPane(documentPaneGroup);
+            return documentPaneGroup;
         }
 
-        ToolPane ILayoutFactory.CreateToolPane()
+        ToolPaneGroup ILayoutFactory.CreateToolPane()
         {
-            ToolPane toolPane = new ToolPane();
-            RegisterDockPane(toolPane);
-            toolPane.UnPinClick += ToolPane_UnPinClick;
-            return toolPane;
+            ToolPaneGroup toolPaneGroup = new ToolPaneGroup();
+            RegisterDockPane(toolPaneGroup);
+            toolPaneGroup.UnPinClick += ToolPane_UnPinClick;
+            return toolPaneGroup;
         }
 
         private void RegisterFloatingPane(FloatingPane floatingPane)
@@ -901,12 +885,12 @@ namespace WpfDockManagerDemo.DockManager
             {
                 List<FrameworkElement> list_N = new List<FrameworkElement>();
 
-                DockManager.DockPane documentPane = ILayoutFactory.CreateDocumentPane();
+                DockManager.DockPane documentPane = ILayoutFactory.CreateDocumentPaneGroup();
                 documentPane.IViewContainer.AddUserControl(documentViews[0]);
 
                 documentPanel.Children.Add(documentPane);
                 list_N.Add(documentPane);
-                AddViews(documentViews, list_N, delegate { return ILayoutFactory.CreateDocumentPane(); });
+                AddViews(documentViews, list_N, delegate { return ILayoutFactory.CreateDocumentPaneGroup(); });
             }
 
             List<UserControl> toolViews = LoadViewsFromTemplates(ToolTemplates, ToolsSource);
@@ -914,12 +898,12 @@ namespace WpfDockManagerDemo.DockManager
             {
                 List<FrameworkElement> list_N = new List<FrameworkElement>();
 
-                DockManager.DockPane toolPane = ILayoutFactory.CreateToolPane();
-                toolPane.IViewContainer.AddUserControl(toolViews[0]);
+                DockManager.DockPane toolPaneGroup = ILayoutFactory.CreateToolPane();
+                toolPaneGroup.IViewContainer.AddUserControl(toolViews[0]);
 
-                (_root as SplitterPane).AddChild(toolPane, false);
+                (_root as SplitterPane).AddChild(toolPaneGroup, false);
 
-                list_N.Add(toolPane);
+                list_N.Add(toolPaneGroup);
                 AddViews(toolViews, list_N, delegate { return ILayoutFactory.CreateToolPane(); });
             }
 
@@ -1058,7 +1042,7 @@ namespace WpfDockManagerDemo.DockManager
                 return false;
             }
 
-            DockPane newDockPane = (dockPane is ToolPane) ? (DockPane)ILayoutFactory.CreateToolPane() : ILayoutFactory.CreateDocumentPane();
+            DockPane newDockPane = (dockPane is ToolPaneGroup) ? (DockPane)ILayoutFactory.CreateToolPane() : ILayoutFactory.CreateDocumentPaneGroup();
             newDockPane.IViewContainer.AddUserControl(userControl);
 
             parentSplitterPane.Children.Remove(dockPane);
@@ -1117,7 +1101,7 @@ namespace WpfDockManagerDemo.DockManager
             ExtractDockPane(dockPane, out FrameworkElement frameworkElement);
 
             FloatingPane floatingPane = null;
-            if (dockPane is ToolPane)
+            if (dockPane is ToolPaneGroup)
             {
                 floatingPane = ILayoutFactory.CreateFloatingTool();
             }
@@ -1161,11 +1145,11 @@ namespace WpfDockManagerDemo.DockManager
 
             ExtractDockPane(dockPane, out FrameworkElement frameworkElement);
 
-            if (dockPane is DocumentPane)
+            if (dockPane is DocumentPaneGroup)
             {
                 DocumentClosed?.Invoke(sender, null);
             }
-            else if (dockPane is ToolPane)
+            else if (dockPane is ToolPaneGroup)
             {
                 ToolClosed?.Invoke(sender, null);
             }
@@ -1264,7 +1248,7 @@ namespace WpfDockManagerDemo.DockManager
             _sideLocationPane = null;
         }
 
-        private void ExtractDocuments(FloatingPane floatingPane, DockPane toolPane)
+        private void ExtractDocuments(FloatingPane floatingPane, DockPane dockPane)
         {
             while (true)
             {
@@ -1274,7 +1258,7 @@ namespace WpfDockManagerDemo.DockManager
                     break;
                 }
 
-                toolPane.IViewContainer.AddUserControl(userControl);
+                dockPane.IViewContainer.AddUserControl(userControl);
             }
             floatingPane.Close();
         }
@@ -1322,7 +1306,7 @@ namespace WpfDockManagerDemo.DockManager
                         }
                         else
                         {
-                            dockPane = ILayoutFactory.CreateDocumentPane();
+                            dockPane = ILayoutFactory.CreateDocumentPaneGroup();
                         }
                         ExtractDocuments(floatingPane, dockPane);
 
@@ -1353,7 +1337,7 @@ namespace WpfDockManagerDemo.DockManager
                         }
                         else
                         {
-                            dockPane = ILayoutFactory.CreateDocumentPane();
+                            dockPane = ILayoutFactory.CreateDocumentPaneGroup();
                         }
                         ExtractDocuments(floatingPane, dockPane);
 
@@ -1386,9 +1370,9 @@ namespace WpfDockManagerDemo.DockManager
                         }
                         else if (selectedPane is DocumentPanel)
                         {
-                            DocumentPane documentPane = ILayoutFactory.CreateDocumentPane();
-                            selectedPane.Children.Add(documentPane);
-                            ExtractDocuments(floatingPane, documentPane);
+                            DocumentPaneGroup documentPaneGroup = ILayoutFactory.CreateDocumentPaneGroup();
+                            selectedPane.Children.Add(documentPaneGroup);
+                            ExtractDocuments(floatingPane, documentPaneGroup);
                         }
                         break;
                 }
@@ -1460,7 +1444,7 @@ namespace WpfDockManagerDemo.DockManager
                     (cursorPositionInMainWindow.Y <= this.ActualHeight) 
                 )
             {
-                Type paneType = (sender is FloatingDocument) ? typeof(DocumentPane) : typeof(ToolPane);
+                Type paneType = (sender is FloatingDocument) ? typeof(DocumentPaneGroup) : typeof(ToolPaneGroup);
                 var pane = FindSelectablePane(this, cursorPositionOnScreen);
                 found = pane != null;
                 if ((pane != null) && (SelectedPane != pane))
