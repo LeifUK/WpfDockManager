@@ -182,7 +182,7 @@ namespace WpfDockManagerDemo.DockManager.Serialisation
             }
         }
 
-        private static XmlElement CreateFloatingToolNode(XmlDocument xmlDocument, XmlNode xmlParentNode, FloatingTool floatingTool)
+        private static XmlElement SaveFloatingToolNode(XmlDocument xmlDocument, XmlNode xmlParentNode, FloatingTool floatingTool)
         {
             System.Diagnostics.Trace.Assert(xmlDocument != null);
             System.Diagnostics.Trace.Assert(xmlParentNode != null);
@@ -274,7 +274,7 @@ namespace WpfDockManagerDemo.DockManager.Serialisation
                     throw new Exception(System.Reflection.MethodBase.GetCurrentMethod().Name + ": no documents");
                 }
 
-                XmlElement xmlNodeParent = CreateFloatingToolNode(xmlDocument, xmlLayoutManager, floatingTool);
+                XmlElement xmlNodeParent = SaveFloatingToolNode(xmlDocument, xmlLayoutManager, floatingTool);
 
                 for (int index = 0; index < count; ++index)
                 {
