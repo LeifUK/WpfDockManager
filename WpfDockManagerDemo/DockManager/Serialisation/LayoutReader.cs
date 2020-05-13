@@ -41,7 +41,31 @@ namespace WpfDockManagerDemo.DockManager.Serialisation
             }
         }
 
-        private static void LoadToolGroup(Dictionary<string, UserControl> viewsMap, XmlElement xmlToolGroup, IViewContainer iViewContainer)
+        private static void SetLocationAndSize(XmlElement xmlElement, Window window)
+        {
+            XmlAttribute xmlAttribute = xmlElement.Attributes.GetNamedItem("left") as XmlAttribute;
+            System.Diagnostics.Trace.Assert(xmlAttribute != null, xmlElement.Name + " element does not have a left attribute");
+            double left = System.Convert.ToDouble(xmlAttribute.Value);
+
+            xmlAttribute = xmlElement.Attributes.GetNamedItem("top") as XmlAttribute;
+            System.Diagnostics.Trace.Assert(xmlAttribute != null, xmlElement.Name + " element does not have a top attribute");
+            double top = System.Convert.ToDouble(xmlAttribute.Value);
+
+            xmlAttribute = xmlElement.Attributes.GetNamedItem("width") as XmlAttribute;
+            System.Diagnostics.Trace.Assert(xmlAttribute != null, xmlElement.Name + " element does not have a width attribute");
+            double width = System.Convert.ToDouble(xmlAttribute.Value);
+
+            xmlAttribute = xmlElement.Attributes.GetNamedItem("height") as XmlAttribute;
+            System.Diagnostics.Trace.Assert(xmlAttribute != null, xmlElement.Name + " element does not have a height attribute");
+            double height = System.Convert.ToDouble(xmlAttribute.Value);
+
+            window.Left = left;
+            window.Top = top;
+            window.Width = width;
+            window.Height = height;
+        }
+
+        private static void LoadToolPaneGroup(Dictionary<string, UserControl> viewsMap, XmlElement xmlToolGroup, IViewContainer iViewContainer)
         {
             foreach (var xmlToolGroupNode in xmlToolGroup.ChildNodes)
             {
@@ -65,7 +89,7 @@ namespace WpfDockManagerDemo.DockManager.Serialisation
             }
         }
 
-        private static void LoadDocumentGroup(Dictionary<string, UserControl> viewsMap, XmlElement xmlDocumentGroup, IViewContainer iViewContainer)
+        private static void LoadDocumentPaneGroup(Dictionary<string, UserControl> viewsMap, XmlElement xmlDocumentGroup, IViewContainer iViewContainer)
         {
             foreach (var xmlDocumentGroupNode in xmlDocumentGroup.ChildNodes)
             {
@@ -160,7 +184,7 @@ namespace WpfDockManagerDemo.DockManager.Serialisation
 
                         SetWidthOrHeight(xmlDocumentGroup, parentFrameworkElement, isParentHorizontal, row, column);
 
-                        LoadDocumentGroup(viewsMap, xmlDocumentGroup, documentPaneGroup.IViewContainer);
+                        LoadDocumentPaneGroup(viewsMap, xmlDocumentGroup, documentPaneGroup.IViewContainer);
                         Grid.SetRow(documentPaneGroup, row);
                         Grid.SetColumn(documentPaneGroup, column);
                         row += rowIncrement;
@@ -177,7 +201,7 @@ namespace WpfDockManagerDemo.DockManager.Serialisation
 
                         SetWidthOrHeight(xmlToolGroup, parentFrameworkElement, isParentHorizontal, row, column);
 
-                        LoadToolGroup(viewsMap, xmlToolGroup, toolPane.IViewContainer);
+                        LoadToolPaneGroup(viewsMap, xmlToolGroup, toolPane.IViewContainer);
                         Grid.SetRow(toolPane, row);
                         Grid.SetColumn(toolPane, column);
                         row += rowIncrement;
@@ -186,16 +210,26 @@ namespace WpfDockManagerDemo.DockManager.Serialisation
                     else if ((xmlChildNode as XmlElement).Name == "FloatingToolPaneGroup")
                     {
                         FloatingToolPaneGroup floatingToolPaneGroup = iLayoutFactory.CreateFloatingToolPaneGroup();
-
                         XmlElement xmlfloatingTool = xmlChildNode as XmlElement;
-                        LoadToolGroup(viewsMap, xmlfloatingTool, floatingToolPaneGroup.IViewContainer);
+                        SetLocationAndSize(xmlfloatingTool, floatingToolPaneGroup);
+                        LoadToolPaneGroup(viewsMap, xmlfloatingTool, floatingToolPaneGroup.IViewContainer);
+                    }
+                    else if ((xmlChildNode as XmlElement).Name == "FloatingDocumentPaneGroup")
+                    {
+                        FloatingDocumentPaneGroup floatingDocumentPaneGroup = iLayoutFactory.CreateFloatingDocumentPaneGroup();
+                        XmlElement xmlfloatingDocument = xmlChildNode as XmlElement;
+                        SetLocationAndSize(xmlfloatingDocument, floatingDocumentPaneGroup);
+                        LoadDocumentPaneGroup(viewsMap, xmlfloatingDocument, floatingDocumentPaneGroup.IViewContainer);
                     }
                 }
 
-                if ((row > 2) || (column > 2))
+                if (parentFrameworkElement != rootFrameworkElement)
                 {
-                    // we can only have two child elements (plus a splitter) in each grid
-                    break;
+                    if ((row > 2) || (column > 2))
+                    {
+                        // we can only have two child elements (plus a splitter) in each grid
+                        break;
+                    }
                 }
             }
         }

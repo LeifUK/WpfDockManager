@@ -119,7 +119,7 @@ namespace WpfDockManagerDemo.DockManager
 
         internal Controls.ToolListBox _leftToolListBox;
         internal Controls.ToolListBox _topToolListBox;
-        internal Controls.ToolListBox _rightToolListBox;
+        internal Controls.ToolListBox _rightToolListBox; 
         internal Controls.ToolListBox _bottomToolListBox;
 
         internal ToolListBoxItem _activeToolListBoxItem;
