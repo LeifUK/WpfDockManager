@@ -14,8 +14,8 @@ namespace WpfDockManagerDemo.DockManager
     {
         public LayoutManager()
         {
-            FloatingTools = new List<FloatingToolPaneGroup>();
-            FloatingDocuments = new List<FloatingDocumentPaneGroup>();
+            FloatingToolPaneGroups = new List<FloatingToolPaneGroup>();
+            FloatingDocumentPaneGroups = new List<FloatingDocumentPaneGroup>();
 
             RowDefinitions.Add(new RowDefinition() { Height = new System.Windows.GridLength(1, System.Windows.GridUnitType.Auto) });
             RowDefinitions.Add(new RowDefinition() { Height = new System.Windows.GridLength(1, System.Windows.GridUnitType.Star) });
@@ -114,8 +114,8 @@ namespace WpfDockManagerDemo.DockManager
         public event EventHandler DocumentClosed;
         public event EventHandler ToolClosed;
 
-        internal List<FloatingToolPaneGroup> FloatingTools;
-        internal List<FloatingDocumentPaneGroup> FloatingDocuments;
+        internal List<FloatingToolPaneGroup> FloatingToolPaneGroups;
+        internal List<FloatingDocumentPaneGroup> FloatingDocumentPaneGroups;
 
         internal Controls.ToolListBox _leftToolListBox;
         internal Controls.ToolListBox _topToolListBox;
@@ -646,16 +646,16 @@ namespace WpfDockManagerDemo.DockManager
         {
             Children.Clear();
             CreateToolListBoxs();
-            while (FloatingTools.Count > 0)
+            while (FloatingToolPaneGroups.Count > 0)
             {
-                FloatingTools[0].Close();
+                FloatingToolPaneGroups[0].Close();
             }
-            FloatingTools.Clear();
-            while (FloatingDocuments.Count > 0)
+            FloatingToolPaneGroups.Clear();
+            while (FloatingDocumentPaneGroups.Count > 0)
             {
-                FloatingDocuments[0].Close();
+                FloatingDocumentPaneGroups[0].Close();
             }
-            FloatingDocuments.Clear();
+            FloatingDocumentPaneGroups.Clear();
         }
 
         public List<UserControl> LoadViewsFromTemplates(List<DataTemplate> dataTemplates, System.Collections.IEnumerable viewModels)
@@ -787,7 +787,7 @@ namespace WpfDockManagerDemo.DockManager
         {
             FloatingDocumentPaneGroup floatingDocumentPaneGroup = new FloatingDocumentPaneGroup();
             RegisterFloatingPane(floatingDocumentPaneGroup);
-            FloatingDocuments.Add(floatingDocumentPaneGroup);
+            FloatingDocumentPaneGroups.Add(floatingDocumentPaneGroup);
             return floatingDocumentPaneGroup;
         }
 
@@ -795,7 +795,7 @@ namespace WpfDockManagerDemo.DockManager
         {
             FloatingToolPaneGroup floatingToolPaneGroup = new FloatingToolPaneGroup();
             RegisterFloatingPane(floatingToolPaneGroup);
-            FloatingTools.Add(floatingToolPaneGroup);
+            FloatingToolPaneGroups.Add(floatingToolPaneGroup);
             return floatingToolPaneGroup;
         }
 
@@ -919,7 +919,7 @@ namespace WpfDockManagerDemo.DockManager
                 return false;
             }
 
-            Serialisation.LayoutWriter.SaveLayout(xmlDocument, _root, FloatingTools);
+            Serialisation.LayoutWriter.SaveLayout(xmlDocument, _root, FloatingToolPaneGroups, FloatingDocumentPaneGroups);
 
             xmlDocument.Save(fileNameAndPath);
 
@@ -1157,14 +1157,14 @@ namespace WpfDockManagerDemo.DockManager
 
         private void FloatingPane_Closed(object sender, EventArgs e)
         {
-            if ((sender is FloatingToolPaneGroup) && (FloatingTools.Contains(sender as FloatingToolPaneGroup)))
+            if ((sender is FloatingToolPaneGroup) && (FloatingToolPaneGroups.Contains(sender as FloatingToolPaneGroup)))
             {
-                FloatingTools.Remove(sender as FloatingToolPaneGroup);
+                FloatingToolPaneGroups.Remove(sender as FloatingToolPaneGroup);
             }
 
-            if ((sender is FloatingDocumentPaneGroup) && (FloatingDocuments.Contains(sender as FloatingDocumentPaneGroup)))
+            if ((sender is FloatingDocumentPaneGroup) && (FloatingDocumentPaneGroups.Contains(sender as FloatingDocumentPaneGroup)))
             {
-                FloatingDocuments.Remove(sender as FloatingDocumentPaneGroup);
+                FloatingDocumentPaneGroups.Remove(sender as FloatingDocumentPaneGroup);
             }
         }
 
@@ -1271,15 +1271,15 @@ namespace WpfDockManagerDemo.DockManager
             {
                 FloatingPane floatingPane = sender as FloatingPane;
 
-                if (SelectedPane == null)
-                {
-                    return;
-                }
+                //if (SelectedPane == null)
+                //{
+                //    return;
+                //}
 
                 if (
                         (floatingPane == null) ||
-                        (SelectedPane == null) ||
-                        (!(SelectedPane.Parent is SplitterPane) && !(SelectedPane.Parent is DocumentPanel) && (SelectedPane.Parent != this)) ||
+                        //(SelectedPane == null) ||
+                        ((SelectedPane != null) && !(SelectedPane.Parent is SplitterPane) && !(SelectedPane.Parent is DocumentPanel) && (SelectedPane.Parent != this)) ||
                         (_insertionIndicatorManager == null) ||
                         (_insertionIndicatorManager.WindowLocation == WindowLocation.None)
                    )
@@ -1287,7 +1287,7 @@ namespace WpfDockManagerDemo.DockManager
                     return;
                 }
 
-                SplitterPane parentSplitterPane = (SelectedPane.Parent as SplitterPane);
+                SplitterPane parentSplitterPane = null;
                 DockPane dockPane = null;
                 SelectablePane selectedPane = SelectedPane;
                 WindowLocation windowLocation = _insertionIndicatorManager.WindowLocation;
@@ -1351,6 +1351,7 @@ namespace WpfDockManagerDemo.DockManager
                         }
                         else
                         {
+                            parentSplitterPane = (selectedPane.Parent as SplitterPane);
                             parentSplitterPane.Children.Remove(selectedPane);
                             parentSplitterPane.Children.Add(newGrid);
                             Grid.SetRow(newGrid, Grid.GetRow(selectedPane));
@@ -1435,7 +1436,7 @@ namespace WpfDockManagerDemo.DockManager
             Window floatingWindow = sender as Window;
             Point cursorPositionOnScreen = WpfControlLibrary.Utilities.GetCursorPosition();
 
-            bool found = false;
+            bool foundSelectedPane = false;
             Point cursorPositionInMainWindow = PointFromScreen(cursorPositionOnScreen);
             if (
                     (cursorPositionInMainWindow.X >= 0) &&
@@ -1446,7 +1447,7 @@ namespace WpfDockManagerDemo.DockManager
             {
                 Type paneType = (sender is FloatingDocumentPaneGroup) ? typeof(DocumentPaneGroup) : typeof(ToolPaneGroup);
                 var pane = FindSelectablePane(this, cursorPositionOnScreen);
-                found = pane != null;
+                foundSelectedPane = pane != null;
                 if ((pane != null) && (SelectedPane != pane))
                 {
                     if (SelectedPane != null)
@@ -1470,54 +1471,55 @@ namespace WpfDockManagerDemo.DockManager
                         {
                             _windowLocationPane.ShowIcons(WindowLocation.Middle);
                         }
-                        Point topLeftPoint = pane.PointToScreen(new Point(0, 0));
-                        _windowLocationPane.Left = topLeftPoint.X;
-                        _windowLocationPane.Top = topLeftPoint.Y;
+                        Point topLeftPanePoint = pane.PointToScreen(new Point(0, 0));
+                        _windowLocationPane.Left = topLeftPanePoint.X;
+                        _windowLocationPane.Top = topLeftPanePoint.Y;
                         _windowLocationPane.Width = SelectedPane.ActualWidth;
                         _windowLocationPane.Height = SelectedPane.ActualHeight;
                         _windowLocationPane.Show();
                     }
+                }
 
-                    if (_sideLocationPane != null)
-                    {
-                        _sideLocationPane.Close();
-                        _sideLocationPane = null;
-                    }
-
-                    if (sender is FloatingToolPaneGroup)
+                if (sender is FloatingToolPaneGroup)
+                {
+                    if (_sideLocationPane == null)
                     {
                         _sideLocationPane = new SideLocationPane();
                         _sideLocationPane.AllowsTransparency = true;
-                        Point topLeftPoint = _root.PointToScreen(new Point(0, 0));
-                        _sideLocationPane.Left = topLeftPoint.X;
-                        _sideLocationPane.Top = topLeftPoint.Y;
-                        _sideLocationPane.Width = _root.ActualWidth;
-                        _sideLocationPane.Height = _root.ActualHeight;
-                        _sideLocationPane.Show();
                     }
+
+                    Point topLeftRootPoint = _root.PointToScreen(new Point(0, 0));
+                    _sideLocationPane.Left = topLeftRootPoint.X;
+                    _sideLocationPane.Top = topLeftRootPoint.Y;
+                    _sideLocationPane.Width = _root.ActualWidth;
+                    _sideLocationPane.Height = _root.ActualHeight;
+                    _sideLocationPane.Show();
                 }
             }
-
-            SelectablePane previousPane = SelectedPane;
-
-            if (!found)
+            else
             {
-                SelectedPane = null;
-            }
-
-            if (!found)
-            {
-                if (_windowLocationPane != null)
-                {
-                    _windowLocationPane.Close();
-                    _windowLocationPane = null;
-                }
                 if (_sideLocationPane != null)
                 {
                     _sideLocationPane.Close();
                     _sideLocationPane = null;
                 }
             }
+
+            SelectablePane previousPane = SelectedPane;
+
+            if (!foundSelectedPane)
+            {
+                SelectedPane = null;
+            }
+
+            if (!foundSelectedPane)
+            {
+                if (_windowLocationPane != null)
+                {
+                    _windowLocationPane.Close();
+                    _windowLocationPane = null;
+                }
+           }
 
             if ((previousPane != null) && (SelectedPane != previousPane))
             {
