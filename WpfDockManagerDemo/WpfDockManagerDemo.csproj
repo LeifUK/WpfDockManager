@@ -69,11 +69,11 @@
     <Compile Include="DockManager\DocumentPaneGroup.cs" />
     <Compile Include="DockManager\FloatEventArgs.cs" />
     <Compile Include="DockManager\FloatEventHandler.cs" />
-    <Compile Include="DockManager\FloatingDocument.cs" />
+    <Compile Include="DockManager\FloatingDocumentPaneGroup.cs" />
     <Compile Include="DockManager\FloatingPane.xaml.cs">
       <DependentUpon>FloatingPane.xaml</DependentUpon>
     </Compile>
-    <Compile Include="DockManager\FloatingTool.cs" />
+    <Compile Include="DockManager\FloatingToolPaneGroup.cs" />
     <Compile Include="DockManager\Helpers.cs" />
     <Compile Include="DockManager\ILayoutFactory.cs" />
     <Compile Include="DockManager\IViewContainer.cs" />

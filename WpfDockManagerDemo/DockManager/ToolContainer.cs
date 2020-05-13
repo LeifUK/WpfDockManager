@@ -60,7 +60,6 @@ namespace WpfDockManagerDemo.DockManager
         private RowDefinition rowDefinition_TabHeader;
         private RowDefinition rowDefinition_Spacer;
 
-        protected UserControl _selectedUserControl;
         private Button _button;
         private Border _border;
 
@@ -81,58 +80,6 @@ namespace WpfDockManagerDemo.DockManager
             SelectionChanged?.Invoke(sender, e);
         }
 
-        private void _tabHeaderControl_CloseTabRequest(object sender, EventArgs e)
-        {
-            if (sender == null)
-            {
-                return;
-            }
-
-            System.Collections.Generic.KeyValuePair<UserControl, IViewModel> item = (System.Collections.Generic.KeyValuePair<UserControl, IViewModel>)sender;
-            if (item.Value.CanClose)
-            {
-                if (item.Value.HasChanged)
-                {
-                    System.Windows.Forms.DialogResult dialogResult = System.Windows.Forms.MessageBox.Show("There are unsaved changes in the document. Do you wish to save the changes before closing?", "Close " + item.Value.Title, System.Windows.Forms.MessageBoxButtons.YesNoCancel);
-
-                    if (dialogResult == System.Windows.Forms.DialogResult.Yes)
-                    {
-                        item.Value.Save();
-                    }
-
-                    if (dialogResult == System.Windows.Forms.DialogResult.Cancel)
-                    {
-                        return;
-                    }
-                }
-
-                int index = _items.IndexOf(item);
-
-                _items.RemoveAt(index);
-                _tabHeaderControl.ItemsSource = _items;
-
-                if (item.Key == _selectedUserControl)
-                {
-                    Children.Remove(_selectedUserControl);
-                    _selectedUserControl = null;
-
-                    if (_items.Count > 0)
-                    {
-                        if (index >= _items.Count)
-                        {
-                            --index;
-                        }
-                        _selectedUserControl = _items[index].Key;
-                        Children.Add(_selectedUserControl);
-                    }
-                }
-                
-                CheckTabCount();
-
-                TabClosed?.Invoke(sender, null);
-            }
-        }
-
         protected override void CheckTabCount()
         {
             if (_items.Count == 1)
@@ -147,18 +94,12 @@ namespace WpfDockManagerDemo.DockManager
             }
         }
 
-        private void TabControl_TabClosed(object sender, EventArgs e)
-        {
-            CheckTabCount();
-        }
-
         private void TabControl_SelectionChanged(object sender, EventArgs e)
         {
             SelectionChanged?.Invoke(sender, e);
         }
 
         public override event EventHandler SelectionChanged;
-        public override event EventHandler TabClosed;
 
         public override void AddUserControl(UserControl userControl)
         {

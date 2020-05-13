@@ -10,6 +10,7 @@ namespace WpfDockManagerDemo.DockManager
     {
         protected System.Collections.ObjectModel.ObservableCollection<System.Collections.Generic.KeyValuePair<UserControl, IViewModel>> _items;
         public WpfControlLibrary.TabHeaderControl _tabHeaderControl;
+        protected UserControl _selectedUserControl;
 
         protected abstract void _tabHeaderControl_SelectionChanged(object sender, System.EventArgs e);
 
@@ -29,10 +30,62 @@ namespace WpfDockManagerDemo.DockManager
             _tabHeaderControl_SelectionChanged(this, null);
         }
 
+        protected void _tabHeaderControl_CloseTabRequest(object sender, EventArgs e)
+        {
+            if (sender == null)
+            {
+                return;
+            }
+
+            System.Collections.Generic.KeyValuePair<UserControl, IViewModel> item = (System.Collections.Generic.KeyValuePair<UserControl, IViewModel>)sender;
+            if (item.Value.CanClose)
+            {
+                if (item.Value.HasChanged)
+                {
+                    System.Windows.Forms.DialogResult dialogResult = System.Windows.Forms.MessageBox.Show("There are unsaved changes in the document. Do you wish to save the changes before closing?", "Close " + item.Value.Title, System.Windows.Forms.MessageBoxButtons.YesNoCancel);
+
+                    if (dialogResult == System.Windows.Forms.DialogResult.Yes)
+                    {
+                        item.Value.Save();
+                    }
+
+                    if (dialogResult == System.Windows.Forms.DialogResult.Cancel)
+                    {
+                        return;
+                    }
+                }
+
+                int index = _items.IndexOf(item);
+
+                _items.RemoveAt(index);
+                _tabHeaderControl.ItemsSource = _items;
+
+                if (item.Key == _selectedUserControl)
+                {
+                    Children.Remove(_selectedUserControl);
+                    _selectedUserControl = null;
+
+                    if (_items.Count > 0)
+                    {
+                        if (index >= _items.Count)
+                        {
+                            --index;
+                        }
+                        _selectedUserControl = _items[index].Key;
+                        Children.Add(_selectedUserControl);
+                    }
+                }
+
+                CheckTabCount();
+
+                TabClosed?.Invoke(sender, null);
+            }
+        }
+
         #region IViewContainer
 
         public abstract event EventHandler SelectionChanged;
-        public abstract event EventHandler TabClosed;
+        public event EventHandler TabClosed;
 
         public string Title
         {

@@ -11,12 +11,9 @@
                 System.Diagnostics.Trace.Assert(IViewContainer != null);
 
                 IViewModel iViewModel = IViewContainer.GetIViewModel(Index);
-                if (iViewModel != null)
-                {
-                    return iViewModel.Title;
-                }
+                System.Diagnostics.Trace.Assert(iViewModel != null);
 
-                return "";
+                return iViewModel.Title;
             }
         }
         public WindowLocation WindowLocation { get; set; }

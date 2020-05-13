@@ -6,9 +6,9 @@ using System.Threading.Tasks;
 
 namespace WpfDockManagerDemo.DockManager
 {
-    internal class FloatingDocument : FloatingPane
+    internal class FloatingDocumentPaneGroup : FloatingPane
     {
-        internal FloatingDocument() : base(new DocumentContainer())
+        internal FloatingDocumentPaneGroup() : base(new DocumentContainer())
         {
 
         }

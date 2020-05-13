@@ -14,8 +14,8 @@ namespace WpfDockManagerDemo.DockManager
     {
         public LayoutManager()
         {
-            FloatingTools = new List<FloatingTool>();
-            FloatingDocuments = new List<FloatingDocument>();
+            FloatingTools = new List<FloatingToolPaneGroup>();
+            FloatingDocuments = new List<FloatingDocumentPaneGroup>();
 
             RowDefinitions.Add(new RowDefinition() { Height = new System.Windows.GridLength(1, System.Windows.GridUnitType.Auto) });
             RowDefinitions.Add(new RowDefinition() { Height = new System.Windows.GridLength(1, System.Windows.GridUnitType.Star) });
@@ -114,8 +114,8 @@ namespace WpfDockManagerDemo.DockManager
         public event EventHandler DocumentClosed;
         public event EventHandler ToolClosed;
 
-        internal List<FloatingTool> FloatingTools;
-        internal List<FloatingDocument> FloatingDocuments;
+        internal List<FloatingToolPaneGroup> FloatingTools;
+        internal List<FloatingDocumentPaneGroup> FloatingDocuments;
 
         internal Controls.ToolListBox _leftToolListBox;
         internal Controls.ToolListBox _topToolListBox;
@@ -761,7 +761,7 @@ namespace WpfDockManagerDemo.DockManager
             return documentPaneGroup;
         }
 
-        ToolPaneGroup ILayoutFactory.CreateToolPane()
+        ToolPaneGroup ILayoutFactory.CreateToolPaneGroup()
         {
             ToolPaneGroup toolPaneGroup = new ToolPaneGroup();
             RegisterDockPane(toolPaneGroup);
@@ -783,20 +783,20 @@ namespace WpfDockManagerDemo.DockManager
             floatingPane.Show();
         }
 
-        FloatingDocument ILayoutFactory.CreateFloatingDocument()
+        FloatingDocumentPaneGroup ILayoutFactory.CreateFloatingDocumentPaneGroup()
         {
-            FloatingDocument floatingDocument = new FloatingDocument();
-            RegisterFloatingPane(floatingDocument);
-            FloatingDocuments.Add(floatingDocument);
-            return floatingDocument;
+            FloatingDocumentPaneGroup floatingDocumentPaneGroup = new FloatingDocumentPaneGroup();
+            RegisterFloatingPane(floatingDocumentPaneGroup);
+            FloatingDocuments.Add(floatingDocumentPaneGroup);
+            return floatingDocumentPaneGroup;
         }
 
-        FloatingTool ILayoutFactory.CreateFloatingTool()
+        FloatingToolPaneGroup ILayoutFactory.CreateFloatingToolPaneGroup()
         {
-            FloatingTool floatingTool = new FloatingTool();
-            RegisterFloatingPane(floatingTool);
-            FloatingTools.Add(floatingTool);
-            return floatingTool;
+            FloatingToolPaneGroup floatingToolPaneGroup = new FloatingToolPaneGroup();
+            RegisterFloatingPane(floatingToolPaneGroup);
+            FloatingTools.Add(floatingToolPaneGroup);
+            return floatingToolPaneGroup;
         }
 
         void ILayoutFactory.SetRootPane(Grid grid, out int row, out int column)
@@ -898,13 +898,13 @@ namespace WpfDockManagerDemo.DockManager
             {
                 List<FrameworkElement> list_N = new List<FrameworkElement>();
 
-                DockManager.DockPane toolPaneGroup = ILayoutFactory.CreateToolPane();
+                DockManager.DockPane toolPaneGroup = ILayoutFactory.CreateToolPaneGroup();
                 toolPaneGroup.IViewContainer.AddUserControl(toolViews[0]);
 
                 (_root as SplitterPane).AddChild(toolPaneGroup, false);
 
                 list_N.Add(toolPaneGroup);
-                AddViews(toolViews, list_N, delegate { return ILayoutFactory.CreateToolPane(); });
+                AddViews(toolViews, list_N, delegate { return ILayoutFactory.CreateToolPaneGroup(); });
             }
 
             UpdateLayout();
@@ -1042,7 +1042,7 @@ namespace WpfDockManagerDemo.DockManager
                 return false;
             }
 
-            DockPane newDockPane = (dockPane is ToolPaneGroup) ? (DockPane)ILayoutFactory.CreateToolPane() : ILayoutFactory.CreateDocumentPaneGroup();
+            DockPane newDockPane = (dockPane is ToolPaneGroup) ? (DockPane)ILayoutFactory.CreateToolPaneGroup() : ILayoutFactory.CreateDocumentPaneGroup();
             newDockPane.IViewContainer.AddUserControl(userControl);
 
             parentSplitterPane.Children.Remove(dockPane);
@@ -1103,11 +1103,11 @@ namespace WpfDockManagerDemo.DockManager
             FloatingPane floatingPane = null;
             if (dockPane is ToolPaneGroup)
             {
-                floatingPane = ILayoutFactory.CreateFloatingTool();
+                floatingPane = ILayoutFactory.CreateFloatingToolPaneGroup();
             }
             else
             {
-                floatingPane = ILayoutFactory.CreateFloatingDocument();
+                floatingPane = ILayoutFactory.CreateFloatingDocumentPaneGroup();
             }
 
             while (true)
@@ -1157,14 +1157,14 @@ namespace WpfDockManagerDemo.DockManager
 
         private void FloatingPane_Closed(object sender, EventArgs e)
         {
-            if ((sender is FloatingTool) && (FloatingTools.Contains(sender as FloatingTool)))
+            if ((sender is FloatingToolPaneGroup) && (FloatingTools.Contains(sender as FloatingToolPaneGroup)))
             {
-                FloatingTools.Remove(sender as FloatingTool);
+                FloatingTools.Remove(sender as FloatingToolPaneGroup);
             }
 
-            if ((sender is FloatingDocument) && (FloatingDocuments.Contains(sender as FloatingDocument)))
+            if ((sender is FloatingDocumentPaneGroup) && (FloatingDocuments.Contains(sender as FloatingDocumentPaneGroup)))
             {
-                FloatingDocuments.Remove(sender as FloatingDocument);
+                FloatingDocuments.Remove(sender as FloatingDocumentPaneGroup);
             }
         }
 
@@ -1182,13 +1182,13 @@ namespace WpfDockManagerDemo.DockManager
             }
 
             FloatingPane newFloatingPane = null;
-            if (floatingPane is FloatingTool)
+            if (floatingPane is FloatingToolPaneGroup)
             {
-                newFloatingPane = ILayoutFactory.CreateFloatingTool();
+                newFloatingPane = ILayoutFactory.CreateFloatingToolPaneGroup();
             }
             else
             {
-                newFloatingPane = ILayoutFactory.CreateFloatingDocument();
+                newFloatingPane = ILayoutFactory.CreateFloatingDocumentPaneGroup();
             }
 
             newFloatingPane.Left = left;
@@ -1300,9 +1300,9 @@ namespace WpfDockManagerDemo.DockManager
                     case WindowLocation.LeftSide:
                     case WindowLocation.RightSide:
 
-                        if (sender is FloatingTool)
+                        if (sender is FloatingToolPaneGroup)
                         {
-                            dockPane = ILayoutFactory.CreateToolPane();
+                            dockPane = ILayoutFactory.CreateToolPaneGroup();
                         }
                         else
                         {
@@ -1331,9 +1331,9 @@ namespace WpfDockManagerDemo.DockManager
                     case WindowLocation.Top:
                     case WindowLocation.Bottom:
 
-                        if (sender is FloatingTool)
+                        if (sender is FloatingToolPaneGroup)
                         {
-                            dockPane = ILayoutFactory.CreateToolPane();
+                            dockPane = ILayoutFactory.CreateToolPaneGroup();
                         }
                         else
                         {
@@ -1444,7 +1444,7 @@ namespace WpfDockManagerDemo.DockManager
                     (cursorPositionInMainWindow.Y <= this.ActualHeight) 
                 )
             {
-                Type paneType = (sender is FloatingDocument) ? typeof(DocumentPaneGroup) : typeof(ToolPaneGroup);
+                Type paneType = (sender is FloatingDocumentPaneGroup) ? typeof(DocumentPaneGroup) : typeof(ToolPaneGroup);
                 var pane = FindSelectablePane(this, cursorPositionOnScreen);
                 found = pane != null;
                 if ((pane != null) && (SelectedPane != pane))
@@ -1462,16 +1462,20 @@ namespace WpfDockManagerDemo.DockManager
                         _windowLocationPane = null;
                     }
 
-                    if ((paneType == pane.GetType()) || ((pane is DocumentPanel) && (sender is FloatingDocument)))
+                    if ((paneType == pane.GetType()) || ((pane is DocumentPanel) && (sender is FloatingDocumentPaneGroup)))
                     {
                         _windowLocationPane = new WindowLocationPane();
                         _windowLocationPane.AllowsTransparency = true;
-                        _windowLocationPane.Show();
+                        if (SelectedPane is DocumentPanel)
+                        {
+                            _windowLocationPane.ShowIcons(WindowLocation.Middle);
+                        }
                         Point topLeftPoint = pane.PointToScreen(new Point(0, 0));
                         _windowLocationPane.Left = topLeftPoint.X;
                         _windowLocationPane.Top = topLeftPoint.Y;
                         _windowLocationPane.Width = SelectedPane.ActualWidth;
                         _windowLocationPane.Height = SelectedPane.ActualHeight;
+                        _windowLocationPane.Show();
                     }
 
                     if (_sideLocationPane != null)
@@ -1480,16 +1484,16 @@ namespace WpfDockManagerDemo.DockManager
                         _sideLocationPane = null;
                     }
 
-                    if (sender is FloatingTool)
+                    if (sender is FloatingToolPaneGroup)
                     {
                         _sideLocationPane = new SideLocationPane();
                         _sideLocationPane.AllowsTransparency = true;
-                        _sideLocationPane.Show();
                         Point topLeftPoint = _root.PointToScreen(new Point(0, 0));
                         _sideLocationPane.Left = topLeftPoint.X;
                         _sideLocationPane.Top = topLeftPoint.Y;
                         _sideLocationPane.Width = _root.ActualWidth;
                         _sideLocationPane.Height = _root.ActualHeight;
+                        _sideLocationPane.Show();
                     }
                 }
             }
@@ -1559,10 +1563,6 @@ namespace WpfDockManagerDemo.DockManager
                 }
 
                 _insertionIndicatorManager.ShowInsertionIndicator(windowLocation);
-                if (SelectedPane is DocumentPanel)
-                {
-                    _windowLocationPane.ShowIcons(WindowLocation.Middle);
-                }
             }
         }
     }

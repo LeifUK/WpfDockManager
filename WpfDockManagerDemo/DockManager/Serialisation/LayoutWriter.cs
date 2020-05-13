@@ -9,28 +9,28 @@ namespace WpfDockManagerDemo.DockManager.Serialisation
 {
     internal static class LayoutWriter
     {
-        private static XmlElement SaveToolGroupNode(XmlDocument xmlDocument, XmlNode xmlNode, ToolPaneGroup toolPane)
+        private static XmlElement SaveToolGroupNode(XmlDocument xmlDocument, XmlNode xmlNode, ToolPaneGroup toolPaneGroup)
         {
             System.Diagnostics.Trace.Assert(xmlDocument != null);
             System.Diagnostics.Trace.Assert(xmlNode != null);
-            System.Diagnostics.Trace.Assert(toolPane != null);
+            System.Diagnostics.Trace.Assert(toolPaneGroup != null);
 
-            XmlElement xmlToolGroup = xmlDocument.CreateElement("ToolGroup");
+            XmlElement xmlToolGroup = xmlDocument.CreateElement("ToolPaneGroup");
 
             XmlAttribute xmlAttribute = xmlDocument.CreateAttribute("row");
-            xmlAttribute.Value = Grid.GetRow(toolPane).ToString();
+            xmlAttribute.Value = Grid.GetRow(toolPaneGroup).ToString();
             xmlToolGroup.Attributes.Append(xmlAttribute);
 
             xmlAttribute = xmlDocument.CreateAttribute("column");
-            xmlAttribute.Value = Grid.GetColumn(toolPane).ToString();
+            xmlAttribute.Value = Grid.GetColumn(toolPaneGroup).ToString();
             xmlToolGroup.Attributes.Append(xmlAttribute);
 
             xmlAttribute = xmlDocument.CreateAttribute("width");
-            xmlAttribute.Value = toolPane.ActualWidth.ToString();
+            xmlAttribute.Value = toolPaneGroup.ActualWidth.ToString();
             xmlToolGroup.Attributes.Append(xmlAttribute);
 
             xmlAttribute = xmlDocument.CreateAttribute("height");
-            xmlAttribute.Value = toolPane.ActualHeight.ToString();
+            xmlAttribute.Value = toolPaneGroup.ActualHeight.ToString();
             xmlToolGroup.Attributes.Append(xmlAttribute);
 
             xmlNode.AppendChild(xmlToolGroup);
@@ -106,7 +106,7 @@ namespace WpfDockManagerDemo.DockManager.Serialisation
             System.Diagnostics.Trace.Assert(xmlNode != null);
             System.Diagnostics.Trace.Assert(documentPaneGroup != null);
 
-            XmlElement xmlDocumentGroup = xmlDocument.CreateElement("DocumentGroup");
+            XmlElement xmlDocumentGroup = xmlDocument.CreateElement("DocumentPaneGroup");
 
             XmlAttribute xmlAttribute = xmlDocument.CreateAttribute("row");
             xmlAttribute.Value = Grid.GetRow(documentPaneGroup).ToString();
@@ -182,19 +182,19 @@ namespace WpfDockManagerDemo.DockManager.Serialisation
             }
         }
 
-        private static XmlElement SaveFloatingToolNode(XmlDocument xmlDocument, XmlNode xmlParentNode, FloatingTool floatingTool)
+        private static XmlElement SaveFloatingToolNode(XmlDocument xmlDocument, XmlNode xmlParentNode, FloatingToolPaneGroup floatingToolPaneGroup)
         {
             System.Diagnostics.Trace.Assert(xmlDocument != null);
             System.Diagnostics.Trace.Assert(xmlParentNode != null);
 
-            XmlElement xmlFloatingTool = xmlDocument.CreateElement("FloatingTool");
+            XmlElement xmlFloatingTool = xmlDocument.CreateElement("FloatingToolPaneGroup");
 
             XmlAttribute xmlAttribute = xmlDocument.CreateAttribute("width");
-            xmlAttribute.Value = floatingTool.ActualWidth.ToString();
+            xmlAttribute.Value = floatingToolPaneGroup.ActualWidth.ToString();
             xmlFloatingTool.Attributes.Append(xmlAttribute);
 
             xmlAttribute = xmlDocument.CreateAttribute("height");
-            xmlAttribute.Value = floatingTool.ActualHeight.ToString();
+            xmlAttribute.Value = floatingToolPaneGroup.ActualHeight.ToString();
             xmlFloatingTool.Attributes.Append(xmlAttribute);
 
             xmlParentNode.AppendChild(xmlFloatingTool);
@@ -255,14 +255,14 @@ namespace WpfDockManagerDemo.DockManager.Serialisation
             }
         }
 
-        public static void SaveLayout(XmlDocument xmlDocument, Grid rootGrid, List<FloatingTool> floatingTools)
+        public static void SaveLayout(XmlDocument xmlDocument, Grid rootGrid, List<FloatingToolPaneGroup> floatingTools)
         {
             XmlElement xmlLayoutManager = xmlDocument.CreateElement("LayoutManager");
             xmlDocument.AppendChild(xmlLayoutManager);
 
             SaveNode(xmlDocument, rootGrid, xmlLayoutManager);
 
-            foreach (FloatingTool floatingTool in floatingTools)
+            foreach (FloatingToolPaneGroup floatingTool in floatingTools)
             {
                 int count = floatingTool.IViewContainer.GetUserControlCount();
                 

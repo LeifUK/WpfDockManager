@@ -149,7 +149,7 @@ namespace WpfDockManagerDemo.DockManager.Serialisation
                         row += rowIncrement;
                         column += columnIncrement;
                     }
-                    else if ((xmlChildNode as XmlElement).Name == "DocumentGroup")
+                    else if ((xmlChildNode as XmlElement).Name == "DocumentPaneGroup")
                     {
                         DocumentPaneGroup documentPaneGroup = iLayoutFactory.CreateDocumentPaneGroup();
 
@@ -166,9 +166,9 @@ namespace WpfDockManagerDemo.DockManager.Serialisation
                         row += rowIncrement;
                         column += columnIncrement;
                     }
-                    else if ((xmlChildNode as XmlElement).Name == "ToolGroup")
+                    else if ((xmlChildNode as XmlElement).Name == "ToolPaneGroup")
                     {
-                        ToolPaneGroup toolPane = iLayoutFactory.CreateToolPane();
+                        ToolPaneGroup toolPane = iLayoutFactory.CreateToolPaneGroup();
 
                         System.Windows.Markup.IAddChild parentElement = (System.Windows.Markup.IAddChild)parentFrameworkElement;
                         parentElement.AddChild(toolPane);
@@ -183,12 +183,12 @@ namespace WpfDockManagerDemo.DockManager.Serialisation
                         row += rowIncrement;
                         column += columnIncrement;
                     }
-                    else if ((xmlChildNode as XmlElement).Name == "FloatingTool")
+                    else if ((xmlChildNode as XmlElement).Name == "FloatingToolPaneGroup")
                     {
-                        FloatingTool floatingTool = iLayoutFactory.CreateFloatingTool();
+                        FloatingToolPaneGroup floatingToolPaneGroup = iLayoutFactory.CreateFloatingToolPaneGroup();
 
                         XmlElement xmlfloatingTool = xmlChildNode as XmlElement;
-                        LoadToolGroup(viewsMap, xmlfloatingTool, floatingTool.IViewContainer);
+                        LoadToolGroup(viewsMap, xmlfloatingTool, floatingToolPaneGroup.IViewContainer);
                     }
                 }
 
