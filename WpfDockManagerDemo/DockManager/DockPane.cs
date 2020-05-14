@@ -10,6 +10,7 @@ namespace WpfDockManagerDemo.DockManager
     {
         public DockPane(IViewContainer iViewContainer)
         {
+            Tag = Guid.NewGuid();
             IViewContainer = iViewContainer;
             IViewContainer.TabClosed += IDocumentContainer_TabClosed;
             Children.Add(iViewContainer as System.Windows.UIElement);

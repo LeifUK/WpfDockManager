@@ -8,6 +8,7 @@ namespace WpfDockManagerDemo.DockManager
     {
         public SplitterPane(bool isHorizontal)
         {
+            Tag = Guid.NewGuid();
             IsHorizontal = isHorizontal;
 
             VerticalAlignment = VerticalAlignment.Stretch;

@@ -8,9 +8,6 @@ namespace WpfDockManagerDemo.DockManager
 {
     public interface IViewModel
     {
-        // A unique ID
-        long ID { get; }
-
         // A user friendly title
         string Title { get; set; }
 
