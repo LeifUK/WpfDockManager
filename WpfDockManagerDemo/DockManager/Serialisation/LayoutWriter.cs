@@ -378,8 +378,17 @@ namespace WpfDockManagerDemo.DockManager.Serialisation
             System.Diagnostics.Trace.Assert(unpinnedToolData != null);
 
             XmlElement xmlUnpinnedToolData = xmlDocument.CreateElement("UnpinnedToolData");
+
             XmlAttribute xmlAttribute = xmlDocument.CreateAttribute("Sibling");
-            xmlAttribute.Value = unpinnedToolData.Sibling.Tag.ToString();
+            xmlAttribute.Value = unpinnedToolData.Sibling.ToString();
+            xmlUnpinnedToolData.Attributes.Append(xmlAttribute);
+
+            xmlAttribute = xmlDocument.CreateAttribute("IsHorizontal");
+            xmlAttribute.Value = unpinnedToolData.IsHorizontal.ToString();
+            xmlUnpinnedToolData.Attributes.Append(xmlAttribute);
+
+            xmlAttribute = xmlDocument.CreateAttribute("IsFirst");
+            xmlAttribute.Value = unpinnedToolData.IsFirst.ToString();
             xmlUnpinnedToolData.Attributes.Append(xmlAttribute);
 
             SaveToolPaneGroupNode(xmlDocument, xmlUnpinnedToolData, unpinnedToolData.ToolPaneGroup);

@@ -150,7 +150,7 @@ namespace WpfDockManagerDemo.DockManager
                 Point mousePosition = e.GetPosition(this);
                 double xdiff = mousePosition.X - _mouseDownPosition.X;
                 double ydiff = mousePosition.Y - _mouseDownPosition.Y;
-                if ((xdiff * xdiff + ydiff * ydiff) > 100)
+                if ((xdiff * xdiff + ydiff * ydiff) > 200)
                 {
 
                     FireFloat(true);

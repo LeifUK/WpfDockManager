@@ -1,4 +1,4 @@
-﻿using System.Windows;
+﻿using System;
 using System.Collections.Generic;
 
 namespace WpfDockManagerDemo.DockManager
@@ -8,8 +8,13 @@ namespace WpfDockManagerDemo.DockManager
      */
     internal class UnpinnedToolData
     {
+        public UnpinnedToolData()
+        {
+            Items = new List<ToolListBoxItem>();
+        }
+
         public ToolPaneGroup ToolPaneGroup { get; set; }
-        public FrameworkElement Sibling { get; set; }
+        public Guid Sibling { get; set; }
 
         public List<ToolListBoxItem> Items;
 
