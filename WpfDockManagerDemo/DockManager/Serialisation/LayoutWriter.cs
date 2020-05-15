@@ -9,6 +9,24 @@ namespace WpfDockManagerDemo.DockManager.Serialisation
 {
     internal static class LayoutWriter
     {
+        private static void AddGuidAttribute(XmlDocument xmlDocument, XmlElement xmlElement, FrameworkElement frameworkElement)
+        {
+            XmlAttribute xmlAttribute = xmlDocument.CreateAttribute("Guid");
+            xmlAttribute.Value = frameworkElement.Tag.ToString();
+            xmlElement.Attributes.Append(xmlAttribute);
+        }
+
+        private static void AddWidthAndHeightAttributes(XmlDocument xmlDocument, XmlElement xmlElement, SelectablePane selectablePane)
+        {
+            XmlAttribute xmlAttribute = xmlDocument.CreateAttribute("Width");
+            xmlAttribute.Value = selectablePane.ActualWidth.ToString();
+            xmlElement.Attributes.Append(xmlAttribute);
+            
+            xmlAttribute = xmlDocument.CreateAttribute("Height");
+            xmlAttribute.Value = selectablePane.ActualHeight.ToString();
+            xmlElement.Attributes.Append(xmlAttribute);
+        }
+
         private static XmlElement SaveToolPaneGroupNode(XmlDocument xmlDocument, XmlNode xmlParentNode, ToolPaneGroup toolPaneGroup)
         {
             System.Diagnostics.Trace.Assert(xmlDocument != null);
@@ -17,25 +35,8 @@ namespace WpfDockManagerDemo.DockManager.Serialisation
 
             XmlElement xmlToolPaneGroup = xmlDocument.CreateElement("ToolPaneGroup");
 
-            XmlAttribute xmlAttribute = xmlDocument.CreateAttribute("Guid");
-            xmlAttribute.Value = toolPaneGroup.Tag.ToString();
-            xmlToolPaneGroup.Attributes.Append(xmlAttribute);
-
-            xmlAttribute = xmlDocument.CreateAttribute("Row");
-            xmlAttribute.Value = Grid.GetRow(toolPaneGroup).ToString();
-            xmlToolPaneGroup.Attributes.Append(xmlAttribute);
-
-            xmlAttribute = xmlDocument.CreateAttribute("Column");
-            xmlAttribute.Value = Grid.GetColumn(toolPaneGroup).ToString();
-            xmlToolPaneGroup.Attributes.Append(xmlAttribute);
-
-            xmlAttribute = xmlDocument.CreateAttribute("Width");
-            xmlAttribute.Value = toolPaneGroup.ActualWidth.ToString();
-            xmlToolPaneGroup.Attributes.Append(xmlAttribute);
-
-            xmlAttribute = xmlDocument.CreateAttribute("Height");
-            xmlAttribute.Value = toolPaneGroup.ActualHeight.ToString();
-            xmlToolPaneGroup.Attributes.Append(xmlAttribute);
+            AddGuidAttribute(xmlDocument, xmlToolPaneGroup, toolPaneGroup);
+            AddWidthAndHeightAttributes(xmlDocument, xmlToolPaneGroup, toolPaneGroup);
 
             xmlParentNode.AppendChild(xmlToolPaneGroup);
 
@@ -127,25 +128,8 @@ namespace WpfDockManagerDemo.DockManager.Serialisation
 
             XmlElement xmlDocumentPaneGroup = xmlDocument.CreateElement("DocumentPaneGroup");
 
-            XmlAttribute xmlAttribute = xmlDocument.CreateAttribute("Guid");
-            xmlAttribute.Value = documentPaneGroup.Tag.ToString();
-            xmlDocumentPaneGroup.Attributes.Append(xmlAttribute);
-
-            xmlAttribute = xmlDocument.CreateAttribute("Row");
-            xmlAttribute.Value = Grid.GetRow(documentPaneGroup).ToString();
-            xmlDocumentPaneGroup.Attributes.Append(xmlAttribute);
-
-            xmlAttribute = xmlDocument.CreateAttribute("Column");
-            xmlAttribute.Value = Grid.GetColumn(documentPaneGroup).ToString();
-            xmlDocumentPaneGroup.Attributes.Append(xmlAttribute);
-
-            xmlAttribute = xmlDocument.CreateAttribute("Width");
-            xmlAttribute.Value = documentPaneGroup.ActualWidth.ToString();
-            xmlDocumentPaneGroup.Attributes.Append(xmlAttribute);
-
-            xmlAttribute = xmlDocument.CreateAttribute("Height");
-            xmlAttribute.Value = documentPaneGroup.ActualHeight.ToString();
-            xmlDocumentPaneGroup.Attributes.Append(xmlAttribute);
+            AddGuidAttribute(xmlDocument, xmlDocumentPaneGroup, documentPaneGroup);
+            AddWidthAndHeightAttributes(xmlDocument, xmlDocumentPaneGroup, documentPaneGroup);
 
             xmlParentNode.AppendChild(xmlDocumentPaneGroup);
 
@@ -194,21 +178,8 @@ namespace WpfDockManagerDemo.DockManager.Serialisation
             XmlElement xmlDocumentPanel = xmlDocument.CreateElement("DocumentPanel");
             xmlParentNode.AppendChild(xmlDocumentPanel);
 
-            XmlAttribute xmlAttribute = xmlDocument.CreateAttribute("Row");
-            xmlAttribute.Value = Grid.GetRow(documentPanel).ToString();
-            xmlDocumentPanel.Attributes.Append(xmlAttribute);
-
-            xmlAttribute = xmlDocument.CreateAttribute("Column");
-            xmlAttribute.Value = Grid.GetColumn(documentPanel).ToString();
-            xmlDocumentPanel.Attributes.Append(xmlAttribute);
-
-            xmlAttribute = xmlDocument.CreateAttribute("Width");
-            xmlAttribute.Value = documentPanel.ActualWidth.ToString();
-            xmlDocumentPanel.Attributes.Append(xmlAttribute);
-
-            xmlAttribute = xmlDocument.CreateAttribute("Height");
-            xmlAttribute.Value = documentPanel.ActualHeight.ToString();
-            xmlDocumentPanel.Attributes.Append(xmlAttribute);
+            AddGuidAttribute(xmlDocument, xmlDocumentPanel, documentPanel);
+            AddWidthAndHeightAttributes(xmlDocument, xmlDocumentPanel, documentPanel);
 
             foreach (var childNode in documentPanel.Children)
             {
@@ -216,7 +187,7 @@ namespace WpfDockManagerDemo.DockManager.Serialisation
             }
         }
 
-        private static void CreateLocationAndSizeAttributes(XmlDocument xmlDocument, XmlNode xmlElement, FloatingPane floatingPane)
+        private static void AddPositionAndSizeAttributes(XmlDocument xmlDocument, XmlNode xmlElement, FloatingPane floatingPane)
         {
             System.Diagnostics.Trace.Assert(xmlDocument != null);
             System.Diagnostics.Trace.Assert(xmlElement != null);
@@ -238,13 +209,14 @@ namespace WpfDockManagerDemo.DockManager.Serialisation
             xmlElement.Attributes.Append(xmlAttribute);
         }
 
-        private static XmlElement SaveFloatingToolNode(XmlDocument xmlDocument, XmlNode xmlParentNode, FloatingToolPaneGroup floatingToolPaneGroup)
+        private static XmlElement SaveFloatingToolPaneGroupNode(XmlDocument xmlDocument, XmlNode xmlParentNode, FloatingToolPaneGroup floatingToolPaneGroup)
         {
             System.Diagnostics.Trace.Assert(xmlDocument != null);
             System.Diagnostics.Trace.Assert(xmlParentNode != null);
 
             XmlElement xmlFloatingToolPaneGroup = xmlDocument.CreateElement("FloatingToolPaneGroup");
-            CreateLocationAndSizeAttributes(xmlDocument, xmlFloatingToolPaneGroup, floatingToolPaneGroup);
+            AddPositionAndSizeAttributes(xmlDocument, xmlFloatingToolPaneGroup, floatingToolPaneGroup);
+            AddGuidAttribute(xmlDocument, xmlFloatingToolPaneGroup, floatingToolPaneGroup);
 
             xmlParentNode.AppendChild(xmlFloatingToolPaneGroup);
 
@@ -265,13 +237,14 @@ namespace WpfDockManagerDemo.DockManager.Serialisation
             return xmlFloatingToolPaneGroup;
         }
 
-        private static XmlElement SaveFloatingDocumentNode(XmlDocument xmlDocument, XmlNode xmlParentNode, FloatingDocumentPaneGroup floatingDocumentPaneGroup)
+        private static XmlElement SaveFloatingDocumentPaneGroupNode(XmlDocument xmlDocument, XmlNode xmlParentNode, FloatingDocumentPaneGroup floatingDocumentPaneGroup)
         {
             System.Diagnostics.Trace.Assert(xmlDocument != null);
             System.Diagnostics.Trace.Assert(xmlParentNode != null);
 
             XmlElement xmlFloatingDocumentPaneGroup = xmlDocument.CreateElement("FloatingDocumentPaneGroup");
-            CreateLocationAndSizeAttributes(xmlDocument, xmlFloatingDocumentPaneGroup, floatingDocumentPaneGroup);
+            AddPositionAndSizeAttributes(xmlDocument, xmlFloatingDocumentPaneGroup, floatingDocumentPaneGroup);
+            AddGuidAttribute(xmlDocument, xmlFloatingDocumentPaneGroup, floatingDocumentPaneGroup);
 
             xmlParentNode.AppendChild(xmlFloatingDocumentPaneGroup);
 
@@ -316,6 +289,32 @@ namespace WpfDockManagerDemo.DockManager.Serialisation
             }
         }
 
+        private static XmlElement SaveUnpinnedToolDataNode(XmlDocument xmlDocument, XmlNode xmlParentNode, UnpinnedToolData unpinnedToolData)
+        {
+            System.Diagnostics.Trace.Assert(xmlDocument != null);
+            System.Diagnostics.Trace.Assert(xmlParentNode != null);
+            System.Diagnostics.Trace.Assert(unpinnedToolData != null);
+
+            XmlElement xmlUnpinnedToolData = xmlDocument.CreateElement("UnpinnedToolData");
+
+            XmlAttribute xmlAttribute = xmlDocument.CreateAttribute("Sibling");
+            xmlAttribute.Value = unpinnedToolData.Sibling.ToString();
+            xmlUnpinnedToolData.Attributes.Append(xmlAttribute);
+
+            xmlAttribute = xmlDocument.CreateAttribute("IsHorizontal");
+            xmlAttribute.Value = unpinnedToolData.IsHorizontal.ToString();
+            xmlUnpinnedToolData.Attributes.Append(xmlAttribute);
+
+            xmlAttribute = xmlDocument.CreateAttribute("IsFirst");
+            xmlAttribute.Value = unpinnedToolData.IsFirst.ToString();
+            xmlUnpinnedToolData.Attributes.Append(xmlAttribute);
+
+            SaveToolPaneGroupNode(xmlDocument, xmlUnpinnedToolData, unpinnedToolData.ToolPaneGroup);
+
+            xmlParentNode.AppendChild(xmlUnpinnedToolData);
+            return xmlUnpinnedToolData;
+        }
+
         public static void SaveLayout(
             XmlDocument xmlDocument, 
             Grid rootGrid, 
@@ -331,12 +330,12 @@ namespace WpfDockManagerDemo.DockManager.Serialisation
 
             foreach (FloatingToolPaneGroup floatingTool in floatingToolPaneGroups)
             {
-                SaveFloatingToolNode(xmlDocument, xmlLayoutManager, floatingTool);
+                SaveFloatingToolPaneGroupNode(xmlDocument, xmlLayoutManager, floatingTool);
             }
 
             foreach (FloatingDocumentPaneGroup floatingDocumentPaneGroup in floatingDocumentPaneGroups)
             {
-                SaveFloatingDocumentNode(xmlDocument, xmlLayoutManager, floatingDocumentPaneGroup);
+                SaveFloatingDocumentPaneGroupNode(xmlDocument, xmlLayoutManager, floatingDocumentPaneGroup);
             }
 
             foreach (var keyValuePair in dictUnpinnedToolData)
@@ -369,32 +368,6 @@ namespace WpfDockManagerDemo.DockManager.Serialisation
                     SaveUnpinnedToolDataNode(xmlDocument, xmlElement, item);
                 }
             }
-        }
-
-        private static XmlElement SaveUnpinnedToolDataNode(XmlDocument xmlDocument, XmlNode xmlParentNode, UnpinnedToolData unpinnedToolData)
-        {
-            System.Diagnostics.Trace.Assert(xmlDocument != null);
-            System.Diagnostics.Trace.Assert(xmlParentNode != null);
-            System.Diagnostics.Trace.Assert(unpinnedToolData != null);
-
-            XmlElement xmlUnpinnedToolData = xmlDocument.CreateElement("UnpinnedToolData");
-
-            XmlAttribute xmlAttribute = xmlDocument.CreateAttribute("Sibling");
-            xmlAttribute.Value = unpinnedToolData.Sibling.ToString();
-            xmlUnpinnedToolData.Attributes.Append(xmlAttribute);
-
-            xmlAttribute = xmlDocument.CreateAttribute("IsHorizontal");
-            xmlAttribute.Value = unpinnedToolData.IsHorizontal.ToString();
-            xmlUnpinnedToolData.Attributes.Append(xmlAttribute);
-
-            xmlAttribute = xmlDocument.CreateAttribute("IsFirst");
-            xmlAttribute.Value = unpinnedToolData.IsFirst.ToString();
-            xmlUnpinnedToolData.Attributes.Append(xmlAttribute);
-
-            SaveToolPaneGroupNode(xmlDocument, xmlUnpinnedToolData, unpinnedToolData.ToolPaneGroup);
-
-            xmlParentNode.AppendChild(xmlUnpinnedToolData);
-            return xmlUnpinnedToolData;
         }
     }
 }

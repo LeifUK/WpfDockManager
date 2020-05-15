@@ -118,6 +118,41 @@ namespace WpfDockManagerDemo.DockManager.Serialisation
             return new Guid(xmlAttribute.Value);
         }
 
+        private static void LoadUnPinnedToolPaneGroups(ILayoutFactory iLayoutFactory, Dictionary<string, UserControl> viewsMap, WindowLocation windowLocation, XmlElement xmlParentElement)
+        {
+            foreach (var xmlChildNode in xmlParentElement.ChildNodes)
+            {
+                if (xmlChildNode is XmlElement)
+                {
+                    if ((xmlChildNode as XmlElement).Name == "UnpinnedToolData")
+                    {
+                        XmlElement xmlUnpinnedToolData = xmlChildNode as XmlElement;
+
+                        XmlAttribute xmlAttribute = xmlUnpinnedToolData.Attributes.GetNamedItem("Sibling") as XmlAttribute;
+                        string guid = xmlAttribute.Value;
+                        xmlAttribute = xmlUnpinnedToolData.Attributes.GetNamedItem("IsHorizontal") as XmlAttribute;
+                        bool.TryParse(xmlAttribute.Value, out bool isHorizontal);
+                        xmlAttribute = xmlUnpinnedToolData.Attributes.GetNamedItem("IsFirst") as XmlAttribute;
+                        bool.TryParse(xmlAttribute.Value, out bool isFirst);
+
+                        foreach (var xmlUnpinnedToolDataChildNode in xmlUnpinnedToolData.ChildNodes)
+                        {
+                            if (xmlUnpinnedToolDataChildNode is XmlElement)
+                            {
+                                if ((xmlUnpinnedToolDataChildNode as XmlElement).Name == "ToolPaneGroup")
+                                {
+                                    ToolPaneGroup toolPaneGroup = iLayoutFactory.CreateToolPaneGroup();
+                                    XmlElement xmlToolPaneGroup = xmlUnpinnedToolDataChildNode as XmlElement;
+                                    LoadToolPaneGroup(viewsMap, xmlToolPaneGroup, toolPaneGroup.IViewContainer);
+                                    iLayoutFactory.CreateUnpinnedToolPaneGroup(windowLocation, toolPaneGroup, guid, isHorizontal, isFirst);
+                                }
+                            }
+                        }
+                    }
+                }
+            }
+        }
+
         public static void LoadNode(ILayoutFactory iLayoutFactory, Dictionary<string, UserControl> viewsMap, FrameworkElement rootFrameworkElement, FrameworkElement parentFrameworkElement, XmlNode xmlParentElement, bool isParentHorizontal)
         {
             int row = 0;
@@ -205,7 +240,7 @@ namespace WpfDockManagerDemo.DockManager.Serialisation
 
                         XmlElement xmlToolPaneGroup = xmlChildNode as XmlElement;
 
-                        toolPaneGroup.Tag = GetGuid(xmlToolPaneGroup); ;
+                        toolPaneGroup.Tag = GetGuid(xmlToolPaneGroup);
                         SetWidthOrHeight(xmlToolPaneGroup, parentFrameworkElement, isParentHorizontal, row, column);
 
                         LoadToolPaneGroup(viewsMap, xmlToolPaneGroup, toolPaneGroup.IViewContainer);
@@ -258,41 +293,6 @@ namespace WpfDockManagerDemo.DockManager.Serialisation
                     {
                         // we can only have two child elements (plus a splitter) in each grid
                         break;
-                    }
-                }
-            }
-        }
-
-        private static void LoadUnPinnedToolPaneGroups(ILayoutFactory iLayoutFactory, Dictionary<string, UserControl> viewsMap, WindowLocation windowLocation, XmlElement xmlParentElement)
-        {
-            foreach (var xmlChildNode in xmlParentElement.ChildNodes)
-            {
-                if (xmlChildNode is XmlElement)
-                {
-                    if ((xmlChildNode as XmlElement).Name == "UnpinnedToolData")
-                    {
-                        XmlElement xmlUnpinnedToolData = xmlChildNode as XmlElement;
-
-                        XmlAttribute xmlAttribute = xmlUnpinnedToolData.Attributes.GetNamedItem("Sibling") as XmlAttribute;
-                        string guid = xmlAttribute.Value;
-                        xmlAttribute = xmlUnpinnedToolData.Attributes.GetNamedItem("IsHorizontal") as XmlAttribute;
-                        bool.TryParse(xmlAttribute.Value, out bool isHorizontal);
-                        xmlAttribute = xmlUnpinnedToolData.Attributes.GetNamedItem("IsFirst") as XmlAttribute;
-                        bool.TryParse(xmlAttribute.Value, out bool isFirst);
-
-                        foreach (var xmlUnpinnedToolDataChildNode in xmlUnpinnedToolData.ChildNodes)
-                        {
-                            if (xmlUnpinnedToolDataChildNode is XmlElement)
-                            {
-                                if ((xmlUnpinnedToolDataChildNode as XmlElement).Name == "ToolPaneGroup")
-                                {
-                                    ToolPaneGroup toolPaneGroup = iLayoutFactory.CreateToolPaneGroup();
-                                    XmlElement xmlToolPaneGroup = xmlUnpinnedToolDataChildNode as XmlElement;
-                                    LoadToolPaneGroup(viewsMap, xmlToolPaneGroup, toolPaneGroup.IViewContainer);
-                                    iLayoutFactory.CreateUnpinnedToolPaneGroup(windowLocation, toolPaneGroup, guid, isHorizontal, isFirst);
-                                }
-                            }
-                        }
                     }
                 }
             }

@@ -13,6 +13,7 @@ namespace WpfDockManagerDemo.DockManager
     {
         internal FloatingPane(IViewContainer iViewContainer)
         {
+            Tag = System.Guid.NewGuid();
             InitializeComponent();
             StateChanged += MainWindowStateChangeRaised;
             _parentContainer.Children.Add(iViewContainer as UIElement);
