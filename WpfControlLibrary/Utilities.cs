@@ -1,8 +1,5 @@
 ﻿using System;
-using System.Collections.Generic;
-using System.Linq;
 using System.Windows;
-using System.Windows.Controls;
 
 namespace WpfControlLibrary
 {
@@ -15,14 +12,24 @@ namespace WpfControlLibrary
             return (User32.GetAsyncKeyState(VK_LBUTTON) & 0x8000) != 0;
         }
 
+        public static void SendMouseButtonPress(IntPtr wndHandle, uint buttonPressCode)
+        {
+            var input = new User32.INPUT();
+            input.Type = User32.MOUSEINPUTTYPE; /// input type mouse
+            input.Data.Mouse.Flags = buttonPressCode;
+
+            var inputs = new User32.INPUT[] { input };
+            User32.SendInput((uint)inputs.Length, inputs, System.Runtime.InteropServices.Marshal.SizeOf(typeof(User32.INPUT)));
+        }
+
         public static void SendLeftMouseButtonDown(IntPtr wndHandle)
         {
-            var inputMouseDown = new User32.INPUT();
-            inputMouseDown.Type = User32.MOUSEINPUTTYPE; /// input type mouse
-            inputMouseDown.Data.Mouse.Flags = User32.LEFTMOUSEDOWN;
+            SendMouseButtonPress(wndHandle, User32.LEFTMOUSEDOWN);
+        }
 
-            var inputs = new User32.INPUT[] { inputMouseDown };
-            User32.SendInput((uint)inputs.Length, inputs, System.Runtime.InteropServices.Marshal.SizeOf(typeof(User32.INPUT)));
+        public static void SendLeftMouseButtonUp(IntPtr wndHandle)
+        {
+            SendMouseButtonPress(wndHandle, User32.LEFTMOUSEUP);
         }
 
         // The WPF method does not work properly -> call into User32.dll

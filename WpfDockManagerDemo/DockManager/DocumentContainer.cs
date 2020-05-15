@@ -8,15 +8,6 @@ namespace WpfDockManagerDemo.DockManager
     {
         public DocumentContainer()
         {
-            _items = new System.Collections.ObjectModel.ObservableCollection<System.Collections.Generic.KeyValuePair<UserControl, IViewModel>>();
-            _tabHeaderControl = new WpfControlLibrary.TabHeaderControl();
-            _tabHeaderControl.ItemsSource = _items;
-            _tabHeaderControl.DisplayMemberPath = "Value.Title";
-            _tabHeaderControl.ItemsChanged += _tabHeaderControl_ItemsChanged;
-            _tabHeaderControl.SelectionChanged += _tabHeaderControl_SelectionChanged;
-            _tabHeaderControl.CloseTabRequest += _tabHeaderControl_CloseTabRequest;
-            Children.Add(_tabHeaderControl);
-
             RowDefinitions.Add(new RowDefinition() { Height = new System.Windows.GridLength(4, System.Windows.GridUnitType.Pixel) });
             RowDefinitions.Add(new RowDefinition() { Height = new System.Windows.GridLength(1, System.Windows.GridUnitType.Auto) });
             RowDefinitions.Add(new RowDefinition() { Height = new System.Windows.GridLength(1, System.Windows.GridUnitType.Star) });
@@ -28,12 +19,7 @@ namespace WpfDockManagerDemo.DockManager
             ColumnDefinitions.Add(new ColumnDefinition() { Width = new System.Windows.GridLength(20, System.Windows.GridUnitType.Pixel) });
             ColumnDefinitions.Add(new ColumnDefinition() { Width = new System.Windows.GridLength(4, System.Windows.GridUnitType.Pixel) });
 
-            Grid.SetRow(_tabHeaderControl, 1);
-            Grid.SetRowSpan(_tabHeaderControl, 1);
-            Grid.SetColumn(_tabHeaderControl, 0);
-            Grid.SetColumnSpan(_tabHeaderControl, 1);
-            _tabHeaderControl.UnselectedTabBackground = System.Windows.Media.Brushes.MidnightBlue;
-            _tabHeaderControl.SelectedTabBackground = System.Windows.Media.Brushes.LightSalmon;
+            CreateTabControl(1, 0);
 
             _menuButton = new Button();
             Children.Add(_menuButton);
@@ -52,41 +38,17 @@ namespace WpfDockManagerDemo.DockManager
             _documentButton.Style = FindResource("styleHeaderMenuButton") as Style;
         }
 
-        public Action DisplayGeneralMenu;
-
-        protected override void _tabHeaderControl_SelectionChanged(object sender, EventArgs e)
-        {
-            if ((_selectedUserControl != null) && (Children.Contains(_selectedUserControl)))
-            {
-                Children.Remove(_selectedUserControl);
-            }
-
-            _selectedUserControl = null;
-            if (_tabHeaderControl.SelectedIndex != -1)
-            {
-                _selectedUserControl = _items[_tabHeaderControl.SelectedIndex].Key;
-                Children.Add(_selectedUserControl);
-                Grid.SetRow(_selectedUserControl, 2);
-                Grid.SetColumn(_selectedUserControl, 0);
-                Grid.SetColumnSpan(_selectedUserControl, 99);
-                Grid.SetZIndex(_selectedUserControl, 2);
-            }
-
-            SelectionChanged?.Invoke(sender, e);
-        }
-
         private Button _documentButton;
         private Button _menuButton;
 
-        public override event EventHandler SelectionChanged;
+        public Action DisplayGeneralMenu;
 
-        public override void AddUserControl(UserControl userControl)
+        protected override void SetSelectedUserControlGridPosition()
         {
-            System.Diagnostics.Trace.Assert(userControl != null);
-            System.Diagnostics.Trace.Assert(userControl.DataContext is IViewModel);
-
-            _items.Add(new System.Collections.Generic.KeyValuePair<UserControl, IViewModel>(userControl, userControl.DataContext as IViewModel));
-            _tabHeaderControl.SelectedItem = _items[_items.Count - 1];
+            Grid.SetRow(_selectedUserControl, 2);
+            Grid.SetColumn(_selectedUserControl, 0);
+            Grid.SetColumnSpan(_selectedUserControl, 99);
+            Grid.SetZIndex(_selectedUserControl, 2);
         }
 
         protected override void CheckTabCount()

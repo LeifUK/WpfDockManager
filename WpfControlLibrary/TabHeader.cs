@@ -7,7 +7,8 @@ namespace WpfControlLibrary
 {
     public class TabHeader : ListBox
     {
-        public event EventHandler ItemsChanged; 
+        public event EventHandler ItemsChanged;
+        public event EventHandler FloatTabRequest;
 
         private bool _mouseLeftButtonDown = false;
         private int _dragIndex;
@@ -87,6 +88,19 @@ namespace WpfControlLibrary
 
             if ((selectedIndex < 0) || (selectedIndex >= Items.Count) || (selectedIndex == _dragIndex))
             {
+                Point topLeftPoint = PointToScreen(new Point(0, 0));
+                if (
+                        (cursorScreenPosition.Y < (topLeftPoint.Y - 100)) ||
+                        (cursorScreenPosition.Y > (topLeftPoint.Y + ActualHeight + 30)) ||
+                        (cursorScreenPosition.X < (topLeftPoint.X - 100)) ||
+                        (cursorScreenPosition.X > (topLeftPoint.X + ActualWidth + 30))
+                   )
+                {
+                    FloatTabRequest?.Invoke(this, null);
+                    // Cancel further drag processing until we get the next mouse left button down
+                    _mouseLeftButtonDown = false;
+                    System.Windows.Input.Mouse.Capture(this, CaptureMode.None);
+                }
                 return;
             }
 

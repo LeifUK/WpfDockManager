@@ -16,5 +16,6 @@ namespace WpfDockManagerDemo.DockManager
 
         event EventHandler SelectionChanged;
         event EventHandler TabClosed;
+        event EventHandler FloatTabRequest;
     }
 }

@@ -16,6 +16,12 @@ namespace WpfControlLibrary
             SetButtonStates();
 
             _listBox.ItemsChanged += _listBox_ItemsChanged;
+            _listBox.FloatTabRequest += _listBox_FloatTabRequest;
+        }
+
+        private void _listBox_FloatTabRequest(object sender, EventArgs e)
+        {
+            FloatTabRequest?.Invoke(this, null);
         }
 
         private void _listBox_ItemsChanged(object sender, EventArgs e)
@@ -27,6 +33,7 @@ namespace WpfControlLibrary
         public event EventHandler CloseTabRequest;
         public event EventHandler SelectionChanged;
         public event EventHandler ItemsChanged;
+        public event EventHandler FloatTabRequest;
 
         public ListBox ListBox { get { return _listBox; } }
 

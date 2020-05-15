@@ -780,6 +780,7 @@ namespace WpfDockManagerDemo.DockManager
 
             dockPane.Close += DockPane_Close;
             dockPane.Float += DockPane_Float;
+            dockPane.FloatTabRequest += DockPane_FloatTabRequest;
             dockPane.UngroupCurrent += DockPane_UngroupCurrent;
             dockPane.Ungroup += DockPane_Ungroup;
         }
@@ -1174,19 +1175,18 @@ namespace WpfDockManagerDemo.DockManager
             }
         }
 
-        private void DockPane_Float(object sender, FloatEventArgs e)
+        private void Float(DockPane dockPane, FloatEventArgs e, bool selectedTabOnly)
         {
-            System.Diagnostics.Trace.Assert(sender is DockPane);
-
-            DockPane dockPane = sender as DockPane;
-
             Point cursorPositionOnScreen = WpfControlLibrary.Utilities.GetCursorPosition();
             Point cursorPositionInMainWindow = App.Current.MainWindow.PointFromScreen(cursorPositionOnScreen);
             Point cursorPositionInToolPane = dockPane.PointFromScreen(cursorPositionOnScreen);
 
-            Point mainWindowLocation = App.Current.MainWindow.PointToScreen(new Point(0, 0));
+            if (!selectedTabOnly || (dockPane.IViewContainer.GetUserControlCount() == 1))
+            {
+                ExtractDockPane(dockPane, out FrameworkElement frameworkElement);
+            }
 
-            ExtractDockPane(dockPane, out FrameworkElement frameworkElement);
+            Point mainWindowLocation = App.Current.MainWindow.PointToScreen(new Point(0, 0));
 
             FloatingPane floatingPane = null;
             if (dockPane is ToolPaneGroup)
@@ -1198,28 +1198,52 @@ namespace WpfDockManagerDemo.DockManager
                 floatingPane = ILayoutFactory.CreateFloatingDocumentPaneGroup();
             }
 
+            int index = selectedTabOnly ? dockPane.IViewContainer.GetCurrentTabIndex() : 0;
             while (true)
             {
-                UserControl userControl = dockPane.IViewContainer.ExtractUserControl(0);
+                UserControl userControl = dockPane.IViewContainer.ExtractUserControl(index);
                 if (userControl == null)
                 {
                     break;
                 }
 
                 floatingPane.IViewContainer.AddUserControl(userControl);
+
+                if (selectedTabOnly)
+                {
+                    break;
+                }
             }
 
-            floatingPane.Left = mainWindowLocation.X + cursorPositionInMainWindow.X/* - cursorPositionInToolPane.X*/;
-            floatingPane.Top = mainWindowLocation.Y + cursorPositionInMainWindow.Y/* - cursorPositionInToolPane.Y*/;
+            floatingPane.Left = mainWindowLocation.X + cursorPositionInMainWindow.X;
+            floatingPane.Top = mainWindowLocation.Y + cursorPositionInMainWindow.Y;
             floatingPane.Width = dockPane.ActualWidth;
             floatingPane.Height = dockPane.ActualHeight;
 
             if (e.Drag)
             {
+                IntPtr hWnd = new System.Windows.Interop.WindowInteropHelper(App.Current.MainWindow).EnsureHandle();
+                WpfControlLibrary.Utilities.SendLeftMouseButtonUp(hWnd);
+
                 // Ensure the floated window can be dragged by the user
-                IntPtr hWnd = new System.Windows.Interop.WindowInteropHelper(floatingPane).EnsureHandle();
+                hWnd = new System.Windows.Interop.WindowInteropHelper(floatingPane).EnsureHandle();
                 WpfControlLibrary.Utilities.SendLeftMouseButtonDown(hWnd);
             }
+        }
+
+        private void DockPane_Float(object sender, FloatEventArgs e)
+        {
+            System.Diagnostics.Trace.Assert(sender is DockPane);
+
+            Float(sender as DockPane, e, false);
+        }
+
+        private void DockPane_FloatTabRequest(object sender, EventArgs e)
+        {
+            System.Diagnostics.Trace.Assert(sender is DockPane);
+
+            FloatEventArgs floatEventArgs = new FloatEventArgs() { Drag = true };
+            Float(sender as DockPane, floatEventArgs, true);
         }
 
         private void DockPane_Close(object sender, EventArgs e)

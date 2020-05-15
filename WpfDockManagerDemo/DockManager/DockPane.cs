@@ -10,10 +10,15 @@ namespace WpfDockManagerDemo.DockManager
     {
         public DockPane(IViewContainer iViewContainer)
         {
-            Tag = Guid.NewGuid();
             IViewContainer = iViewContainer;
             IViewContainer.TabClosed += IDocumentContainer_TabClosed;
+            IViewContainer.FloatTabRequest += IViewContainer_FloatTabRequest;
             Children.Add(iViewContainer as System.Windows.UIElement);
+        }
+
+        private void IViewContainer_FloatTabRequest(object sender, EventArgs e)
+        {
+            FloatTabRequest?.Invoke(this, e);
         }
 
         private void IDocumentContainer_TabClosed(object sender, EventArgs e)
@@ -26,6 +31,7 @@ namespace WpfDockManagerDemo.DockManager
 
         public event EventHandler Close;
         public event FloatEventHandler Float;
+        public event EventHandler FloatTabRequest;
         public event EventHandler UngroupCurrent;
         public event EventHandler Ungroup;
 

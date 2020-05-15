@@ -20,20 +20,8 @@ namespace WpfDockManagerDemo.DockManager
             ColumnDefinitions.Add(new ColumnDefinition() { Width = new System.Windows.GridLength(20, System.Windows.GridUnitType.Pixel) });
             ColumnDefinitions.Add(new ColumnDefinition() { Width = new System.Windows.GridLength(4, System.Windows.GridUnitType.Pixel) });
 
-            _items = new System.Collections.ObjectModel.ObservableCollection<System.Collections.Generic.KeyValuePair<UserControl, IViewModel>>();
-
-            _tabHeaderControl = new WpfControlLibrary.TabHeaderControl();
-            _tabHeaderControl.SelectionChanged += _tabHeaderControl_SelectionChanged;
-            _tabHeaderControl.CloseTabRequest += _tabHeaderControl_CloseTabRequest;
-            _tabHeaderControl.ItemsSource = _items;
-            _tabHeaderControl.DisplayMemberPath = "Value.Title";
-            _tabHeaderControl.ItemsChanged += _tabHeaderControl_ItemsChanged;
-            Children.Add(_tabHeaderControl);
-            Grid.SetRow(_tabHeaderControl, 1);
-            Grid.SetColumn(_tabHeaderControl, 0);
+            CreateTabControl(1, 0);
             Grid.SetZIndex(_tabHeaderControl, 1);
-            _tabHeaderControl.UnselectedTabBackground = System.Windows.Media.Brushes.MidnightBlue;
-            _tabHeaderControl.SelectedTabBackground = System.Windows.Media.Brushes.LightSalmon;
 
             _border = new Border();
             Children.Add(_border);
@@ -63,21 +51,11 @@ namespace WpfDockManagerDemo.DockManager
         private Button _button;
         private Border _border;
 
-        protected override void _tabHeaderControl_SelectionChanged(object sender, System.EventArgs e)
+        protected override void SetSelectedUserControlGridPosition()
         {
-            if (_selectedUserControl != null)
-            {
-                Children.Remove(_selectedUserControl);
-                _selectedUserControl = null;
-            }
-
-            if ((_tabHeaderControl.SelectedIndex > -1) && (_tabHeaderControl.SelectedIndex < _items.Count))
-            {
-                _selectedUserControl = _items[_tabHeaderControl.SelectedIndex].Key;
-                Children.Add(_selectedUserControl);
-            }
-
-            SelectionChanged?.Invoke(sender, e);
+            Grid.SetRow(_selectedUserControl, 0);
+            Grid.SetColumn(_selectedUserControl, 0);
+            Grid.SetColumnSpan(_selectedUserControl, 99);
         }
 
         protected override void CheckTabCount()
@@ -92,34 +70,6 @@ namespace WpfDockManagerDemo.DockManager
                 rowDefinition_TabHeader.Height = new System.Windows.GridLength(1, System.Windows.GridUnitType.Auto);
                 rowDefinition_Spacer.Height = new System.Windows.GridLength(4, System.Windows.GridUnitType.Pixel);
             }
-        }
-
-        private void TabControl_SelectionChanged(object sender, EventArgs e)
-        {
-            SelectionChanged?.Invoke(sender, e);
-        }
-
-        public override event EventHandler SelectionChanged;
-
-        public override void AddUserControl(UserControl userControl)
-        {
-            System.Diagnostics.Trace.Assert(userControl != null);
-            System.Diagnostics.Trace.Assert(userControl.DataContext is IViewModel);
-
-            _items.Add(new System.Collections.Generic.KeyValuePair<UserControl, IViewModel>(userControl, userControl.DataContext as IViewModel));
-            if ((_selectedUserControl != null) && Children.Contains(_selectedUserControl))
-            {
-                Children.Remove(_selectedUserControl);
-            }
-            _selectedUserControl = userControl;
-            Children.Add(userControl);
-            Grid.SetRow(userControl, 0);
-            Grid.SetColumn(userControl, 0);
-            Grid.SetColumnSpan(userControl, 99);
-            // Do this AFTER adding the child 
-            _tabHeaderControl.SelectedIndex = _items.Count - 1;
-
-            CheckTabCount();
         }
     }
 }

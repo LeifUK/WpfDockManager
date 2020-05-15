@@ -43,6 +43,7 @@ namespace WpfControlLibrary
         }
 
         internal static uint LEFTMOUSEDOWN = 0x0002;
+        internal static uint LEFTMOUSEUP = 0x0004;
         internal static uint MOUSEINPUTTYPE = 0x0000;
 
 #pragma warning restore 649

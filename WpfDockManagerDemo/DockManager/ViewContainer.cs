@@ -1,7 +1,4 @@
 ﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
 using System.Windows.Controls;
 
 namespace WpfDockManagerDemo.DockManager
@@ -12,7 +9,44 @@ namespace WpfDockManagerDemo.DockManager
         public WpfControlLibrary.TabHeaderControl _tabHeaderControl;
         protected UserControl _selectedUserControl;
 
-        protected abstract void _tabHeaderControl_SelectionChanged(object sender, System.EventArgs e);
+        protected void CreateTabControl(int row, int column)
+        {
+            _items = new System.Collections.ObjectModel.ObservableCollection<System.Collections.Generic.KeyValuePair<UserControl, IViewModel>>();
+
+            _tabHeaderControl = new WpfControlLibrary.TabHeaderControl();
+            _tabHeaderControl.SelectionChanged += _tabHeaderControl_SelectionChanged;
+            _tabHeaderControl.CloseTabRequest += _tabHeaderControl_CloseTabRequest;
+            _tabHeaderControl.FloatTabRequest += _tabHeaderControl_FloatTabRequest;
+            _tabHeaderControl.ItemsChanged += _tabHeaderControl_ItemsChanged;
+            _tabHeaderControl.ItemsSource = _items;
+            _tabHeaderControl.DisplayMemberPath = "Value.Title";
+            _tabHeaderControl.UnselectedTabBackground = System.Windows.Media.Brushes.MidnightBlue;
+            _tabHeaderControl.SelectedTabBackground = System.Windows.Media.Brushes.LightSalmon;
+            Children.Add(_tabHeaderControl);
+            Grid.SetRow(_tabHeaderControl, row);
+            Grid.SetColumn(_tabHeaderControl, column);
+        }
+
+        protected abstract void SetSelectedUserControlGridPosition();
+
+        protected void _tabHeaderControl_SelectionChanged(object sender, System.EventArgs e)
+        {
+            if ((_selectedUserControl != null) && (Children.Contains(_selectedUserControl)))
+            {
+                Children.Remove(_selectedUserControl);
+            }
+            _selectedUserControl = null;
+
+            if ((_tabHeaderControl.SelectedIndex > -1) && (_tabHeaderControl.SelectedIndex < _items.Count))
+            {
+                _selectedUserControl = _items[_tabHeaderControl.SelectedIndex].Key;
+                Children.Add(_selectedUserControl);
+                SetSelectedUserControlGridPosition();
+            }
+            CheckTabCount();
+
+            SelectionChanged?.Invoke(sender, e);
+        }
 
         protected void _tabHeaderControl_ItemsChanged(object sender, System.EventArgs e)
         {
@@ -82,10 +116,16 @@ namespace WpfDockManagerDemo.DockManager
             }
         }
 
+        protected void _tabHeaderControl_FloatTabRequest(object sender, EventArgs e)
+        {
+            FloatTabRequest?.Invoke(this, e);
+        }
+
         #region IViewContainer
 
-        public abstract event EventHandler SelectionChanged;
+        public event EventHandler SelectionChanged;
         public event EventHandler TabClosed;
+        public event EventHandler FloatTabRequest;
 
         public string Title
         {
@@ -102,7 +142,14 @@ namespace WpfDockManagerDemo.DockManager
 
         protected abstract void CheckTabCount();
 
-        public abstract void AddUserControl(UserControl userControl);
+        public void AddUserControl(UserControl userControl)
+        {
+            System.Diagnostics.Trace.Assert(userControl != null);
+            System.Diagnostics.Trace.Assert(userControl.DataContext is IViewModel);
+
+            _items.Add(new System.Collections.Generic.KeyValuePair<UserControl, IViewModel>(userControl, userControl.DataContext as IViewModel));
+            _tabHeaderControl.SelectedItem = _items[_items.Count - 1];
+        }
 
         public void InsertUserControl(int index, UserControl userControl)
         {
