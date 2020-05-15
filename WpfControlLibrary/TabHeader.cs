@@ -78,6 +78,8 @@ namespace WpfControlLibrary
 
         protected override void OnPreviewMouseMove(MouseEventArgs e)
         {
+            base.OnPreviewMouseMove(e);
+            e.Handled = true;
             if (!_mouseLeftButtonDown)
             {
                 return;
@@ -96,10 +98,11 @@ namespace WpfControlLibrary
                         (cursorScreenPosition.X > (topLeftPoint.X + ActualWidth + 30))
                    )
                 {
-                    FloatTabRequest?.Invoke(this, null);
                     // Cancel further drag processing until we get the next mouse left button down
                     _mouseLeftButtonDown = false;
                     System.Windows.Input.Mouse.Capture(this, CaptureMode.None);
+                    System.Diagnostics.Debug.WriteLine("FloatTabRequest: count = " + Items.Count);
+                    FloatTabRequest?.Invoke(this, null);
                 }
                 return;
             }

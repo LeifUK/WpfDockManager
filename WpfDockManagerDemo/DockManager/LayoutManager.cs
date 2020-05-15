@@ -7,7 +7,6 @@ using System.ComponentModel;
 using System.Xml;
 using System.Windows.Input;
 using WpfControlLibrary;
-//using System.Windows.Forms;
 
 namespace WpfDockManagerDemo.DockManager
 {
@@ -1177,10 +1176,6 @@ namespace WpfDockManagerDemo.DockManager
 
         private void Float(DockPane dockPane, FloatEventArgs e, bool selectedTabOnly)
         {
-            Point cursorPositionOnScreen = WpfControlLibrary.Utilities.GetCursorPosition();
-            Point cursorPositionInMainWindow = App.Current.MainWindow.PointFromScreen(cursorPositionOnScreen);
-            Point cursorPositionInToolPane = dockPane.PointFromScreen(cursorPositionOnScreen);
-
             if (!selectedTabOnly || (dockPane.IViewContainer.GetUserControlCount() == 1))
             {
                 ExtractDockPane(dockPane, out FrameworkElement frameworkElement);
@@ -1215,11 +1210,6 @@ namespace WpfDockManagerDemo.DockManager
                 }
             }
 
-            floatingPane.Left = mainWindowLocation.X + cursorPositionInMainWindow.X;
-            floatingPane.Top = mainWindowLocation.Y + cursorPositionInMainWindow.Y;
-            floatingPane.Width = dockPane.ActualWidth;
-            floatingPane.Height = dockPane.ActualHeight;
-
             if (e.Drag)
             {
                 IntPtr hWnd = new System.Windows.Interop.WindowInteropHelper(App.Current.MainWindow).EnsureHandle();
@@ -1228,7 +1218,13 @@ namespace WpfDockManagerDemo.DockManager
                 // Ensure the floated window can be dragged by the user
                 hWnd = new System.Windows.Interop.WindowInteropHelper(floatingPane).EnsureHandle();
                 WpfControlLibrary.Utilities.SendLeftMouseButtonDown(hWnd);
-            }
+           }
+            
+            Point cursorPositionOnScreen = WpfControlLibrary.Utilities.GetCursorPosition();
+            floatingPane.Left = cursorPositionOnScreen.X - 30;
+            floatingPane.Top = cursorPositionOnScreen.Y - 30;
+            floatingPane.Width = dockPane.ActualWidth;
+            floatingPane.Height = dockPane.ActualHeight;
         }
 
         private void DockPane_Float(object sender, FloatEventArgs e)

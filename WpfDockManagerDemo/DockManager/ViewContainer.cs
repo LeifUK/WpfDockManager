@@ -171,6 +171,7 @@ namespace WpfDockManagerDemo.DockManager
 
             UserControl userControl = _items[index].Key;
             _items.RemoveAt(index);
+            _tabHeaderControl.ItemsSource = _items;
             if (Children.Contains(userControl))
             {
                 Children.Remove(userControl);
