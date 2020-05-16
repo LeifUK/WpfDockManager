@@ -13,16 +13,18 @@ namespace WpfDockManagerDemo.ViewModel
         {
             long id = 0;
             Tools = new System.Collections.ObjectModel.ObservableCollection<DockManager.IViewModel>();
-            Tools.Add(new ViewModel.ToolOneViewModel() { ID = id++ });
-            Tools.Add(new ViewModel.ToolTwoViewModel() { ID = id++ });
-            Tools.Add(new ViewModel.ToolThreeViewModel() { ID = id++ });
-            Tools.Add(new ViewModel.ToolFourViewModel() { ID = id++ });
-            Tools.Add(new ViewModel.ToolFiveViewModel() { ID = id++ });
+            Tools.Add(new ViewModel.ToolOneViewModel());
+            Tools.Add(new ViewModel.ToolTwoViewModel());
+            Tools.Add(new ViewModel.ToolThreeViewModel());
+            Tools.Add(new ViewModel.ToolFourViewModel());
+            Tools.Add(new ViewModel.ToolFiveViewModel());
 
             Documents = new System.Collections.ObjectModel.ObservableCollection<DockManager.IViewModel>();
-            Documents.Add(new ViewModel.DocumentOneViewModel());
-            Documents.Add(new ViewModel.DocumentTwoViewModel());
-            Documents.Add(new ViewModel.DocumentThreeViewModel());
+            Documents.Add(new ViewModel.DocumentOneViewModel() { URL = "C:\\File-C1" });
+            Documents.Add(new ViewModel.DocumentOneViewModel() { URL = "C:\\File-C2" });
+            Documents.Add(new ViewModel.DocumentTwoViewModel() { URL = "D:\\File-D1" });
+            Documents.Add(new ViewModel.DocumentTwoViewModel() { URL = "D:\\File-D2" });
+            Documents.Add(new ViewModel.DocumentTwoViewModel() { URL = "D:\\File-D3" });
         }
 
         private System.Collections.ObjectModel.ObservableCollection<DockManager.IViewModel> _documents;

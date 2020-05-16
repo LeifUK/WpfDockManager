@@ -882,6 +882,11 @@ namespace WpfDockManagerDemo.DockManager
             AddUnpinnedToolData(unpinnedToolData, windowLocation, toolListBox);
         }
 
+        string ILayoutFactory.MakeDocumentKey(string contentId, string Url)
+        {
+            return contentId + "," + Url;
+        }
+
         void ILayoutFactory.SetRootPane(Grid grid, out int row, out int column)
         {
             SetRootPane(grid);
@@ -1032,7 +1037,7 @@ namespace WpfDockManagerDemo.DockManager
             List<UserControl> documentViews = LoadViewsFromTemplates(DocumentTemplates, DocumentsSource);
             foreach (var item in documentViews)
             {
-                viewsMap.Add(item.Name, item);
+                viewsMap.Add(ILayoutFactory.MakeDocumentKey(item.Name, ((item.DataContext) as IViewModel).URL), item);
             }
 
             List<UserControl> toolViews = LoadViewsFromTemplates(ToolTemplates, ToolsSource);

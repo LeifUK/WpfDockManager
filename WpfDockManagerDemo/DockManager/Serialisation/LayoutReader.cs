@@ -8,20 +8,27 @@ namespace WpfDockManagerDemo.DockManager.Serialisation
 {
     internal class LayoutReader
     {
+        private static string GetStringAttribute(XmlElement xmlElement, string name)
+        {
+            XmlAttribute xmlAttribute = xmlElement.Attributes.GetNamedItem(name) as XmlAttribute;
+            System.Diagnostics.Trace.Assert(xmlAttribute != null, xmlElement.Name + " element does not have a " + name + " attribute");
+            return xmlAttribute.Value;
+        }
+
+        private static double GetDoubleAttribute(XmlElement xmlElement, string name)
+        {
+            return System.Convert.ToDouble(GetStringAttribute(xmlElement, name));
+        }
+
+        private static bool GetBooleanAttribute(XmlElement xmlElement, string name)
+        {
+            string value = GetStringAttribute(xmlElement, name);
+            bool.TryParse(value, out bool isHorizontal);
+            return isHorizontal;
+        }
+
         private static void SetWidthOrHeight(XmlElement xmlElement, FrameworkElement parentFrameworkElement, bool isParentHorizontal, int row, int column)
         {
-            XmlAttribute xmlAttribute = xmlElement.Attributes.GetNamedItem("Width") as XmlAttribute;
-
-            System.Diagnostics.Trace.Assert(xmlAttribute != null, xmlElement.Name + " element does not have a Width attribute");
-
-            double width = System.Convert.ToDouble(xmlAttribute.Value);
-
-            xmlAttribute = xmlElement.Attributes.GetNamedItem("Height") as XmlAttribute;
-
-            System.Diagnostics.Trace.Assert(xmlAttribute != null, xmlElement.Name + " element does not have a Height attribute");
-
-            double height = System.Convert.ToDouble(xmlAttribute.Value);
-
             Grid grid = parentFrameworkElement as Grid;
             if (grid != null)
             {
@@ -29,6 +36,7 @@ namespace WpfDockManagerDemo.DockManager.Serialisation
                 {
                     if (row < grid.RowDefinitions.Count)
                     {
+                        double height = GetDoubleAttribute(xmlElement, "Height");
                         grid.RowDefinitions[row].Height = new GridLength(height, GridUnitType.Star);
                     }
                 }
@@ -36,6 +44,7 @@ namespace WpfDockManagerDemo.DockManager.Serialisation
                 {
                     if (column < grid.ColumnDefinitions.Count)
                     {
+                        double width = GetDoubleAttribute(xmlElement, "Width");
                         grid.ColumnDefinitions[column].Width = new GridLength(width, GridUnitType.Star);
                     }
                 }
@@ -44,29 +53,13 @@ namespace WpfDockManagerDemo.DockManager.Serialisation
 
         private static void SetLocationAndSize(XmlElement xmlElement, Window window)
         {
-            XmlAttribute xmlAttribute = xmlElement.Attributes.GetNamedItem("Left") as XmlAttribute;
-            System.Diagnostics.Trace.Assert(xmlAttribute != null, xmlElement.Name + " element does not have a Left attribute");
-            double left = System.Convert.ToDouble(xmlAttribute.Value);
-
-            xmlAttribute = xmlElement.Attributes.GetNamedItem("Top") as XmlAttribute;
-            System.Diagnostics.Trace.Assert(xmlAttribute != null, xmlElement.Name + " element does not have a Top attribute");
-            double top = System.Convert.ToDouble(xmlAttribute.Value);
-
-            xmlAttribute = xmlElement.Attributes.GetNamedItem("Width") as XmlAttribute;
-            System.Diagnostics.Trace.Assert(xmlAttribute != null, xmlElement.Name + " element does not have a Width attribute");
-            double width = System.Convert.ToDouble(xmlAttribute.Value);
-
-            xmlAttribute = xmlElement.Attributes.GetNamedItem("Height") as XmlAttribute;
-            System.Diagnostics.Trace.Assert(xmlAttribute != null, xmlElement.Name + " element does not have a Height attribute");
-            double height = System.Convert.ToDouble(xmlAttribute.Value);
-
-            window.Left = left;
-            window.Top = top;
-            window.Width = width;
-            window.Height = height;
+            window.Left = GetDoubleAttribute(xmlElement, "Left");
+            window.Top = GetDoubleAttribute(xmlElement, "Top");
+            window.Width = GetDoubleAttribute(xmlElement, "Width");
+            window.Height = GetDoubleAttribute(xmlElement, "Height");
         }
 
-        private static void LoadToolPaneGroup(Dictionary<string, UserControl> viewsMap, XmlElement xmlToolPaneGroup, IViewContainer iViewContainer)
+        private static void LoadTools(Dictionary<string, UserControl> viewsMap, XmlElement xmlToolPaneGroup, IViewContainer iViewContainer)
         {
             foreach (var xmlChild in xmlToolPaneGroup.ChildNodes)
             {
@@ -76,21 +69,19 @@ namespace WpfDockManagerDemo.DockManager.Serialisation
                     {
                         XmlElement xmlToolElement = xmlChild as XmlElement;
 
-                        XmlAttribute xmlAttribute = xmlToolElement.Attributes.GetNamedItem("ContentId") as XmlAttribute;
+                        string ContentId = GetStringAttribute(xmlToolElement, "ContentId");
 
-                        System.Diagnostics.Trace.Assert(xmlAttribute != null, "Tool element does not have a ContentId attribute");
-
-                        if (viewsMap.ContainsKey(xmlAttribute.Value))
+                        if (viewsMap.ContainsKey(ContentId))
                         {
-                            iViewContainer.AddUserControl(viewsMap[xmlAttribute.Value]);
-                            viewsMap.Remove(xmlAttribute.Value);
+                            iViewContainer.AddUserControl(viewsMap[ContentId]);
+                            viewsMap.Remove(ContentId);
                         }
                     }
                 }
             }
         }
 
-        private static void LoadDocumentPaneGroup(Dictionary<string, UserControl> viewsMap, XmlElement xmlDocumentPaneGroup, IViewContainer iViewContainer)
+        private static void LoadDocuments(ILayoutFactory iLayoutFactory, Dictionary<string, UserControl> viewsMap, XmlElement xmlDocumentPaneGroup, IViewContainer iViewContainer)
         {
             foreach (var xmlChild in xmlDocumentPaneGroup.ChildNodes)
             {
@@ -100,12 +91,14 @@ namespace WpfDockManagerDemo.DockManager.Serialisation
                     {
                         XmlElement xmlToolElement = xmlChild as XmlElement;
 
-                        XmlAttribute xmlAttribute = xmlToolElement.Attributes.GetNamedItem("ContentId") as XmlAttribute;
+                        string contentId = GetStringAttribute(xmlToolElement, "ContentId");
+                        string url = GetStringAttribute(xmlToolElement, "Url");
+                        string key = iLayoutFactory.MakeDocumentKey(contentId, url);
 
-                        if (viewsMap.ContainsKey(xmlAttribute.Value))
+                        if (viewsMap.ContainsKey(key))
                         {
-                            iViewContainer.AddUserControl(viewsMap[xmlAttribute.Value]);
-                            viewsMap.Remove(xmlAttribute.Value);
+                            iViewContainer.AddUserControl(viewsMap[key]);
+                            viewsMap.Remove(contentId);
                         }
                     }
                 }
@@ -118,7 +111,7 @@ namespace WpfDockManagerDemo.DockManager.Serialisation
             return new Guid(xmlAttribute.Value);
         }
 
-        private static void LoadUnPinnedToolPaneGroups(ILayoutFactory iLayoutFactory, Dictionary<string, UserControl> viewsMap, WindowLocation windowLocation, XmlElement xmlParentElement)
+        private static void LoadUnPinnedToolDataNodes(ILayoutFactory iLayoutFactory, Dictionary<string, UserControl> viewsMap, WindowLocation windowLocation, XmlElement xmlParentElement)
         {
             foreach (var xmlChildNode in xmlParentElement.ChildNodes)
             {
@@ -128,12 +121,9 @@ namespace WpfDockManagerDemo.DockManager.Serialisation
                     {
                         XmlElement xmlUnpinnedToolData = xmlChildNode as XmlElement;
 
-                        XmlAttribute xmlAttribute = xmlUnpinnedToolData.Attributes.GetNamedItem("Sibling") as XmlAttribute;
-                        string guid = xmlAttribute.Value;
-                        xmlAttribute = xmlUnpinnedToolData.Attributes.GetNamedItem("IsHorizontal") as XmlAttribute;
-                        bool.TryParse(xmlAttribute.Value, out bool isHorizontal);
-                        xmlAttribute = xmlUnpinnedToolData.Attributes.GetNamedItem("IsFirst") as XmlAttribute;
-                        bool.TryParse(xmlAttribute.Value, out bool isFirst);
+                        string guid = GetStringAttribute(xmlUnpinnedToolData, "Sibling");
+                        bool isHorizontal = GetBooleanAttribute(xmlUnpinnedToolData, "IsHorizontal");
+                        bool isFirst = GetBooleanAttribute(xmlUnpinnedToolData, "IsFirst");
 
                         foreach (var xmlUnpinnedToolDataChildNode in xmlUnpinnedToolData.ChildNodes)
                         {
@@ -143,7 +133,7 @@ namespace WpfDockManagerDemo.DockManager.Serialisation
                                 {
                                     ToolPaneGroup toolPaneGroup = iLayoutFactory.CreateToolPaneGroup();
                                     XmlElement xmlToolPaneGroup = xmlUnpinnedToolDataChildNode as XmlElement;
-                                    LoadToolPaneGroup(viewsMap, xmlToolPaneGroup, toolPaneGroup.IViewContainer);
+                                    LoadTools(viewsMap, xmlToolPaneGroup, toolPaneGroup.IViewContainer);
                                     iLayoutFactory.CreateUnpinnedToolPaneGroup(windowLocation, toolPaneGroup, guid, isHorizontal, isFirst);
                                 }
                             }
@@ -225,7 +215,7 @@ namespace WpfDockManagerDemo.DockManager.Serialisation
                         documentPaneGroup.Tag = GetGuid(xmlDocumentGroup); ;
                         SetWidthOrHeight(xmlDocumentGroup, parentFrameworkElement, isParentHorizontal, row, column);
 
-                        LoadDocumentPaneGroup(viewsMap, xmlDocumentGroup, documentPaneGroup.IViewContainer);
+                        LoadDocuments(iLayoutFactory, viewsMap, xmlDocumentGroup, documentPaneGroup.IViewContainer);
                         Grid.SetRow(documentPaneGroup, row);
                         Grid.SetColumn(documentPaneGroup, column);
                         row += rowIncrement;
@@ -243,7 +233,7 @@ namespace WpfDockManagerDemo.DockManager.Serialisation
                         toolPaneGroup.Tag = GetGuid(xmlToolPaneGroup);
                         SetWidthOrHeight(xmlToolPaneGroup, parentFrameworkElement, isParentHorizontal, row, column);
 
-                        LoadToolPaneGroup(viewsMap, xmlToolPaneGroup, toolPaneGroup.IViewContainer);
+                        LoadTools(viewsMap, xmlToolPaneGroup, toolPaneGroup.IViewContainer);
                         Grid.SetRow(toolPaneGroup, row);
                         Grid.SetColumn(toolPaneGroup, column);
                         row += rowIncrement;
@@ -255,7 +245,7 @@ namespace WpfDockManagerDemo.DockManager.Serialisation
                         XmlElement xmlfloatingTool = xmlChildNode as XmlElement;
                         floatingToolPaneGroup.Tag = GetGuid(xmlfloatingTool);
                         SetLocationAndSize(xmlfloatingTool, floatingToolPaneGroup);
-                        LoadToolPaneGroup(viewsMap, xmlfloatingTool, floatingToolPaneGroup.IViewContainer);
+                        LoadTools(viewsMap, xmlfloatingTool, floatingToolPaneGroup.IViewContainer);
                     }
                     else if ((xmlChildNode as XmlElement).Name == "FloatingDocumentPaneGroup")
                     {
@@ -263,27 +253,27 @@ namespace WpfDockManagerDemo.DockManager.Serialisation
                         XmlElement xmlfloatingDocument = xmlChildNode as XmlElement;
                         floatingDocumentPaneGroup.Tag = GetGuid(xmlfloatingDocument);
                         SetLocationAndSize(xmlfloatingDocument, floatingDocumentPaneGroup);
-                        LoadDocumentPaneGroup(viewsMap, xmlfloatingDocument, floatingDocumentPaneGroup.IViewContainer);
+                        LoadDocuments(iLayoutFactory, viewsMap, xmlfloatingDocument, floatingDocumentPaneGroup.IViewContainer);
                     }
                     else if ((xmlChildNode as XmlElement).Name == "LeftSide")
                     {
                         XmlElement xmlLeftSide = xmlChildNode as XmlElement;
-                        LoadUnPinnedToolPaneGroups(iLayoutFactory, viewsMap, WindowLocation.LeftSide, xmlLeftSide);
+                        LoadUnPinnedToolDataNodes(iLayoutFactory, viewsMap, WindowLocation.LeftSide, xmlLeftSide);
                     }
                     else if ((xmlChildNode as XmlElement).Name == "TopSide")
                     {
                         XmlElement xmlTopSide = xmlChildNode as XmlElement;
-                        LoadUnPinnedToolPaneGroups(iLayoutFactory, viewsMap, WindowLocation.TopSide, xmlTopSide);
+                        LoadUnPinnedToolDataNodes(iLayoutFactory, viewsMap, WindowLocation.TopSide, xmlTopSide);
                     }
                     else if ((xmlChildNode as XmlElement).Name == "RightSide")
                     {
                         XmlElement xmlRightSide = xmlChildNode as XmlElement;
-                        LoadUnPinnedToolPaneGroups(iLayoutFactory, viewsMap, WindowLocation.RightSide, xmlRightSide);
+                        LoadUnPinnedToolDataNodes(iLayoutFactory, viewsMap, WindowLocation.RightSide, xmlRightSide);
                     }
                     else if ((xmlChildNode as XmlElement).Name == "BottomSide")
                     {
                         XmlElement xmlBottomSide = xmlChildNode as XmlElement;
-                        LoadUnPinnedToolPaneGroups(iLayoutFactory, viewsMap, WindowLocation.TopSide, xmlBottomSide);
+                        LoadUnPinnedToolDataNodes(iLayoutFactory, viewsMap, WindowLocation.TopSide, xmlBottomSide);
                     }
                 }
 

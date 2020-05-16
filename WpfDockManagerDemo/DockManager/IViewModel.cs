@@ -1,15 +1,15 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
-
-namespace WpfDockManagerDemo.DockManager
+﻿namespace WpfDockManagerDemo.DockManager
 {
     public interface IViewModel
     {
         // A user friendly title
         string Title { get; set; }
+
+        /*
+         * Uniquely identifies a document instance.
+         * For example a file path for a text document. 
+         */
+        string URL { get; set; }
 
         bool CanClose { get; }
         bool CanFloat { get; }

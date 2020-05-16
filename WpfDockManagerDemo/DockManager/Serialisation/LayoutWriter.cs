@@ -9,25 +9,25 @@ namespace WpfDockManagerDemo.DockManager.Serialisation
 {
     internal static class LayoutWriter
     {
+        private static void AddAttribute(XmlDocument xmlDocument, XmlElement xmlElement, string name, string value)
+        {
+            XmlAttribute xmlAttribute = xmlDocument.CreateAttribute(name);
+            xmlAttribute.Value = value;
+            xmlElement.Attributes.Append(xmlAttribute);
+        }
+
         private static void AddGuidAttribute(XmlDocument xmlDocument, XmlElement xmlElement, FrameworkElement frameworkElement)
         {
-            XmlAttribute xmlAttribute = xmlDocument.CreateAttribute("Guid");
-            xmlAttribute.Value = frameworkElement.Tag.ToString();
-            xmlElement.Attributes.Append(xmlAttribute);
+            AddAttribute(xmlDocument, xmlElement, "Guid", frameworkElement.Tag.ToString());
         }
 
-        private static void AddWidthAndHeightAttributes(XmlDocument xmlDocument, XmlElement xmlElement, SelectablePane selectablePane)
+        private static void AddWidthAndHeightAttributes(XmlDocument xmlDocument, XmlElement xmlElement, Grid grid)
         {
-            XmlAttribute xmlAttribute = xmlDocument.CreateAttribute("Width");
-            xmlAttribute.Value = selectablePane.ActualWidth.ToString();
-            xmlElement.Attributes.Append(xmlAttribute);
-            
-            xmlAttribute = xmlDocument.CreateAttribute("Height");
-            xmlAttribute.Value = selectablePane.ActualHeight.ToString();
-            xmlElement.Attributes.Append(xmlAttribute);
+            AddAttribute(xmlDocument, xmlElement, "Width", grid.ActualWidth.ToString());
+            AddAttribute(xmlDocument, xmlElement, "Height", grid.ActualHeight.ToString());
         }
 
-        private static XmlElement SaveToolPaneGroupNode(XmlDocument xmlDocument, XmlNode xmlParentNode, ToolPaneGroup toolPaneGroup)
+        private static XmlElement AddToolPaneGroupNode(XmlDocument xmlDocument, XmlNode xmlParentNode, ToolPaneGroup toolPaneGroup)
         {
             System.Diagnostics.Trace.Assert(xmlDocument != null);
             System.Diagnostics.Trace.Assert(xmlParentNode != null);
@@ -51,32 +51,27 @@ namespace WpfDockManagerDemo.DockManager.Serialisation
                 {
                     break;
                 }
-                SaveToolNode(xmlDocument, xmlToolPaneGroup, userControl.DataContext as IViewModel, userControl.Name);
+                AddToolNode(xmlDocument, xmlToolPaneGroup, userControl.DataContext as IViewModel, userControl.Name);
             }
 
             return xmlToolPaneGroup;
         }
 
-        private static XmlElement SaveToolNode(XmlDocument xmlDocument, XmlNode xmlParentNode, IViewModel iViewModel, string contentId)
+        private static XmlElement AddToolNode(XmlDocument xmlDocument, XmlNode xmlParentNode, IViewModel iViewModel, string contentId)
         {
             System.Diagnostics.Trace.Assert(xmlDocument != null);
             System.Diagnostics.Trace.Assert(xmlParentNode != null);
             System.Diagnostics.Trace.Assert(iViewModel != null);
 
             XmlElement xmlElement = xmlDocument.CreateElement("Tool");
-            XmlAttribute xmlAttribute = xmlDocument.CreateAttribute("Title");
-            xmlAttribute.Value = iViewModel.Title;
-            xmlElement.Attributes.Append(xmlAttribute);
-
-            xmlAttribute = xmlDocument.CreateAttribute("ContentId");
-            xmlAttribute.Value = contentId;
-            xmlElement.Attributes.Append(xmlAttribute);
+            AddAttribute(xmlDocument, xmlElement, "Title", iViewModel.Title);
+            AddAttribute(xmlDocument, xmlElement, "ContentId", contentId);
 
             xmlParentNode.AppendChild(xmlElement);
             return xmlElement;
         }
 
-        private static void SaveSplitterPaneNode(XmlDocument xmlDocument, Grid splitterPane, XmlNode xmlParentNode)
+        private static void AddSplitterPaneNode(XmlDocument xmlDocument, Grid splitterPane, XmlNode xmlParentNode)
         {
             System.Diagnostics.Trace.Assert(xmlDocument != null);
             System.Diagnostics.Trace.Assert(splitterPane != null);
@@ -88,46 +83,24 @@ namespace WpfDockManagerDemo.DockManager.Serialisation
             GridSplitter gridSplitter = splitterPane.Children.OfType<GridSplitter>().Single();
             System.Diagnostics.Trace.Assert(gridSplitter != null);
 
-            XmlAttribute xmlAttribute = xmlDocument.CreateAttribute("Guid");
-            xmlAttribute.Value = splitterPane.Tag.ToString();
-            xmlSplitterPane.Attributes.Append(xmlAttribute);
-
-            bool isHorizontal = Grid.GetRow(gridSplitter) == 1;
-            xmlAttribute = xmlDocument.CreateAttribute("Orientation");
-            xmlAttribute.Value = isHorizontal ? "Horizontal" : "Vertical";
-            xmlSplitterPane.Attributes.Append(xmlAttribute);
-
-            xmlAttribute = xmlDocument.CreateAttribute("Row");
-            xmlAttribute.Value = Grid.GetRow(splitterPane).ToString();
-            xmlSplitterPane.Attributes.Append(xmlAttribute);
-
-            xmlAttribute = xmlDocument.CreateAttribute("Column");
-            xmlAttribute.Value = Grid.GetColumn(splitterPane).ToString();
-            xmlSplitterPane.Attributes.Append(xmlAttribute);
-
-            xmlAttribute = xmlDocument.CreateAttribute("Width");
-            xmlAttribute.Value = splitterPane.ActualWidth.ToString();
-            xmlSplitterPane.Attributes.Append(xmlAttribute);
-
-            xmlAttribute = xmlDocument.CreateAttribute("Height");
-            xmlAttribute.Value = splitterPane.ActualHeight.ToString();
-            xmlSplitterPane.Attributes.Append(xmlAttribute);
+            AddGuidAttribute(xmlDocument, xmlSplitterPane, splitterPane);
+            AddAttribute(xmlDocument, xmlSplitterPane, "Orientation", (Grid.GetRow(gridSplitter) == 1) ? "Horizontal" : "Vertical");
+            AddWidthAndHeightAttributes(xmlDocument, xmlSplitterPane, splitterPane);
 
             List<FrameworkElement> children = splitterPane.Children.OfType<FrameworkElement>().Where(n => !(n is GridSplitter)).OrderBy(n => Grid.GetRow(n) + Grid.GetColumn(n)).ToList();
             foreach (var childNode in children)
             {
-                SaveNode(xmlDocument, childNode, xmlSplitterPane);
+                AddNode(xmlDocument, childNode, xmlSplitterPane);
             }
         }
 
-        private static XmlElement SaveDocumentPaneGroupNode(XmlDocument xmlDocument, XmlNode xmlParentNode, DocumentPaneGroup documentPaneGroup)
+        private static XmlElement AddDocumentPaneGroupNode(XmlDocument xmlDocument, XmlNode xmlParentNode, DocumentPaneGroup documentPaneGroup)
         {
             System.Diagnostics.Trace.Assert(xmlDocument != null);
             System.Diagnostics.Trace.Assert(xmlParentNode != null);
             System.Diagnostics.Trace.Assert(documentPaneGroup != null);
 
             XmlElement xmlDocumentPaneGroup = xmlDocument.CreateElement("DocumentPaneGroup");
-
             AddGuidAttribute(xmlDocument, xmlDocumentPaneGroup, documentPaneGroup);
             AddWidthAndHeightAttributes(xmlDocument, xmlDocumentPaneGroup, documentPaneGroup);
 
@@ -144,72 +117,57 @@ namespace WpfDockManagerDemo.DockManager.Serialisation
                 {
                     break;
                 }
-                SaveDocumentNode(xmlDocument, xmlDocumentPaneGroup, userControl.DataContext as IViewModel, userControl.Name);
+                AddDocumentNode(xmlDocument, xmlDocumentPaneGroup, userControl.DataContext as IViewModel, userControl.Name);
             }
 
             return xmlDocumentPaneGroup;
         }
 
-        private static XmlElement SaveDocumentNode(XmlDocument xmlDocument, XmlNode xmlParentNode, IViewModel iViewModel, string contentId)
+        private static XmlElement AddDocumentNode(XmlDocument xmlDocument, XmlNode xmlParentNode, IViewModel iViewModel, string contentId)
         {
             System.Diagnostics.Trace.Assert(xmlDocument != null);
             System.Diagnostics.Trace.Assert(xmlParentNode != null);
             System.Diagnostics.Trace.Assert(iViewModel != null);
 
             XmlElement xmlElement = xmlDocument.CreateElement("Document");
-            XmlAttribute xmlAttribute = xmlDocument.CreateAttribute("Title");
-            xmlAttribute.Value = iViewModel.Title;
-            xmlElement.Attributes.Append(xmlAttribute);
-
-            xmlAttribute = xmlDocument.CreateAttribute("ContentId");
-            xmlAttribute.Value = contentId;
-            xmlElement.Attributes.Append(xmlAttribute);
+            AddAttribute(xmlDocument, xmlElement, "Title", iViewModel.Title);
+            AddAttribute(xmlDocument, xmlElement, "ContentId", contentId);
+            AddAttribute(xmlDocument, xmlElement, "Url", iViewModel.URL);
 
             xmlParentNode.AppendChild(xmlElement);
             return xmlElement;
         }
 
-        private static void SaveDocumentPanelNode(XmlDocument xmlDocument, DocumentPanel documentPanel, XmlNode xmlParentNode)
+        private static void AddDocumentPanelNode(XmlDocument xmlDocument, DocumentPanel documentPanel, XmlNode xmlParentNode)
         {
             System.Diagnostics.Trace.Assert(xmlDocument != null);
             System.Diagnostics.Trace.Assert(documentPanel != null);
             System.Diagnostics.Trace.Assert(xmlParentNode != null);
 
             XmlElement xmlDocumentPanel = xmlDocument.CreateElement("DocumentPanel");
-            xmlParentNode.AppendChild(xmlDocumentPanel);
-
             AddGuidAttribute(xmlDocument, xmlDocumentPanel, documentPanel);
             AddWidthAndHeightAttributes(xmlDocument, xmlDocumentPanel, documentPanel);
+            xmlParentNode.AppendChild(xmlDocumentPanel);
 
             foreach (var childNode in documentPanel.Children)
             {
-                SaveNode(xmlDocument, childNode, xmlDocumentPanel);
+                AddNode(xmlDocument, childNode, xmlDocumentPanel);
             }
         }
 
-        private static void AddPositionAndSizeAttributes(XmlDocument xmlDocument, XmlNode xmlElement, FloatingPane floatingPane)
+        private static void AddPositionAndSizeAttributes(XmlDocument xmlDocument, XmlElement xmlElement, FloatingPane floatingPane)
         {
             System.Diagnostics.Trace.Assert(xmlDocument != null);
             System.Diagnostics.Trace.Assert(xmlElement != null);
+            System.Diagnostics.Trace.Assert(floatingPane != null);
 
-            XmlAttribute xmlAttribute = xmlDocument.CreateAttribute("Left");
-            xmlAttribute.Value = floatingPane.Left.ToString();
-            xmlElement.Attributes.Append(xmlAttribute);
-
-            xmlAttribute = xmlDocument.CreateAttribute("Top");
-            xmlAttribute.Value = floatingPane.Top.ToString();
-            xmlElement.Attributes.Append(xmlAttribute);
-
-            xmlAttribute = xmlDocument.CreateAttribute("Width");
-            xmlAttribute.Value = floatingPane.ActualWidth.ToString();
-            xmlElement.Attributes.Append(xmlAttribute);
-
-            xmlAttribute = xmlDocument.CreateAttribute("Height");
-            xmlAttribute.Value = floatingPane.ActualHeight.ToString();
-            xmlElement.Attributes.Append(xmlAttribute);
+            AddAttribute(xmlDocument, xmlElement, "Left", floatingPane.Left.ToString());
+            AddAttribute(xmlDocument, xmlElement, "Top", floatingPane.Top.ToString());
+            AddAttribute(xmlDocument, xmlElement, "Width", floatingPane.Width.ToString());
+            AddAttribute(xmlDocument, xmlElement, "Height", floatingPane.Height.ToString());
         }
 
-        private static XmlElement SaveFloatingToolPaneGroupNode(XmlDocument xmlDocument, XmlNode xmlParentNode, FloatingToolPaneGroup floatingToolPaneGroup)
+        private static XmlElement AddFloatingToolPaneGroupNode(XmlDocument xmlDocument, XmlNode xmlParentNode, FloatingToolPaneGroup floatingToolPaneGroup)
         {
             System.Diagnostics.Trace.Assert(xmlDocument != null);
             System.Diagnostics.Trace.Assert(xmlParentNode != null);
@@ -231,13 +189,13 @@ namespace WpfDockManagerDemo.DockManager.Serialisation
                 {
                     break;
                 }
-                SaveToolNode(xmlDocument, xmlFloatingToolPaneGroup, userControl.DataContext as IViewModel, userControl.Name);
+                AddToolNode(xmlDocument, xmlFloatingToolPaneGroup, userControl.DataContext as IViewModel, userControl.Name);
             }
 
             return xmlFloatingToolPaneGroup;
         }
 
-        private static XmlElement SaveFloatingDocumentPaneGroupNode(XmlDocument xmlDocument, XmlNode xmlParentNode, FloatingDocumentPaneGroup floatingDocumentPaneGroup)
+        private static XmlElement AddFloatingDocumentPaneGroupNode(XmlDocument xmlDocument, XmlNode xmlParentNode, FloatingDocumentPaneGroup floatingDocumentPaneGroup)
         {
             System.Diagnostics.Trace.Assert(xmlDocument != null);
             System.Diagnostics.Trace.Assert(xmlParentNode != null);
@@ -259,13 +217,13 @@ namespace WpfDockManagerDemo.DockManager.Serialisation
                 {
                     break;
                 }
-                SaveDocumentNode(xmlDocument, xmlFloatingDocumentPaneGroup, userControl.DataContext as IViewModel, userControl.Name);
+                AddDocumentNode(xmlDocument, xmlFloatingDocumentPaneGroup, userControl.DataContext as IViewModel, userControl.Name);
             }
 
             return xmlFloatingDocumentPaneGroup;
         }
 
-        private static void SaveNode(XmlDocument xmlDocument, Object node, XmlNode xmlParentPane)
+        private static void AddNode(XmlDocument xmlDocument, Object node, XmlNode xmlParentPane)
         {
             System.Diagnostics.Trace.Assert(xmlDocument != null);
             System.Diagnostics.Trace.Assert(node != null);
@@ -273,23 +231,23 @@ namespace WpfDockManagerDemo.DockManager.Serialisation
 
             if (node is DocumentPanel)
             {
-                SaveDocumentPanelNode(xmlDocument, node as DocumentPanel, xmlParentPane);
+                AddDocumentPanelNode(xmlDocument, node as DocumentPanel, xmlParentPane);
             }
             else if (node is DocumentPaneGroup)
             {
-                SaveDocumentPaneGroupNode(xmlDocument, xmlParentPane, node as DocumentPaneGroup);
+                AddDocumentPaneGroupNode(xmlDocument, xmlParentPane, node as DocumentPaneGroup);
             }
             else if (node is ToolPaneGroup)
             {
-                SaveToolPaneGroupNode(xmlDocument, xmlParentPane, node as ToolPaneGroup);
+                AddToolPaneGroupNode(xmlDocument, xmlParentPane, node as ToolPaneGroup);
             }
             else if (node is Grid)
             {
-                SaveSplitterPaneNode(xmlDocument, node as Grid, xmlParentPane);
+                AddSplitterPaneNode(xmlDocument, node as Grid, xmlParentPane);
             }
         }
 
-        private static XmlElement SaveUnpinnedToolDataNode(XmlDocument xmlDocument, XmlNode xmlParentNode, UnpinnedToolData unpinnedToolData)
+        private static XmlElement AddUnpinnedToolDataNode(XmlDocument xmlDocument, XmlNode xmlParentNode, UnpinnedToolData unpinnedToolData)
         {
             System.Diagnostics.Trace.Assert(xmlDocument != null);
             System.Diagnostics.Trace.Assert(xmlParentNode != null);
@@ -309,7 +267,7 @@ namespace WpfDockManagerDemo.DockManager.Serialisation
             xmlAttribute.Value = unpinnedToolData.IsFirst.ToString();
             xmlUnpinnedToolData.Attributes.Append(xmlAttribute);
 
-            SaveToolPaneGroupNode(xmlDocument, xmlUnpinnedToolData, unpinnedToolData.ToolPaneGroup);
+            AddToolPaneGroupNode(xmlDocument, xmlUnpinnedToolData, unpinnedToolData.ToolPaneGroup);
 
             xmlParentNode.AppendChild(xmlUnpinnedToolData);
             return xmlUnpinnedToolData;
@@ -326,16 +284,16 @@ namespace WpfDockManagerDemo.DockManager.Serialisation
             XmlElement xmlLayoutManager = xmlDocument.CreateElement("LayoutManager");
             xmlDocument.AppendChild(xmlLayoutManager);
 
-            SaveNode(xmlDocument, rootGrid, xmlLayoutManager);
+            AddNode(xmlDocument, rootGrid, xmlLayoutManager);
 
             foreach (FloatingToolPaneGroup floatingTool in floatingToolPaneGroups)
             {
-                SaveFloatingToolPaneGroupNode(xmlDocument, xmlLayoutManager, floatingTool);
+                AddFloatingToolPaneGroupNode(xmlDocument, xmlLayoutManager, floatingTool);
             }
 
             foreach (FloatingDocumentPaneGroup floatingDocumentPaneGroup in floatingDocumentPaneGroups)
             {
-                SaveFloatingDocumentPaneGroupNode(xmlDocument, xmlLayoutManager, floatingDocumentPaneGroup);
+                AddFloatingDocumentPaneGroupNode(xmlDocument, xmlLayoutManager, floatingDocumentPaneGroup);
             }
 
             foreach (var keyValuePair in dictUnpinnedToolData)
@@ -365,7 +323,7 @@ namespace WpfDockManagerDemo.DockManager.Serialisation
 
                 foreach (var item in keyValuePair.Value)
                 {
-                    SaveUnpinnedToolDataNode(xmlDocument, xmlElement, item);
+                    AddUnpinnedToolDataNode(xmlDocument, xmlElement, item);
                 }
             }
         }
