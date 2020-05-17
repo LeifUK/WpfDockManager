@@ -131,10 +131,10 @@ namespace WpfDockManagerDemo.DockManager.Serialisation
                             {
                                 if ((xmlUnpinnedToolDataChildNode as XmlElement).Name == "ToolPaneGroup")
                                 {
-                                    ToolPaneGroup toolPaneGroup = iLayoutFactory.CreateToolPaneGroup();
+                                    ToolPaneGroup toolPaneGroup = iLayoutFactory.MakeToolPaneGroup();
                                     XmlElement xmlToolPaneGroup = xmlUnpinnedToolDataChildNode as XmlElement;
                                     LoadTools(viewsMap, xmlToolPaneGroup, toolPaneGroup.IViewContainer);
-                                    iLayoutFactory.CreateUnpinnedToolPaneGroup(windowLocation, toolPaneGroup, guid, isHorizontal, isFirst);
+                                    iLayoutFactory.MakeUnpinnedToolPaneGroup(windowLocation, toolPaneGroup, guid, isHorizontal, isFirst);
                                 }
                             }
                         }
@@ -205,7 +205,7 @@ namespace WpfDockManagerDemo.DockManager.Serialisation
                     }
                     else if ((xmlChildNode as XmlElement).Name == "DocumentPaneGroup")
                     {
-                        DocumentPaneGroup documentPaneGroup = iLayoutFactory.CreateDocumentPaneGroup();
+                        DocumentPaneGroup documentPaneGroup = iLayoutFactory.MakeDocumentPaneGroup();
 
                         System.Windows.Markup.IAddChild parentElement = (System.Windows.Markup.IAddChild)parentFrameworkElement;
                         parentElement.AddChild(documentPaneGroup);
@@ -223,7 +223,7 @@ namespace WpfDockManagerDemo.DockManager.Serialisation
                     }
                     else if ((xmlChildNode as XmlElement).Name == "ToolPaneGroup")
                     {
-                        ToolPaneGroup toolPaneGroup = iLayoutFactory.CreateToolPaneGroup();
+                        ToolPaneGroup toolPaneGroup = iLayoutFactory.MakeToolPaneGroup();
 
                         System.Windows.Markup.IAddChild parentElement = (System.Windows.Markup.IAddChild)parentFrameworkElement;
                         parentElement.AddChild(toolPaneGroup);
@@ -249,7 +249,7 @@ namespace WpfDockManagerDemo.DockManager.Serialisation
                     }
                     else if ((xmlChildNode as XmlElement).Name == "FloatingDocumentPaneGroup")
                     {
-                        FloatingDocumentPaneGroup floatingDocumentPaneGroup = iLayoutFactory.CreateFloatingDocumentPaneGroup();
+                        FloatingDocumentPaneGroup floatingDocumentPaneGroup = iLayoutFactory.MakeFloatingDocumentPaneGroup();
                         XmlElement xmlfloatingDocument = xmlChildNode as XmlElement;
                         floatingDocumentPaneGroup.Tag = GetGuid(xmlfloatingDocument);
                         SetLocationAndSize(xmlfloatingDocument, floatingDocumentPaneGroup);

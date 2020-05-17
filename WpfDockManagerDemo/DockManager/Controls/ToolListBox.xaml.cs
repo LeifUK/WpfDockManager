@@ -19,6 +19,8 @@ namespace WpfDockManagerDemo.DockManager.Controls
 
         internal event ItemClickEventHandler ItemClick;
 
+        internal WindowLocation WindowLocation { get; set; }
+
         #region Dependency properties
 
         #region ItemsSource dependency property

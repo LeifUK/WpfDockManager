@@ -4,11 +4,11 @@ namespace WpfDockManagerDemo.DockManager
 {
     internal interface ILayoutFactory
     {
-        DocumentPaneGroup CreateDocumentPaneGroup();
-        ToolPaneGroup CreateToolPaneGroup();
-        FloatingDocumentPaneGroup CreateFloatingDocumentPaneGroup();
+        DocumentPaneGroup MakeDocumentPaneGroup();
+        ToolPaneGroup MakeToolPaneGroup();
+        FloatingDocumentPaneGroup MakeFloatingDocumentPaneGroup();
         FloatingToolPaneGroup CreateFloatingToolPaneGroup();
-        void CreateUnpinnedToolPaneGroup(WindowLocation windowLocation, ToolPaneGroup toolPaneGroup, string siblingGuid, bool isHorizontal, bool isFirst);
+        void MakeUnpinnedToolPaneGroup(WindowLocation windowLocation, ToolPaneGroup toolPaneGroup, string siblingGuid, bool isHorizontal, bool isFirst);
 
         string MakeDocumentKey(string contentId, string Url);
 

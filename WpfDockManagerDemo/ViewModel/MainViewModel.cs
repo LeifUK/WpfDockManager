@@ -11,7 +11,6 @@ namespace WpfDockManagerDemo.ViewModel
     {
         public MainViewModel()
         {
-            long id = 0;
             Tools = new System.Collections.ObjectModel.ObservableCollection<DockManager.IViewModel>();
             Tools.Add(new ViewModel.ToolOneViewModel());
             Tools.Add(new ViewModel.ToolTwoViewModel());
