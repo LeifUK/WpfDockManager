@@ -62,11 +62,11 @@ namespace WpfDockManagerDemo.DockManager
             Shutdown();
         }
 
-        ILayoutFactory ILayoutFactory 
-        { 
-            get 
-            { 
-                return this; 
+        ILayoutFactory ILayoutFactory
+        {
+            get
+            {
+                return this;
             }
         }
 
@@ -126,7 +126,7 @@ namespace WpfDockManagerDemo.DockManager
 
         internal Controls.ToolListBox _leftToolListBox;
         internal Controls.ToolListBox _topToolListBox;
-        internal Controls.ToolListBox _rightToolListBox; 
+        internal Controls.ToolListBox _rightToolListBox;
         internal Controls.ToolListBox _bottomToolListBox;
 
         internal ToolListBoxItem _activeToolListBoxItem;
@@ -134,7 +134,7 @@ namespace WpfDockManagerDemo.DockManager
         internal UnpinnedToolData _activeUnpinnedToolData;
         internal Controls.ToolListBox _activeToolListBox;
 
-        private Dictionary<WindowLocation,List<UnpinnedToolData>> _dictUnpinnedToolData;
+        private Dictionary<WindowLocation, List<UnpinnedToolData>> _dictUnpinnedToolData;
 
         internal Grid _root;
 
@@ -311,48 +311,100 @@ namespace WpfDockManagerDemo.DockManager
 
         #endregion
 
-        // Warning warning
+        private void UpdateProperties(DocumentPaneGroup documentPaneGroup)
+        {
+            documentPaneGroup.HeaderBackground = DocumentHeaderBackground;
+            IViewContainer iViewContainer = documentPaneGroup.IViewContainer;
+            iViewContainer.FontSize = DocumentFontSize;
+            iViewContainer.FontFamily = DocumentFontFamily;
+            iViewContainer.TabCornerRadius = DocumentTabCornerRadius;
+            iViewContainer.SelectedTabHeaderBackground = SelectedToolTabHeaderBackground;
+            iViewContainer.UnselectedTabHeaderBackground = UnselectedToolTabHeaderBackground;
+            iViewContainer.SelectedTabHeaderForeground = SelectedToolTabHeaderForeground;
+            iViewContainer.UnselectedTabHeaderForeground = UnselectedToolTabHeaderForeground;
+        }
+
+        private void UpdateProperties(ToolPaneGroup toolPaneGroup)
+        {
+            toolPaneGroup.HeaderBackground = ToolHeaderBackground;
+            toolPaneGroup.FontSize = ToolFontSize;
+            IViewContainer iViewContainer = toolPaneGroup.IViewContainer;
+            iViewContainer.FontSize = ToolFontSize;
+            iViewContainer.FontFamily = ToolFontFamily;
+            iViewContainer.TabCornerRadius = ToolTabCornerRadius;
+            iViewContainer.SelectedTabHeaderBackground = SelectedToolTabHeaderBackground;
+            iViewContainer.UnselectedTabHeaderBackground = UnselectedToolTabHeaderBackground;
+            iViewContainer.SelectedTabHeaderForeground = SelectedToolTabHeaderForeground;
+            iViewContainer.UnselectedTabHeaderForeground = UnselectedToolTabHeaderForeground;
+        }
+
+        private void UpdateProperties(FloatingDocumentPaneGroup floatingDocumentPaneGroup)
+        {
+            floatingDocumentPaneGroup.FontSize = DocumentFontSize;
+            floatingDocumentPaneGroup.FontFamily = new FontFamily(DocumentFontFamily);
+            floatingDocumentPaneGroup.Background = FloatingDocumentBackground;
+            floatingDocumentPaneGroup.HeaderBackground = FloatingDocumentTitleBarBackground;
+            floatingDocumentPaneGroup.IViewContainer.TabCornerRadius = DocumentTabCornerRadius;
+            floatingDocumentPaneGroup.IViewContainer.FontSize = DocumentFontSize;
+            floatingDocumentPaneGroup.IViewContainer.FontFamily = DocumentFontFamily;
+            floatingDocumentPaneGroup.IViewContainer.SelectedTabHeaderBackground = SelectedDocumentTabHeaderBackground;
+            floatingDocumentPaneGroup.IViewContainer.UnselectedTabHeaderBackground = UnselectedDocumentTabHeaderBackground;
+            floatingDocumentPaneGroup.IViewContainer.SelectedTabHeaderForeground = SelectedDocumentTabHeaderForeground;
+            floatingDocumentPaneGroup.IViewContainer.UnselectedTabHeaderForeground = UnselectedDocumentTabHeaderForeground;
+        }
+
+        private void UpdateProperties(FloatingToolPaneGroup floatingToolPaneGroup)
+        {
+            floatingToolPaneGroup.FontSize = ToolFontSize;
+            floatingToolPaneGroup.FontFamily = new FontFamily(ToolFontFamily);
+            floatingToolPaneGroup.Background = FloatingToolBackground;
+            floatingToolPaneGroup.HeaderBackground = FloatingToolTitleBarBackground;
+            floatingToolPaneGroup.IViewContainer.TabCornerRadius = ToolTabCornerRadius;
+            floatingToolPaneGroup.IViewContainer.FontSize = ToolFontSize;
+            floatingToolPaneGroup.IViewContainer.FontFamily = ToolFontFamily;
+            floatingToolPaneGroup.IViewContainer.SelectedTabHeaderBackground = SelectedToolTabHeaderBackground;
+            floatingToolPaneGroup.IViewContainer.UnselectedTabHeaderBackground = UnselectedToolTabHeaderBackground;
+            floatingToolPaneGroup.IViewContainer.SelectedTabHeaderForeground = SelectedToolTabHeaderForeground;
+            floatingToolPaneGroup.IViewContainer.UnselectedTabHeaderForeground = UnselectedToolTabHeaderForeground;
+        }
+
         private void UpdateProperties(Grid grid)
         {
             foreach (var child in grid.Children)
             {
                 if (child is ToolPaneGroup)
                 {
-                    IViewContainer iViewContainer = (child as ToolPaneGroup).IViewContainer;
-                    (child as ToolPaneGroup).HeaderBackground = ToolHeaderBackground;
-                    (child as ToolPaneGroup).FontSize = ToolFontSize;
-                    iViewContainer.FontSize = ToolFontSize;
-                    iViewContainer.FontFamily = ToolFontFamily;
-                    iViewContainer.SelectedTabHeaderBackground = SelectedToolTabHeaderBackground;
-                    iViewContainer.UnselectedTabHeaderBackground = UnselectedToolTabHeaderBackground;
-                    iViewContainer.SelectedTabHeaderForeground = SelectedToolTabHeaderForeground;
-                    iViewContainer.UnselectedTabHeaderForeground = UnselectedToolTabHeaderForeground;
+                    UpdateProperties(child as ToolPaneGroup);
                 }
                 else if (child is DocumentPaneGroup)
                 {
-                    IViewContainer iViewContainer = (child as DocumentPaneGroup).IViewContainer;
-                    (child as DocumentPaneGroup).HeaderBackground = DocumentHeaderBackground;
-                    iViewContainer.FontSize = DocumentFontSize;
-                    iViewContainer.FontFamily = DocumentFontFamily;
-                    iViewContainer.SelectedTabHeaderBackground = SelectedToolTabHeaderBackground;
-                    iViewContainer.UnselectedTabHeaderBackground = UnselectedToolTabHeaderBackground;
-                    iViewContainer.SelectedTabHeaderForeground = SelectedToolTabHeaderForeground;
-                    iViewContainer.UnselectedTabHeaderForeground = UnselectedToolTabHeaderForeground;
+                    UpdateProperties(child as DocumentPaneGroup);
                 }
                 else if (child is FloatingToolPaneGroup)
                 {
-                    // Warning warning
-                    //(child as FloatingToolPaneGroup).Background = FloatingDocumentBackground;
-                    //(child as FloatingToolPaneGroup).HeaderBackground = FloatingDocumentTitleBarBackground;
+                    UpdateProperties((child as FloatingToolPaneGroup));
                 }
                 else if (child is FloatingDocumentPaneGroup)
                 {
-                    (child as FloatingDocumentPaneGroup).Background = FloatingDocumentBackground;
-                    (child as FloatingDocumentPaneGroup).HeaderBackground = FloatingDocumentTitleBarBackground;
+                    UpdateProperties(child as FloatingDocumentPaneGroup);
                 }
+
                 if (child is Grid)
                 {
                     UpdateProperties(child as Grid);
+                }
+            }
+
+            if (grid == _root)
+            {
+                foreach (var floatingDocumentPaneGroup in FloatingDocumentPaneGroups)
+                {
+                    UpdateProperties(floatingDocumentPaneGroup);
+                }
+
+                foreach (var floatingToolPaneGroup in FloatingToolPaneGroups)
+                {
+                    UpdateProperties(floatingToolPaneGroup);
                 }
             }
         }
@@ -422,6 +474,42 @@ namespace WpfDockManagerDemo.DockManager
         protected virtual void OnToolFontSizeChanged(DependencyPropertyChangedEventArgs e)
         {
             if ((double)e.NewValue != ToolFontSize)
+            {
+                UpdateProperties(_root);
+            }
+        }
+
+        #endregion
+
+        #region ToolTabCornerRadius dependency property
+
+        [Bindable(true)]
+        [DesignerSerializationVisibility(DesignerSerializationVisibility.Hidden)]
+        public static readonly DependencyProperty ToolTabCornerRadiusProperty = DependencyProperty.Register("ToolTabCornerRadius", typeof(CornerRadius), typeof(TabHeaderControl), new FrameworkPropertyMetadata(new CornerRadius(0.0), new PropertyChangedCallback(OnToolTabCornerRadiusChanged)));
+
+        public CornerRadius ToolTabCornerRadius
+        {
+            get
+            {
+                return (CornerRadius)GetValue(ToolTabCornerRadiusProperty);
+            }
+            set
+            {
+                if (value != ToolTabCornerRadius)
+                {
+                    SetValue(ToolTabCornerRadiusProperty, value);
+                }
+            }
+        }
+
+        private static void OnToolTabCornerRadiusChanged(DependencyObject d, DependencyPropertyChangedEventArgs e)
+        {
+            ((LayoutManager)d).OnToolTabCornerRadiusChanged(e);
+        }
+
+        protected virtual void OnToolTabCornerRadiusChanged(DependencyPropertyChangedEventArgs e)
+        {
+            if ((CornerRadius)e.NewValue != ToolTabCornerRadius)
             {
                 UpdateProperties(_root);
             }
@@ -609,6 +697,78 @@ namespace WpfDockManagerDemo.DockManager
 
         #endregion
 
+        #region FloatingToolTitleBarBackground dependency property
+
+        [Bindable(true)]
+        [DesignerSerializationVisibility(DesignerSerializationVisibility.Hidden)]
+        public static readonly DependencyProperty FloatingToolTitleBarBackgroundProperty = DependencyProperty.Register("FloatingToolTitleBarBackground", typeof(Brush), typeof(TabHeaderControl), new FrameworkPropertyMetadata(Brushes.Gainsboro, new PropertyChangedCallback(OnFloatingToolTitleBarBackgroundChanged)));
+
+        public Brush FloatingToolTitleBarBackground
+        {
+            get
+            {
+                return (Brush)GetValue(FloatingToolTitleBarBackgroundProperty);
+            }
+            set
+            {
+                if (value != FloatingToolTitleBarBackground)
+                {
+                    SetValue(FloatingToolTitleBarBackgroundProperty, value);
+                }
+            }
+        }
+
+        private static void OnFloatingToolTitleBarBackgroundChanged(DependencyObject d, DependencyPropertyChangedEventArgs e)
+        {
+            ((LayoutManager)d).OnFloatingToolTitleBarBackgroundChanged(e);
+        }
+
+        protected virtual void OnFloatingToolTitleBarBackgroundChanged(DependencyPropertyChangedEventArgs e)
+        {
+            if ((Brush)e.NewValue != FloatingToolTitleBarBackground)
+            {
+                UpdateProperties(_root);
+            }
+        }
+
+        #endregion
+
+        #region FloatingToolBackground dependency property
+
+        [Bindable(true)]
+        [DesignerSerializationVisibility(DesignerSerializationVisibility.Hidden)]
+        public static readonly DependencyProperty FloatingToolBackgroundProperty = DependencyProperty.Register("FloatingToolBackground", typeof(Brush), typeof(TabHeaderControl), new FrameworkPropertyMetadata(Brushes.LightBlue, new PropertyChangedCallback(OnFloatingToolBackgroundChanged)));
+
+        public Brush FloatingToolBackground
+        {
+            get
+            {
+                return (Brush)GetValue(FloatingToolBackgroundProperty);
+            }
+            set
+            {
+                if (value != FloatingToolBackground)
+                {
+                    SetValue(FloatingToolBackgroundProperty, value);
+                }
+            }
+        }
+
+        private static void OnFloatingToolBackgroundChanged(DependencyObject d, DependencyPropertyChangedEventArgs e)
+        {
+            ((LayoutManager)d).OnFloatingToolBackgroundChanged(e);
+        }
+
+        protected virtual void OnFloatingToolBackgroundChanged(DependencyPropertyChangedEventArgs e)
+        {
+            if ((Brush)e.NewValue != FloatingToolBackground)
+            {
+                UpdateProperties(_root);
+            }
+        }
+
+        #endregion
+
         #region DocumentFontFamily dependency property
 
         [Bindable(true)]
@@ -674,6 +834,42 @@ namespace WpfDockManagerDemo.DockManager
         protected virtual void OnDocumentFontSizeChanged(DependencyPropertyChangedEventArgs e)
         {
             if ((double)e.NewValue != DocumentFontSize)
+            {
+                UpdateProperties(_root);
+            }
+        }
+
+        #endregion
+
+        #region DocumentTabCornerRadius dependency property
+
+        [Bindable(true)]
+        [DesignerSerializationVisibility(DesignerSerializationVisibility.Hidden)]
+        public static readonly DependencyProperty DocumentTabCornerRadiusProperty = DependencyProperty.Register("DocumentTabCornerRadius", typeof(CornerRadius), typeof(TabHeaderControl), new FrameworkPropertyMetadata(new CornerRadius(0.0), new PropertyChangedCallback(OnDocumentTabCornerRadiusChanged)));
+
+        public CornerRadius DocumentTabCornerRadius
+        {
+            get
+            {
+                return (CornerRadius)GetValue(DocumentTabCornerRadiusProperty);
+            }
+            set
+            {
+                if (value != DocumentTabCornerRadius)
+                {
+                    SetValue(DocumentTabCornerRadiusProperty, value);
+                }
+            }
+        }
+
+        private static void OnDocumentTabCornerRadiusChanged(DependencyObject d, DependencyPropertyChangedEventArgs e)
+        {
+            ((LayoutManager)d).OnDocumentTabCornerRadiusChanged(e);
+        }
+
+        protected virtual void OnDocumentTabCornerRadiusChanged(DependencyPropertyChangedEventArgs e)
+        {
+            if ((CornerRadius)e.NewValue != DocumentTabCornerRadius)
             {
                 UpdateProperties(_root);
             }
@@ -1437,13 +1633,7 @@ namespace WpfDockManagerDemo.DockManager
         DocumentPaneGroup ILayoutFactory.MakeDocumentPaneGroup()
         {
             DocumentPaneGroup documentPaneGroup = new DocumentPaneGroup();
-            documentPaneGroup.HeaderBackground = DocumentHeaderBackground;
-            documentPaneGroup.IViewContainer.FontSize = DocumentFontSize;
-            documentPaneGroup.IViewContainer.FontFamily = DocumentFontFamily;
-            documentPaneGroup.IViewContainer.SelectedTabHeaderBackground = SelectedDocumentTabHeaderBackground;
-            documentPaneGroup.IViewContainer.UnselectedTabHeaderBackground = UnselectedDocumentTabHeaderBackground;
-            documentPaneGroup.IViewContainer.SelectedTabHeaderForeground = SelectedDocumentTabHeaderForeground;
-            documentPaneGroup.IViewContainer.UnselectedTabHeaderForeground = UnselectedDocumentTabHeaderForeground;
+            UpdateProperties(documentPaneGroup);
             RegisterDockPane(documentPaneGroup);
             return documentPaneGroup;
         }
@@ -1451,14 +1641,7 @@ namespace WpfDockManagerDemo.DockManager
         ToolPaneGroup ILayoutFactory.MakeToolPaneGroup()
         {
             ToolPaneGroup toolPaneGroup = new ToolPaneGroup();
-            toolPaneGroup.HeaderBackground = ToolHeaderBackground;
-            toolPaneGroup.FontSize = ToolFontSize;
-            toolPaneGroup.IViewContainer.FontSize = ToolFontSize;
-            toolPaneGroup.IViewContainer.FontFamily = ToolFontFamily;
-            toolPaneGroup.IViewContainer.SelectedTabHeaderBackground = SelectedToolTabHeaderBackground;
-            toolPaneGroup.IViewContainer.UnselectedTabHeaderBackground = UnselectedToolTabHeaderBackground;
-            toolPaneGroup.IViewContainer.SelectedTabHeaderForeground = SelectedToolTabHeaderForeground;
-            toolPaneGroup.IViewContainer.UnselectedTabHeaderForeground = UnselectedToolTabHeaderForeground;
+            UpdateProperties(toolPaneGroup);
             RegisterDockPane(toolPaneGroup);
             toolPaneGroup.UnPinClick += ToolPane_UnPinClick;
             return toolPaneGroup;
@@ -1481,14 +1664,7 @@ namespace WpfDockManagerDemo.DockManager
         FloatingDocumentPaneGroup ILayoutFactory.MakeFloatingDocumentPaneGroup()
         {
             FloatingDocumentPaneGroup floatingDocumentPaneGroup = new FloatingDocumentPaneGroup();
-            floatingDocumentPaneGroup.Background = FloatingDocumentBackground;
-            floatingDocumentPaneGroup.HeaderBackground = FloatingDocumentTitleBarBackground;
-            floatingDocumentPaneGroup.IViewContainer.FontSize = DocumentFontSize;
-            floatingDocumentPaneGroup.IViewContainer.FontFamily = DocumentFontFamily;
-            floatingDocumentPaneGroup.IViewContainer.SelectedTabHeaderBackground = SelectedDocumentTabHeaderBackground;
-            floatingDocumentPaneGroup.IViewContainer.UnselectedTabHeaderBackground = UnselectedDocumentTabHeaderBackground;
-            floatingDocumentPaneGroup.IViewContainer.SelectedTabHeaderForeground = SelectedDocumentTabHeaderForeground;
-            floatingDocumentPaneGroup.IViewContainer.UnselectedTabHeaderForeground = UnselectedDocumentTabHeaderForeground;
+            UpdateProperties(floatingDocumentPaneGroup);
             RegisterFloatingPane(floatingDocumentPaneGroup);
             FloatingDocumentPaneGroups.Add(floatingDocumentPaneGroup);
             return floatingDocumentPaneGroup;
@@ -1497,6 +1673,7 @@ namespace WpfDockManagerDemo.DockManager
         FloatingToolPaneGroup ILayoutFactory.MakeFloatingToolPaneGroup()
         {
             FloatingToolPaneGroup floatingToolPaneGroup = new FloatingToolPaneGroup();
+            UpdateProperties(floatingToolPaneGroup);
             RegisterFloatingPane(floatingToolPaneGroup);
             FloatingToolPaneGroups.Add(floatingToolPaneGroup);
             return floatingToolPaneGroup;

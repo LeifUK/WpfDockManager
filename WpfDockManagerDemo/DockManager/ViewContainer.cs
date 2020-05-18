@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Windows;
 using System.Windows.Controls;
 using System.Windows.Media;
 
@@ -135,6 +136,14 @@ namespace WpfDockManagerDemo.DockManager
             set
             {
                 _tabHeaderControl.FontFamily = new FontFamily(value);
+            }
+        }
+
+        public CornerRadius TabCornerRadius
+        {
+            set
+            {
+                _tabHeaderControl.TabCornerRadius = value;
             }
         }
 

@@ -116,7 +116,7 @@
                     <Setter Property="Template">
                         <Setter.Value>
                             <ControlTemplate TargetType="ListBoxItem">
-                                <Border Name="Border" Padding="0" SnapsToDevicePixels="true" BorderThickness="0">
+                                <Border Name="Border" Padding="0" SnapsToDevicePixels="true" BorderThickness="0" CornerRadius="{Binding Path=TabCornerRadius, RelativeSource={RelativeSource AncestorType={x:Type local:TabHeaderControl}}}">
                                     <Grid>
                                         <Grid.ColumnDefinitions>
                                             <ColumnDefinition Width="4"/>

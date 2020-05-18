@@ -31,7 +31,7 @@ namespace WpfDockManagerDemo.DockManager
             Grid.SetZIndex(_border, -1);
             _border.HorizontalAlignment = System.Windows.HorizontalAlignment.Stretch;
             _border.VerticalAlignment = System.Windows.VerticalAlignment.Stretch;
-            _border.Background = System.Windows.Media.Brushes.Gray;
+            _border.Background = System.Windows.Media.Brushes.Transparent;
 
             _button = new Button();
             _button.VerticalAlignment = VerticalAlignment.Center;

@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Windows;
 using System.Windows.Controls;
 using System.Windows.Media;
 
@@ -21,6 +22,7 @@ namespace WpfDockManagerDemo.DockManager
 
         double FontSize { set; }
         string FontFamily { set; }
+        CornerRadius TabCornerRadius { set; }
         Brush SelectedTabHeaderBackground { set; }
         Brush UnselectedTabHeaderBackground { set; }
         Brush SelectedTabHeaderForeground { set; }

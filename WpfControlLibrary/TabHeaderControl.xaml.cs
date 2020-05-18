@@ -302,6 +302,44 @@ namespace WpfControlLibrary
 
         #endregion
 
+
+        #region TabCornerRadius dependency property
+
+        [Bindable(true)]
+        [DesignerSerializationVisibility(DesignerSerializationVisibility.Hidden)]
+        public static readonly DependencyProperty TabCornerRadiusProperty = DependencyProperty.Register("TabCornerRadius", typeof(CornerRadius), typeof(TabHeaderControl), new FrameworkPropertyMetadata(new CornerRadius(0.0), new PropertyChangedCallback(OnTabCornerRadiusChanged)));
+
+        public CornerRadius TabCornerRadius
+        {
+            get
+            {
+                return (CornerRadius)GetValue(TabCornerRadiusProperty);
+            }
+            set
+            {
+                if (value != TabCornerRadius)
+                {
+                    SetValue(TabCornerRadiusProperty, value);
+                }
+            }
+        }
+
+        private static void OnTabCornerRadiusChanged(DependencyObject d, DependencyPropertyChangedEventArgs e)
+        {
+            ((TabHeaderControl)d).OnTabCornerRadiusChanged(e);
+        }
+
+        protected virtual void OnTabCornerRadiusChanged(DependencyPropertyChangedEventArgs e)
+        {
+            if (e.NewValue != null)
+            {
+                // Warning warning
+                //_listBox.cor = e.NewValue;
+            }
+        }
+
+        #endregion
+
         #region SelectedTabBackground dependency property
 
         [Bindable(true)]
