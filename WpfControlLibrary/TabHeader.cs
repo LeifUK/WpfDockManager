@@ -92,10 +92,10 @@ namespace WpfControlLibrary
             {
                 Point topLeftPoint = PointToScreen(new Point(0, 0));
                 if (
-                        (cursorScreenPosition.Y < (topLeftPoint.Y - 100)) ||
-                        (cursorScreenPosition.Y > (topLeftPoint.Y + ActualHeight + 30)) ||
-                        (cursorScreenPosition.X < (topLeftPoint.X - 100)) ||
-                        (cursorScreenPosition.X > (topLeftPoint.X + ActualWidth + 30))
+                        (cursorScreenPosition.Y < (topLeftPoint.Y - 30)) ||
+                        (cursorScreenPosition.Y > (topLeftPoint.Y + ActualHeight + 15)) ||
+                        (cursorScreenPosition.X < (topLeftPoint.X - 30)) ||
+                        (cursorScreenPosition.X > (topLeftPoint.X + ActualWidth + 15))
                    )
                 {
                     // Cancel further drag processing until we get the next mouse left button down

@@ -21,21 +21,21 @@ namespace WpfDockManagerDemo.DockManager
 
             CreateTabControl(1, 0);
 
+            System.Windows.ResourceDictionary res = Utilities.GetResourceDictionary();
+
             _menuButton = new Button();
             Children.Add(_menuButton);
             Grid.SetRow(_menuButton, 1);
             Grid.SetColumn(_menuButton, 2);
             _menuButton.Click += delegate { if (DisplayGeneralMenu != null) DisplayGeneralMenu(); };
-            // Warning warning warning
-            System.Windows.ResourceDictionary res = (System.Windows.ResourceDictionary)App.LoadComponent(new System.Uri("/WpfDockManagerDemo;component/DockManager/Dictionary.xaml", System.UriKind.Relative));
-            _menuButton.Style = (System.Windows.Style)res["styleDocumentMenuButton"];
+            _menuButton.Style = res["StyleSettingsButton"] as Style;
 
             _documentButton = new Button();
             Children.Add(_documentButton);
             Grid.SetRow(_documentButton, 1);
             Grid.SetColumn(_documentButton, 4);
             _documentButton.Click += delegate { Helpers.DisplayItemsMenu(_items, _tabHeaderControl, _selectedUserControl); };
-            _documentButton.Style = FindResource("styleHeaderMenuButton") as Style;
+            _documentButton.Style = res["StyleViewListButton"] as Style;
         }
 
         private Button _documentButton;

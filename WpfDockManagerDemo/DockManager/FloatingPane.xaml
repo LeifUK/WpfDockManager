@@ -30,8 +30,8 @@
         <CommandBinding Command="{x:Static SystemCommands.RestoreWindowCommand}" CanExecute="CommandBinding_CanExecute" Executed="CommandBinding_Executed_Restore" />
     </Window.CommandBindings>
 
-    <Border x:Name="MainWindowBorder" BorderBrush="LightCoral" BorderThickness="0">
-        <Grid x:Name="_parentContainer" Background="White">
+    <Border x:Name="MainWindowBorder" BorderBrush="LightCoral" BorderThickness="0" Background="Transparent">
+        <Grid x:Name="_parentContainer" Background="Transparent">
 
             <Grid.RowDefinitions>
                 <RowDefinition Height ="Auto"/>
@@ -39,7 +39,7 @@
             </Grid.RowDefinitions>
 
             <!--Window chrome-->
-            <Grid Grid.Row="0" Height="30" Background="Transparent">
+            <Grid x:Name="_gridHeader" Grid.Row="0" Height="30" Background="Transparent">
                 <Grid.ColumnDefinitions>
                     <ColumnDefinition Width="*"/>
                     <ColumnDefinition Width="Auto"/>

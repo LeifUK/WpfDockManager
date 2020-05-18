@@ -1,8 +1,6 @@
 ﻿using System;
-using System.Collections.Generic;
 using System.Windows.Controls;
-using System.Windows;
-using System.Windows.Input;
+using System.Windows.Media;
 
 namespace WpfDockManagerDemo.DockManager
 {
@@ -14,6 +12,35 @@ namespace WpfDockManagerDemo.DockManager
             IViewContainer.TabClosed += IDocumentContainer_TabClosed;
             IViewContainer.FloatTabRequest += IViewContainer_FloatTabRequest;
             Children.Add(iViewContainer as System.Windows.UIElement);
+        }
+
+        protected Border HeaderBorder;
+
+        protected Brush _headerBackground;
+        public Brush HeaderBackground
+        {
+            set
+            {
+                _headerBackground = value;
+                if (HeaderBorder != null)
+                {
+                    HeaderBorder.Background = value;
+                }
+            }
+        }
+
+        private bool _isHighlighted;
+        public override bool IsHighlighted
+        {
+            get
+            {
+                return _isHighlighted;
+            }
+            set
+            {
+                _isHighlighted = value;
+                HeaderBorder.Background = IsHighlighted ? System.Windows.Media.Brushes.Firebrick : _headerBackground;
+            }
         }
 
         private void IViewContainer_FloatTabRequest(object sender, EventArgs e)

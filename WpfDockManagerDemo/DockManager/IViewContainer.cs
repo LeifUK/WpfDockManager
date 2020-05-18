@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Windows.Controls;
+using System.Windows.Media;
 
 namespace WpfDockManagerDemo.DockManager
 {
@@ -17,5 +18,12 @@ namespace WpfDockManagerDemo.DockManager
         event EventHandler SelectionChanged;
         event EventHandler TabClosed;
         event EventHandler FloatTabRequest;
+
+        double FontSize { set; }
+        string FontFamily { set; }
+        Brush SelectedTabHeaderBackground { set; }
+        Brush UnselectedTabHeaderBackground { set; }
+        Brush SelectedTabHeaderForeground { set; }
+        Brush UnselectedTabHeaderForeground { set; }
     }
 }

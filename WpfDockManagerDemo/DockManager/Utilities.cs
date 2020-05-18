@@ -8,6 +8,11 @@ namespace WpfDockManagerDemo.DockManager
 {
     public static class Utilities
     {
+        internal static System.Windows.ResourceDictionary GetResourceDictionary()
+        {
+            return (System.Windows.ResourceDictionary)App.LoadComponent(new System.Uri("/WpfDockManagerDemo;component/DockManager/Dictionary.xaml", System.UriKind.Relative));
+        }
+
         public const int VK_LBUTTON = 0x01;
 
         public static bool IsLeftMouseButtonDown()

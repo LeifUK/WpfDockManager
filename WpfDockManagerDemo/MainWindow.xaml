@@ -77,6 +77,25 @@
             </Grid>
 
             <dockManager:LayoutManager x:Name="_layoutManager" Grid.Row="1" Grid.Column="0" DocumentsSource="{Binding Documents}" ToolsSource="{Binding Tools}" VerticalAlignment="Stretch" HorizontalAlignment="Stretch">
+                <dockManager:LayoutManager.ToolFontSize>18</dockManager:LayoutManager.ToolFontSize>
+                <dockManager:LayoutManager.ToolFontFamily>Times New Roman</dockManager:LayoutManager.ToolFontFamily>
+                <dockManager:LayoutManager.ToolHeaderBackground>MidnightBlue</dockManager:LayoutManager.ToolHeaderBackground>
+                <dockManager:LayoutManager.SelectedToolTabHeaderBackground>LightSteelBlue</dockManager:LayoutManager.SelectedToolTabHeaderBackground>
+                <dockManager:LayoutManager.UnselectedToolTabHeaderBackground>MidnightBlue</dockManager:LayoutManager.UnselectedToolTabHeaderBackground>
+                <dockManager:LayoutManager.SelectedToolTabHeaderForeground>Black</dockManager:LayoutManager.SelectedToolTabHeaderForeground>
+                <dockManager:LayoutManager.UnselectedToolTabHeaderForeground>White</dockManager:LayoutManager.UnselectedToolTabHeaderForeground>
+
+                <dockManager:LayoutManager.DocumentFontSize>18</dockManager:LayoutManager.DocumentFontSize>
+                <dockManager:LayoutManager.DocumentFontFamily>Courier New</dockManager:LayoutManager.DocumentFontFamily>
+                <dockManager:LayoutManager.DocumentHeaderBackground>SteelBlue</dockManager:LayoutManager.DocumentHeaderBackground>
+                <dockManager:LayoutManager.SelectedDocumentTabHeaderBackground>DarkSalmon</dockManager:LayoutManager.SelectedDocumentTabHeaderBackground>
+                <dockManager:LayoutManager.UnselectedDocumentTabHeaderBackground>DarkRed</dockManager:LayoutManager.UnselectedDocumentTabHeaderBackground>
+                <dockManager:LayoutManager.SelectedDocumentTabHeaderForeground>Black</dockManager:LayoutManager.SelectedDocumentTabHeaderForeground>
+                <dockManager:LayoutManager.UnselectedDocumentTabHeaderForeground>White</dockManager:LayoutManager.UnselectedDocumentTabHeaderForeground>
+
+                <dockManager:LayoutManager.FloatingDocumentTitleBarBackground>LightSteelBlue</dockManager:LayoutManager.FloatingDocumentTitleBarBackground>
+                <dockManager:LayoutManager.FloatingDocumentBackground>SteelBlue</dockManager:LayoutManager.FloatingDocumentBackground>
+                
                 <dockManager:LayoutManager.DocumentTemplates>
                     <DataTemplate DataType="{x:Type viewModel:DocumentOneViewModel}">
                         <view:DocumentOneView x:Name="_documentOneView"/>

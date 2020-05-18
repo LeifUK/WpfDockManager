@@ -2,6 +2,7 @@
 using System.Windows;
 using System.Windows.Controls;
 using System.Windows.Input;
+using System.Windows.Media;
 
 namespace WpfDockManagerDemo.DockManager
 {
@@ -33,20 +34,20 @@ namespace WpfDockManagerDemo.DockManager
             ColumnDefinitions.Add(columnDefinition);
 
             RowDefinitions.Add(new RowDefinition());
-            RowDefinitions[0].Height = new GridLength(20, GridUnitType.Pixel);
+            RowDefinitions[0].Height = new GridLength(1, GridUnitType.Auto);
             RowDefinitions.Add(new RowDefinition());
             RowDefinitions[1].Height = new GridLength(1, GridUnitType.Star);
 
-            Border = new Border();
-            Border.VerticalAlignment = VerticalAlignment.Stretch;
-            Border.HorizontalAlignment = HorizontalAlignment.Stretch;
-            Border.Background = System.Windows.Media.Brushes.MidnightBlue;
-            Border.BorderBrush = System.Windows.Media.Brushes.Black;
-            Border.BorderThickness = new Thickness(1);
-            Grid.SetRow(Border, 0);
-            Grid.SetColumn(Border, 0);
-            Grid.SetColumnSpan(Border, 5);
-            Children.Add(Border);
+            HeaderBorder = new Border();
+            HeaderBorder.VerticalAlignment = VerticalAlignment.Stretch;
+            HeaderBorder.HorizontalAlignment = HorizontalAlignment.Stretch;
+            HeaderBorder.BorderBrush = System.Windows.Media.Brushes.Black;
+            HeaderBackground = System.Windows.Media.Brushes.MidnightBlue;
+            HeaderBorder.BorderThickness = new Thickness(1);
+            Grid.SetRow(HeaderBorder, 0);
+            Grid.SetColumn(HeaderBorder, 0);
+            Grid.SetColumnSpan(HeaderBorder, 5);
+            Children.Add(HeaderBorder);
 
             _titleLabel = new Label();
             _titleLabel.FontSize = 12;
@@ -58,23 +59,28 @@ namespace WpfDockManagerDemo.DockManager
             Grid.SetColumn(_titleLabel, 0);
             Children.Add(_titleLabel);
 
+            System.Windows.ResourceDictionary res = Utilities.GetResourceDictionary();
+
             Button menuButton = new Button();
-            menuButton.Style = FindResource("styleHeaderMenuButton") as Style;
+            menuButton.VerticalAlignment = VerticalAlignment.Center;
+            menuButton.Style = res["StyleViewListButton"] as Style;
             menuButton.Click += delegate { DisplayGeneralMenu(); };
             Grid.SetRow(menuButton, 0);
             Grid.SetColumn(menuButton, 2);
             Children.Add(menuButton);
 
             _pinButton = new Button();
+            _pinButton.VerticalAlignment = VerticalAlignment.Center;
             _pinButton.LayoutTransform = new System.Windows.Media.RotateTransform();
-            _pinButton.Style = FindResource("styleHeaderPinButton") as Style;
+            _pinButton.Style = res["StylePinButton"] as Style;
             _pinButton.Click += PinButton_Click;
             Grid.SetRow(_pinButton, 0);
             Grid.SetColumn(_pinButton, 3);
             Children.Add(_pinButton);
 
             Button closeButton = new Button();
-            closeButton.Style = FindResource("styleHeaderCloseButton") as Style;
+            closeButton.VerticalAlignment = VerticalAlignment.Center;
+            closeButton.Style = res["StyleCloseButton"] as Style;
             Grid.SetRow(closeButton, 0);
             Grid.SetColumn(closeButton, 4);
             Panel.SetZIndex(closeButton, 99);
@@ -85,6 +91,17 @@ namespace WpfDockManagerDemo.DockManager
             Grid.SetRow(IViewContainer as System.Windows.UIElement, 1);
             Grid.SetColumn(IViewContainer as System.Windows.UIElement, 0);
             Grid.SetColumnSpan(IViewContainer as System.Windows.UIElement, ColumnDefinitions.Count);
+        }
+
+        public double FontSize
+        {
+            set
+            {
+                if (_titleLabel != null)
+                {
+                    _titleLabel.FontSize = value;
+                }
+            }
         }
 
         public void ShowAsUnPinned()
@@ -110,22 +127,7 @@ namespace WpfDockManagerDemo.DockManager
 
         public string Title { get { return IViewContainer.Title; } }
 
-        public Border Border { get; private set; }
         Button _pinButton;
-
-        private bool _isHighlighted;
-        public override bool IsHighlighted
-        {
-            get
-            {
-                return _isHighlighted;
-            }
-            set
-            {
-                _isHighlighted = value;
-                Border.Background = IsHighlighted ? System.Windows.Media.Brushes.Firebrick : System.Windows.Media.Brushes.SteelBlue;
-            }
-        }
 
         Point _mouseDownPosition;
 

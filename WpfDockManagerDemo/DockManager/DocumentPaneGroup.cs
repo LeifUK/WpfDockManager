@@ -37,17 +37,17 @@ namespace WpfDockManagerDemo.DockManager
             RowDefinitions.Add(new RowDefinition());
             RowDefinitions[0].Height = new GridLength(1, GridUnitType.Star);
 
-            Border = new Border();
-            Border.VerticalAlignment = VerticalAlignment.Stretch;
-            Border.HorizontalAlignment = HorizontalAlignment.Stretch;
-            Border.Background = System.Windows.Media.Brushes.Gray;
-            Border.BorderBrush = System.Windows.Media.Brushes.Black;
-            Border.BorderThickness = new Thickness(1);
-            Grid.SetRow(Border, 0);
-            Grid.SetColumn(Border, 0);
-            Grid.SetColumnSpan(Border, 5);
-            Grid.SetZIndex(Border, -1);
-            Children.Add(Border);
+            HeaderBorder = new Border();
+            HeaderBorder.VerticalAlignment = VerticalAlignment.Stretch;
+            HeaderBorder.HorizontalAlignment = HorizontalAlignment.Stretch;
+            HeaderBackground = System.Windows.Media.Brushes.MidnightBlue;
+            HeaderBorder.BorderBrush = System.Windows.Media.Brushes.Black;
+            HeaderBorder.BorderThickness = new Thickness(1);
+            Grid.SetRow(HeaderBorder, 0);
+            Grid.SetColumn(HeaderBorder, 0);
+            Grid.SetColumnSpan(HeaderBorder, 5);
+            Grid.SetZIndex(HeaderBorder, -1);
+            Children.Add(HeaderBorder);
 
             IViewContainer.SelectionChanged += DocumentContainer_SelectionChanged;
             Grid.SetRow(IViewContainer as System.Windows.UIElement, 0);
@@ -60,23 +60,6 @@ namespace WpfDockManagerDemo.DockManager
         private void DocumentContainer_SelectionChanged(object sender, EventArgs e)
         {
             // Nothing to do!
-        }
-
-        private Border Border { get; set; }
-
-        private bool _isHighlighted;
-        // Warning warning => move to DockPane?
-        public override bool IsHighlighted
-        {
-            get
-            {
-                return _isHighlighted;
-            }
-            set
-            {
-                _isHighlighted = value;
-                Border.Background = IsHighlighted ? System.Windows.Media.Brushes.Firebrick : System.Windows.Media.Brushes.SteelBlue;
-            }
         }
 
         //Point _mouseDownPosition;

@@ -241,7 +241,7 @@ namespace WpfDockManagerDemo.DockManager.Serialisation
                     }
                     else if ((xmlChildNode as XmlElement).Name == "FloatingToolPaneGroup")
                     {
-                        FloatingToolPaneGroup floatingToolPaneGroup = iLayoutFactory.CreateFloatingToolPaneGroup();
+                        FloatingToolPaneGroup floatingToolPaneGroup = iLayoutFactory.MakeFloatingToolPaneGroup();
                         XmlElement xmlfloatingTool = xmlChildNode as XmlElement;
                         floatingToolPaneGroup.Tag = GetGuid(xmlfloatingTool);
                         SetLocationAndSize(xmlfloatingTool, floatingToolPaneGroup);

@@ -7,7 +7,7 @@ namespace WpfDockManagerDemo.DockManager
         DocumentPaneGroup MakeDocumentPaneGroup();
         ToolPaneGroup MakeToolPaneGroup();
         FloatingDocumentPaneGroup MakeFloatingDocumentPaneGroup();
-        FloatingToolPaneGroup CreateFloatingToolPaneGroup();
+        FloatingToolPaneGroup MakeFloatingToolPaneGroup();
         void MakeUnpinnedToolPaneGroup(WindowLocation windowLocation, ToolPaneGroup toolPaneGroup, string siblingGuid, bool isHorizontal, bool isFirst);
 
         string MakeDocumentKey(string contentId, string Url);

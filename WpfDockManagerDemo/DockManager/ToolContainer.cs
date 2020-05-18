@@ -1,5 +1,4 @@
-﻿using System;
-using System.Windows;
+﻿using System.Windows;
 using System.Windows.Controls;
 
 namespace WpfDockManagerDemo.DockManager
@@ -35,13 +34,13 @@ namespace WpfDockManagerDemo.DockManager
             _border.Background = System.Windows.Media.Brushes.Gray;
 
             _button = new Button();
+            _button.VerticalAlignment = VerticalAlignment.Center;
             Children.Add(_button);
             Grid.SetRow(_button, 1);
             Grid.SetColumn(_button, 2);
             _button.Click += delegate { Helpers.DisplayItemsMenu(_items, _tabHeaderControl, _selectedUserControl); };
-            // Warning warning warning
             System.Windows.ResourceDictionary res = (System.Windows.ResourceDictionary)App.LoadComponent(new System.Uri("/WpfDockManagerDemo;component/DockManager/Dictionary.xaml", System.UriKind.Relative));
-            _button.Style = (System.Windows.Style)res["MenuButtonStyle"];
+            _button.Style = Utilities.GetResourceDictionary()["MenuButtonStyle"] as Style;
         }
 
         private RowDefinition rowDefinition_UserControl;

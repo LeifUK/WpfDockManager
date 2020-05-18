@@ -14,6 +14,7 @@
         <Grid.ColumnDefinitions>
             <ColumnDefinition Width="*"/>
         </Grid.ColumnDefinitions>
+
         <Label Grid.Row="0" Grid.Column="0" Content="{Binding LabelText}" VerticalAlignment="Center" HorizontalAlignment="Center" Foreground="White" FontSize="24" Panel.ZIndex="2"/>
         <Rectangle Grid.Row="0" Grid.Column="0" Width="200" Height="100" VerticalAlignment="Center" HorizontalAlignment="Center" Fill="Green" Panel.ZIndex="1"/>
     </Grid>

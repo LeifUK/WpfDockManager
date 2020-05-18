@@ -3,6 +3,7 @@ using System.Threading.Tasks;
 using System.Windows;
 using System.Windows.Controls;
 using System.Windows.Input;
+using System.Windows.Media;
 
 namespace WpfDockManagerDemo.DockManager
 {
@@ -19,6 +20,14 @@ namespace WpfDockManagerDemo.DockManager
             _parentContainer.Children.Add(iViewContainer as UIElement);
             Grid.SetRow(iViewContainer as UIElement, 1);
             IViewContainer = iViewContainer;
+        }
+
+        public Brush HeaderBackground
+        {
+            set
+            {
+                _gridHeader.Background = value;
+            }
         }
 
         // Can execute

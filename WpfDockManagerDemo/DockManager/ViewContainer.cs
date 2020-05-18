@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Windows.Controls;
+using System.Windows.Media;
 
 namespace WpfDockManagerDemo.DockManager
 {
@@ -20,8 +21,6 @@ namespace WpfDockManagerDemo.DockManager
             _tabHeaderControl.ItemsChanged += _tabHeaderControl_ItemsChanged;
             _tabHeaderControl.ItemsSource = _items;
             _tabHeaderControl.DisplayMemberPath = "Value.Title";
-            _tabHeaderControl.UnselectedTabBackground = System.Windows.Media.Brushes.MidnightBlue;
-            _tabHeaderControl.SelectedTabBackground = System.Windows.Media.Brushes.LightSalmon;
             Children.Add(_tabHeaderControl);
             Grid.SetRow(_tabHeaderControl, row);
             Grid.SetColumn(_tabHeaderControl, column);
@@ -122,6 +121,54 @@ namespace WpfDockManagerDemo.DockManager
         }
 
         #region IViewContainer
+
+        public double FontSize
+        {
+            set
+            {
+                _tabHeaderControl.FontSize = value;
+            }
+        }
+
+        public string FontFamily
+        {
+            set
+            {
+                _tabHeaderControl.FontFamily = new FontFamily(value);
+            }
+        }
+
+        public Brush SelectedTabHeaderBackground
+        {
+            set
+            {
+                _tabHeaderControl.SelectedTabBackground = value;
+            }
+        }
+
+        public Brush UnselectedTabHeaderBackground
+        {
+            set
+            {
+                _tabHeaderControl.UnselectedTabBackground = value;
+            }
+        }
+
+        public Brush SelectedTabHeaderForeground
+        {
+            set
+            {
+                _tabHeaderControl.SelectedTabForeground = value;
+            }
+        }
+
+        public Brush UnselectedTabHeaderForeground
+        {
+            set
+            {
+                _tabHeaderControl.UnselectedTabForeground = value;
+            }
+        }
 
         public event EventHandler SelectionChanged;
         public event EventHandler TabClosed;

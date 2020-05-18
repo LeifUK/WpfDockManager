@@ -6,6 +6,7 @@ using System.Windows.Controls;
 using System.ComponentModel;
 using System.Xml;
 using System.Windows.Input;
+using System.Windows.Media;
 using WpfControlLibrary;
 
 namespace WpfDockManagerDemo.DockManager
@@ -310,6 +311,628 @@ namespace WpfDockManagerDemo.DockManager
 
         #endregion
 
+        // Warning warning
+        private void UpdateProperties(Grid grid)
+        {
+            foreach (var child in grid.Children)
+            {
+                if (child is ToolPaneGroup)
+                {
+                    IViewContainer iViewContainer = (child as ToolPaneGroup).IViewContainer;
+                    (child as ToolPaneGroup).HeaderBackground = ToolHeaderBackground;
+                    (child as ToolPaneGroup).FontSize = ToolFontSize;
+                    iViewContainer.FontSize = ToolFontSize;
+                    iViewContainer.FontFamily = ToolFontFamily;
+                    iViewContainer.SelectedTabHeaderBackground = SelectedToolTabHeaderBackground;
+                    iViewContainer.UnselectedTabHeaderBackground = UnselectedToolTabHeaderBackground;
+                    iViewContainer.SelectedTabHeaderForeground = SelectedToolTabHeaderForeground;
+                    iViewContainer.UnselectedTabHeaderForeground = UnselectedToolTabHeaderForeground;
+                }
+                else if (child is DocumentPaneGroup)
+                {
+                    IViewContainer iViewContainer = (child as DocumentPaneGroup).IViewContainer;
+                    (child as DocumentPaneGroup).HeaderBackground = DocumentHeaderBackground;
+                    iViewContainer.FontSize = DocumentFontSize;
+                    iViewContainer.FontFamily = DocumentFontFamily;
+                    iViewContainer.SelectedTabHeaderBackground = SelectedToolTabHeaderBackground;
+                    iViewContainer.UnselectedTabHeaderBackground = UnselectedToolTabHeaderBackground;
+                    iViewContainer.SelectedTabHeaderForeground = SelectedToolTabHeaderForeground;
+                    iViewContainer.UnselectedTabHeaderForeground = UnselectedToolTabHeaderForeground;
+                }
+                else if (child is FloatingToolPaneGroup)
+                {
+                    // Warning warning
+                    //(child as FloatingToolPaneGroup).Background = FloatingDocumentBackground;
+                    //(child as FloatingToolPaneGroup).HeaderBackground = FloatingDocumentTitleBarBackground;
+                }
+                else if (child is FloatingDocumentPaneGroup)
+                {
+                    (child as FloatingDocumentPaneGroup).Background = FloatingDocumentBackground;
+                    (child as FloatingDocumentPaneGroup).HeaderBackground = FloatingDocumentTitleBarBackground;
+                }
+                if (child is Grid)
+                {
+                    UpdateProperties(child as Grid);
+                }
+            }
+        }
+
+        #region ToolFontFamily dependency property
+
+        [Bindable(true)]
+        [DesignerSerializationVisibility(DesignerSerializationVisibility.Hidden)]
+        public static readonly DependencyProperty ToolFontFamilyProperty = DependencyProperty.Register("ToolFontFamily", typeof(string), typeof(TabHeaderControl), new FrameworkPropertyMetadata("Arial", new PropertyChangedCallback(OnToolFontFamilyChanged)));
+
+        public string ToolFontFamily
+        {
+            get
+            {
+                return (string)GetValue(ToolFontFamilyProperty);
+            }
+            set
+            {
+                if (value != ToolFontFamily)
+                {
+                    SetValue(ToolFontFamilyProperty, value);
+                }
+            }
+        }
+
+        private static void OnToolFontFamilyChanged(DependencyObject d, DependencyPropertyChangedEventArgs e)
+        {
+            ((LayoutManager)d).OnToolFontFamilyChanged(e);
+        }
+
+        protected virtual void OnToolFontFamilyChanged(DependencyPropertyChangedEventArgs e)
+        {
+            if ((string)e.NewValue != ToolFontFamily)
+            {
+                UpdateProperties(_root);
+            }
+        }
+
+        #endregion
+
+        #region ToolFontSize dependency property
+
+        [Bindable(true)]
+        [DesignerSerializationVisibility(DesignerSerializationVisibility.Hidden)]
+        public static readonly DependencyProperty ToolFontSizeProperty = DependencyProperty.Register("ToolFontSize", typeof(double), typeof(TabHeaderControl), new FrameworkPropertyMetadata(12.0, new PropertyChangedCallback(OnToolFontSizeChanged)));
+
+        public double ToolFontSize
+        {
+            get
+            {
+                return (double)GetValue(ToolFontSizeProperty);
+            }
+            set
+            {
+                if (value != ToolFontSize)
+                {
+                    SetValue(ToolFontSizeProperty, value);
+                }
+            }
+        }
+
+        private static void OnToolFontSizeChanged(DependencyObject d, DependencyPropertyChangedEventArgs e)
+        {
+            ((LayoutManager)d).OnToolFontSizeChanged(e);
+        }
+
+        protected virtual void OnToolFontSizeChanged(DependencyPropertyChangedEventArgs e)
+        {
+            if ((double)e.NewValue != ToolFontSize)
+            {
+                UpdateProperties(_root);
+            }
+        }
+
+        #endregion
+
+        #region ToolHeaderBackground dependency property
+
+        [Bindable(true)]
+        [DesignerSerializationVisibility(DesignerSerializationVisibility.Hidden)]
+        public static readonly DependencyProperty ToolHeaderBackgroundProperty = DependencyProperty.Register("ToolHeaderBackground", typeof(Brush), typeof(TabHeaderControl), new FrameworkPropertyMetadata(Brushes.LightSteelBlue, new PropertyChangedCallback(OnToolHeaderBackgroundChanged)));
+
+        public Brush ToolHeaderBackground
+        {
+            get
+            {
+                return (Brush)GetValue(ToolHeaderBackgroundProperty);
+            }
+            set
+            {
+                if (value != ToolHeaderBackground)
+                {
+                    SetValue(ToolHeaderBackgroundProperty, value);
+                }
+            }
+        }
+
+        private static void OnToolHeaderBackgroundChanged(DependencyObject d, DependencyPropertyChangedEventArgs e)
+        {
+            ((LayoutManager)d).OnToolHeaderBackgroundChanged(e);
+        }
+
+        protected virtual void OnToolHeaderBackgroundChanged(DependencyPropertyChangedEventArgs e)
+        {
+            if ((Brush)e.NewValue != ToolHeaderBackground)
+            {
+                UpdateProperties(_root);
+            }
+        }
+
+        #endregion
+
+        #region SelectedToolTabHeaderBackground dependency property
+
+        [Bindable(true)]
+        [DesignerSerializationVisibility(DesignerSerializationVisibility.Hidden)]
+        public static readonly DependencyProperty SelectedToolTabHeaderBackgroundProperty = DependencyProperty.Register("SelectedToolTabHeaderBackground", typeof(Brush), typeof(TabHeaderControl), new FrameworkPropertyMetadata(Brushes.LightSteelBlue, new PropertyChangedCallback(OnSelectedToolTabHeaderBackgroundChanged)));
+
+        public Brush SelectedToolTabHeaderBackground
+        {
+            get
+            {
+                return (Brush)GetValue(SelectedToolTabHeaderBackgroundProperty);
+            }
+            set
+            {
+                if (value != SelectedToolTabHeaderBackground)
+                {
+                    SetValue(SelectedToolTabHeaderBackgroundProperty, value);
+                }
+            }
+        }
+
+        private static void OnSelectedToolTabHeaderBackgroundChanged(DependencyObject d, DependencyPropertyChangedEventArgs e)
+        {
+            ((LayoutManager)d).OnSelectedToolTabHeaderBackgroundChanged(e);
+        }
+
+        protected virtual void OnSelectedToolTabHeaderBackgroundChanged(DependencyPropertyChangedEventArgs e)
+        {
+            if ((Brush)e.NewValue != SelectedToolTabHeaderBackground)
+            {
+                UpdateProperties(_root);
+            }
+        }
+
+        #endregion
+
+        #region UnselectedToolTabHeaderBackground dependency property
+
+        [Bindable(true)]
+        [DesignerSerializationVisibility(DesignerSerializationVisibility.Hidden)]
+        public static readonly DependencyProperty UnselectedToolTabHeaderBackgroundProperty = DependencyProperty.Register("UnselectedToolTabHeaderBackground", typeof(Brush), typeof(TabHeaderControl), new FrameworkPropertyMetadata(Brushes.Navy, new PropertyChangedCallback(OnSelectedToolTabHeaderBackgroundChanged)));
+
+        public Brush UnselectedToolTabHeaderBackground
+        {
+            get
+            {
+                return (Brush)GetValue(UnselectedToolTabHeaderBackgroundProperty);
+            }
+            set
+            {
+                if (value != UnselectedToolTabHeaderBackground)
+                {
+                    SetValue(UnselectedToolTabHeaderBackgroundProperty, value);
+                }
+            }
+        }
+
+        private static void OnUnselectedToolTabHeaderBackgroundChanged(DependencyObject d, DependencyPropertyChangedEventArgs e)
+        {
+            ((LayoutManager)d).OnUnselectedToolTabHeaderBackgroundChanged(e);
+        }
+
+        protected virtual void OnUnselectedToolTabHeaderBackgroundChanged(DependencyPropertyChangedEventArgs e)
+        {
+            if ((Brush)e.NewValue != UnselectedToolTabHeaderBackground)
+            {
+                UpdateProperties(_root);
+            }
+        }
+
+        #endregion
+
+        #region SelectedToolTabHeaderForeground dependency property
+
+        [Bindable(true)]
+        [DesignerSerializationVisibility(DesignerSerializationVisibility.Hidden)]
+        public static readonly DependencyProperty SelectedToolTabHeaderForegroundProperty = DependencyProperty.Register("SelectedToolTabHeaderForeground", typeof(Brush), typeof(TabHeaderControl), new FrameworkPropertyMetadata(Brushes.Khaki, new PropertyChangedCallback(OnSelectedToolTabHeaderForegroundPropertyChanged)));
+
+        public Brush SelectedToolTabHeaderForeground
+        {
+            get
+            {
+                return (Brush)GetValue(SelectedToolTabHeaderForegroundProperty);
+            }
+            set
+            {
+                if (value != SelectedToolTabHeaderForeground)
+                {
+                    SetValue(SelectedToolTabHeaderForegroundProperty, value);
+                }
+            }
+        }
+
+        private static void OnSelectedToolTabHeaderForegroundPropertyChanged(DependencyObject d, DependencyPropertyChangedEventArgs e)
+        {
+            ((LayoutManager)d).OnSelectedToolTabHeaderForegroundPropertyChanged(e);
+        }
+
+        protected virtual void OnSelectedToolTabHeaderForegroundPropertyChanged(DependencyPropertyChangedEventArgs e)
+        {
+            if ((Brush)e.NewValue != SelectedToolTabHeaderForeground)
+            {
+                UpdateProperties(_root);
+            }
+        }
+
+        #endregion
+
+        #region UnselectedToolTabHeaderForeground dependency property
+
+        [Bindable(true)]
+        [DesignerSerializationVisibility(DesignerSerializationVisibility.Hidden)]
+        public static readonly DependencyProperty UnselectedToolTabHeaderForegroundProperty = DependencyProperty.Register("UnselectedToolTabHeaderForeground", typeof(Brush), typeof(TabHeaderControl), new FrameworkPropertyMetadata(Brushes.Navy, new PropertyChangedCallback(OnUnselectedToolTabHeaderForegroundChanged)));
+
+        public Brush UnselectedToolTabHeaderForeground
+        {
+            get
+            {
+                return (Brush)GetValue(UnselectedToolTabHeaderForegroundProperty);
+            }
+            set
+            {
+                if (value != UnselectedToolTabHeaderForeground)
+                {
+                    SetValue(UnselectedToolTabHeaderForegroundProperty, value);
+                }
+            }
+        }
+
+        private static void OnUnselectedToolTabHeaderForegroundChanged(DependencyObject d, DependencyPropertyChangedEventArgs e)
+        {
+            ((LayoutManager)d).OnUnselectedToolTabHeaderForegroundChanged(e);
+        }
+
+        protected virtual void OnUnselectedToolTabHeaderForegroundChanged(DependencyPropertyChangedEventArgs e)
+        {
+            if ((Brush)e.NewValue != SelectedToolTabHeaderForeground)
+            {
+                UpdateProperties(_root);
+            }
+        }
+
+        #endregion
+
+        #region DocumentFontFamily dependency property
+
+        [Bindable(true)]
+        [DesignerSerializationVisibility(DesignerSerializationVisibility.Hidden)]
+        public static readonly DependencyProperty DocumentFontFamilyProperty = DependencyProperty.Register("DocumentFontFamily", typeof(string), typeof(TabHeaderControl), new FrameworkPropertyMetadata("Arial", new PropertyChangedCallback(OnDocumentFontFamilyChanged)));
+
+        public string DocumentFontFamily
+        {
+            get
+            {
+                return (string)GetValue(DocumentFontFamilyProperty);
+            }
+            set
+            {
+                if (value != DocumentFontFamily)
+                {
+                    SetValue(DocumentFontFamilyProperty, value);
+                }
+            }
+        }
+
+        private static void OnDocumentFontFamilyChanged(DependencyObject d, DependencyPropertyChangedEventArgs e)
+        {
+            ((LayoutManager)d).OnDocumentFontFamilyChanged(e);
+        }
+
+        protected virtual void OnDocumentFontFamilyChanged(DependencyPropertyChangedEventArgs e)
+        {
+            if ((string)e.NewValue != DocumentFontFamily)
+            {
+                UpdateProperties(_root);
+            }
+        }
+
+        #endregion
+
+        #region DocumentFontSize dependency property
+
+        [Bindable(true)]
+        [DesignerSerializationVisibility(DesignerSerializationVisibility.Hidden)]
+        public static readonly DependencyProperty DocumentFontSizeProperty = DependencyProperty.Register("DocumentFontSize", typeof(double), typeof(TabHeaderControl), new FrameworkPropertyMetadata(12.0, new PropertyChangedCallback(OnDocumentFontSizeChanged)));
+
+        public double DocumentFontSize
+        {
+            get
+            {
+                return (double)GetValue(DocumentFontSizeProperty);
+            }
+            set
+            {
+                if (value != DocumentFontSize)
+                {
+                    SetValue(DocumentFontSizeProperty, value);
+                }
+            }
+        }
+
+        private static void OnDocumentFontSizeChanged(DependencyObject d, DependencyPropertyChangedEventArgs e)
+        {
+            ((LayoutManager)d).OnDocumentFontSizeChanged(e);
+        }
+
+        protected virtual void OnDocumentFontSizeChanged(DependencyPropertyChangedEventArgs e)
+        {
+            if ((double)e.NewValue != DocumentFontSize)
+            {
+                UpdateProperties(_root);
+            }
+        }
+
+        #endregion
+
+        #region DocumentHeaderBackground dependency property
+
+        [Bindable(true)]
+        [DesignerSerializationVisibility(DesignerSerializationVisibility.Hidden)]
+        public static readonly DependencyProperty DocumentHeaderBackgroundProperty = DependencyProperty.Register("DocumentHeaderBackground", typeof(Brush), typeof(TabHeaderControl), new FrameworkPropertyMetadata(Brushes.LightBlue, new PropertyChangedCallback(OnDocumentHeaderBackgroundChanged)));
+
+        public Brush DocumentHeaderBackground
+        {
+            get
+            {
+                return (Brush)GetValue(DocumentHeaderBackgroundProperty);
+            }
+            set
+            {
+                if (value != DocumentHeaderBackground)
+                {
+                    SetValue(DocumentHeaderBackgroundProperty, value);
+                }
+            }
+        }
+
+        private static void OnDocumentHeaderBackgroundChanged(DependencyObject d, DependencyPropertyChangedEventArgs e)
+        {
+            ((LayoutManager)d).OnDocumentHeaderBackgroundChanged(e);
+        }
+
+        protected virtual void OnDocumentHeaderBackgroundChanged(DependencyPropertyChangedEventArgs e)
+        {
+            if ((Brush)e.NewValue != DocumentHeaderBackground)
+            {
+                UpdateProperties(_root);
+            }
+        }
+
+        #endregion
+
+        #region SelectedDocumentTabHeaderBackground dependency property
+
+        [Bindable(true)]
+        [DesignerSerializationVisibility(DesignerSerializationVisibility.Hidden)]
+        public static readonly DependencyProperty SelectedDocumentTabHeaderBackgroundProperty = DependencyProperty.Register("SelectedDocumentTabHeaderBackground", typeof(Brush), typeof(TabHeaderControl), new FrameworkPropertyMetadata(Brushes.LightSteelBlue, new PropertyChangedCallback(OnSelectedDocumentTabHeaderBackgroundChanged)));
+
+        public Brush SelectedDocumentTabHeaderBackground
+        {
+            get
+            {
+                return (Brush)GetValue(SelectedDocumentTabHeaderBackgroundProperty);
+            }
+            set
+            {
+                if (value != SelectedDocumentTabHeaderBackground)
+                {
+                    SetValue(SelectedDocumentTabHeaderBackgroundProperty, value);
+                }
+            }
+        }
+
+        private static void OnSelectedDocumentTabHeaderBackgroundChanged(DependencyObject d, DependencyPropertyChangedEventArgs e)
+        {
+            ((LayoutManager)d).OnSelectedDocumentTabHeaderBackgroundChanged(e);
+        }
+
+        protected virtual void OnSelectedDocumentTabHeaderBackgroundChanged(DependencyPropertyChangedEventArgs e)
+        {
+            if ((Brush)e.NewValue != SelectedDocumentTabHeaderBackground)
+            {
+                UpdateProperties(_root);
+            }
+        }
+
+        #endregion
+
+        #region UnselectedDocumentTabHeaderBackground dependency property
+
+        [Bindable(true)]
+        [DesignerSerializationVisibility(DesignerSerializationVisibility.Hidden)]
+        public static readonly DependencyProperty UnselectedDocumentTabHeaderBackgroundProperty = DependencyProperty.Register("UnselectedDocumentTabHeaderBackground", typeof(Brush), typeof(TabHeaderControl), new FrameworkPropertyMetadata(Brushes.Navy, new PropertyChangedCallback(OnSelectedDocumentTabHeaderBackgroundChanged)));
+
+        public Brush UnselectedDocumentTabHeaderBackground
+        {
+            get
+            {
+                return (Brush)GetValue(UnselectedDocumentTabHeaderBackgroundProperty);
+            }
+            set
+            {
+                if (value != UnselectedDocumentTabHeaderBackground)
+                {
+                    SetValue(UnselectedDocumentTabHeaderBackgroundProperty, value);
+                }
+            }
+        }
+
+        private static void OnUnselectedDocumentTabHeaderBackgroundChanged(DependencyObject d, DependencyPropertyChangedEventArgs e)
+        {
+            ((LayoutManager)d).OnUnselectedDocumentTabHeaderBackgroundChanged(e);
+        }
+
+        protected virtual void OnUnselectedDocumentTabHeaderBackgroundChanged(DependencyPropertyChangedEventArgs e)
+        {
+            if ((Brush)e.NewValue != UnselectedDocumentTabHeaderBackground)
+            {
+                UpdateProperties(_root);
+            }
+        }
+
+        #endregion
+
+        #region SelectedDocumentTabHeaderForeground dependency property
+
+        [Bindable(true)]
+        [DesignerSerializationVisibility(DesignerSerializationVisibility.Hidden)]
+        public static readonly DependencyProperty SelectedDocumentTabHeaderForegroundProperty = DependencyProperty.Register("SelectedDocumentTabHeaderForeground", typeof(Brush), typeof(TabHeaderControl), new FrameworkPropertyMetadata(Brushes.Khaki, new PropertyChangedCallback(OnSelectedDocumentTabHeaderForegroundPropertyChanged)));
+
+        public Brush SelectedDocumentTabHeaderForeground
+        {
+            get
+            {
+                return (Brush)GetValue(SelectedDocumentTabHeaderForegroundProperty);
+            }
+            set
+            {
+                if (value != SelectedDocumentTabHeaderForeground)
+                {
+                    SetValue(SelectedDocumentTabHeaderForegroundProperty, value);
+                }
+            }
+        }
+
+        private static void OnSelectedDocumentTabHeaderForegroundPropertyChanged(DependencyObject d, DependencyPropertyChangedEventArgs e)
+        {
+            ((LayoutManager)d).OnSelectedDocumentTabHeaderForegroundPropertyChanged(e);
+        }
+
+        protected virtual void OnSelectedDocumentTabHeaderForegroundPropertyChanged(DependencyPropertyChangedEventArgs e)
+        {
+            if ((Brush)e.NewValue != SelectedDocumentTabHeaderForeground)
+            {
+                UpdateProperties(_root);
+            }
+        }
+
+        #endregion
+
+        #region UnselectedDocumentTabHeaderForeground dependency property
+
+        [Bindable(true)]
+        [DesignerSerializationVisibility(DesignerSerializationVisibility.Hidden)]
+        public static readonly DependencyProperty UnselectedDocumentTabHeaderForegroundProperty = DependencyProperty.Register("UnselectedDocumentTabHeaderForeground", typeof(Brush), typeof(TabHeaderControl), new FrameworkPropertyMetadata(Brushes.Navy, new PropertyChangedCallback(OnUnselectedDocumentTabHeaderForegroundChanged)));
+
+        public Brush UnselectedDocumentTabHeaderForeground
+        {
+            get
+            {
+                return (Brush)GetValue(UnselectedDocumentTabHeaderForegroundProperty);
+            }
+            set
+            {
+                if (value != UnselectedDocumentTabHeaderForeground)
+                {
+                    SetValue(UnselectedDocumentTabHeaderForegroundProperty, value);
+                }
+            }
+        }
+
+        private static void OnUnselectedDocumentTabHeaderForegroundChanged(DependencyObject d, DependencyPropertyChangedEventArgs e)
+        {
+            ((LayoutManager)d).OnUnselectedDocumentTabHeaderForegroundChanged(e);
+        }
+
+        protected virtual void OnUnselectedDocumentTabHeaderForegroundChanged(DependencyPropertyChangedEventArgs e)
+        {
+            if ((Brush)e.NewValue != UnselectedDocumentTabHeaderForeground)
+            {
+                UpdateProperties(_root);
+            }
+        }
+
+        #endregion
+
+        #region FloatingDocumentTitleBarBackground dependency property
+
+        [Bindable(true)]
+        [DesignerSerializationVisibility(DesignerSerializationVisibility.Hidden)]
+        public static readonly DependencyProperty FloatingDocumentTitleBarBackgroundProperty = DependencyProperty.Register("FloatingDocumentTitleBarBackground", typeof(Brush), typeof(TabHeaderControl), new FrameworkPropertyMetadata(Brushes.Gainsboro, new PropertyChangedCallback(OnFloatingDocumentTitleBarBackgroundChanged)));
+
+        public Brush FloatingDocumentTitleBarBackground
+        {
+            get
+            {
+                return (Brush)GetValue(FloatingDocumentTitleBarBackgroundProperty);
+            }
+            set
+            {
+                if (value != FloatingDocumentTitleBarBackground)
+                {
+                    SetValue(FloatingDocumentTitleBarBackgroundProperty, value);
+                }
+            }
+        }
+
+        private static void OnFloatingDocumentTitleBarBackgroundChanged(DependencyObject d, DependencyPropertyChangedEventArgs e)
+        {
+            ((LayoutManager)d).OnFloatingDocumentTitleBarBackgroundChanged(e);
+        }
+
+        protected virtual void OnFloatingDocumentTitleBarBackgroundChanged(DependencyPropertyChangedEventArgs e)
+        {
+            if ((Brush)e.NewValue != FloatingDocumentTitleBarBackground)
+            {
+                UpdateProperties(_root);
+            }
+        }
+
+        #endregion
+
+        #region FloatingDocumentBackground dependency property
+
+        [Bindable(true)]
+        [DesignerSerializationVisibility(DesignerSerializationVisibility.Hidden)]
+        public static readonly DependencyProperty FloatingDocumentBackgroundProperty = DependencyProperty.Register("FloatingDocumentBackground", typeof(Brush), typeof(TabHeaderControl), new FrameworkPropertyMetadata(Brushes.LightBlue, new PropertyChangedCallback(OnFloatingDocumentBackgroundChanged)));
+
+        public Brush FloatingDocumentBackground
+        {
+            get
+            {
+                return (Brush)GetValue(FloatingDocumentBackgroundProperty);
+            }
+            set
+            {
+                if (value != FloatingDocumentBackground)
+                {
+                    SetValue(FloatingDocumentBackgroundProperty, value);
+                }
+            }
+        }
+
+        private static void OnFloatingDocumentBackgroundChanged(DependencyObject d, DependencyPropertyChangedEventArgs e)
+        {
+            ((LayoutManager)d).OnFloatingDocumentBackgroundChanged(e);
+        }
+
+        protected virtual void OnFloatingDocumentBackgroundChanged(DependencyPropertyChangedEventArgs e)
+        {
+            if ((Brush)e.NewValue != FloatingDocumentBackground)
+            {
+                UpdateProperties(_root);
+            }
+        }
+
+        #endregion
+
         #endregion
 
         private void ProcessMoveResize()
@@ -463,7 +1086,7 @@ namespace WpfDockManagerDemo.DockManager
             {
                 sibling = this;
             }
-            
+
             SplitterPane newSplitterPane = new SplitterPane(unpinnedToolData.IsHorizontal);
 
             if (unpinnedToolData.Sibling == (Guid)this.Tag)
@@ -814,6 +1437,13 @@ namespace WpfDockManagerDemo.DockManager
         DocumentPaneGroup ILayoutFactory.MakeDocumentPaneGroup()
         {
             DocumentPaneGroup documentPaneGroup = new DocumentPaneGroup();
+            documentPaneGroup.HeaderBackground = DocumentHeaderBackground;
+            documentPaneGroup.IViewContainer.FontSize = DocumentFontSize;
+            documentPaneGroup.IViewContainer.FontFamily = DocumentFontFamily;
+            documentPaneGroup.IViewContainer.SelectedTabHeaderBackground = SelectedDocumentTabHeaderBackground;
+            documentPaneGroup.IViewContainer.UnselectedTabHeaderBackground = UnselectedDocumentTabHeaderBackground;
+            documentPaneGroup.IViewContainer.SelectedTabHeaderForeground = SelectedDocumentTabHeaderForeground;
+            documentPaneGroup.IViewContainer.UnselectedTabHeaderForeground = UnselectedDocumentTabHeaderForeground;
             RegisterDockPane(documentPaneGroup);
             return documentPaneGroup;
         }
@@ -821,6 +1451,14 @@ namespace WpfDockManagerDemo.DockManager
         ToolPaneGroup ILayoutFactory.MakeToolPaneGroup()
         {
             ToolPaneGroup toolPaneGroup = new ToolPaneGroup();
+            toolPaneGroup.HeaderBackground = ToolHeaderBackground;
+            toolPaneGroup.FontSize = ToolFontSize;
+            toolPaneGroup.IViewContainer.FontSize = ToolFontSize;
+            toolPaneGroup.IViewContainer.FontFamily = ToolFontFamily;
+            toolPaneGroup.IViewContainer.SelectedTabHeaderBackground = SelectedToolTabHeaderBackground;
+            toolPaneGroup.IViewContainer.UnselectedTabHeaderBackground = UnselectedToolTabHeaderBackground;
+            toolPaneGroup.IViewContainer.SelectedTabHeaderForeground = SelectedToolTabHeaderForeground;
+            toolPaneGroup.IViewContainer.UnselectedTabHeaderForeground = UnselectedToolTabHeaderForeground;
             RegisterDockPane(toolPaneGroup);
             toolPaneGroup.UnPinClick += ToolPane_UnPinClick;
             return toolPaneGroup;
@@ -843,12 +1481,20 @@ namespace WpfDockManagerDemo.DockManager
         FloatingDocumentPaneGroup ILayoutFactory.MakeFloatingDocumentPaneGroup()
         {
             FloatingDocumentPaneGroup floatingDocumentPaneGroup = new FloatingDocumentPaneGroup();
+            floatingDocumentPaneGroup.Background = FloatingDocumentBackground;
+            floatingDocumentPaneGroup.HeaderBackground = FloatingDocumentTitleBarBackground;
+            floatingDocumentPaneGroup.IViewContainer.FontSize = DocumentFontSize;
+            floatingDocumentPaneGroup.IViewContainer.FontFamily = DocumentFontFamily;
+            floatingDocumentPaneGroup.IViewContainer.SelectedTabHeaderBackground = SelectedDocumentTabHeaderBackground;
+            floatingDocumentPaneGroup.IViewContainer.UnselectedTabHeaderBackground = UnselectedDocumentTabHeaderBackground;
+            floatingDocumentPaneGroup.IViewContainer.SelectedTabHeaderForeground = SelectedDocumentTabHeaderForeground;
+            floatingDocumentPaneGroup.IViewContainer.UnselectedTabHeaderForeground = UnselectedDocumentTabHeaderForeground;
             RegisterFloatingPane(floatingDocumentPaneGroup);
             FloatingDocumentPaneGroups.Add(floatingDocumentPaneGroup);
             return floatingDocumentPaneGroup;
         }
 
-        FloatingToolPaneGroup ILayoutFactory.CreateFloatingToolPaneGroup()
+        FloatingToolPaneGroup ILayoutFactory.MakeFloatingToolPaneGroup()
         {
             FloatingToolPaneGroup floatingToolPaneGroup = new FloatingToolPaneGroup();
             RegisterFloatingPane(floatingToolPaneGroup);
@@ -1218,7 +1864,7 @@ namespace WpfDockManagerDemo.DockManager
             FloatingPane floatingPane = null;
             if (dockPane is ToolPaneGroup)
             {
-                floatingPane = ILayoutFactory.CreateFloatingToolPaneGroup();
+                floatingPane = ILayoutFactory.MakeFloatingToolPaneGroup();
             }
             else
             {
@@ -1324,7 +1970,7 @@ namespace WpfDockManagerDemo.DockManager
             FloatingPane newFloatingPane = null;
             if (floatingPane is FloatingToolPaneGroup)
             {
-                newFloatingPane = ILayoutFactory.CreateFloatingToolPaneGroup();
+                newFloatingPane = ILayoutFactory.MakeFloatingToolPaneGroup();
             }
             else
             {

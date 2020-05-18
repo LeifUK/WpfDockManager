@@ -279,6 +279,29 @@ namespace WpfControlLibrary
 
         #endregion
 
+        #region HeaderBackground dependency property
+
+        [Bindable(true)]
+        [DesignerSerializationVisibility(DesignerSerializationVisibility.Hidden)]
+        public static readonly DependencyProperty HeaderBackgroundProperty = DependencyProperty.Register("HeaderBackground", typeof(Brush), typeof(TabHeaderControl), new FrameworkPropertyMetadata(Brushes.Transparent, null));
+
+        public Brush HeaderBackground
+        {
+            get
+            {
+                return (Brush)GetValue(HeaderBackgroundProperty);
+            }
+            set
+            {
+                if (value != HeaderBackground)
+                {
+                    SetValue(HeaderBackgroundProperty, value);
+                }
+            }
+        }
+
+        #endregion
+
         #region SelectedTabBackground dependency property
 
         [Bindable(true)]
@@ -602,17 +625,20 @@ namespace WpfControlLibrary
 
         private void SetButtonStates()
         {
-            _buttonLeft.IsEnabled = true;
-            _buttonRight.IsEnabled = true;
+            _buttonLeft.IsEnabled = false;
+            _buttonRight.IsEnabled = false;
 
-            if (_listBox.SelectedIndex == 0)
+            if (_listBox.SelectedIndex > 0)
             {
-                _buttonLeft.IsEnabled = false;
+                _buttonLeft.IsEnabled = true;
             }
-            else if (_listBox.SelectedIndex == (_listBox.Items.Count - 1))
+            if (_listBox.SelectedIndex < (_listBox.Items.Count - 1))
             {
-                _buttonRight.IsEnabled = false;
+                _buttonRight.IsEnabled = true;
             }
+
+            _buttonLeft.Visibility = (_listBox.Items.Count == 1) ? Visibility.Collapsed : Visibility.Visible;
+            _buttonRight.Visibility = _buttonLeft.Visibility;
         }
 
         private void _buttonLeft_Click(object sender, RoutedEventArgs e)
