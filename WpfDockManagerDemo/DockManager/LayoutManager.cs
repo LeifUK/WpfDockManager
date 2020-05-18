@@ -29,8 +29,6 @@ namespace WpfDockManagerDemo.DockManager
             ColumnDefinitions.Add(new ColumnDefinition() { Width = new System.Windows.GridLength(1, System.Windows.GridUnitType.Auto) });
             CreateToolListBoxs();
 
-            Background = System.Windows.Media.Brushes.LightBlue;
-
             App.Current.MainWindow.LocationChanged += MainWindow_LocationChanged;
             PreviewMouseDown += LayoutManager_PreviewMouseDown;
             SizeChanged += LayoutManager_SizeChanged;
@@ -318,10 +316,10 @@ namespace WpfDockManagerDemo.DockManager
             iViewContainer.FontSize = DocumentFontSize;
             iViewContainer.FontFamily = DocumentFontFamily;
             iViewContainer.TabCornerRadius = DocumentTabCornerRadius;
-            iViewContainer.SelectedTabHeaderBackground = SelectedToolTabHeaderBackground;
-            iViewContainer.UnselectedTabHeaderBackground = UnselectedToolTabHeaderBackground;
-            iViewContainer.SelectedTabHeaderForeground = SelectedToolTabHeaderForeground;
-            iViewContainer.UnselectedTabHeaderForeground = UnselectedToolTabHeaderForeground;
+            iViewContainer.SelectedTabHeaderBackground = SelectedDocumentTabHeaderBackground;
+            iViewContainer.UnselectedTabHeaderBackground = UnselectedDocumentTabHeaderBackground;
+            iViewContainer.SelectedTabHeaderForeground = SelectedDocumentTabHeaderForeground;
+            iViewContainer.UnselectedTabHeaderForeground = UnselectedDocumentTabHeaderForeground;
         }
 
         private void UpdateProperties(ToolPaneGroup toolPaneGroup)

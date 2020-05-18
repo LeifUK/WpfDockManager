@@ -8,6 +8,7 @@
         xmlns:dockManager="clr-namespace:WpfDockManagerDemo.DockManager"
         xmlns:local="clr-namespace:WpfDockManagerDemo"
         mc:Ignorable="d"
+        Background="LightSteelBlue"
         Loaded="Window_Loaded"
         Unloaded="Window_Unloaded"
         Title="MainWindow" Height="450" Width="800">
@@ -42,7 +43,7 @@
     </Window.CommandBindings>-->
 
     <Border x:Name="MainWindowBorder" BorderBrush="LightCoral" BorderThickness="0">
-        <Grid x:Name="parentContainer" Background="White">
+        <Grid x:Name="parentContainer" Background="#ccd5f0">
 
             <Grid.RowDefinitions>
                 <RowDefinition Height ="Auto"/>
@@ -60,11 +61,12 @@
 
                 <!--Caption buttons-->
                 <StackPanel Grid.Row="0" Grid.Column="0" Orientation="Horizontal" HorizontalAlignment="Right" >
-                    <Button Name="_buttonMenu" Style="{StaticResource MenuButtonStyle}" WindowChrome.IsHitTestVisibleInChrome="True" VerticalAlignment="Center" Background="LightSteelBlue" Foreground="Black" Click="_buttonMenu_Click">
+                    <!--<Button Name="_buttonMenu" Style="{StaticResource MenuButtonStyle}" WindowChrome.IsHitTestVisibleInChrome="True" VerticalAlignment="Center" Background="LightSteelBlue" Foreground="Black" Click="_buttonMenu_Click">
                         <Button.RenderTransform>
                             <ScaleTransform ScaleX="1." ScaleY="1."/>
                         </Button.RenderTransform>
-                    </Button>
+                    </Button>-->
+                    <Button Name="_buttonMenu" Content="Layout" Style="{StaticResource StyleTitleBarButton}" WindowChrome.IsHitTestVisibleInChrome="True" VerticalAlignment="Center" Click="_buttonMenu_Click"/>
                     <Button Style="{StaticResource MinimizeButtonStyle}" WindowChrome.IsHitTestVisibleInChrome="True" ToolTip="Minimize"
                             Command="{x:Static SystemCommands.MinimizeWindowCommand}"/>
                     <Button x:Name="RestoreButton" Visibility="Collapsed" Style="{StaticResource RestoreButtonStyle}" 
@@ -76,15 +78,15 @@
                 </StackPanel>
             </Grid>
 
-            <dockManager:LayoutManager x:Name="_layoutManager" Grid.Row="1" Grid.Column="0" DocumentsSource="{Binding Documents}" ToolsSource="{Binding Tools}" VerticalAlignment="Stretch" HorizontalAlignment="Stretch">
+            <dockManager:LayoutManager x:Name="_layoutManager" Grid.Row="1" Grid.Column="0" DocumentsSource="{Binding Documents}" ToolsSource="{Binding Tools}" VerticalAlignment="Stretch" HorizontalAlignment="Stretch" Background="#5d6b99">
                 <dockManager:LayoutManager.ToolTabCornerRadius>
                     <CornerRadius BottomLeft="8" BottomRight="4"/>
                 </dockManager:LayoutManager.ToolTabCornerRadius>
                 <dockManager:LayoutManager.ToolFontSize>12</dockManager:LayoutManager.ToolFontSize>
                 <dockManager:LayoutManager.ToolFontFamily>Arial</dockManager:LayoutManager.ToolFontFamily>
-                <dockManager:LayoutManager.ToolHeaderBackground>MidnightBlue</dockManager:LayoutManager.ToolHeaderBackground>
-                <dockManager:LayoutManager.SelectedToolTabHeaderBackground>LightSteelBlue</dockManager:LayoutManager.SelectedToolTabHeaderBackground>
-                <dockManager:LayoutManager.UnselectedToolTabHeaderBackground>MidnightBlue</dockManager:LayoutManager.UnselectedToolTabHeaderBackground>
+                <dockManager:LayoutManager.ToolHeaderBackground>#5d6b99</dockManager:LayoutManager.ToolHeaderBackground>
+                <dockManager:LayoutManager.SelectedToolTabHeaderBackground>AliceBlue</dockManager:LayoutManager.SelectedToolTabHeaderBackground>
+                <dockManager:LayoutManager.UnselectedToolTabHeaderBackground>#3b4f81</dockManager:LayoutManager.UnselectedToolTabHeaderBackground>
                 <dockManager:LayoutManager.SelectedToolTabHeaderForeground>Black</dockManager:LayoutManager.SelectedToolTabHeaderForeground>
                 <dockManager:LayoutManager.UnselectedToolTabHeaderForeground>White</dockManager:LayoutManager.UnselectedToolTabHeaderForeground>
 
@@ -96,9 +98,9 @@
                 </dockManager:LayoutManager.DocumentTabCornerRadius>
                 <dockManager:LayoutManager.DocumentFontSize>12</dockManager:LayoutManager.DocumentFontSize>
                 <dockManager:LayoutManager.DocumentFontFamily>Arial</dockManager:LayoutManager.DocumentFontFamily>
-                <dockManager:LayoutManager.DocumentHeaderBackground>SteelBlue</dockManager:LayoutManager.DocumentHeaderBackground>
-                <dockManager:LayoutManager.SelectedDocumentTabHeaderBackground>DarkSalmon</dockManager:LayoutManager.SelectedDocumentTabHeaderBackground>
-                <dockManager:LayoutManager.UnselectedDocumentTabHeaderBackground>DarkRed</dockManager:LayoutManager.UnselectedDocumentTabHeaderBackground>
+                <dockManager:LayoutManager.DocumentHeaderBackground>#5d6b99</dockManager:LayoutManager.DocumentHeaderBackground>
+                <dockManager:LayoutManager.SelectedDocumentTabHeaderBackground>#f5cc84</dockManager:LayoutManager.SelectedDocumentTabHeaderBackground>
+                <dockManager:LayoutManager.UnselectedDocumentTabHeaderBackground>#3b4f81</dockManager:LayoutManager.UnselectedDocumentTabHeaderBackground>
                 <dockManager:LayoutManager.SelectedDocumentTabHeaderForeground>Black</dockManager:LayoutManager.SelectedDocumentTabHeaderForeground>
                 <dockManager:LayoutManager.UnselectedDocumentTabHeaderForeground>White</dockManager:LayoutManager.UnselectedDocumentTabHeaderForeground>
 
