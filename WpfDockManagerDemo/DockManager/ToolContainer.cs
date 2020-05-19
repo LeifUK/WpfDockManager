@@ -40,7 +40,7 @@ namespace WpfDockManagerDemo.DockManager
             Grid.SetColumn(_button, 2);
             _button.Click += delegate { Helpers.DisplayItemsMenu(_items, _tabHeaderControl, _selectedUserControl); };
             System.Windows.ResourceDictionary res = (System.Windows.ResourceDictionary)App.LoadComponent(new System.Uri("/WpfDockManagerDemo;component/DockManager/Dictionary.xaml", System.UriKind.Relative));
-            _button.Style = Utilities.GetResourceDictionary()["MenuButtonStyle"] as Style;
+            _button.Style = Utilities.GetResourceDictionary()["StyleViewListButton"] as Style;
         }
 
         private RowDefinition rowDefinition_UserControl;
