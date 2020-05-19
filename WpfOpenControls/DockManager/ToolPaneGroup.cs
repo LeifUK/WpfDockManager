@@ -43,7 +43,7 @@ namespace WpfOpenControls.DockManager
             HeaderBorder.HorizontalAlignment = HorizontalAlignment.Stretch;
             HeaderBorder.BorderBrush = System.Windows.Media.Brushes.Black;
             HeaderBackground = System.Windows.Media.Brushes.MidnightBlue;
-            HeaderBorder.BorderThickness = new Thickness(1);
+            HeaderBorder.BorderThickness = new Thickness(0);
             Grid.SetRow(HeaderBorder, 0);
             Grid.SetColumn(HeaderBorder, 0);
             Grid.SetColumnSpan(HeaderBorder, 5);

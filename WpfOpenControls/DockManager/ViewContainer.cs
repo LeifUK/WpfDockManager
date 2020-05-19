@@ -179,6 +179,22 @@ namespace WpfOpenControls.DockManager
             }
         }
 
+        public Brush ActiveScrollIndicatorBrush
+        {
+            set
+            {
+                _tabHeaderControl.ActiveArrowBrush = value;
+            }
+        }
+
+        public Brush InactiveScrollIndicatorBrush
+        {
+            set
+            {
+                _tabHeaderControl.InactiveArrowBrush = value;
+            }
+        }
+
         public event EventHandler SelectionChanged;
         public event EventHandler TabClosed;
         public event EventHandler FloatTabRequest;

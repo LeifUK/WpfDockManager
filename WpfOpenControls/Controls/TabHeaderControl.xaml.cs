@@ -302,7 +302,6 @@ namespace WpfOpenControls.Controls
 
         #endregion
 
-
         #region TabCornerRadius dependency property
 
         [Bindable(true)]
@@ -468,46 +467,46 @@ namespace WpfOpenControls.Controls
 
         #endregion
 
-        #region EnabledArrowBrush dependency property
+        #region ActiveArrowBrush dependency property
 
         [Bindable(true)]
         [DesignerSerializationVisibility(DesignerSerializationVisibility.Hidden)]
-        public static readonly DependencyProperty EnabledArrowBrushProperty = DependencyProperty.Register("EnabledArrowBrush", typeof(Brush), typeof(TabHeaderControl), new FrameworkPropertyMetadata(Brushes.Green, null));
+        public static readonly DependencyProperty ActiveArrowBrushProperty = DependencyProperty.Register("ActiveArrowBrush", typeof(Brush), typeof(TabHeaderControl), new FrameworkPropertyMetadata(Brushes.White, null));
 
-        public Brush EnabledArrowBrush
+        public Brush ActiveArrowBrush
         {
             get
             {
-                return (Brush)GetValue(EnabledArrowBrushProperty);
+                return (Brush)GetValue(ActiveArrowBrushProperty);
             }
             set
             {
-                if (value != EnabledArrowBrush)
+                if (value != ActiveArrowBrush)
                 {
-                    SetValue(EnabledArrowBrushProperty, value);
+                    SetValue(ActiveArrowBrushProperty, value);
                 }
             }
         }
 
         #endregion
 
-        #region DisabledArrowBrush dependency property
+        #region InactiveArrowBrush dependency property
 
         [Bindable(true)]
         [DesignerSerializationVisibility(DesignerSerializationVisibility.Hidden)]
-        public static readonly DependencyProperty DisabledArrowBrushProperty = DependencyProperty.Register("DisabledArrowBrush", typeof(Brush), typeof(TabHeaderControl), new FrameworkPropertyMetadata(Brushes.Gray, null));
+        public static readonly DependencyProperty InactiveArrowBrushProperty = DependencyProperty.Register("InactiveArrowBrush", typeof(Brush), typeof(TabHeaderControl), new FrameworkPropertyMetadata(Brushes.Gainsboro, null));
 
-        public Brush DisabledArrowBrush
+        public Brush InactiveArrowBrush
         {
             get
             {
-                return (Brush)GetValue(DisabledArrowBrushProperty);
+                return (Brush)GetValue(InactiveArrowBrushProperty);
             }
             set
             {
-                if (value != DisabledArrowBrush)
+                if (value != InactiveArrowBrush)
                 {
-                    SetValue(DisabledArrowBrushProperty, value);
+                    SetValue(InactiveArrowBrushProperty, value);
                 }
             }
         }

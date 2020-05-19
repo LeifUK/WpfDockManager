@@ -273,7 +273,7 @@ namespace WpfOpenControls.DockManager.Serialisation
                     else if ((xmlChildNode as XmlElement).Name == "BottomSide")
                     {
                         XmlElement xmlBottomSide = xmlChildNode as XmlElement;
-                        LoadUnPinnedToolDataNodes(iLayoutFactory, viewsMap, WindowLocation.TopSide, xmlBottomSide);
+                        LoadUnPinnedToolDataNodes(iLayoutFactory, viewsMap, WindowLocation.BottomSide, xmlBottomSide);
                     }
                 }
 

@@ -73,10 +73,10 @@
                         </Grid>
                         <ControlTemplate.Triggers>
                             <Trigger Property="IsEnabled" Value="False">
-                                <Setter TargetName="_pathPointer" Property="Fill" Value="{Binding Path=DisabledArrowBrush, RelativeSource={RelativeSource AncestorType={x:Type local:TabHeaderControl}}}" />
+                                <Setter TargetName="_pathPointer" Property="Fill" Value="{Binding Path=InactiveArrowBrush, RelativeSource={RelativeSource AncestorType={x:Type local:TabHeaderControl}}}" />
                             </Trigger>
                             <Trigger Property="IsEnabled" Value="True">
-                                <Setter TargetName="_pathPointer" Property="Fill" Value="{Binding Path=EnabledArrowBrush, RelativeSource={RelativeSource AncestorType={x:Type local:TabHeaderControl}}}" />
+                                <Setter TargetName="_pathPointer" Property="Fill" Value="{Binding Path=ActiveArrowBrush, RelativeSource={RelativeSource AncestorType={x:Type local:TabHeaderControl}}}" />
                             </Trigger>
                             <!--<Trigger Property="IsMouseOver" Value="True">
                                 <Setter TargetName="_pathPointer" Property="Fill" Value="Gray" />

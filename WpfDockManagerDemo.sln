@@ -5,10 +5,6 @@ VisualStudioVersion = 16.0.29728.190
 MinimumVisualStudioVersion = 10.0.40219.1
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "WpfDockManagerDemo", "WpfDockManagerDemo\WpfDockManagerDemo.csproj", "{9843B6E4-5B93-46FA-96B8-05E423118E9F}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "WpfControlLibrary", "WpfControlLibrary\WpfControlLibrary.csproj", "{460C09DE-DE0D-4D2B-B1EC-F2BBD72022C6}"
-EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "WpfTabHeaderControlDemo", "WpfTabHeaderControlDemo\WpfTabHeaderControlDemo.csproj", "{3E0AA70B-C167-4EF1-ACBE-DA0C2662F783}"
-EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "WpfOpenControls", "WpfOpenControls\WpfOpenControls.csproj", "{C4D43E50-84B0-47FF-888E-7C8351368BD6}"
 EndProject
 Global
@@ -21,14 +17,6 @@ Global
 		{9843B6E4-5B93-46FA-96B8-05E423118E9F}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{9843B6E4-5B93-46FA-96B8-05E423118E9F}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{9843B6E4-5B93-46FA-96B8-05E423118E9F}.Release|Any CPU.Build.0 = Release|Any CPU
-		{460C09DE-DE0D-4D2B-B1EC-F2BBD72022C6}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
-		{460C09DE-DE0D-4D2B-B1EC-F2BBD72022C6}.Debug|Any CPU.Build.0 = Debug|Any CPU
-		{460C09DE-DE0D-4D2B-B1EC-F2BBD72022C6}.Release|Any CPU.ActiveCfg = Release|Any CPU
-		{460C09DE-DE0D-4D2B-B1EC-F2BBD72022C6}.Release|Any CPU.Build.0 = Release|Any CPU
-		{3E0AA70B-C167-4EF1-ACBE-DA0C2662F783}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
-		{3E0AA70B-C167-4EF1-ACBE-DA0C2662F783}.Debug|Any CPU.Build.0 = Debug|Any CPU
-		{3E0AA70B-C167-4EF1-ACBE-DA0C2662F783}.Release|Any CPU.ActiveCfg = Release|Any CPU
-		{3E0AA70B-C167-4EF1-ACBE-DA0C2662F783}.Release|Any CPU.Build.0 = Release|Any CPU
 		{C4D43E50-84B0-47FF-888E-7C8351368BD6}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
 		{C4D43E50-84B0-47FF-888E-7C8351368BD6}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{C4D43E50-84B0-47FF-888E-7C8351368BD6}.Release|Any CPU.ActiveCfg = Release|Any CPU
