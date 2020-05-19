@@ -77,15 +77,17 @@
                             Command="{x:Static SystemCommands.CloseWindowCommand}"/>
                 </StackPanel>
             </Grid>
-
-            <dockManager:LayoutManager x:Name="_layoutManager" Grid.Row="1" Grid.Column="0" DocumentsSource="{Binding Documents}" ToolsSource="{Binding Tools}" VerticalAlignment="Stretch" HorizontalAlignment="Stretch" Background="#5d6b99">
+            <dockManager:LayoutManager x:Name="_layoutManager" Grid.Row="1" Grid.Column="0" DocumentsSource="{Binding Documents}" ToolsSource="{Binding Tools}" VerticalAlignment="Stretch" HorizontalAlignment="Stretch" Background="#5d6b99" >
+                <dockManager:LayoutManager.SplitterBrush>#5d6b99</dockManager:LayoutManager.SplitterBrush>
+                <dockManager:LayoutManager.SplitterWidth>6</dockManager:LayoutManager.SplitterWidth>
+                
                 <dockManager:LayoutManager.ToolTabCornerRadius>
                     <CornerRadius BottomLeft="8" BottomRight="4"/>
                 </dockManager:LayoutManager.ToolTabCornerRadius>
                 <dockManager:LayoutManager.ToolFontSize>12</dockManager:LayoutManager.ToolFontSize>
                 <dockManager:LayoutManager.ToolFontFamily>Arial</dockManager:LayoutManager.ToolFontFamily>
                 <dockManager:LayoutManager.ToolBackground>#5d6b99</dockManager:LayoutManager.ToolBackground>
-                <dockManager:LayoutManager.ToolHeaderBackground>#5d6b99</dockManager:LayoutManager.ToolHeaderBackground>
+                <dockManager:LayoutManager.ToolHeaderBackground>#3b4f81</dockManager:LayoutManager.ToolHeaderBackground>
                 <dockManager:LayoutManager.SelectedToolTabHeaderBackground>AliceBlue</dockManager:LayoutManager.SelectedToolTabHeaderBackground>
                 <dockManager:LayoutManager.UnselectedToolTabHeaderBackground>#3b4f81</dockManager:LayoutManager.UnselectedToolTabHeaderBackground>
                 <dockManager:LayoutManager.SelectedToolTabHeaderForeground>Black</dockManager:LayoutManager.SelectedToolTabHeaderForeground>
@@ -94,8 +96,8 @@
                 <dockManager:LayoutManager.InactiveToolScrollIndicatorBrush>Transparent</dockManager:LayoutManager.InactiveToolScrollIndicatorBrush>
 
                 <dockManager:LayoutManager.SideToolForeground>White</dockManager:LayoutManager.SideToolForeground>
-                <dockManager:LayoutManager.SideToolBarBrush>Orange</dockManager:LayoutManager.SideToolBarBrush>
-                <dockManager:LayoutManager.MouseOverSideToolBarBrush>Violet</dockManager:LayoutManager.MouseOverSideToolBarBrush>
+                <dockManager:LayoutManager.SideToolBarBrush>#3b4f81</dockManager:LayoutManager.SideToolBarBrush>
+                <dockManager:LayoutManager.MouseOverSideToolBarBrush>AliceBlue</dockManager:LayoutManager.MouseOverSideToolBarBrush>
                 
                 <dockManager:LayoutManager.FloatingToolTitleBarBackground>LightSteelBlue</dockManager:LayoutManager.FloatingToolTitleBarBackground>
                 <dockManager:LayoutManager.FloatingToolBackground>SteelBlue</dockManager:LayoutManager.FloatingToolBackground>
@@ -154,7 +156,6 @@
                     </ControlTemplate>
                 </dockManager:LayoutManager.CloseControlTemplate>
             </dockManager:LayoutManager>
-
         </Grid>
     </Border>
 </Window>

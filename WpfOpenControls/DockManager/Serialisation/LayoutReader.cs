@@ -164,7 +164,7 @@ namespace WpfOpenControls.DockManager.Serialisation
 
                         bool isChildHorizontal = xmlAttribute.Value == "Horizontal";
 
-                        SplitterPane newGrid = new SplitterPane(isChildHorizontal);
+                        SplitterPane newGrid = iLayoutFactory.MakeSplitterPane(isChildHorizontal);
                         newGrid.Tag = GetGuid(xmlSplitterPane);
 
                         if (parentFrameworkElement == rootFrameworkElement)

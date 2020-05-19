@@ -379,6 +379,12 @@ namespace WpfOpenControls.DockManager
                 return;
             }
 
+            if (grid is SplitterPane)
+            {
+                (grid as SplitterPane).SplitterWidth = SplitterWidth;
+                (grid as SplitterPane).SplitterBrush = SplitterBrush;
+            }
+
             foreach (var child in grid.Children)
             {
                 if (child is ToolPaneGroup)
@@ -422,6 +428,80 @@ namespace WpfOpenControls.DockManager
                 }
             }
         }
+
+        #region SplitterWidth dependency property
+
+        [Bindable(true)]
+        [DesignerSerializationVisibility(DesignerSerializationVisibility.Hidden)]
+        public static readonly DependencyProperty SplitterWidthProperty = DependencyProperty.Register("SplitterWidth", typeof(double), typeof(TabHeaderControl), new FrameworkPropertyMetadata(4.0, new PropertyChangedCallback(OnSplitterWidthChanged)));
+
+        public double SplitterWidth
+        {
+            get
+            {
+                return (double)GetValue(SplitterWidthProperty);
+            }
+            set
+            {
+                if (value != SplitterWidth)
+                {
+                    SetValue(SplitterWidthProperty, value);
+                    UpdateProperties(_root);
+                }
+            }
+        }
+
+        private static void OnSplitterWidthChanged(DependencyObject d, DependencyPropertyChangedEventArgs e)
+        {
+            ((LayoutManager)d).OnSplitterWidthChanged(e);
+        }
+
+        protected virtual void OnSplitterWidthChanged(DependencyPropertyChangedEventArgs e)
+        {
+            if ((double)e.NewValue != SplitterWidth)
+            {
+                UpdateProperties(_root);
+            }
+        }
+
+        #endregion
+
+        #region SplitterBrush dependency property
+
+        [Bindable(true)]
+        [DesignerSerializationVisibility(DesignerSerializationVisibility.Hidden)]
+        public static readonly DependencyProperty SplitterBrushProperty = DependencyProperty.Register("SplitterBrush", typeof(Brush), typeof(TabHeaderControl), new FrameworkPropertyMetadata(Brushes.Gainsboro, new PropertyChangedCallback(OnSplitterBrushChanged)));
+
+        public Brush SplitterBrush
+        {
+            get
+            {
+                return (Brush)GetValue(SplitterBrushProperty);
+            }
+            set
+            {
+                if (value != SplitterBrush)
+                {
+                    SetValue(SplitterBrushProperty, value);
+                    UpdateProperties(_root);
+                }
+            }
+        }
+
+        private static void OnSplitterBrushChanged(DependencyObject d, DependencyPropertyChangedEventArgs e)
+        {
+            ((LayoutManager)d).OnSplitterBrushChanged(e);
+        }
+
+        protected virtual void OnSplitterBrushChanged(DependencyPropertyChangedEventArgs e)
+        {
+            if ((Brush)e.NewValue != SplitterBrush)
+            {
+                UpdateProperties(_root);
+            }
+        }
+
+        #endregion
 
         #region ToolFontFamily dependency property
 
@@ -1379,7 +1459,7 @@ namespace WpfOpenControls.DockManager
 
         [Bindable(true)]
         [DesignerSerializationVisibility(DesignerSerializationVisibility.Hidden)]
-        public static readonly DependencyProperty SideToolBarBrushProperty = DependencyProperty.Register("SideToolBarBrush", typeof(Brush), typeof(TabHeaderControl), new FrameworkPropertyMetadata(Brushes.White, new PropertyChangedCallback(OnSideToolBarBrushChanged)));
+        public static readonly DependencyProperty SideToolBarBrushProperty = DependencyProperty.Register("SideToolBarBrush", typeof(Brush), typeof(TabHeaderControl), new FrameworkPropertyMetadata(Brushes.White, null));
 
         public Brush SideToolBarBrush
         {
@@ -1392,27 +1472,9 @@ namespace WpfOpenControls.DockManager
                 if (value != SideToolBarBrush)
                 {
                     SetValue(SideToolBarBrushProperty, value);
-                    _leftToolListBox.BarBrushMouseOver = value;
-                    _topToolListBox.BarBrushMouseOver = value;
-                    _rightToolListBox.BarBrushMouseOver = value;
-                    _bottomToolListBox.BarBrushMouseOver = value;
                 }
             }
         }
-
-        private static void OnSideToolBarBrushChanged(DependencyObject d, DependencyPropertyChangedEventArgs e)
-        {
-            ((LayoutManager)d).OnSideToolBarBrushChanged(e);
-        }
-
-        protected virtual void OnSideToolBarBrushChanged(DependencyPropertyChangedEventArgs e)
-        {
-            if ((Brush)e.NewValue != SideToolBarBrush)
-            {
-                UpdateProperties(_root);
-            }
-        }
-
 
         #endregion
 
@@ -1433,10 +1495,6 @@ namespace WpfOpenControls.DockManager
                 if (value != MouseOverSideToolBarBrush)
                 {
                     SetValue(MouseOverSideToolBarBrushProperty, value);
-                    _leftToolListBox.BarBrushMouseOver = MouseOverSideToolBarBrush;
-                    _topToolListBox.BarBrushMouseOver = MouseOverSideToolBarBrush;
-                    _rightToolListBox.BarBrushMouseOver = MouseOverSideToolBarBrush;
-                    _bottomToolListBox.BarBrushMouseOver = MouseOverSideToolBarBrush;
                 }
             }
         }
@@ -1581,7 +1639,7 @@ namespace WpfOpenControls.DockManager
                 sibling = this;
             }
 
-            SplitterPane newSplitterPane = new SplitterPane(unpinnedToolData.IsHorizontal);
+            SplitterPane newSplitterPane = ILayoutFactory.MakeSplitterPane(unpinnedToolData.IsHorizontal);
 
             if (unpinnedToolData.Sibling == (Guid)this.Tag)
             {
@@ -1818,8 +1876,8 @@ namespace WpfOpenControls.DockManager
             ToolListBox.ItemsSource = items;
             ToolListBox.IsHorizontal = isHorizontal;
             ToolListBox.DisplayMemberPath = "Title";
-            ToolListBox.BarBrush = System.Windows.Media.Brushes.Navy;
-            ToolListBox.BarBrushMouseOver = System.Windows.Media.Brushes.Crimson;
+            ToolListBox.BarBrush = SideToolBarBrush;
+            ToolListBox.BarBrushMouseOver = MouseOverSideToolBarBrush;
             ToolListBox.ItemClick += ToolListBox_ItemClick;
             Children.Add(ToolListBox);
             Grid.SetRow(ToolListBox, row);
@@ -1903,7 +1961,7 @@ namespace WpfOpenControls.DockManager
             {
                 for (int i = 0; (i < list_N.Count) && (viewIndex < views.Count); ++i)
                 {
-                    SplitterPane splitterPane = new SplitterPane(isHorizontal);
+                    SplitterPane splitterPane = ILayoutFactory.MakeSplitterPane(isHorizontal);
 
                     var node = list_N[i];
                     System.Windows.Markup.IAddChild parentElement = (System.Windows.Markup.IAddChild)node.Parent;
@@ -1934,7 +1992,12 @@ namespace WpfOpenControls.DockManager
             }
         }
 
-         #region ILayoutFactory
+        #region ILayoutFactory
+
+        SplitterPane ILayoutFactory.MakeSplitterPane(bool isHorizontal)
+        {
+            return new SplitterPane(isHorizontal, SplitterWidth, SplitterBrush);
+        }
 
         private void RegisterDockPane(DockPane dockPane)
         {
@@ -2129,7 +2192,7 @@ namespace WpfOpenControls.DockManager
 
              */
 
-            SetRootPane(new SplitterPane(true));
+            SetRootPane(ILayoutFactory.MakeSplitterPane(true));
 
             DocumentPanel documentPanel = new DocumentPanel();
             (_root as SplitterPane).AddChild(documentPanel, true);
@@ -2307,7 +2370,7 @@ namespace WpfOpenControls.DockManager
 
             parentSplitterPane.Children.Remove(dockPane);
 
-            SplitterPane newGrid = new SplitterPane(false);
+            SplitterPane newGrid = ILayoutFactory.MakeSplitterPane(false);
             parentSplitterPane.Children.Add(newGrid);
             Grid.SetRow(newGrid, Grid.GetRow(dockPane));
             Grid.SetColumn(newGrid, Grid.GetColumn(dockPane));
@@ -2583,7 +2646,7 @@ namespace WpfOpenControls.DockManager
                         }
                         ExtractDocuments(floatingPane, dockPane);
 
-                        parentSplitterPane = new SplitterPane((windowLocation == WindowLocation.TopSide) || (windowLocation == WindowLocation.BottomSide));
+                        parentSplitterPane = ILayoutFactory.MakeSplitterPane((windowLocation == WindowLocation.TopSide) || (windowLocation == WindowLocation.BottomSide));
                         bool isFirst = (windowLocation == WindowLocation.TopSide) || (windowLocation == WindowLocation.LeftSide);
                         parentSplitterPane.AddChild(dockPane, isFirst);
 
@@ -2614,7 +2677,7 @@ namespace WpfOpenControls.DockManager
                         }
                         ExtractDocuments(floatingPane, dockPane);
 
-                        SplitterPane newGrid = new SplitterPane((windowLocation == WindowLocation.Top) || (windowLocation == WindowLocation.Bottom));
+                        SplitterPane newGrid = ILayoutFactory.MakeSplitterPane((windowLocation == WindowLocation.Top) || (windowLocation == WindowLocation.Bottom));
 
                         if (selectedPane.Parent is DocumentPanel)
                         {

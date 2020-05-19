@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Windows.Media;
 using System.Windows;
 using System.Windows.Controls;
 
@@ -6,7 +7,7 @@ namespace WpfOpenControls.DockManager
 {
     internal class SplitterPane : Grid
     {
-        public SplitterPane(bool isHorizontal)
+        public SplitterPane(bool isHorizontal, double splitterWidth, Brush splitterBrush)
         {
             Tag = Guid.NewGuid();
             IsHorizontal = isHorizontal;
@@ -15,10 +16,10 @@ namespace WpfOpenControls.DockManager
             HorizontalAlignment = HorizontalAlignment.Stretch;
             Margin = new Thickness(0);
 
-            var gridSplitter = new GridSplitter();
-            gridSplitter.Background = System.Windows.Media.Brushes.Gainsboro;
-            gridSplitter.BorderThickness = new Thickness(0);
-            Children.Add(gridSplitter);
+            _gridSplitter = new GridSplitter();
+            _gridSplitter.Background = splitterBrush;
+            _gridSplitter.BorderThickness = new Thickness(0);
+            Children.Add(_gridSplitter);
 
             RowDefinitions.Add(new RowDefinition());
             ColumnDefinitions.Add(new ColumnDefinition());
@@ -34,11 +35,11 @@ namespace WpfOpenControls.DockManager
 
                 ColumnDefinitions[0].Width = new GridLength(1, GridUnitType.Star);
 
-                gridSplitter.VerticalAlignment = VerticalAlignment.Center;
-                gridSplitter.HorizontalAlignment = HorizontalAlignment.Stretch;
-                gridSplitter.Height = 4;
-                Grid.SetRow(gridSplitter, 1);
-                Grid.SetColumn(gridSplitter, 0);
+                _gridSplitter.VerticalAlignment = VerticalAlignment.Center;
+                _gridSplitter.HorizontalAlignment = HorizontalAlignment.Stretch;
+                _gridSplitter.Height = splitterWidth;
+                Grid.SetRow(_gridSplitter, 1);
+                Grid.SetColumn(_gridSplitter, 0);
             }
             else
             {
@@ -50,13 +51,15 @@ namespace WpfOpenControls.DockManager
 
                 RowDefinitions[0].Height = new GridLength(1, GridUnitType.Star);
 
-                gridSplitter.VerticalAlignment = VerticalAlignment.Stretch;
-                gridSplitter.HorizontalAlignment = HorizontalAlignment.Center;
-                gridSplitter.Width = 4;
-                Grid.SetRow(gridSplitter, 0);
-                Grid.SetColumn(gridSplitter, 1);
+                _gridSplitter.VerticalAlignment = VerticalAlignment.Stretch;
+                _gridSplitter.HorizontalAlignment = HorizontalAlignment.Center;
+                _gridSplitter.Width = splitterWidth;
+                Grid.SetRow(_gridSplitter, 0);
+                Grid.SetColumn(_gridSplitter, 1);
             }
         }
+
+        private readonly GridSplitter _gridSplitter;
 
         public readonly bool IsHorizontal;
 
@@ -78,6 +81,33 @@ namespace WpfOpenControls.DockManager
             }
             Grid.SetRow(frameworkElement, row);
             Grid.SetColumn(frameworkElement, column);
+        }
+
+        public double SplitterWidth
+        {
+            set
+            {
+                System.Diagnostics.Trace.Assert(_gridSplitter != null);
+
+                if (IsHorizontal)
+                {
+                    _gridSplitter.Height = value;
+                }
+                else
+                {
+                    _gridSplitter.Width = value;
+                }
+            }
+        }
+
+        public Brush SplitterBrush
+        {
+            set
+            {
+                System.Diagnostics.Trace.Assert(_gridSplitter != null);
+
+                _gridSplitter.Background = value;
+            }
         }
     }
 }

@@ -189,7 +189,7 @@ namespace WpfOpenControls.DockManager.Controls
 
         [Bindable(true)]
         [DesignerSerializationVisibility(DesignerSerializationVisibility.Hidden)]
-        public static readonly DependencyProperty BarBrushProperty = DependencyProperty.Register("BarBrush", typeof(Brush), typeof(ToolListBox), new FrameworkPropertyMetadata(Brushes.DarkSlateBlue, null));
+        public static readonly DependencyProperty BarBrushProperty = DependencyProperty.Register("BarBrush", typeof(Brush), typeof(ToolListBox), new FrameworkPropertyMetadata(Brushes.DarkSlateBlue, new PropertyChangedCallback(OnBarBrushChanged)));
 
         public Brush BarBrush
         {
@@ -203,6 +203,19 @@ namespace WpfOpenControls.DockManager.Controls
                 {
                     SetValue(BarBrushProperty, value);
                 }
+            }
+        }
+
+        private static void OnBarBrushChanged(DependencyObject d, DependencyPropertyChangedEventArgs e)
+        {
+            ((ToolListBox)d).OnBarBrushChanged(e);
+        }
+
+        protected virtual void OnBarBrushChanged(DependencyPropertyChangedEventArgs e)
+        {
+            if ((Brush)e.NewValue != BarBrush)
+            {
+                BarBrush = (Brush)e.NewValue;
             }
         }
 

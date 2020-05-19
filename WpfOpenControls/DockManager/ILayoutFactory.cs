@@ -4,6 +4,7 @@ namespace WpfOpenControls.DockManager
 {
     internal interface ILayoutFactory
     {
+        SplitterPane MakeSplitterPane(bool isHorizontal);
         DocumentPaneGroup MakeDocumentPaneGroup();
         ToolPaneGroup MakeToolPaneGroup();
         FloatingDocumentPaneGroup MakeFloatingDocumentPaneGroup();
