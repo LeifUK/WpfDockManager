@@ -164,10 +164,6 @@
     <None Include="App.config" />
   </ItemGroup>
   <ItemGroup>
-    <ProjectReference Include="..\WpfControlLibrary\WpfControlLibrary.csproj">
-      <Project>{460c09de-de0d-4d2b-b1ec-f2bbd72022c6}</Project>
-      <Name>WpfControlLibrary</Name>
-    </ProjectReference>
     <ProjectReference Include="..\WpfOpenControls\WpfOpenControls.csproj">
       <Project>{c4d43e50-84b0-47ff-888e-7c8351368bd6}</Project>
       <Name>WpfOpenControls</Name>

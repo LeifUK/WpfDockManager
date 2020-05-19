@@ -113,11 +113,6 @@ namespace WpfDockManagerDemo
             menuItem.Command = new WpfOpenControls.DockManager.Command(delegate { LoadLayout(); }, delegate { return true; });
             contextMenu.Items.Add(menuItem);
 
-            menuItem = new MenuItem();
-            menuItem.Header = "Freeze Aspect Ratio";
-            menuItem.IsChecked = false;
-            contextMenu.Items.Add(menuItem);
-
             contextMenu.IsOpen = true;
         }
     }

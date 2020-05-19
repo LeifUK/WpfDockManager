@@ -84,12 +84,19 @@
                 </dockManager:LayoutManager.ToolTabCornerRadius>
                 <dockManager:LayoutManager.ToolFontSize>12</dockManager:LayoutManager.ToolFontSize>
                 <dockManager:LayoutManager.ToolFontFamily>Arial</dockManager:LayoutManager.ToolFontFamily>
+                <dockManager:LayoutManager.ToolBackground>#5d6b99</dockManager:LayoutManager.ToolBackground>
                 <dockManager:LayoutManager.ToolHeaderBackground>#5d6b99</dockManager:LayoutManager.ToolHeaderBackground>
                 <dockManager:LayoutManager.SelectedToolTabHeaderBackground>AliceBlue</dockManager:LayoutManager.SelectedToolTabHeaderBackground>
                 <dockManager:LayoutManager.UnselectedToolTabHeaderBackground>#3b4f81</dockManager:LayoutManager.UnselectedToolTabHeaderBackground>
                 <dockManager:LayoutManager.SelectedToolTabHeaderForeground>Black</dockManager:LayoutManager.SelectedToolTabHeaderForeground>
                 <dockManager:LayoutManager.UnselectedToolTabHeaderForeground>White</dockManager:LayoutManager.UnselectedToolTabHeaderForeground>
+                <dockManager:LayoutManager.ActiveToolScrollIndicatorBrush>White</dockManager:LayoutManager.ActiveToolScrollIndicatorBrush>
+                <dockManager:LayoutManager.InactiveToolScrollIndicatorBrush>Transparent</dockManager:LayoutManager.InactiveToolScrollIndicatorBrush>
 
+                <dockManager:LayoutManager.SideToolForeground>White</dockManager:LayoutManager.SideToolForeground>
+                <dockManager:LayoutManager.SideToolBarBrush>Orange</dockManager:LayoutManager.SideToolBarBrush>
+                <dockManager:LayoutManager.MouseOverSideToolBarBrush>Violet</dockManager:LayoutManager.MouseOverSideToolBarBrush>
+                
                 <dockManager:LayoutManager.FloatingToolTitleBarBackground>LightSteelBlue</dockManager:LayoutManager.FloatingToolTitleBarBackground>
                 <dockManager:LayoutManager.FloatingToolBackground>SteelBlue</dockManager:LayoutManager.FloatingToolBackground>
 
@@ -103,6 +110,8 @@
                 <dockManager:LayoutManager.UnselectedDocumentTabHeaderBackground>#3b4f81</dockManager:LayoutManager.UnselectedDocumentTabHeaderBackground>
                 <dockManager:LayoutManager.SelectedDocumentTabHeaderForeground>Black</dockManager:LayoutManager.SelectedDocumentTabHeaderForeground>
                 <dockManager:LayoutManager.UnselectedDocumentTabHeaderForeground>White</dockManager:LayoutManager.UnselectedDocumentTabHeaderForeground>
+                <dockManager:LayoutManager.ActiveDocumentScrollIndicatorBrush>White</dockManager:LayoutManager.ActiveDocumentScrollIndicatorBrush>
+                <dockManager:LayoutManager.InactiveDocumentScrollIndicatorBrush>Transparent</dockManager:LayoutManager.InactiveDocumentScrollIndicatorBrush>
 
                 <dockManager:LayoutManager.FloatingDocumentTitleBarBackground>LightSteelBlue</dockManager:LayoutManager.FloatingDocumentTitleBarBackground>
                 <dockManager:LayoutManager.FloatingDocumentBackground>SteelBlue</dockManager:LayoutManager.FloatingDocumentBackground>
