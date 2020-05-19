@@ -6,7 +6,7 @@ using System.Threading.Tasks;
 
 namespace WpfDockManagerDemo.ViewModel
 {
-    class DummyViewModel : WpfDockManagerDemo.DockManager.IViewModel
+    class DummyViewModel : WpfOpenControls.DockManager.IViewModel
     {
         public string URL { get; set; }
         public string Title { get; set; }

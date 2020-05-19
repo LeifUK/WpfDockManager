@@ -5,13 +5,13 @@ namespace WpfDockManagerDemo.View
     /// <summary>
     /// Interaction logic for DemoThreeView.xaml
     /// </summary>
-    public partial class ToolFourView : UserControl, DockManager.IView
+    public partial class ToolFourView : UserControl, WpfOpenControls.DockManager.IView
     {
         public ToolFourView()
         {
             InitializeComponent();
         }
 
-        public DockManager.IViewModel IViewModel { get; set; }
+        public WpfOpenControls.DockManager.IViewModel IViewModel { get; set; }
     }
 }

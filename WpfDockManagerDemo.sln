@@ -9,6 +9,8 @@ Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "WpfControlLibrary", "WpfCon
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "WpfTabHeaderControlDemo", "WpfTabHeaderControlDemo\WpfTabHeaderControlDemo.csproj", "{3E0AA70B-C167-4EF1-ACBE-DA0C2662F783}"
 EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "WpfOpenControls", "WpfOpenControls\WpfOpenControls.csproj", "{C4D43E50-84B0-47FF-888E-7C8351368BD6}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -27,6 +29,10 @@ Global
 		{3E0AA70B-C167-4EF1-ACBE-DA0C2662F783}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{3E0AA70B-C167-4EF1-ACBE-DA0C2662F783}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{3E0AA70B-C167-4EF1-ACBE-DA0C2662F783}.Release|Any CPU.Build.0 = Release|Any CPU
+		{C4D43E50-84B0-47FF-888E-7C8351368BD6}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{C4D43E50-84B0-47FF-888E-7C8351368BD6}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{C4D43E50-84B0-47FF-888E-7C8351368BD6}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{C4D43E50-84B0-47FF-888E-7C8351368BD6}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE

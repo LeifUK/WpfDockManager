@@ -5,8 +5,7 @@
         xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
         xmlns:view="clr-namespace:WpfDockManagerDemo.View"
         xmlns:viewModel="clr-namespace:WpfDockManagerDemo.ViewModel"
-        xmlns:dockManager="clr-namespace:WpfDockManagerDemo.DockManager"
-        xmlns:local="clr-namespace:WpfDockManagerDemo"
+        xmlns:dockManager="clr-namespace:WpfOpenControls.DockManager;assembly=WpfOpenControls"
         mc:Ignorable="d"
         Background="LightSteelBlue"
         Loaded="Window_Loaded"
@@ -30,7 +29,8 @@
                 <Setter Property="Width" Value="4"/>
             </Style>
             <ResourceDictionary.MergedDictionaries>
-                <ResourceDictionary Source="./DockManager/Dictionary.xaml"/>
+                <!--<ResourceDictionary Source="./DockManager/Dictionary.xaml"/>-->
+                <ResourceDictionary Source="pack://application:,,,/WpfOpenControls;component/DockManager/Dictionary.xaml"/>
             </ResourceDictionary.MergedDictionaries>
         </ResourceDictionary>
     </Window.Resources>

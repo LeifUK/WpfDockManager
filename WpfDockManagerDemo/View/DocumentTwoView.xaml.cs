@@ -5,13 +5,13 @@ namespace WpfDockManagerDemo.View
     /// <summary>
     /// Interaction logic for DemoOneView.xaml
     /// </summary>
-    public partial class DocumentTwoView : UserControl, DockManager.IView
+    public partial class DocumentTwoView : UserControl, WpfOpenControls.DockManager.IView
     {
         public DocumentTwoView()
         {
             InitializeComponent();
         }
 
-        public DockManager.IViewModel IViewModel { get; set; }
+        public WpfOpenControls.DockManager.IViewModel IViewModel { get; set; }
     }
 }

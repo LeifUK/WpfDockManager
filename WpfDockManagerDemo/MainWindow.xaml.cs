@@ -104,13 +104,13 @@ namespace WpfDockManagerDemo
             menuItem = new MenuItem();
             menuItem.Header = "Save Layout";
             menuItem.IsChecked = false;
-            menuItem.Command = new WpfDockManagerDemo.DockManager.Command(delegate { SaveLayout(); }, delegate { return true; });
+            menuItem.Command = new WpfOpenControls.DockManager.Command(delegate { SaveLayout(); }, delegate { return true; });
             contextMenu.Items.Add(menuItem);
 
             menuItem = new MenuItem();
             menuItem.Header = "Load Layout";
             menuItem.IsChecked = false;
-            menuItem.Command = new WpfDockManagerDemo.DockManager.Command(delegate { LoadLayout(); }, delegate { return true; });
+            menuItem.Command = new WpfOpenControls.DockManager.Command(delegate { LoadLayout(); }, delegate { return true; });
             contextMenu.Items.Add(menuItem);
 
             menuItem = new MenuItem();

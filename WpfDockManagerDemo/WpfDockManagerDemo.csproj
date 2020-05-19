@@ -58,54 +58,6 @@
       <Generator>MSBuild:Compile</Generator>
       <SubType>Designer</SubType>
     </ApplicationDefinition>
-    <Compile Include="DockManager\Command.cs" />
-    <Compile Include="DockManager\Controls\ItemClickEventArgs.cs" />
-    <Compile Include="DockManager\Controls\ItemClickEventHandler.cs" />
-    <Compile Include="DockManager\Controls\IToolListBoxItem.cs" />
-    <Compile Include="DockManager\Controls\ToolListBox.xaml.cs">
-      <DependentUpon>ToolListBox.xaml</DependentUpon>
-    </Compile>
-    <Compile Include="DockManager\DockPane.cs" />
-    <Compile Include="DockManager\DocumentPaneGroup.cs" />
-    <Compile Include="DockManager\FloatEventArgs.cs" />
-    <Compile Include="DockManager\FloatEventHandler.cs" />
-    <Compile Include="DockManager\FloatingDocumentPaneGroup.cs" />
-    <Compile Include="DockManager\FloatingPane.xaml.cs">
-      <DependentUpon>FloatingPane.xaml</DependentUpon>
-    </Compile>
-    <Compile Include="DockManager\FloatingToolPaneGroup.cs" />
-    <Compile Include="DockManager\Helpers.cs" />
-    <Compile Include="DockManager\ILayoutFactory.cs" />
-    <Compile Include="DockManager\IViewContainer.cs" />
-    <Compile Include="DockManager\IViewModel.cs" />
-    <Compile Include="DockManager\SelectablePane.cs" />
-    <Compile Include="DockManager\Serialisation\LayoutReader.cs" />
-    <Compile Include="DockManager\Serialisation\LayoutWriter.cs" />
-    <Compile Include="DockManager\SideLocationPane.xaml.cs">
-      <DependentUpon>SideLocationPane.xaml</DependentUpon>
-    </Compile>
-    <Compile Include="DockManager\ToolContainer.cs" />
-    <Compile Include="DockManager\DocumentContainer.cs" />
-    <Compile Include="DockManager\DocumentPanel.cs" />
-    <Compile Include="DockManager\ExtensionMethods.cs" />
-    <Compile Include="DockManager\InsertionIndicatorManager.cs" />
-    <Compile Include="DockManager\IView.cs" />
-    <Compile Include="DockManager\ToolListBoxItem.cs" />
-    <Compile Include="DockManager\ToolPaneGroup.cs" />
-    <Compile Include="DockManager\UnpinnedToolData.cs" />
-    <Compile Include="DockManager\UnpinnedToolPane.xaml.cs">
-      <DependentUpon>UnpinnedToolPane.xaml</DependentUpon>
-    </Compile>
-    <Compile Include="DockManager\User32.cs" />
-    <Compile Include="DockManager\Utilities.cs" />
-    <Compile Include="DockManager\ViewContainer.cs" />
-    <Compile Include="DockManager\WindowLocationPane.xaml.cs">
-      <DependentUpon>WindowLocationPane.xaml</DependentUpon>
-    </Compile>
-    <Compile Include="DockManager\LayoutManager.cs" />
-    <Compile Include="DockManager\SplitterPane.cs" />
-    <Compile Include="DockManager\WindowLocation.cs" />
-    <Compile Include="DockManager\FloatingViewModel.cs" />
     <Compile Include="ViewModel\DocumentThreeViewModel.cs" />
     <Compile Include="ViewModel\DocumentTwoViewModel.cs" />
     <Compile Include="ViewModel\DummyViewModel.cs" />
@@ -140,30 +92,6 @@
     <Compile Include="View\ToolTwoView.xaml.cs">
       <DependentUpon>ToolTwoView.xaml</DependentUpon>
     </Compile>
-    <Page Include="DockManager\Controls\ToolListBox.xaml">
-      <Generator>MSBuild:Compile</Generator>
-      <SubType>Designer</SubType>
-    </Page>
-    <Page Include="DockManager\Dictionary.xaml">
-      <SubType>Designer</SubType>
-      <Generator>MSBuild:Compile</Generator>
-    </Page>
-    <Page Include="DockManager\FloatingPane.xaml">
-      <SubType>Designer</SubType>
-      <Generator>XamlIntelliSenseFileGenerator</Generator>
-    </Page>
-    <Page Include="DockManager\SideLocationPane.xaml">
-      <Generator>MSBuild:Compile</Generator>
-      <SubType>Designer</SubType>
-    </Page>
-    <Page Include="DockManager\UnpinnedToolPane.xaml">
-      <Generator>MSBuild:Compile</Generator>
-      <SubType>Designer</SubType>
-    </Page>
-    <Page Include="DockManager\WindowLocationPane.xaml">
-      <SubType>Designer</SubType>
-      <Generator>MSBuild:Compile</Generator>
-    </Page>
     <Page Include="MainWindow.xaml">
       <Generator>MSBuild:Compile</Generator>
       <SubType>Designer</SubType>
@@ -239,6 +167,10 @@
     <ProjectReference Include="..\WpfControlLibrary\WpfControlLibrary.csproj">
       <Project>{460c09de-de0d-4d2b-b1ec-f2bbd72022c6}</Project>
       <Name>WpfControlLibrary</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\WpfOpenControls\WpfOpenControls.csproj">
+      <Project>{c4d43e50-84b0-47ff-888e-7c8351368bd6}</Project>
+      <Name>WpfOpenControls</Name>
     </ProjectReference>
   </ItemGroup>
   <ItemGroup />
