@@ -309,13 +309,15 @@ namespace WpfOpenControls.DockManager
 
         #endregion
 
-        private void UpdateProperties(DocumentPaneGroup documentPaneGroup)
+        private void UpdateDocumentProperties(IViewContainer iViewContainer)
         {
-            documentPaneGroup.HeaderBackground = DocumentHeaderBackground;
-            IViewContainer iViewContainer = documentPaneGroup.IViewContainer;
             iViewContainer.FontSize = DocumentFontSize;
             iViewContainer.FontFamily = DocumentFontFamily;
             iViewContainer.TabCornerRadius = DocumentTabCornerRadius;
+            iViewContainer.SelectedTabBorderThickness = SelectedDocumentTabBorderThickness;
+            iViewContainer.SelectedTabBorderBrush = SelectedDocumentTabBorderBrush;
+            iViewContainer.UnselectedTabBorderThickness = UnselectedDocumentTabBorderThickness;
+            iViewContainer.UnselectedTabBorderBrush = UnselectedDocumentTabBorderBrush;
             iViewContainer.SelectedTabHeaderBackground = SelectedDocumentTabHeaderBackground;
             iViewContainer.UnselectedTabHeaderBackground = UnselectedDocumentTabHeaderBackground;
             iViewContainer.SelectedTabHeaderForeground = SelectedDocumentTabHeaderForeground;
@@ -324,25 +326,35 @@ namespace WpfOpenControls.DockManager
             iViewContainer.InactiveScrollIndicatorBrush = InactiveDocumentScrollIndicatorBrush;
         }
 
-        private void UpdateProperties(ToolContainer toolContainer)
+        private void UpdateProperties(DocumentPaneGroup documentPaneGroup)
         {
-            toolContainer.FontSize = ToolFontSize;
-            toolContainer.FontFamily = ToolFontFamily;
-            toolContainer.TabCornerRadius = ToolTabCornerRadius;
-            toolContainer.Background = ToolBackground;
-            toolContainer.SelectedTabHeaderBackground = SelectedToolTabHeaderBackground;
-            toolContainer.UnselectedTabHeaderBackground = UnselectedToolTabHeaderBackground;
-            toolContainer.SelectedTabHeaderForeground = SelectedToolTabHeaderForeground;
-            toolContainer.UnselectedTabHeaderForeground = UnselectedToolTabHeaderForeground;
-            toolContainer.ActiveScrollIndicatorBrush = ActiveToolScrollIndicatorBrush;
-            toolContainer.InactiveScrollIndicatorBrush = InactiveToolScrollIndicatorBrush;
+            documentPaneGroup.HeaderBackground = DocumentHeaderBackground;
+            UpdateDocumentProperties(documentPaneGroup.IViewContainer);
+        }
+
+        private void UpdateToolProperties(IViewContainer iViewContainer)
+        {
+            iViewContainer.FontSize = ToolFontSize;
+            iViewContainer.FontFamily = ToolFontFamily;
+            iViewContainer.TabCornerRadius = ToolTabCornerRadius;
+            iViewContainer.Background = ToolBackground;
+            iViewContainer.SelectedTabBorderThickness = SelectedToolTabBorderThickness;
+            iViewContainer.SelectedTabBorderBrush = SelectedToolTabBorderBrush;
+            iViewContainer.UnselectedTabBorderThickness = UnselectedToolTabBorderThickness;
+            iViewContainer.UnselectedTabBorderBrush = UnselectedToolTabBorderBrush;
+            iViewContainer.SelectedTabHeaderBackground = SelectedToolTabHeaderBackground;
+            iViewContainer.UnselectedTabHeaderBackground = UnselectedToolTabHeaderBackground;
+            iViewContainer.SelectedTabHeaderForeground = SelectedToolTabHeaderForeground;
+            iViewContainer.UnselectedTabHeaderForeground = UnselectedToolTabHeaderForeground;
+            iViewContainer.ActiveScrollIndicatorBrush = ActiveToolScrollIndicatorBrush;
+            iViewContainer.InactiveScrollIndicatorBrush = InactiveToolScrollIndicatorBrush;
         }
 
         private void UpdateProperties(ToolPaneGroup toolPaneGroup)
         {
             toolPaneGroup.HeaderBackground = ToolHeaderBackground;
             toolPaneGroup.FontSize = ToolFontSize;
-            UpdateProperties(toolPaneGroup.IViewContainer as ToolContainer);
+            UpdateToolProperties(toolPaneGroup.IViewContainer as ToolContainer);
         }
 
         private void UpdateProperties(FloatingDocumentPaneGroup floatingDocumentPaneGroup)
@@ -352,15 +364,7 @@ namespace WpfOpenControls.DockManager
             floatingDocumentPaneGroup.Background = FloatingDocumentBackground;
             floatingDocumentPaneGroup.HeaderBackground = FloatingDocumentTitleBarBackground;
             IViewContainer iViewContainer = floatingDocumentPaneGroup.IViewContainer;
-            iViewContainer.TabCornerRadius = DocumentTabCornerRadius;
-            iViewContainer.FontSize = DocumentFontSize;
-            iViewContainer.FontFamily = DocumentFontFamily;
-            iViewContainer.SelectedTabHeaderBackground = SelectedDocumentTabHeaderBackground;
-            iViewContainer.UnselectedTabHeaderBackground = UnselectedDocumentTabHeaderBackground;
-            iViewContainer.SelectedTabHeaderForeground = SelectedDocumentTabHeaderForeground;
-            iViewContainer.UnselectedTabHeaderForeground = UnselectedDocumentTabHeaderForeground;
-            iViewContainer.ActiveScrollIndicatorBrush = ActiveDocumentScrollIndicatorBrush;
-            iViewContainer.InactiveScrollIndicatorBrush = InactiveDocumentScrollIndicatorBrush;
+            UpdateDocumentProperties(floatingDocumentPaneGroup.IViewContainer);
         }
 
         private void UpdateProperties(FloatingToolPaneGroup floatingToolPaneGroup)
@@ -369,7 +373,7 @@ namespace WpfOpenControls.DockManager
             floatingToolPaneGroup.FontFamily = new FontFamily(ToolFontFamily);
             floatingToolPaneGroup.Background = FloatingToolBackground;
             floatingToolPaneGroup.HeaderBackground = FloatingToolTitleBarBackground;
-            UpdateProperties(floatingToolPaneGroup.IViewContainer as ToolContainer);
+            UpdateToolProperties(floatingToolPaneGroup.IViewContainer);
         }
 
         private void UpdateProperties(Grid grid)
@@ -607,6 +611,154 @@ namespace WpfOpenControls.DockManager
         protected virtual void OnToolTabCornerRadiusChanged(DependencyPropertyChangedEventArgs e)
         {
             if ((CornerRadius)e.NewValue != ToolTabCornerRadius)
+            {
+                UpdateProperties(_root);
+            }
+        }
+
+        #endregion
+
+        #region SelectedToolTabBorderThickness dependency property
+
+        [Bindable(true)]
+        [DesignerSerializationVisibility(DesignerSerializationVisibility.Hidden)]
+        public static readonly DependencyProperty SelectedToolTabBorderThicknessProperty = DependencyProperty.Register("SelectedToolTabBorderThickness", typeof(Thickness), typeof(TabHeaderControl), new FrameworkPropertyMetadata(new Thickness(0.0), new PropertyChangedCallback(OnSelectedToolTabBorderThicknessChanged)));
+
+        public Thickness SelectedToolTabBorderThickness
+        {
+            get
+            {
+                return (Thickness)GetValue(SelectedToolTabBorderThicknessProperty);
+            }
+            set
+            {
+                if (value != SelectedToolTabBorderThickness)
+                {
+                    SetValue(SelectedToolTabBorderThicknessProperty, value);
+                    UpdateProperties(_root);
+                }
+            }
+        }
+
+        private static void OnSelectedToolTabBorderThicknessChanged(DependencyObject d, DependencyPropertyChangedEventArgs e)
+        {
+            ((LayoutManager)d).OnSelectedToolTabBorderThicknessChanged(e);
+        }
+
+        protected virtual void OnSelectedToolTabBorderThicknessChanged(DependencyPropertyChangedEventArgs e)
+        {
+            if ((Thickness)e.NewValue != SelectedToolTabBorderThickness)
+            {
+                UpdateProperties(_root);
+            }
+        }
+
+        #endregion
+
+        #region SelectedToolTabBorderBrush dependency property
+
+        [Bindable(true)]
+        [DesignerSerializationVisibility(DesignerSerializationVisibility.Hidden)]
+        public static readonly DependencyProperty SelectedToolTabBorderBrushProperty = DependencyProperty.Register("SelectedToolTabBorderBrush", typeof(Brush), typeof(TabHeaderControl), new FrameworkPropertyMetadata(Brushes.Gray, new PropertyChangedCallback(OnSelectedToolTabBorderBrushChanged)));
+
+        public Brush SelectedToolTabBorderBrush
+        {
+            get
+            {
+                return (Brush)GetValue(SelectedToolTabBorderBrushProperty);
+            }
+            set
+            {
+                if (value != SelectedToolTabBorderBrush)
+                {
+                    SetValue(SelectedToolTabBorderBrushProperty, value);
+                    UpdateProperties(_root);
+                }
+            }
+        }
+
+        private static void OnSelectedToolTabBorderBrushChanged(DependencyObject d, DependencyPropertyChangedEventArgs e)
+        {
+            ((LayoutManager)d).OnSelectedToolTabBorderBrushChanged(e);
+        }
+
+        protected virtual void OnSelectedToolTabBorderBrushChanged(DependencyPropertyChangedEventArgs e)
+        {
+            if ((Brush)e.NewValue != SelectedToolTabBorderBrush)
+            {
+                UpdateProperties(_root);
+            }
+        }
+
+        #endregion
+
+        #region UnselectedToolTabBorderThickness dependency property
+
+        [Bindable(true)]
+        [DesignerSerializationVisibility(DesignerSerializationVisibility.Hidden)]
+        public static readonly DependencyProperty UnselectedToolTabBorderThicknessProperty = DependencyProperty.Register("UnselectedToolTabBorderThickness", typeof(Thickness), typeof(TabHeaderControl), new FrameworkPropertyMetadata(new Thickness(0.0), new PropertyChangedCallback(OnUnselectedToolTabBorderThicknessChanged)));
+
+        public Thickness UnselectedToolTabBorderThickness
+        {
+            get
+            {
+                return (Thickness)GetValue(UnselectedToolTabBorderThicknessProperty);
+            }
+            set
+            {
+                if (value != UnselectedToolTabBorderThickness)
+                {
+                    SetValue(UnselectedToolTabBorderThicknessProperty, value);
+                    UpdateProperties(_root);
+                }
+            }
+        }
+
+        private static void OnUnselectedToolTabBorderThicknessChanged(DependencyObject d, DependencyPropertyChangedEventArgs e)
+        {
+            ((LayoutManager)d).OnUnselectedToolTabBorderThicknessChanged(e);
+        }
+
+        protected virtual void OnUnselectedToolTabBorderThicknessChanged(DependencyPropertyChangedEventArgs e)
+        {
+            if ((Thickness)e.NewValue != UnselectedToolTabBorderThickness)
+            {
+                UpdateProperties(_root);
+            }
+        }
+
+        #endregion
+
+        #region UnselectedToolTabBorderBrush dependency property
+
+        [Bindable(true)]
+        [DesignerSerializationVisibility(DesignerSerializationVisibility.Hidden)]
+        public static readonly DependencyProperty UnselectedToolTabBorderBrushProperty = DependencyProperty.Register("UnselectedToolTabBorderBrush", typeof(Brush), typeof(TabHeaderControl), new FrameworkPropertyMetadata(Brushes.Gray, new PropertyChangedCallback(OnUnselectedToolTabBorderBrushChanged)));
+
+        public Brush UnselectedToolTabBorderBrush
+        {
+            get
+            {
+                return (Brush)GetValue(UnselectedToolTabBorderBrushProperty);
+            }
+            set
+            {
+                if (value != UnselectedToolTabBorderBrush)
+                {
+                    SetValue(UnselectedToolTabBorderBrushProperty, value);
+                    UpdateProperties(_root);
+                }
+            }
+        }
+
+        private static void OnUnselectedToolTabBorderBrushChanged(DependencyObject d, DependencyPropertyChangedEventArgs e)
+        {
+            ((LayoutManager)d).OnUnselectedToolTabBorderBrushChanged(e);
+        }
+
+        protected virtual void OnUnselectedToolTabBorderBrushChanged(DependencyPropertyChangedEventArgs e)
+        {
+            if ((Brush)e.NewValue != UnselectedToolTabBorderBrush)
             {
                 UpdateProperties(_root);
             }
@@ -1085,6 +1237,154 @@ namespace WpfOpenControls.DockManager
         protected virtual void OnDocumentTabCornerRadiusChanged(DependencyPropertyChangedEventArgs e)
         {
             if ((CornerRadius)e.NewValue != DocumentTabCornerRadius)
+            {
+                UpdateProperties(_root);
+            }
+        }
+
+        #endregion
+
+        #region SelectedDocumentTabBorderThickness dependency property
+
+        [Bindable(true)]
+        [DesignerSerializationVisibility(DesignerSerializationVisibility.Hidden)]
+        public static readonly DependencyProperty SelectedDocumentTabBorderThicknessProperty = DependencyProperty.Register("SelectedDocumentTabBorderThickness", typeof(Thickness), typeof(TabHeaderControl), new FrameworkPropertyMetadata(new Thickness(0.0), new PropertyChangedCallback(OnSelectedDocumentTabBorderThicknessChanged)));
+
+        public Thickness SelectedDocumentTabBorderThickness
+        {
+            get
+            {
+                return (Thickness)GetValue(SelectedDocumentTabBorderThicknessProperty);
+            }
+            set
+            {
+                if (value != SelectedDocumentTabBorderThickness)
+                {
+                    SetValue(SelectedDocumentTabBorderThicknessProperty, value);
+                    UpdateProperties(_root);
+                }
+            }
+        }
+
+        private static void OnSelectedDocumentTabBorderThicknessChanged(DependencyObject d, DependencyPropertyChangedEventArgs e)
+        {
+            ((LayoutManager)d).OnSelectedDocumentTabBorderThicknessChanged(e);
+        }
+
+        protected virtual void OnSelectedDocumentTabBorderThicknessChanged(DependencyPropertyChangedEventArgs e)
+        {
+            if ((Thickness)e.NewValue != SelectedDocumentTabBorderThickness)
+            {
+                UpdateProperties(_root);
+            }
+        }
+
+        #endregion
+
+        #region SelectedDocumentTabBorderBrush dependency property
+
+        [Bindable(true)]
+        [DesignerSerializationVisibility(DesignerSerializationVisibility.Hidden)]
+        public static readonly DependencyProperty SelectedDocumentTabBorderBrushProperty = DependencyProperty.Register("SelectedDocumentTabBorderBrush", typeof(Brush), typeof(TabHeaderControl), new FrameworkPropertyMetadata(Brushes.Gray, new PropertyChangedCallback(OnSelectedDocumentTabBorderBrushChanged)));
+
+        public Brush SelectedDocumentTabBorderBrush
+        {
+            get
+            {
+                return (Brush)GetValue(SelectedDocumentTabBorderBrushProperty);
+            }
+            set
+            {
+                if (value != SelectedDocumentTabBorderBrush)
+                {
+                    SetValue(SelectedDocumentTabBorderBrushProperty, value);
+                    UpdateProperties(_root);
+                }
+            }
+        }
+
+        private static void OnSelectedDocumentTabBorderBrushChanged(DependencyObject d, DependencyPropertyChangedEventArgs e)
+        {
+            ((LayoutManager)d).OnSelectedDocumentTabBorderBrushChanged(e);
+        }
+
+        protected virtual void OnSelectedDocumentTabBorderBrushChanged(DependencyPropertyChangedEventArgs e)
+        {
+            if ((Brush)e.NewValue != SelectedDocumentTabBorderBrush)
+            {
+                UpdateProperties(_root);
+            }
+        }
+
+        #endregion
+
+        #region UnselectedDocumentTabBorderThickness dependency property
+
+        [Bindable(true)]
+        [DesignerSerializationVisibility(DesignerSerializationVisibility.Hidden)]
+        public static readonly DependencyProperty UnselectedDocumentTabBorderThicknessProperty = DependencyProperty.Register("UnselectedDocumentTabBorderThickness", typeof(Thickness), typeof(TabHeaderControl), new FrameworkPropertyMetadata(new Thickness(0.0), new PropertyChangedCallback(OnUnselectedDocumentTabBorderThicknessChanged)));
+
+        public Thickness UnselectedDocumentTabBorderThickness
+        {
+            get
+            {
+                return (Thickness)GetValue(UnselectedDocumentTabBorderThicknessProperty);
+            }
+            set
+            {
+                if (value != UnselectedDocumentTabBorderThickness)
+                {
+                    SetValue(UnselectedDocumentTabBorderThicknessProperty, value);
+                    UpdateProperties(_root);
+                }
+            }
+        }
+
+        private static void OnUnselectedDocumentTabBorderThicknessChanged(DependencyObject d, DependencyPropertyChangedEventArgs e)
+        {
+            ((LayoutManager)d).OnUnselectedDocumentTabBorderThicknessChanged(e);
+        }
+
+        protected virtual void OnUnselectedDocumentTabBorderThicknessChanged(DependencyPropertyChangedEventArgs e)
+        {
+            if ((Thickness)e.NewValue != UnselectedDocumentTabBorderThickness)
+            {
+                UpdateProperties(_root);
+            }
+        }
+
+        #endregion
+
+        #region UnselectedDocumentTabBorderBrush dependency property
+
+        [Bindable(true)]
+        [DesignerSerializationVisibility(DesignerSerializationVisibility.Hidden)]
+        public static readonly DependencyProperty UnselectedDocumentTabBorderBrushProperty = DependencyProperty.Register("UnselectedDocumentTabBorderBrush", typeof(Brush), typeof(TabHeaderControl), new FrameworkPropertyMetadata(Brushes.Gray, new PropertyChangedCallback(OnUnselectedDocumentTabBorderBrushChanged)));
+
+        public Brush UnselectedDocumentTabBorderBrush
+        {
+            get
+            {
+                return (Brush)GetValue(UnselectedDocumentTabBorderBrushProperty);
+            }
+            set
+            {
+                if (value != UnselectedDocumentTabBorderBrush)
+                {
+                    SetValue(UnselectedDocumentTabBorderBrushProperty, value);
+                    UpdateProperties(_root);
+                }
+            }
+        }
+
+        private static void OnUnselectedDocumentTabBorderBrushChanged(DependencyObject d, DependencyPropertyChangedEventArgs e)
+        {
+            ((LayoutManager)d).OnUnselectedDocumentTabBorderBrushChanged(e);
+        }
+
+        protected virtual void OnUnselectedDocumentTabBorderBrushChanged(DependencyPropertyChangedEventArgs e)
+        {
+            if ((Brush)e.NewValue != UnselectedDocumentTabBorderBrush)
             {
                 UpdateProperties(_root);
             }

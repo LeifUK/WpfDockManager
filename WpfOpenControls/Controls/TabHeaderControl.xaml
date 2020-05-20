@@ -105,18 +105,14 @@
                 <RotateTransform Angle="180" CenterX="0.5" CenterY="0.5"/>
             </Button.LayoutTransform>
        </Button>
-        <local:TabHeader Grid.Row="0" Grid.Column="1" x:Name="_listBox" ScrollViewer.HorizontalScrollBarVisibility="Hidden" SelectionChanged="_listBox_SelectionChanged" Padding="0,-2,0,-2" BorderThickness="0" Background="Transparent">
+        <local:TabHeader Grid.Row="0" Grid.Column="1" x:Name="_listBox" ScrollViewer.HorizontalScrollBarVisibility="Hidden" SelectionChanged="_listBox_SelectionChanged" Padding="0,-1,0,-1" BorderThickness="0" Background="Transparent">
             <ListBox.ItemContainerStyle>
                 <Style TargetType="ListBoxItem">
-                    <Setter Property="FrameworkElement.Margin" Value="0"/>
                     <Setter Property="FocusVisualStyle" Value="{x:Null}" />
-                    <Setter Property="Padding" Value="10" />
-                    <Setter Property="Margin" Value="0" />
-
                     <Setter Property="Template">
                         <Setter.Value>
                             <ControlTemplate TargetType="ListBoxItem">
-                                <Border Name="Border" Padding="0" SnapsToDevicePixels="true" BorderThickness="0" CornerRadius="{Binding Path=TabCornerRadius, RelativeSource={RelativeSource AncestorType={x:Type local:TabHeaderControl}}}">
+                                <Border Name="Border" SnapsToDevicePixels="true" BorderThickness="0" CornerRadius="{Binding Path=TabCornerRadius, RelativeSource={RelativeSource AncestorType={x:Type local:TabHeaderControl}}}">
                                     <Grid>
                                         <Grid.ColumnDefinitions>
                                             <ColumnDefinition Width="4"/>
@@ -136,14 +132,14 @@
                                         <Setter TargetName="Button" Property="Background" Value="Transparent"/>
                                         <Setter TargetName="Border" Property="Background" Value="{Binding Path=SelectedTabBackground, RelativeSource={RelativeSource AncestorType={x:Type local:TabHeaderControl}}}"/>
                                         <Setter TargetName="Border" Property="BorderThickness" Value="{Binding Path=SelectedTabBorderThickness, RelativeSource={RelativeSource AncestorType={x:Type local:TabHeaderControl}}}"/>
-                                        <Setter TargetName="Border" Property="BorderBrush" Value="Gray"/>
+                                        <Setter TargetName="Border" Property="BorderBrush" Value="{Binding Path=SelectedTabBorderBrush, RelativeSource={RelativeSource AncestorType={x:Type local:TabHeaderControl}}}"/>
                                         <Setter TargetName="Label" Property="Foreground" Value="{Binding Path=SelectedTabForeground, RelativeSource={RelativeSource AncestorType={x:Type local:TabHeaderControl}}}"/>
                                         <Setter TargetName="Button" Property="Foreground" Value="{Binding Path=SelectedTabForeground, RelativeSource={RelativeSource AncestorType={x:Type local:TabHeaderControl}}}"/>
                                     </Trigger>
                                     <Trigger Property="IsSelected" Value="false">
                                         <Setter TargetName="Border" Property="Background" Value="{Binding Path=UnselectedTabBackground, RelativeSource={RelativeSource AncestorType={x:Type local:TabHeaderControl}}}"/>
-                                        <Setter TargetName="Border" Property="BorderThickness" Value="1"/>
-                                        <Setter TargetName="Border" Property="BorderBrush" Value="Transparent"/>
+                                        <Setter TargetName="Border" Property="BorderThickness" Value="{Binding Path=UnselectedTabBorderThickness, RelativeSource={RelativeSource AncestorType={x:Type local:TabHeaderControl}}}"/>
+                                        <Setter TargetName="Border" Property="BorderBrush" Value="{Binding Path=UnselectedTabBorderBrush, RelativeSource={RelativeSource AncestorType={x:Type local:TabHeaderControl}}}"/>
                                         <Setter TargetName="Label" Property="Foreground" Value="{Binding Path=UnselectedTabForeground, RelativeSource={RelativeSource AncestorType={x:Type local:TabHeaderControl}}}"/>
                                         <Setter TargetName="Button" Property="Foreground" Value="{Binding Path=UnselectedTabBackground, RelativeSource={RelativeSource AncestorType={x:Type local:TabHeaderControl}}}"/>
                                     </Trigger>

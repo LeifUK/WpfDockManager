@@ -302,6 +302,124 @@ namespace WpfOpenControls.Controls
 
         #endregion
 
+        #region SelectedTabBorderThickness dependency property
+
+        [Bindable(true)]
+        [DesignerSerializationVisibility(DesignerSerializationVisibility.Hidden)]
+        public static readonly DependencyProperty SelectedTabBorderThicknessProperty = DependencyProperty.Register("SelectedTabBorderThickness", typeof(Thickness), typeof(TabHeaderControl), new FrameworkPropertyMetadata(new Thickness(0.0), new PropertyChangedCallback(OnSelectedTabBorderThicknessChanged)));
+
+        public Thickness SelectedTabBorderThickness
+        {
+            get
+            {
+                return (Thickness)GetValue(SelectedTabBorderThicknessProperty);
+            }
+            set
+            {
+                if (value != SelectedTabBorderThickness)
+                {
+                    SetValue(SelectedTabBorderThicknessProperty, value);
+                }
+            }
+        }
+
+        private static void OnSelectedTabBorderThicknessChanged(DependencyObject d, DependencyPropertyChangedEventArgs e)
+        {
+            ((TabHeaderControl)d).OnSelectedTabBorderThicknessChanged(e);
+        }
+
+        protected virtual void OnSelectedTabBorderThicknessChanged(DependencyPropertyChangedEventArgs e)
+        {
+            if (e.NewValue != null)
+            {
+                _listBox.SelectedItem = e.NewValue;
+            }
+        }
+
+        #endregion
+
+        #region SelectedTabBorderBrush dependency property
+
+        [Bindable(true)]
+        [DesignerSerializationVisibility(DesignerSerializationVisibility.Hidden)]
+        public static readonly DependencyProperty SelectedTabBorderBrushProperty = DependencyProperty.Register("SelectedTabBorderBrush", typeof(Brush), typeof(TabHeaderControl), new FrameworkPropertyMetadata(Brushes.Transparent, null));
+
+        public Brush SelectedTabBorderBrush
+        {
+            get
+            {
+                return (Brush)GetValue(SelectedTabBorderBrushProperty);
+            }
+            set
+            {
+                if (value != SelectedTabBorderBrush)
+                {
+                    SetValue(SelectedTabBorderBrushProperty, value);
+                }
+            }
+        }
+
+        #endregion
+
+        #region UnselectedTabBorderThickness dependency property
+
+        [Bindable(true)]
+        [DesignerSerializationVisibility(DesignerSerializationVisibility.Hidden)]
+        public static readonly DependencyProperty UnselectedTabBorderThicknessProperty = DependencyProperty.Register("UnselectedTabBorderThickness", typeof(Thickness), typeof(TabHeaderControl), new FrameworkPropertyMetadata(new Thickness(0.0), new PropertyChangedCallback(OnUnselectedTabBorderThicknessChanged)));
+
+        public Thickness UnselectedTabBorderThickness
+        {
+            get
+            {
+                return (Thickness)GetValue(UnselectedTabBorderThicknessProperty);
+            }
+            set
+            {
+                if ((Thickness)value != UnselectedTabBorderThickness)
+                {
+                    SetValue(UnselectedTabBorderThicknessProperty, value);
+                }
+            }
+        }
+
+        private static void OnUnselectedTabBorderThicknessChanged(DependencyObject d, DependencyPropertyChangedEventArgs e)
+        {
+            ((TabHeaderControl)d).OnUnselectedTabBorderThicknessChanged(e);
+        }
+
+        protected virtual void OnUnselectedTabBorderThicknessChanged(DependencyPropertyChangedEventArgs e)
+        {
+            if (e.NewValue != null)
+            {
+                _listBox.SelectedItem = e.NewValue;
+            }
+        }
+
+        #endregion
+
+        #region UnselectedTabBorderBrush dependency property
+
+        [Bindable(true)]
+        [DesignerSerializationVisibility(DesignerSerializationVisibility.Hidden)]
+        public static readonly DependencyProperty UnselectedTabBorderBrushProperty = DependencyProperty.Register("UnselectedTabBorderBrush", typeof(Brush), typeof(TabHeaderControl), new FrameworkPropertyMetadata(Brushes.Transparent, null));
+
+        public Brush UnselectedTabBorderBrush
+        {
+            get
+            {
+                return (Brush)GetValue(UnselectedTabBorderBrushProperty);
+            }
+            set
+            {
+                if (value != UnselectedTabBorderBrush)
+                {
+                    SetValue(UnselectedTabBorderBrushProperty, value);
+                }
+            }
+        }
+
+        #endregion
+
         #region TabCornerRadius dependency property
 
         [Bindable(true)]
@@ -426,42 +544,6 @@ namespace WpfOpenControls.Controls
                 {
                     SetValue(UnselectedTabForegroundProperty, value);
                 }
-            }
-        }
-
-        #endregion
-
-        #region SelectedTabBorderThickness dependency property
-
-        [Bindable(true)]
-        [DesignerSerializationVisibility(DesignerSerializationVisibility.Hidden)]
-        public static readonly DependencyProperty SelectedTabBorderThicknessProperty = DependencyProperty.Register("SelectedTabBorderThickness", typeof(string), typeof(TabHeaderControl), new FrameworkPropertyMetadata(null, new PropertyChangedCallback(OnSelectedTabBorderThicknessChanged)));
-
-        public Object SelectedTabBorderThickness
-        {
-            get
-            {
-                return GetValue(SelectedTabBorderThicknessProperty);
-            }
-            set
-            {
-                if (value != SelectedTabBorderThickness)
-                {
-                    SetValue(SelectedTabBorderThicknessProperty, value);
-                }
-            }
-        }
-
-        private static void OnSelectedTabBorderThicknessChanged(DependencyObject d, DependencyPropertyChangedEventArgs e)
-        {
-            ((TabHeaderControl)d).OnSelectedTabBorderThicknessChanged(e);
-        }
-
-        protected virtual void OnSelectedTabBorderThicknessChanged(DependencyPropertyChangedEventArgs e)
-        {
-            if (e.NewValue != null)
-            {
-                _listBox.SelectedItem = e.NewValue;
             }
         }
 

@@ -138,6 +138,38 @@ namespace WpfOpenControls.DockManager
                 _tabHeaderControl.FontFamily = new FontFamily(value);
             }
         }
+        
+        public Thickness SelectedTabBorderThickness
+        {
+            set
+            {
+                _tabHeaderControl.SelectedTabBorderThickness = value;
+            }
+        }
+
+        public Brush SelectedTabBorderBrush
+        {
+            set
+            {
+                _tabHeaderControl.SelectedTabBorderBrush = value;
+            }
+        }
+
+        public Thickness UnselectedTabBorderThickness
+        {
+            set
+            {
+                _tabHeaderControl.UnselectedTabBorderThickness = value;
+            }
+        }
+
+        public Brush UnselectedTabBorderBrush
+        {
+            set
+            {
+                _tabHeaderControl.UnselectedTabBorderBrush = value;
+            }
+        }
 
         public CornerRadius TabCornerRadius
         {

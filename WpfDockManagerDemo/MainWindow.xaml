@@ -88,6 +88,10 @@
                 <dockManager:LayoutManager.ToolFontFamily>Arial</dockManager:LayoutManager.ToolFontFamily>
                 <dockManager:LayoutManager.ToolBackground>#5d6b99</dockManager:LayoutManager.ToolBackground>
                 <dockManager:LayoutManager.ToolHeaderBackground>#3b4f81</dockManager:LayoutManager.ToolHeaderBackground>
+                <dockManager:LayoutManager.SelectedToolTabBorderBrush>Orange</dockManager:LayoutManager.SelectedToolTabBorderBrush>
+                <dockManager:LayoutManager.SelectedToolTabBorderThickness>0,2,0,0</dockManager:LayoutManager.SelectedToolTabBorderThickness>
+                <dockManager:LayoutManager.UnselectedToolTabBorderBrush>Transparent</dockManager:LayoutManager.UnselectedToolTabBorderBrush>
+                <dockManager:LayoutManager.UnselectedToolTabBorderThickness>0</dockManager:LayoutManager.UnselectedToolTabBorderThickness>
                 <dockManager:LayoutManager.SelectedToolTabHeaderBackground>AliceBlue</dockManager:LayoutManager.SelectedToolTabHeaderBackground>
                 <dockManager:LayoutManager.UnselectedToolTabHeaderBackground>#3b4f81</dockManager:LayoutManager.UnselectedToolTabHeaderBackground>
                 <dockManager:LayoutManager.SelectedToolTabHeaderForeground>Black</dockManager:LayoutManager.SelectedToolTabHeaderForeground>
@@ -108,6 +112,11 @@
                 <dockManager:LayoutManager.DocumentFontSize>12</dockManager:LayoutManager.DocumentFontSize>
                 <dockManager:LayoutManager.DocumentFontFamily>Arial</dockManager:LayoutManager.DocumentFontFamily>
                 <dockManager:LayoutManager.DocumentHeaderBackground>#5d6b99</dockManager:LayoutManager.DocumentHeaderBackground>
+                <dockManager:LayoutManager.SelectedDocumentTabBorderBrush>Orange</dockManager:LayoutManager.SelectedDocumentTabBorderBrush>
+                <dockManager:LayoutManager.SelectedDocumentTabBorderThickness>0,0,0,2</dockManager:LayoutManager.SelectedDocumentTabBorderThickness>
+                <dockManager:LayoutManager.UnselectedDocumentTabBorderBrush>Transparent</dockManager:LayoutManager.UnselectedDocumentTabBorderBrush>
+                <dockManager:LayoutManager.UnselectedDocumentTabBorderThickness>0</dockManager:LayoutManager.UnselectedDocumentTabBorderThickness>
+
                 <dockManager:LayoutManager.SelectedDocumentTabHeaderBackground>#f5cc84</dockManager:LayoutManager.SelectedDocumentTabHeaderBackground>
                 <dockManager:LayoutManager.UnselectedDocumentTabHeaderBackground>#3b4f81</dockManager:LayoutManager.UnselectedDocumentTabHeaderBackground>
                 <dockManager:LayoutManager.SelectedDocumentTabHeaderForeground>Black</dockManager:LayoutManager.SelectedDocumentTabHeaderForeground>
