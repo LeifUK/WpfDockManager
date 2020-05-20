@@ -1,5 +1,6 @@
 ﻿using System.Windows;
 using System.Windows.Controls;
+using System.Windows.Media;
 
 namespace WpfOpenControls.DockManager
 {
@@ -41,14 +42,14 @@ namespace WpfOpenControls.DockManager
             _border.VerticalAlignment = System.Windows.VerticalAlignment.Stretch;
             _border.Background = System.Windows.Media.Brushes.Transparent;
 
-            _button = new Button();
-            _button.VerticalAlignment = VerticalAlignment.Center;
-            Children.Add(_button);
-            Grid.SetRow(_button, 1);
-            Grid.SetColumn(_button, 2);
-            _button.Click += delegate { Helpers.DisplayItemsMenu(_items, _tabHeaderControl, _selectedUserControl); };
+            _viewListButton = new Button();
+            _viewListButton.VerticalAlignment = VerticalAlignment.Center;
+            Children.Add(_viewListButton);
+            Grid.SetRow(_viewListButton, 2);
+            Grid.SetColumn(_viewListButton, 2);
+            _viewListButton.Click += delegate { Helpers.DisplayItemsMenu(_items, _tabHeaderControl, _selectedUserControl); };
             System.Windows.ResourceDictionary res = (System.Windows.ResourceDictionary)Application.LoadComponent(new System.Uri("/WpfOpenControls;component/DockManager/Dictionary.xaml", System.UriKind.Relative));
-            _button.Style = WpfOpenControls.Controls.Utilities.GetResourceDictionary()["StyleViewListButton"] as Style;
+            _viewListButton.Style = WpfOpenControls.Controls.Utilities.GetResourceDictionary()["StyleViewListButton"] as Style;
         }
 
         private RowDefinition rowDefinition_UserControl;
@@ -56,8 +57,16 @@ namespace WpfOpenControls.DockManager
         private RowDefinition rowDefinition_TabHeader;
         private RowDefinition rowDefinition_Spacer;
 
-        private Button _button;
+        private Button _viewListButton;
         private Border _border;
+
+        public override Brush ButtonForeground
+        {
+            set
+            {
+                _viewListButton.Foreground = value;
+            }
+        }
 
         protected override void SetSelectedUserControlGridPosition()
         {

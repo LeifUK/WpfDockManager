@@ -24,6 +24,7 @@ namespace WpfOpenControls.DockManager
         string FontFamily { set; }
         CornerRadius TabCornerRadius { set; }
         Brush Background { set; }
+        Brush ButtonForeground { set; }
         Thickness SelectedTabBorderThickness { set; }
         Brush SelectedTabBorderBrush { set; }
         Thickness UnselectedTabBorderThickness { set; }

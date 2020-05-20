@@ -59,37 +59,5 @@ namespace WpfOpenControls.DockManager
         {
             // Nothing to do!
         }
-
-        //Point _mouseDownPosition;
-
-        //protected override void OnMouseLeftButtonDown(MouseButtonEventArgs e)
-        //{
-        //    _mouseDownPosition = e.GetPosition(this);
-        //    base.OnMouseLeftButtonDown(e);
-        //    System.Windows.Input.Mouse.Capture(this);
-        //}
-
-        //protected override void OnMouseLeftButtonUp(MouseButtonEventArgs e)
-        //{
-        //    base.OnMouseLeftButtonUp(e);
-        //    System.Windows.Input.Mouse.Capture(this, CaptureMode.None);
-        //}
-
-        //protected override void OnMouseMove(MouseEventArgs e)
-        //{
-        //    base.OnMouseMove(e);
-        //    if (System.Windows.Input.Mouse.Captured == this)
-        //    {
-        //        Point mousePosition = e.GetPosition(this);
-        //        double xdiff = mousePosition.X - _mouseDownPosition.X;
-        //        double ydiff = mousePosition.Y - _mouseDownPosition.Y;
-        //        if ((xdiff * xdiff + ydiff * ydiff) > 100)
-        //        {
-
-        //            FireFloat();
-        //            System.Windows.Input.Mouse.Capture(this, CaptureMode.None);
-        //        }
-        //    }
-        //}
     }
 }

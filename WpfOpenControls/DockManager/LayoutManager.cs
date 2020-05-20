@@ -314,6 +314,7 @@ namespace WpfOpenControls.DockManager
             iViewContainer.FontSize = DocumentFontSize;
             iViewContainer.FontFamily = DocumentFontFamily;
             iViewContainer.TabCornerRadius = DocumentTabCornerRadius;
+            iViewContainer.ButtonForeground = DocumentButtonForeground;
             iViewContainer.SelectedTabBorderThickness = SelectedDocumentTabBorderThickness;
             iViewContainer.SelectedTabBorderBrush = SelectedDocumentTabBorderBrush;
             iViewContainer.UnselectedTabBorderThickness = UnselectedDocumentTabBorderThickness;
@@ -338,6 +339,7 @@ namespace WpfOpenControls.DockManager
             iViewContainer.FontSize = ToolFontSize;
             iViewContainer.FontFamily = ToolFontFamily;
             iViewContainer.TabCornerRadius = ToolTabCornerRadius;
+            iViewContainer.ButtonForeground = ToolButtonForeground;
             iViewContainer.Background = ToolBackground;
             iViewContainer.SelectedTabBorderThickness = SelectedToolTabBorderThickness;
             iViewContainer.SelectedTabBorderBrush = SelectedToolTabBorderBrush;
@@ -356,6 +358,7 @@ namespace WpfOpenControls.DockManager
             toolPaneGroup.HeaderBackground = ToolHeaderBackground;
             toolPaneGroup.FontSize = ToolFontSize;
             toolPaneGroup.HighlightBrush = SelectedPaneBrush;
+            toolPaneGroup.ButtonForeground = ToolButtonForeground;
             UpdateToolProperties(toolPaneGroup.IViewContainer as ToolContainer);
         }
 
@@ -654,6 +657,43 @@ namespace WpfOpenControls.DockManager
         protected virtual void OnToolTabCornerRadiusChanged(DependencyPropertyChangedEventArgs e)
         {
             if ((CornerRadius)e.NewValue != ToolTabCornerRadius)
+            {
+                UpdateProperties(_root);
+            }
+        }
+
+        #endregion
+
+        #region ToolButtonForeground dependency property
+
+        [Bindable(true)]
+        [DesignerSerializationVisibility(DesignerSerializationVisibility.Hidden)]
+        public static readonly DependencyProperty ToolButtonForegroundProperty = DependencyProperty.Register("ToolButtonForeground", typeof(Brush), typeof(TabHeaderControl), new FrameworkPropertyMetadata(Brushes.White, new PropertyChangedCallback(OnToolButtonForegroundChanged)));
+
+        public Brush ToolButtonForeground
+        {
+            get
+            {
+                return (Brush)GetValue(ToolButtonForegroundProperty);
+            }
+            set
+            {
+                if (value != ToolButtonForeground)
+                {
+                    SetValue(ToolButtonForegroundProperty, value);
+                    UpdateProperties(_root);
+                }
+            }
+        }
+
+        private static void OnToolButtonForegroundChanged(DependencyObject d, DependencyPropertyChangedEventArgs e)
+        {
+            ((LayoutManager)d).OnToolButtonForegroundChanged(e);
+        }
+
+        protected virtual void OnToolButtonForegroundChanged(DependencyPropertyChangedEventArgs e)
+        {
+            if ((Brush)e.NewValue != ToolButtonForeground)
             {
                 UpdateProperties(_root);
             }
@@ -1243,6 +1283,43 @@ namespace WpfOpenControls.DockManager
         protected virtual void OnDocumentTabCornerRadiusChanged(DependencyPropertyChangedEventArgs e)
         {
             if ((CornerRadius)e.NewValue != DocumentTabCornerRadius)
+            {
+                UpdateProperties(_root);
+            }
+        }
+
+        #endregion
+
+        #region DocumentButtonForeground dependency property
+
+        [Bindable(true)]
+        [DesignerSerializationVisibility(DesignerSerializationVisibility.Hidden)]
+        public static readonly DependencyProperty DocumentButtonForegroundProperty = DependencyProperty.Register("DocumentButtonForeground", typeof(Brush), typeof(TabHeaderControl), new FrameworkPropertyMetadata(Brushes.White, new PropertyChangedCallback(OnDocumentButtonForegroundChanged)));
+
+        public Brush DocumentButtonForeground
+        {
+            get
+            {
+                return (Brush)GetValue(DocumentButtonForegroundProperty);
+            }
+            set
+            {
+                if (value != DocumentButtonForeground)
+                {
+                    SetValue(DocumentButtonForegroundProperty, value);
+                    UpdateProperties(_root);
+                }
+            }
+        }
+
+        private static void OnDocumentButtonForegroundChanged(DependencyObject d, DependencyPropertyChangedEventArgs e)
+        {
+            ((LayoutManager)d).OnDocumentButtonForegroundChanged(e);
+        }
+
+        protected virtual void OnDocumentButtonForegroundChanged(DependencyPropertyChangedEventArgs e)
+        {
+            if ((Brush)e.NewValue != DocumentButtonForeground)
             {
                 UpdateProperties(_root);
             }

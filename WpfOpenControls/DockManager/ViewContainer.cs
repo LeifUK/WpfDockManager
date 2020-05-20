@@ -139,7 +139,17 @@ namespace WpfOpenControls.DockManager
                 _tabHeaderControl.FontFamily = new FontFamily(value);
             }
         }
-        
+
+        public CornerRadius TabCornerRadius
+        {
+            set
+            {
+                _tabHeaderControl.TabCornerRadius = value;
+            }
+        }
+
+        public abstract Brush ButtonForeground { set; }
+
         public Thickness SelectedTabBorderThickness
         {
             set
@@ -169,14 +179,6 @@ namespace WpfOpenControls.DockManager
             set
             {
                 _tabHeaderControl.UnselectedTabBorderBrush = value;
-            }
-        }
-
-        public CornerRadius TabCornerRadius
-        {
-            set
-            {
-                _tabHeaderControl.TabCornerRadius = value;
             }
         }
 

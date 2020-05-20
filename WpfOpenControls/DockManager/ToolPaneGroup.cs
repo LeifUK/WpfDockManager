@@ -61,13 +61,13 @@ namespace WpfOpenControls.DockManager
 
             System.Windows.ResourceDictionary res = WpfOpenControls.Controls.Utilities.GetResourceDictionary();
 
-            Button menuButton = new Button();
-            menuButton.VerticalAlignment = VerticalAlignment.Center;
-            menuButton.Style = res["StyleViewListButton"] as Style;
-            menuButton.Click += delegate { DisplayGeneralMenu(); };
-            Grid.SetRow(menuButton, 0);
-            Grid.SetColumn(menuButton, 2);
-            Children.Add(menuButton);
+            _toolListButton = new Button();
+            _toolListButton.VerticalAlignment = VerticalAlignment.Center;
+            _toolListButton.Style = res["StyleViewListButton"] as Style;
+            _toolListButton.Click += delegate { DisplayGeneralMenu(); };
+            Grid.SetRow(_toolListButton, 0);
+            Grid.SetColumn(_toolListButton, 2);
+            Children.Add(_toolListButton);
 
             _pinButton = new Button();
             _pinButton.VerticalAlignment = VerticalAlignment.Center;
@@ -78,19 +78,29 @@ namespace WpfOpenControls.DockManager
             Grid.SetColumn(_pinButton, 3);
             Children.Add(_pinButton);
 
-            Button closeButton = new Button();
-            closeButton.VerticalAlignment = VerticalAlignment.Center;
-            closeButton.Style = res["StyleCloseButton"] as Style;
-            Grid.SetRow(closeButton, 0);
-            Grid.SetColumn(closeButton, 4);
-            Panel.SetZIndex(closeButton, 99);
-            Children.Add(closeButton);
-            closeButton.Click += delegate { FireClose(); };
+            _closeButton = new Button();
+            _closeButton.VerticalAlignment = VerticalAlignment.Center;
+            _closeButton.Style = res["StyleCloseButton"] as Style;
+            Grid.SetRow(_closeButton, 0);
+            Grid.SetColumn(_closeButton, 4);
+            Panel.SetZIndex(_closeButton, 99);
+            Children.Add(_closeButton);
+            _closeButton.Click += delegate { FireClose(); };
 
             IViewContainer.SelectionChanged += DocumentContainer_SelectionChanged;
             Grid.SetRow(IViewContainer as System.Windows.UIElement, 1);
             Grid.SetColumn(IViewContainer as System.Windows.UIElement, 0);
             Grid.SetColumnSpan(IViewContainer as System.Windows.UIElement, ColumnDefinitions.Count);
+        }
+
+        public Brush ButtonForeground
+        {
+            set
+            {
+                _pinButton.Foreground = value;
+                _closeButton.Foreground = value;
+                _toolListButton.Foreground = value;
+            }
         }
 
         public double FontSize
@@ -127,9 +137,10 @@ namespace WpfOpenControls.DockManager
 
         public string Title { get { return IViewContainer.Title; } }
 
-        Button _pinButton;
-
-        Point _mouseDownPosition;
+        private Button _pinButton;
+        private Button _closeButton;
+        private Button _toolListButton;
+        private Point _mouseDownPosition;
 
         protected override void OnMouseLeftButtonDown(MouseButtonEventArgs e)
         {

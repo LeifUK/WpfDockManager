@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Windows;
 using System.Windows.Controls;
+using System.Windows.Media;
 
 namespace WpfOpenControls.DockManager
 {
@@ -49,6 +50,15 @@ namespace WpfOpenControls.DockManager
         private Button _menuButton;
 
         public Action DisplayGeneralMenu;
+
+        public override Brush ButtonForeground 
+        {
+            set
+            {
+                _documentButton.Foreground = value;
+                _menuButton.Foreground = value;
+            } 
+        }
 
         protected override void SetSelectedUserControlGridPosition()
         {

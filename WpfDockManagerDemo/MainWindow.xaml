@@ -83,6 +83,7 @@
                 <dockManager:LayoutManager.ToolFontSize>12</dockManager:LayoutManager.ToolFontSize>
                 <dockManager:LayoutManager.ToolFontFamily>Arial</dockManager:LayoutManager.ToolFontFamily>
                 <dockManager:LayoutManager.ToolBackground>#5d6b99</dockManager:LayoutManager.ToolBackground>
+                <dockManager:LayoutManager.ToolButtonForeground>White</dockManager:LayoutManager.ToolButtonForeground>
                 <dockManager:LayoutManager.ToolHeaderBackground>#3b4f81</dockManager:LayoutManager.ToolHeaderBackground>
                 <dockManager:LayoutManager.SelectedToolTabBorderBrush>Orange</dockManager:LayoutManager.SelectedToolTabBorderBrush>
                 <dockManager:LayoutManager.SelectedToolTabBorderThickness>0,0,0,2</dockManager:LayoutManager.SelectedToolTabBorderThickness>
@@ -106,6 +107,7 @@
                 </dockManager:LayoutManager.DocumentTabCornerRadius>
                 <dockManager:LayoutManager.DocumentFontSize>12</dockManager:LayoutManager.DocumentFontSize>
                 <dockManager:LayoutManager.DocumentFontFamily>Arial</dockManager:LayoutManager.DocumentFontFamily>
+                <dockManager:LayoutManager.DocumentButtonForeground>White</dockManager:LayoutManager.DocumentButtonForeground>
                 <dockManager:LayoutManager.DocumentHeaderBackground>#5d6b99</dockManager:LayoutManager.DocumentHeaderBackground>
                 <dockManager:LayoutManager.SelectedDocumentTabBorderBrush>Orange</dockManager:LayoutManager.SelectedDocumentTabBorderBrush>
                 <dockManager:LayoutManager.SelectedDocumentTabBorderThickness>0,0,0,0</dockManager:LayoutManager.SelectedDocumentTabBorderThickness>
