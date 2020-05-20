@@ -10,6 +10,7 @@ namespace WpfOpenControls.DockManager
         protected System.Collections.ObjectModel.ObservableCollection<System.Collections.Generic.KeyValuePair<UserControl, IViewModel>> _items;
         public WpfOpenControls.Controls.TabHeaderControl _tabHeaderControl;
         protected UserControl _selectedUserControl;
+        protected Border _gap;
 
         protected void CreateTabControl(int row, int column)
         {
@@ -184,6 +185,7 @@ namespace WpfOpenControls.DockManager
             set
             {
                 _tabHeaderControl.SelectedTabBackground = value;
+                _gap.Background = value;
             }
         }
 

@@ -39,7 +39,7 @@ namespace WpfOpenControls.DockManager
             set
             {
                 _isHighlighted = value;
-                HeaderBorder.Background = IsHighlighted ? System.Windows.Media.Brushes.Firebrick : _headerBackground;
+                HeaderBorder.Background = IsHighlighted ? HighlightBrush : _headerBackground;
             }
         }
 

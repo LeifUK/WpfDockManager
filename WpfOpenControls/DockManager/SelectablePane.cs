@@ -1,4 +1,5 @@
 ﻿using System.Windows.Controls;
+using System.Windows.Media;
 
 namespace WpfOpenControls.DockManager
 {
@@ -10,5 +11,7 @@ namespace WpfOpenControls.DockManager
         }
 
         abstract public bool IsHighlighted { get; set; }
+
+        public Brush HighlightBrush { get; set; }
     }
 }

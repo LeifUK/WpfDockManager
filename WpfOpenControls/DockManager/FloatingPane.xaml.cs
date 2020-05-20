@@ -20,6 +20,12 @@ namespace WpfOpenControls.DockManager
             _parentContainer.Children.Add(iViewContainer as UIElement);
             Grid.SetRow(iViewContainer as UIElement, 1);
             IViewContainer = iViewContainer;
+            IViewContainer.SelectionChanged += IViewContainer_SelectionChanged;
+        }
+
+        private void IViewContainer_SelectionChanged(object sender, EventArgs e)
+        {
+            (DataContext as FloatingViewModel).Title = Application.Current.MainWindow.Title + " - " + IViewContainer.Title;
         }
 
         public Brush HeaderBackground

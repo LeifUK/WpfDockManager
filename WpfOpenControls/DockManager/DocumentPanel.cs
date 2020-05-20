@@ -21,7 +21,7 @@ namespace WpfOpenControls.DockManager
                 _isHighlighted = value;
                 if (value)
                 {
-                    Background = System.Windows.Media.Brushes.Firebrick;
+                    Background = HighlightBrush;
                 }
                 else
                 {

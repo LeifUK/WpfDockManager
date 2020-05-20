@@ -10,6 +10,7 @@ namespace WpfOpenControls.DockManager
         {
             RowDefinitions.Add(new RowDefinition() { Height = new System.Windows.GridLength(4, System.Windows.GridUnitType.Pixel) });
             RowDefinitions.Add(new RowDefinition() { Height = new System.Windows.GridLength(1, System.Windows.GridUnitType.Auto) });
+            RowDefinitions.Add(new RowDefinition() { Height = new System.Windows.GridLength(2, System.Windows.GridUnitType.Pixel) });
             RowDefinitions.Add(new RowDefinition() { Height = new System.Windows.GridLength(1, System.Windows.GridUnitType.Star) });
 
             ColumnDefinitions.Add(new ColumnDefinition() { Width = new System.Windows.GridLength(1, System.Windows.GridUnitType.Star) });
@@ -20,6 +21,12 @@ namespace WpfOpenControls.DockManager
             ColumnDefinitions.Add(new ColumnDefinition() { Width = new System.Windows.GridLength(4, System.Windows.GridUnitType.Pixel) });
 
             CreateTabControl(1, 0);
+
+            _gap = new Border();
+            Children.Add(_gap);
+            Grid.SetRow(_gap, 2);
+            Grid.SetColumn(_gap, 0);
+            Grid.SetColumnSpan(_gap, 6);
 
             System.Windows.ResourceDictionary res = WpfOpenControls.Controls.Utilities.GetResourceDictionary();
 
@@ -45,7 +52,7 @@ namespace WpfOpenControls.DockManager
 
         protected override void SetSelectedUserControlGridPosition()
         {
-            Grid.SetRow(_selectedUserControl, 2);
+            Grid.SetRow(_selectedUserControl, 3);
             Grid.SetColumn(_selectedUserControl, 0);
             Grid.SetColumnSpan(_selectedUserControl, 99);
             Grid.SetZIndex(_selectedUserControl, 2);

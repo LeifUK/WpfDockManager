@@ -10,7 +10,7 @@
         Background="LightSteelBlue"
         Loaded="Window_Loaded"
         Unloaded="Window_Unloaded"
-        Title="MainWindow" Height="450" Width="800">
+        Title="WPF Dock Manager Demo" Height="450" Width="800">
     <WindowChrome.WindowChrome>
         <WindowChrome CaptionHeight="34" />
     </WindowChrome.WindowChrome>
@@ -61,11 +61,6 @@
 
                 <!--Caption buttons-->
                 <StackPanel Grid.Row="0" Grid.Column="0" Orientation="Horizontal" HorizontalAlignment="Right" >
-                    <!--<Button Name="_buttonMenu" Style="{StaticResource MenuButtonStyle}" WindowChrome.IsHitTestVisibleInChrome="True" VerticalAlignment="Center" Background="LightSteelBlue" Foreground="Black" Click="_buttonMenu_Click">
-                        <Button.RenderTransform>
-                            <ScaleTransform ScaleX="1." ScaleY="1."/>
-                        </Button.RenderTransform>
-                    </Button>-->
                     <Button Name="_buttonMenu" Content="Layout" Style="{StaticResource StyleTitleBarButton}" WindowChrome.IsHitTestVisibleInChrome="True" VerticalAlignment="Center" Click="_buttonMenu_Click"/>
                     <Button Style="{StaticResource MinimizeButtonStyle}" WindowChrome.IsHitTestVisibleInChrome="True" ToolTip="Minimize"
                             Command="{x:Static SystemCommands.MinimizeWindowCommand}"/>
@@ -80,6 +75,7 @@
             <dockManager:LayoutManager x:Name="_layoutManager" Grid.Row="1" Grid.Column="0" DocumentsSource="{Binding Documents}" ToolsSource="{Binding Tools}" VerticalAlignment="Stretch" HorizontalAlignment="Stretch" Background="#5d6b99" >
                 <dockManager:LayoutManager.SplitterBrush>#5d6b99</dockManager:LayoutManager.SplitterBrush>
                 <dockManager:LayoutManager.SplitterWidth>6</dockManager:LayoutManager.SplitterWidth>
+                <dockManager:LayoutManager.SelectedPaneBrush>DarkRed</dockManager:LayoutManager.SelectedPaneBrush>
                 
                 <dockManager:LayoutManager.ToolTabCornerRadius>
                     <CornerRadius BottomLeft="8" BottomRight="4"/>
@@ -89,7 +85,7 @@
                 <dockManager:LayoutManager.ToolBackground>#5d6b99</dockManager:LayoutManager.ToolBackground>
                 <dockManager:LayoutManager.ToolHeaderBackground>#3b4f81</dockManager:LayoutManager.ToolHeaderBackground>
                 <dockManager:LayoutManager.SelectedToolTabBorderBrush>Orange</dockManager:LayoutManager.SelectedToolTabBorderBrush>
-                <dockManager:LayoutManager.SelectedToolTabBorderThickness>0,2,0,0</dockManager:LayoutManager.SelectedToolTabBorderThickness>
+                <dockManager:LayoutManager.SelectedToolTabBorderThickness>0,0,0,2</dockManager:LayoutManager.SelectedToolTabBorderThickness>
                 <dockManager:LayoutManager.UnselectedToolTabBorderBrush>Transparent</dockManager:LayoutManager.UnselectedToolTabBorderBrush>
                 <dockManager:LayoutManager.UnselectedToolTabBorderThickness>0</dockManager:LayoutManager.UnselectedToolTabBorderThickness>
                 <dockManager:LayoutManager.SelectedToolTabHeaderBackground>AliceBlue</dockManager:LayoutManager.SelectedToolTabHeaderBackground>
@@ -102,9 +98,8 @@
                 <dockManager:LayoutManager.SideToolForeground>White</dockManager:LayoutManager.SideToolForeground>
                 <dockManager:LayoutManager.SideToolBarBrush>#3b4f81</dockManager:LayoutManager.SideToolBarBrush>
                 <dockManager:LayoutManager.MouseOverSideToolBarBrush>AliceBlue</dockManager:LayoutManager.MouseOverSideToolBarBrush>
-                
-                <dockManager:LayoutManager.FloatingToolTitleBarBackground>LightSteelBlue</dockManager:LayoutManager.FloatingToolTitleBarBackground>
-                <dockManager:LayoutManager.FloatingToolBackground>SteelBlue</dockManager:LayoutManager.FloatingToolBackground>
+
+                <dockManager:LayoutManager.FloatingToolTitleBarBackground>#ccd5f0</dockManager:LayoutManager.FloatingToolTitleBarBackground>
 
                 <dockManager:LayoutManager.DocumentTabCornerRadius>
                     <CornerRadius TopLeft="8" TopRight="4"/>
@@ -113,7 +108,7 @@
                 <dockManager:LayoutManager.DocumentFontFamily>Arial</dockManager:LayoutManager.DocumentFontFamily>
                 <dockManager:LayoutManager.DocumentHeaderBackground>#5d6b99</dockManager:LayoutManager.DocumentHeaderBackground>
                 <dockManager:LayoutManager.SelectedDocumentTabBorderBrush>Orange</dockManager:LayoutManager.SelectedDocumentTabBorderBrush>
-                <dockManager:LayoutManager.SelectedDocumentTabBorderThickness>0,0,0,2</dockManager:LayoutManager.SelectedDocumentTabBorderThickness>
+                <dockManager:LayoutManager.SelectedDocumentTabBorderThickness>0,0,0,0</dockManager:LayoutManager.SelectedDocumentTabBorderThickness>
                 <dockManager:LayoutManager.UnselectedDocumentTabBorderBrush>Transparent</dockManager:LayoutManager.UnselectedDocumentTabBorderBrush>
                 <dockManager:LayoutManager.UnselectedDocumentTabBorderThickness>0</dockManager:LayoutManager.UnselectedDocumentTabBorderThickness>
 
@@ -124,8 +119,7 @@
                 <dockManager:LayoutManager.ActiveDocumentScrollIndicatorBrush>White</dockManager:LayoutManager.ActiveDocumentScrollIndicatorBrush>
                 <dockManager:LayoutManager.InactiveDocumentScrollIndicatorBrush>Transparent</dockManager:LayoutManager.InactiveDocumentScrollIndicatorBrush>
 
-                <dockManager:LayoutManager.FloatingDocumentTitleBarBackground>LightSteelBlue</dockManager:LayoutManager.FloatingDocumentTitleBarBackground>
-                <dockManager:LayoutManager.FloatingDocumentBackground>SteelBlue</dockManager:LayoutManager.FloatingDocumentBackground>
+                <dockManager:LayoutManager.FloatingDocumentTitleBarBackground>#ccd5f0</dockManager:LayoutManager.FloatingDocumentTitleBarBackground>
                 
                 <dockManager:LayoutManager.DocumentTemplates>
                     <DataTemplate DataType="{x:Type viewModel:DocumentOneViewModel}">

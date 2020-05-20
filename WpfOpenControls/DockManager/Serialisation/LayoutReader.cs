@@ -187,7 +187,7 @@ namespace WpfOpenControls.DockManager.Serialisation
                     }
                     else if ((xmlChildNode as XmlElement).Name == "DocumentPanel")
                     {
-                        DocumentPanel documentPanel = new DocumentPanel();
+                        DocumentPanel documentPanel = iLayoutFactory.MakeDocumentPanel();
 
                         System.Windows.Markup.IAddChild parentElement = (System.Windows.Markup.IAddChild)parentFrameworkElement;
                         parentElement.AddChild(documentPanel);

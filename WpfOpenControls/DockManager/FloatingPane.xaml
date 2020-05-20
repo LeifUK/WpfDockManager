@@ -6,7 +6,7 @@
         xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
         LocationChanged="Window_LocationChanged"
         mc:Ignorable="d"
-        Title="MainWindow" Height="200" Width="500">
+        Title="{Binding Title}" Height="200" Width="500">
 
     <!--Add the WindowChrome object-->
     <WindowChrome.WindowChrome>

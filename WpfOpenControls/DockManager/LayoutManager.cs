@@ -15,7 +15,7 @@ namespace WpfOpenControls.DockManager
     {
         public LayoutManager()
         {
-            Tag = Guid.NewGuid();
+            Tag = new Guid("3c81a424-ef66-4de7-a361-9968cd88071c");
 
             FloatingToolPaneGroups = new List<FloatingToolPaneGroup>();
             FloatingDocumentPaneGroups = new List<FloatingDocumentPaneGroup>();
@@ -329,6 +329,7 @@ namespace WpfOpenControls.DockManager
         private void UpdateProperties(DocumentPaneGroup documentPaneGroup)
         {
             documentPaneGroup.HeaderBackground = DocumentHeaderBackground;
+            documentPaneGroup.HighlightBrush = SelectedPaneBrush;
             UpdateDocumentProperties(documentPaneGroup.IViewContainer);
         }
 
@@ -354,6 +355,7 @@ namespace WpfOpenControls.DockManager
         {
             toolPaneGroup.HeaderBackground = ToolHeaderBackground;
             toolPaneGroup.FontSize = ToolFontSize;
+            toolPaneGroup.HighlightBrush = SelectedPaneBrush;
             UpdateToolProperties(toolPaneGroup.IViewContainer as ToolContainer);
         }
 
@@ -361,7 +363,7 @@ namespace WpfOpenControls.DockManager
         {
             floatingDocumentPaneGroup.FontSize = DocumentFontSize;
             floatingDocumentPaneGroup.FontFamily = new FontFamily(DocumentFontFamily);
-            floatingDocumentPaneGroup.Background = FloatingDocumentBackground;
+            floatingDocumentPaneGroup.Background = DocumentHeaderBackground;
             floatingDocumentPaneGroup.HeaderBackground = FloatingDocumentTitleBarBackground;
             IViewContainer iViewContainer = floatingDocumentPaneGroup.IViewContainer;
             UpdateDocumentProperties(floatingDocumentPaneGroup.IViewContainer);
@@ -371,7 +373,7 @@ namespace WpfOpenControls.DockManager
         {
             floatingToolPaneGroup.FontSize = ToolFontSize;
             floatingToolPaneGroup.FontFamily = new FontFamily(ToolFontFamily);
-            floatingToolPaneGroup.Background = FloatingToolBackground;
+            floatingToolPaneGroup.Background = ToolBackground;
             floatingToolPaneGroup.HeaderBackground = FloatingToolTitleBarBackground;
             UpdateToolProperties(floatingToolPaneGroup.IViewContainer);
         }
@@ -391,7 +393,11 @@ namespace WpfOpenControls.DockManager
 
             foreach (var child in grid.Children)
             {
-                if (child is ToolPaneGroup)
+                if (child is DocumentPanel)
+                {
+                    (child as DocumentPanel).HighlightBrush = SelectedPaneBrush;
+                }
+                else if (child is ToolPaneGroup)
                 {
                     UpdateProperties(child as ToolPaneGroup);
                 }
@@ -500,6 +506,43 @@ namespace WpfOpenControls.DockManager
         protected virtual void OnSplitterBrushChanged(DependencyPropertyChangedEventArgs e)
         {
             if ((Brush)e.NewValue != SplitterBrush)
+            {
+                UpdateProperties(_root);
+            }
+        }
+
+        #endregion
+
+        #region SelectedPaneBrush dependency property
+
+        [Bindable(true)]
+        [DesignerSerializationVisibility(DesignerSerializationVisibility.Hidden)]
+        public static readonly DependencyProperty SelectedPaneBrushProperty = DependencyProperty.Register("SelectedPaneBrush", typeof(Brush), typeof(TabHeaderControl), new FrameworkPropertyMetadata(Brushes.Crimson, new PropertyChangedCallback(OnSelectedPaneBrushChanged)));
+
+        public Brush SelectedPaneBrush
+        {
+            get
+            {
+                return (Brush)GetValue(SelectedPaneBrushProperty);
+            }
+            set
+            {
+                if (value != SelectedPaneBrush)
+                {
+                    SetValue(SelectedPaneBrushProperty, value);
+                    UpdateProperties(_root);
+                }
+            }
+        }
+
+        private static void OnSelectedPaneBrushChanged(DependencyObject d, DependencyPropertyChangedEventArgs e)
+        {
+            ((LayoutManager)d).OnSelectedPaneBrushChanged(e);
+        }
+
+        protected virtual void OnSelectedPaneBrushChanged(DependencyPropertyChangedEventArgs e)
+        {
+            if ((Brush)e.NewValue != SelectedPaneBrush)
             {
                 UpdateProperties(_root);
             }
@@ -1099,43 +1142,6 @@ namespace WpfOpenControls.DockManager
 
         #endregion
 
-        #region FloatingToolBackground dependency property
-
-        [Bindable(true)]
-        [DesignerSerializationVisibility(DesignerSerializationVisibility.Hidden)]
-        public static readonly DependencyProperty FloatingToolBackgroundProperty = DependencyProperty.Register("FloatingToolBackground", typeof(Brush), typeof(TabHeaderControl), new FrameworkPropertyMetadata(Brushes.LightBlue, new PropertyChangedCallback(OnFloatingToolBackgroundChanged)));
-
-        public Brush FloatingToolBackground
-        {
-            get
-            {
-                return (Brush)GetValue(FloatingToolBackgroundProperty);
-            }
-            set
-            {
-                if (value != FloatingToolBackground)
-                {
-                    SetValue(FloatingToolBackgroundProperty, value);
-                    UpdateProperties(_root);
-                }
-            }
-        }
-
-        private static void OnFloatingToolBackgroundChanged(DependencyObject d, DependencyPropertyChangedEventArgs e)
-        {
-            ((LayoutManager)d).OnFloatingToolBackgroundChanged(e);
-        }
-
-        protected virtual void OnFloatingToolBackgroundChanged(DependencyPropertyChangedEventArgs e)
-        {
-            if ((Brush)e.NewValue != FloatingToolBackground)
-            {
-                UpdateProperties(_root);
-            }
-        }
-
-        #endregion
-
         #region DocumentFontFamily dependency property
 
         [Bindable(true)]
@@ -1682,42 +1688,6 @@ namespace WpfOpenControls.DockManager
 
         #endregion
 
-        #region FloatingDocumentBackground dependency property
-
-        [Bindable(true)]
-        [DesignerSerializationVisibility(DesignerSerializationVisibility.Hidden)]
-        public static readonly DependencyProperty FloatingDocumentBackgroundProperty = DependencyProperty.Register("FloatingDocumentBackground", typeof(Brush), typeof(TabHeaderControl), new FrameworkPropertyMetadata(Brushes.LightBlue, new PropertyChangedCallback(OnFloatingDocumentBackgroundChanged)));
-
-        public Brush FloatingDocumentBackground
-        {
-            get
-            {
-                return (Brush)GetValue(FloatingDocumentBackgroundProperty);
-            }
-            set
-            {
-                if (value != FloatingDocumentBackground)
-                {
-                    SetValue(FloatingDocumentBackgroundProperty, value);
-                }
-            }
-        }
-
-        private static void OnFloatingDocumentBackgroundChanged(DependencyObject d, DependencyPropertyChangedEventArgs e)
-        {
-            ((LayoutManager)d).OnFloatingDocumentBackgroundChanged(e);
-        }
-
-        protected virtual void OnFloatingDocumentBackgroundChanged(DependencyPropertyChangedEventArgs e)
-        {
-            if ((Brush)e.NewValue != FloatingDocumentBackground)
-            {
-                UpdateProperties(_root);
-            }
-        }
-
-        #endregion
-
         #region SideToolForeground dependency property
 
         [Bindable(true)]
@@ -1941,7 +1911,7 @@ namespace WpfOpenControls.DockManager
 
             SplitterPane newSplitterPane = ILayoutFactory.MakeSplitterPane(unpinnedToolData.IsHorizontal);
 
-            if (unpinnedToolData.Sibling == (Guid)this.Tag)
+            if (sibling == this)
             {
 
                 IEnumerable<SplitterPane> enumerableSplitterPanes = Children.OfType<SplitterPane>();
@@ -2294,6 +2264,13 @@ namespace WpfOpenControls.DockManager
 
         #region ILayoutFactory
 
+        DocumentPanel ILayoutFactory.MakeDocumentPanel()
+        {
+            DocumentPanel documentPanel = new DocumentPanel();
+            documentPanel.HighlightBrush = SelectedPaneBrush;
+            return documentPanel;
+        }
+
         SplitterPane ILayoutFactory.MakeSplitterPane(bool isHorizontal)
         {
             return new SplitterPane(isHorizontal, SplitterWidth, SplitterBrush);
@@ -2494,7 +2471,7 @@ namespace WpfOpenControls.DockManager
 
             SetRootPane(ILayoutFactory.MakeSplitterPane(true));
 
-            DocumentPanel documentPanel = new DocumentPanel();
+            DocumentPanel documentPanel = ILayoutFactory.MakeDocumentPanel();
             (_root as SplitterPane).AddChild(documentPanel, true);
 
             List<UserControl> documentViews = LoadViewsFromTemplates(DocumentTemplates, DocumentsSource);
