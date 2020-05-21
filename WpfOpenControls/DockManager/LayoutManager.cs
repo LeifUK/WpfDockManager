@@ -138,86 +138,6 @@ namespace WpfOpenControls.DockManager
 
         private SelectablePane SelectedPane;
 
-        #region dependency properties 
-
-        #region DocumentsSource dependency property
-
-        [Bindable(true)]
-        [DesignerSerializationVisibility(DesignerSerializationVisibility.Hidden)]
-        public static readonly DependencyProperty DocumentsSourceProperty = DependencyProperty.Register("DocumentsSource", typeof(System.Collections.Generic.IEnumerable<IViewModel>), typeof(LayoutManager), new FrameworkPropertyMetadata(null, new PropertyChangedCallback(OnDocumentsSourceChanged)));
-
-        private void ValidatePanes(Type paneType, IEnumerable<IViewModel> enumerable, List<IFloatingPane> floatingPanes)
-        {
-            List<IViewModel> viewModels = new List<IViewModel>();
-
-            var enumerator = enumerable.GetEnumerator();
-            while (enumerator.MoveNext())
-            {
-                viewModels.Add(enumerator.Current as IViewModel);
-            }
-            List<DockPane> emptyDockPanes = new List<DockPane>();
-            ValidateDockPanes(_root, viewModels, emptyDockPanes, paneType);
-            foreach (var dockPane in emptyDockPanes)
-            {
-                ExtractDockPane(dockPane, out FrameworkElement frameworkElement);
-            }
-
-            ValidateFloatingPanes(viewModels, floatingPanes);
-        }
-
-        private void LayoutManager_DocumentsSourceCollectionChanged(object sender, System.Collections.Specialized.NotifyCollectionChangedEventArgs e)
-        {
-            ValidatePanes(typeof(DocumentPaneGroup), DocumentsSource, FloatingDocumentPaneGroups);
-        }
-
-        public System.Collections.Generic.IEnumerable<IViewModel> DocumentsSource
-        {
-            get
-            {
-                return (System.Collections.Generic.IEnumerable<IViewModel>)GetValue(DocumentsSourceProperty);
-            }
-            set
-            {
-                SetValue(DocumentsSourceProperty, value);
-                (value as System.Collections.Specialized.INotifyCollectionChanged).CollectionChanged += LayoutManager_DocumentsSourceCollectionChanged;
-            }
-        }
-
-        private static void OnDocumentsSourceChanged(DependencyObject d, DependencyPropertyChangedEventArgs e)
-        {
-            ((LayoutManager)d).OnDocumentsSourceChanged(e);
-        }
-
-        protected virtual void OnDocumentsSourceChanged(DependencyPropertyChangedEventArgs e)
-        {
-            if (e.NewValue != null)
-            {
-                DocumentsSource = (System.Collections.Generic.IEnumerable<IViewModel>)e.NewValue;
-                Create();
-            }
-        }
-
-        #endregion
-
-        #region ToolsSource dependency property
-
-        [Bindable(true)]
-        [DesignerSerializationVisibility(DesignerSerializationVisibility.Hidden)]
-        public static readonly DependencyProperty ToolsSourceProperty = DependencyProperty.Register("ToolsSource", typeof(System.Collections.IEnumerable), typeof(LayoutManager), new FrameworkPropertyMetadata(null, new PropertyChangedCallback(OnToolsSourceChanged)));
-
-        public System.Collections.Generic.IEnumerable<IViewModel> ToolsSource
-        {
-            get
-            {
-                return (System.Collections.Generic.IEnumerable<IViewModel>)GetValue(ToolsSourceProperty);
-            }
-            set
-            {
-                SetValue(ToolsSourceProperty, value);
-                (value as System.Collections.Specialized.INotifyCollectionChanged).CollectionChanged += LayoutManager_ToolsSourceCollectionChanged;
-            }
-        }
-
         /*
          * Remove tool views not in ToolsSource
          */
@@ -291,9 +211,89 @@ namespace WpfOpenControls.DockManager
             }
         }
 
+        #region dependency properties 
+
+        #region DocumentsSource dependency property
+
+        [Bindable(true)]
+        [DesignerSerializationVisibility(DesignerSerializationVisibility.Hidden)]
+        public static readonly DependencyProperty DocumentsSourceProperty = DependencyProperty.Register("DocumentsSource", typeof(System.Collections.Generic.IEnumerable<IViewModel>), typeof(LayoutManager), new FrameworkPropertyMetadata(null, new PropertyChangedCallback(OnDocumentsSourceChanged)));
+
+        private void ValidatePanes(Type paneType, IEnumerable<IViewModel> enumerable, List<IFloatingPane> floatingPanes)
+        {
+            List<IViewModel> viewModels = new List<IViewModel>();
+
+            var enumerator = enumerable.GetEnumerator();
+            while (enumerator.MoveNext())
+            {
+                viewModels.Add(enumerator.Current as IViewModel);
+            }
+            List<DockPane> emptyDockPanes = new List<DockPane>();
+            ValidateDockPanes(_root, viewModels, emptyDockPanes, paneType);
+            foreach (var dockPane in emptyDockPanes)
+            {
+                ExtractDockPane(dockPane, out FrameworkElement frameworkElement);
+            }
+
+            ValidateFloatingPanes(viewModels, floatingPanes);
+        }
+
+        private void LayoutManager_DocumentsSourceCollectionChanged(object sender, System.Collections.Specialized.NotifyCollectionChangedEventArgs e)
+        {
+            ValidatePanes(typeof(DocumentPaneGroup), DocumentsSource, FloatingDocumentPaneGroups);
+        }
+
+        public System.Collections.Generic.IEnumerable<IViewModel> DocumentsSource
+        {
+            get
+            {
+                return (System.Collections.Generic.IEnumerable<IViewModel>)GetValue(DocumentsSourceProperty);
+            }
+            set
+            {
+                SetValue(DocumentsSourceProperty, value);
+                (value as System.Collections.Specialized.INotifyCollectionChanged).CollectionChanged += LayoutManager_DocumentsSourceCollectionChanged;
+            }
+        }
+
+        private static void OnDocumentsSourceChanged(DependencyObject d, DependencyPropertyChangedEventArgs e)
+        {
+            ((LayoutManager)d).OnDocumentsSourceChanged(e);
+        }
+
+        protected virtual void OnDocumentsSourceChanged(DependencyPropertyChangedEventArgs e)
+        {
+            if (e.NewValue != null)
+            {
+                DocumentsSource = (System.Collections.Generic.IEnumerable<IViewModel>)e.NewValue;
+                Create();
+            }
+        }
+
+        #endregion
+
+        #region ToolsSource dependency property
+
+        [Bindable(true)]
+        [DesignerSerializationVisibility(DesignerSerializationVisibility.Hidden)]
+        public static readonly DependencyProperty ToolsSourceProperty = DependencyProperty.Register("ToolsSource", typeof(System.Collections.IEnumerable), typeof(LayoutManager), new FrameworkPropertyMetadata(null, new PropertyChangedCallback(OnToolsSourceChanged)));
+
         private void LayoutManager_ToolsSourceCollectionChanged(object sender, System.Collections.Specialized.NotifyCollectionChangedEventArgs e)
         {
             ValidatePanes(typeof(ToolPaneGroup), ToolsSource, FloatingToolPaneGroups);
+        }
+
+        public System.Collections.Generic.IEnumerable<IViewModel> ToolsSource
+        {
+            get
+            {
+                return (System.Collections.Generic.IEnumerable<IViewModel>)GetValue(ToolsSourceProperty);
+            }
+            set
+            {
+                SetValue(ToolsSourceProperty, value);
+                (value as System.Collections.Specialized.INotifyCollectionChanged).CollectionChanged += LayoutManager_ToolsSourceCollectionChanged;
+            }
         }
 
         private static void OnToolsSourceChanged(DependencyObject d, DependencyPropertyChangedEventArgs e)
@@ -468,13 +468,22 @@ namespace WpfOpenControls.DockManager
             UpdateToolProperties(toolPaneGroup.IViewContainer as ToolContainer);
         }
 
-        private void UpdateProperties(IFloatingPane iFloatingPane)
+        private void UpdateProperties(FloatingToolPaneGroup floatingToolPaneGroup)
         {
-            iFloatingPane.FontSize = DocumentFontSize;
-            iFloatingPane.FontFamily = new FontFamily(DocumentFontFamily);
-            iFloatingPane.Background = DocumentHeaderBackground;
-            iFloatingPane.HeaderBackground = FloatingDocumentTitleBarBackground;
-            UpdateDocumentProperties(iFloatingPane.IViewContainer);
+            floatingToolPaneGroup.FontSize = DocumentFontSize;
+            floatingToolPaneGroup.FontFamily = new FontFamily(DocumentFontFamily);
+            floatingToolPaneGroup.Background = DocumentHeaderBackground;
+            floatingToolPaneGroup.HeaderBackground = FloatingDocumentTitleBarBackground;
+            UpdateToolProperties(floatingToolPaneGroup.IViewContainer);
+        }
+
+        private void UpdateProperties(FloatingDocumentPaneGroup floatingDocumentPaneGroup)
+        {
+            floatingDocumentPaneGroup.FontSize = DocumentFontSize;
+            floatingDocumentPaneGroup.FontFamily = new FontFamily(DocumentFontFamily);
+            floatingDocumentPaneGroup.Background = DocumentHeaderBackground;
+            floatingDocumentPaneGroup.HeaderBackground = FloatingDocumentTitleBarBackground;
+            UpdateDocumentProperties(floatingDocumentPaneGroup.IViewContainer);
         }
 
         private void UpdateSideToolProperties()
@@ -496,7 +505,7 @@ namespace WpfOpenControls.DockManager
         {
             foreach (var floatingToolPaneGroup in FloatingToolPaneGroups)
             {
-                UpdateProperties(floatingToolPaneGroup);
+                UpdateProperties(floatingToolPaneGroup as FloatingToolPaneGroup);
             }
         }
 
@@ -504,7 +513,7 @@ namespace WpfOpenControls.DockManager
         {
             foreach (var floatingDocumentPaneGroup in FloatingDocumentPaneGroups)
             {
-                UpdateProperties(floatingDocumentPaneGroup);
+                UpdateProperties(floatingDocumentPaneGroup as FloatingDocumentPaneGroup);
             }
         }
 
