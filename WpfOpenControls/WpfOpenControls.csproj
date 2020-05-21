@@ -116,7 +116,9 @@
     <Compile Include="DockManager\SideLocationPane.xaml.cs">
       <DependentUpon>SideLocationPane.xaml</DependentUpon>
     </Compile>
+    <Compile Include="DockManager\SideToolStyle.cs" />
     <Compile Include="DockManager\SplitterPane.cs" />
+    <Compile Include="DockManager\TabStyle.cs" />
     <Compile Include="DockManager\ToolContainer.cs" />
     <Compile Include="DockManager\ToolListBoxItem.cs" />
     <Compile Include="DockManager\ToolPaneGroup.cs" />

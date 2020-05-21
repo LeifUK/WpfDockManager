@@ -76,6 +76,13 @@
                 <dockManager:LayoutManager.SplitterBrush>#5d6b99</dockManager:LayoutManager.SplitterBrush>
                 <dockManager:LayoutManager.SplitterWidth>6</dockManager:LayoutManager.SplitterWidth>
                 <dockManager:LayoutManager.SelectedPaneBrush>DarkRed</dockManager:LayoutManager.SelectedPaneBrush>
+
+                <dockManager:LayoutManager.SelectedToolTabStyle>
+                    <dockManager:TabStyle BorderBrush="Transparent" BorderThickness="0" Background="AliceBlue" Foreground="Black"/>
+                </dockManager:LayoutManager.SelectedToolTabStyle>
+                <dockManager:LayoutManager.UnselectedToolTabStyle>
+                    <dockManager:TabStyle BorderBrush="Transparent" BorderThickness="0" Background="#3b4f81" Foreground="White"/>
+                </dockManager:LayoutManager.UnselectedToolTabStyle>
                 
                 <dockManager:LayoutManager.ToolTabCornerRadius>
                     <CornerRadius BottomLeft="8" BottomRight="4"/>
@@ -85,21 +92,13 @@
                 <dockManager:LayoutManager.ToolBackground>#5d6b99</dockManager:LayoutManager.ToolBackground>
                 <dockManager:LayoutManager.ToolButtonForeground>White</dockManager:LayoutManager.ToolButtonForeground>
                 <dockManager:LayoutManager.ToolHeaderBackground>#3b4f81</dockManager:LayoutManager.ToolHeaderBackground>
-                <dockManager:LayoutManager.SelectedToolTabBorderBrush>White</dockManager:LayoutManager.SelectedToolTabBorderBrush>
-                <dockManager:LayoutManager.SelectedToolTabBorderThickness>0</dockManager:LayoutManager.SelectedToolTabBorderThickness>
-                <dockManager:LayoutManager.UnselectedToolTabBorderBrush>Transparent</dockManager:LayoutManager.UnselectedToolTabBorderBrush>
-                <dockManager:LayoutManager.UnselectedToolTabBorderThickness>0</dockManager:LayoutManager.UnselectedToolTabBorderThickness>
-                <dockManager:LayoutManager.SelectedToolTabHeaderBackground>AliceBlue</dockManager:LayoutManager.SelectedToolTabHeaderBackground>
-                <dockManager:LayoutManager.UnselectedToolTabHeaderBackground>#3b4f81</dockManager:LayoutManager.UnselectedToolTabHeaderBackground>
-                <dockManager:LayoutManager.SelectedToolTabHeaderForeground>Black</dockManager:LayoutManager.SelectedToolTabHeaderForeground>
-                <dockManager:LayoutManager.UnselectedToolTabHeaderForeground>White</dockManager:LayoutManager.UnselectedToolTabHeaderForeground>
                 <dockManager:LayoutManager.ActiveToolScrollIndicatorBrush>White</dockManager:LayoutManager.ActiveToolScrollIndicatorBrush>
                 <dockManager:LayoutManager.InactiveToolScrollIndicatorBrush>Transparent</dockManager:LayoutManager.InactiveToolScrollIndicatorBrush>
 
-                <dockManager:LayoutManager.SideToolForeground>White</dockManager:LayoutManager.SideToolForeground>
-                <dockManager:LayoutManager.SideToolBarBrush>#3b4f81</dockManager:LayoutManager.SideToolBarBrush>
-                <dockManager:LayoutManager.MouseOverSideToolBarBrush>AliceBlue</dockManager:LayoutManager.MouseOverSideToolBarBrush>
-
+                <dockManager:LayoutManager.SideToolStyle>
+                    <dockManager:SideToolStyle FontSize="24" FontFamily="Courier New" Foreground="White" BarBrush="#3b4f81" MouseOverBarBrush="AliceBlue"/>
+                </dockManager:LayoutManager.SideToolStyle>
+                
                 <dockManager:LayoutManager.FloatingToolTitleBarBackground>#ccd5f0</dockManager:LayoutManager.FloatingToolTitleBarBackground>
 
                 <dockManager:LayoutManager.DocumentTabCornerRadius>
@@ -109,15 +108,14 @@
                 <dockManager:LayoutManager.DocumentFontFamily>Arial</dockManager:LayoutManager.DocumentFontFamily>
                 <dockManager:LayoutManager.DocumentButtonForeground>White</dockManager:LayoutManager.DocumentButtonForeground>
                 <dockManager:LayoutManager.DocumentHeaderBackground>#5d6b99</dockManager:LayoutManager.DocumentHeaderBackground>
-                <dockManager:LayoutManager.SelectedDocumentTabBorderBrush>White</dockManager:LayoutManager.SelectedDocumentTabBorderBrush>
-                <dockManager:LayoutManager.SelectedDocumentTabBorderThickness>0</dockManager:LayoutManager.SelectedDocumentTabBorderThickness>
-                <dockManager:LayoutManager.UnselectedDocumentTabBorderBrush>Transparent</dockManager:LayoutManager.UnselectedDocumentTabBorderBrush>
-                <dockManager:LayoutManager.UnselectedDocumentTabBorderThickness>0</dockManager:LayoutManager.UnselectedDocumentTabBorderThickness>
 
-                <dockManager:LayoutManager.SelectedDocumentTabHeaderBackground>#f5cc84</dockManager:LayoutManager.SelectedDocumentTabHeaderBackground>
-                <dockManager:LayoutManager.UnselectedDocumentTabHeaderBackground>#3b4f81</dockManager:LayoutManager.UnselectedDocumentTabHeaderBackground>
-                <dockManager:LayoutManager.SelectedDocumentTabHeaderForeground>Black</dockManager:LayoutManager.SelectedDocumentTabHeaderForeground>
-                <dockManager:LayoutManager.UnselectedDocumentTabHeaderForeground>White</dockManager:LayoutManager.UnselectedDocumentTabHeaderForeground>
+                <dockManager:LayoutManager.SelectedDocumentTabStyle>
+                    <dockManager:TabStyle BorderBrush="Transparent" BorderThickness="0" Background="#f5cc84" Foreground="Black"/>
+                </dockManager:LayoutManager.SelectedDocumentTabStyle>
+                <dockManager:LayoutManager.UnselectedDocumentTabStyle>
+                    <dockManager:TabStyle BorderBrush="Transparent" BorderThickness="0" Background="#3b4f81" Foreground="White"/>
+                </dockManager:LayoutManager.UnselectedDocumentTabStyle>
+
                 <dockManager:LayoutManager.ActiveDocumentScrollIndicatorBrush>White</dockManager:LayoutManager.ActiveDocumentScrollIndicatorBrush>
                 <dockManager:LayoutManager.InactiveDocumentScrollIndicatorBrush>Transparent</dockManager:LayoutManager.InactiveDocumentScrollIndicatorBrush>
 

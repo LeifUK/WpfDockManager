@@ -5,6 +5,8 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 using WpfOpenControls.DockManager;
+using System.Windows.Media;
+using System.Windows;
 
 namespace WpfDockManagerDemo.ViewModel
 {

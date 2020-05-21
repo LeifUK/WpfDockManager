@@ -213,6 +213,98 @@ namespace WpfOpenControls.DockManager
 
         #region dependency properties 
 
+        #region SelectedToolTabStyle dependency property
+
+        private static TabStyle DefaultSelectedToolTabStyle
+        {
+            get
+            {
+                return new TabStyle() { Foreground = Brushes.Black, Background = Brushes.AliceBlue, BorderThickness = new Thickness(0), BorderBrush = Brushes.Gray};
+            }
+        }
+
+        [Bindable(true)]
+        [DesignerSerializationVisibility(DesignerSerializationVisibility.Hidden)]
+        public static readonly DependencyProperty SelectedToolTabStyleProperty = DependencyProperty.Register("SelectedToolTabStyle", typeof(TabStyle), typeof(TabHeaderControl), new FrameworkPropertyMetadata(DefaultSelectedToolTabStyle, new PropertyChangedCallback(OnSelectedToolTabStyleChanged)));
+
+        public TabStyle SelectedToolTabStyle
+        {
+            get
+            {
+                return GetValue(SelectedToolTabStyleProperty) as TabStyle;
+            }
+            set
+            {
+                if (value != SelectedToolTabStyle)
+                {
+                    SetValue(SelectedToolTabStyleProperty, value);
+                    // Warning warning
+                    UpdateProperties();
+                }
+            }
+        }
+
+        private static void OnSelectedToolTabStyleChanged(DependencyObject d, DependencyPropertyChangedEventArgs e)
+        {
+            ((LayoutManager)d).OnSelectedToolTabStyleChanged(e);
+        }
+
+        protected virtual void OnSelectedToolTabStyleChanged(DependencyPropertyChangedEventArgs e)
+        {
+            if ((TabStyle)e.NewValue != SelectedToolTabStyle)
+            {
+                UpdateProperties();
+            }
+        }
+
+        #endregion
+
+        #region UnselectedToolTabStyle dependency property
+
+        private static TabStyle DefaultUnselectedToolTabStyle
+        {
+            get
+            {
+                return new TabStyle() { Foreground = Brushes.White, Background = Brushes.Navy, BorderThickness = new Thickness(0), BorderBrush = Brushes.Gray };
+            }
+        }
+
+        [Bindable(true)]
+        [DesignerSerializationVisibility(DesignerSerializationVisibility.Hidden)]
+        public static readonly DependencyProperty UnselectedToolTabStyleProperty = DependencyProperty.Register("UnselectedToolTabStyle", typeof(TabStyle), typeof(TabHeaderControl), new FrameworkPropertyMetadata(DefaultUnselectedToolTabStyle, new PropertyChangedCallback(OnUnselectedToolTabStyleChanged)));
+
+        public TabStyle UnselectedToolTabStyle
+        {
+            get
+            {
+                return GetValue(UnselectedToolTabStyleProperty) as TabStyle;
+            }
+            set
+            {
+                if (value != SelectedToolTabStyle)
+                {
+                    SetValue(UnselectedToolTabStyleProperty, value);
+                    // Warning warning
+                    UpdateProperties();
+                }
+            }
+        }
+
+        private static void OnUnselectedToolTabStyleChanged(DependencyObject d, DependencyPropertyChangedEventArgs e)
+        {
+            ((LayoutManager)d).OnUnselectedToolTabStyleChanged(e);
+        }
+
+        protected virtual void OnUnselectedToolTabStyleChanged(DependencyPropertyChangedEventArgs e)
+        {
+            if ((TabStyle)e.NewValue != UnselectedToolTabStyle)
+            {
+                UpdateProperties();
+            }
+        }
+
+        #endregion
+
         #region DocumentsSource dependency property
 
         [Bindable(true)]
@@ -419,14 +511,14 @@ namespace WpfOpenControls.DockManager
             iViewContainer.FontFamily = DocumentFontFamily;
             iViewContainer.TabCornerRadius = DocumentTabCornerRadius;
             iViewContainer.ButtonForeground = DocumentButtonForeground;
-            iViewContainer.SelectedTabBorderThickness = SelectedDocumentTabBorderThickness;
-            iViewContainer.SelectedTabBorderBrush = SelectedDocumentTabBorderBrush;
-            iViewContainer.UnselectedTabBorderThickness = UnselectedDocumentTabBorderThickness;
-            iViewContainer.UnselectedTabBorderBrush = UnselectedDocumentTabBorderBrush;
-            iViewContainer.SelectedTabHeaderBackground = SelectedDocumentTabHeaderBackground;
-            iViewContainer.UnselectedTabHeaderBackground = UnselectedDocumentTabHeaderBackground;
-            iViewContainer.SelectedTabHeaderForeground = SelectedDocumentTabHeaderForeground;
-            iViewContainer.UnselectedTabHeaderForeground = UnselectedDocumentTabHeaderForeground;
+            iViewContainer.SelectedTabBorderThickness = SelectedDocumentTabStyle.BorderThickness;
+            iViewContainer.SelectedTabBorderBrush = SelectedDocumentTabStyle.BorderBrush;
+            iViewContainer.UnselectedTabBorderThickness = UnselectedDocumentTabStyle.BorderThickness;
+            iViewContainer.UnselectedTabBorderBrush = UnselectedDocumentTabStyle.BorderBrush;
+            iViewContainer.SelectedTabHeaderBackground = SelectedDocumentTabStyle.Background;
+            iViewContainer.UnselectedTabHeaderBackground = UnselectedDocumentTabStyle.Background;
+            iViewContainer.SelectedTabHeaderForeground = SelectedDocumentTabStyle.Foreground;
+            iViewContainer.UnselectedTabHeaderForeground = UnselectedDocumentTabStyle.Foreground;
             iViewContainer.ActiveScrollIndicatorBrush = ActiveDocumentScrollIndicatorBrush;
             iViewContainer.InactiveScrollIndicatorBrush = InactiveDocumentScrollIndicatorBrush;
             iViewContainer.TabItemStyle = DocumentTabItemStyle;
@@ -446,14 +538,14 @@ namespace WpfOpenControls.DockManager
             iViewContainer.TabCornerRadius = ToolTabCornerRadius;
             iViewContainer.ButtonForeground = ToolButtonForeground;
             iViewContainer.Background = ToolBackground;
-            iViewContainer.SelectedTabBorderThickness = SelectedToolTabBorderThickness;
-            iViewContainer.SelectedTabBorderBrush = SelectedToolTabBorderBrush;
-            iViewContainer.UnselectedTabBorderThickness = UnselectedToolTabBorderThickness;
-            iViewContainer.UnselectedTabBorderBrush = UnselectedToolTabBorderBrush;
-            iViewContainer.SelectedTabHeaderBackground = SelectedToolTabHeaderBackground;
-            iViewContainer.UnselectedTabHeaderBackground = UnselectedToolTabHeaderBackground;
-            iViewContainer.SelectedTabHeaderForeground = SelectedToolTabHeaderForeground;
-            iViewContainer.UnselectedTabHeaderForeground = UnselectedToolTabHeaderForeground;
+            iViewContainer.SelectedTabBorderThickness = SelectedToolTabStyle.BorderThickness;
+            iViewContainer.SelectedTabBorderBrush = SelectedToolTabStyle.BorderBrush;
+            iViewContainer.SelectedTabHeaderBackground = SelectedToolTabStyle.Background;
+            iViewContainer.SelectedTabHeaderForeground = SelectedToolTabStyle.Foreground;
+            iViewContainer.UnselectedTabBorderThickness = UnselectedToolTabStyle.BorderThickness;
+            iViewContainer.UnselectedTabBorderBrush = UnselectedToolTabStyle.BorderBrush;
+            iViewContainer.UnselectedTabHeaderBackground = UnselectedToolTabStyle.Background;
+            iViewContainer.UnselectedTabHeaderForeground = UnselectedToolTabStyle.Foreground;
             iViewContainer.ActiveScrollIndicatorBrush = ActiveToolScrollIndicatorBrush;
             iViewContainer.InactiveScrollIndicatorBrush = InactiveToolScrollIndicatorBrush;
             iViewContainer.TabItemStyle = ToolTabItemStyle;
@@ -486,19 +578,25 @@ namespace WpfOpenControls.DockManager
             UpdateDocumentProperties(floatingDocumentPaneGroup.IViewContainer);
         }
 
-        private void UpdateSideToolProperties()
+        private void UpdateProperties(Controls.ToolListBox toolListBox)
         {
+            toolListBox.FontSize = SideToolStyle.FontSize;
+            toolListBox.FontFamily = SideToolStyle.FontFamily;
+            toolListBox.BarBrush = SideToolStyle.BarBrush;
+            toolListBox.BarBrushMouseOver = SideToolStyle.MouseOverBarBrush;
+            toolListBox.Foreground = SideToolStyle.Foreground;
             if (SideToolItemContainerStyle != null)
             {
-                _leftToolListBox.ItemContainerStyle = SideToolItemContainerStyle;
-                _topToolListBox.ItemContainerStyle = SideToolItemContainerStyle;
-                _rightToolListBox.ItemContainerStyle = SideToolItemContainerStyle;
-                _bottomToolListBox.ItemContainerStyle = SideToolItemContainerStyle;
+                toolListBox.ItemContainerStyle = SideToolItemContainerStyle;
             }
-            _leftToolListBox.Foreground = SideToolForeground;
-            _topToolListBox.Foreground = SideToolForeground;
-            _rightToolListBox.Foreground = SideToolForeground;
-            _bottomToolListBox.Foreground = SideToolForeground;
+        }
+
+        private void UpdateSideToolProperties()
+        {
+            UpdateProperties(_leftToolListBox);
+            UpdateProperties(_topToolListBox);
+            UpdateProperties(_rightToolListBox);
+            UpdateProperties(_bottomToolListBox);
         }
 
         private void UpdateFloatingToolPaneGroupProperties()
@@ -863,154 +961,6 @@ namespace WpfOpenControls.DockManager
 
         #endregion
 
-        #region SelectedToolTabBorderThickness dependency property
-
-        [Bindable(true)]
-        [DesignerSerializationVisibility(DesignerSerializationVisibility.Hidden)]
-        public static readonly DependencyProperty SelectedToolTabBorderThicknessProperty = DependencyProperty.Register("SelectedToolTabBorderThickness", typeof(Thickness), typeof(TabHeaderControl), new FrameworkPropertyMetadata(new Thickness(0.0), new PropertyChangedCallback(OnSelectedToolTabBorderThicknessChanged)));
-
-        public Thickness SelectedToolTabBorderThickness
-        {
-            get
-            {
-                return (Thickness)GetValue(SelectedToolTabBorderThicknessProperty);
-            }
-            set
-            {
-                if (value != SelectedToolTabBorderThickness)
-                {
-                    SetValue(SelectedToolTabBorderThicknessProperty, value);
-                    UpdateProperties();
-                }
-            }
-        }
-
-        private static void OnSelectedToolTabBorderThicknessChanged(DependencyObject d, DependencyPropertyChangedEventArgs e)
-        {
-            ((LayoutManager)d).OnSelectedToolTabBorderThicknessChanged(e);
-        }
-
-        protected virtual void OnSelectedToolTabBorderThicknessChanged(DependencyPropertyChangedEventArgs e)
-        {
-            if ((Thickness)e.NewValue != SelectedToolTabBorderThickness)
-            {
-                UpdateProperties();
-            }
-        }
-
-        #endregion
-
-        #region SelectedToolTabBorderBrush dependency property
-
-        [Bindable(true)]
-        [DesignerSerializationVisibility(DesignerSerializationVisibility.Hidden)]
-        public static readonly DependencyProperty SelectedToolTabBorderBrushProperty = DependencyProperty.Register("SelectedToolTabBorderBrush", typeof(Brush), typeof(TabHeaderControl), new FrameworkPropertyMetadata(Brushes.Gray, new PropertyChangedCallback(OnSelectedToolTabBorderBrushChanged)));
-
-        public Brush SelectedToolTabBorderBrush
-        {
-            get
-            {
-                return (Brush)GetValue(SelectedToolTabBorderBrushProperty);
-            }
-            set
-            {
-                if (value != SelectedToolTabBorderBrush)
-                {
-                    SetValue(SelectedToolTabBorderBrushProperty, value);
-                    UpdateProperties();
-                }
-            }
-        }
-
-        private static void OnSelectedToolTabBorderBrushChanged(DependencyObject d, DependencyPropertyChangedEventArgs e)
-        {
-            ((LayoutManager)d).OnSelectedToolTabBorderBrushChanged(e);
-        }
-
-        protected virtual void OnSelectedToolTabBorderBrushChanged(DependencyPropertyChangedEventArgs e)
-        {
-            if ((Brush)e.NewValue != SelectedToolTabBorderBrush)
-            {
-                UpdateProperties();
-            }
-        }
-
-        #endregion
-
-        #region UnselectedToolTabBorderThickness dependency property
-
-        [Bindable(true)]
-        [DesignerSerializationVisibility(DesignerSerializationVisibility.Hidden)]
-        public static readonly DependencyProperty UnselectedToolTabBorderThicknessProperty = DependencyProperty.Register("UnselectedToolTabBorderThickness", typeof(Thickness), typeof(TabHeaderControl), new FrameworkPropertyMetadata(new Thickness(0.0), new PropertyChangedCallback(OnUnselectedToolTabBorderThicknessChanged)));
-
-        public Thickness UnselectedToolTabBorderThickness
-        {
-            get
-            {
-                return (Thickness)GetValue(UnselectedToolTabBorderThicknessProperty);
-            }
-            set
-            {
-                if (value != UnselectedToolTabBorderThickness)
-                {
-                    SetValue(UnselectedToolTabBorderThicknessProperty, value);
-                    UpdateProperties();
-                }
-            }
-        }
-
-        private static void OnUnselectedToolTabBorderThicknessChanged(DependencyObject d, DependencyPropertyChangedEventArgs e)
-        {
-            ((LayoutManager)d).OnUnselectedToolTabBorderThicknessChanged(e);
-        }
-
-        protected virtual void OnUnselectedToolTabBorderThicknessChanged(DependencyPropertyChangedEventArgs e)
-        {
-            if ((Thickness)e.NewValue != UnselectedToolTabBorderThickness)
-            {
-                UpdateProperties();
-            }
-        }
-
-        #endregion
-
-        #region UnselectedToolTabBorderBrush dependency property
-
-        [Bindable(true)]
-        [DesignerSerializationVisibility(DesignerSerializationVisibility.Hidden)]
-        public static readonly DependencyProperty UnselectedToolTabBorderBrushProperty = DependencyProperty.Register("UnselectedToolTabBorderBrush", typeof(Brush), typeof(TabHeaderControl), new FrameworkPropertyMetadata(Brushes.Gray, new PropertyChangedCallback(OnUnselectedToolTabBorderBrushChanged)));
-
-        public Brush UnselectedToolTabBorderBrush
-        {
-            get
-            {
-                return (Brush)GetValue(UnselectedToolTabBorderBrushProperty);
-            }
-            set
-            {
-                if (value != UnselectedToolTabBorderBrush)
-                {
-                    SetValue(UnselectedToolTabBorderBrushProperty, value);
-                    UpdateProperties();
-                }
-            }
-        }
-
-        private static void OnUnselectedToolTabBorderBrushChanged(DependencyObject d, DependencyPropertyChangedEventArgs e)
-        {
-            ((LayoutManager)d).OnUnselectedToolTabBorderBrushChanged(e);
-        }
-
-        protected virtual void OnUnselectedToolTabBorderBrushChanged(DependencyPropertyChangedEventArgs e)
-        {
-            if ((Brush)e.NewValue != UnselectedToolTabBorderBrush)
-            {
-                UpdateProperties();
-            }
-        }
-
-        #endregion
-
         #region ActiveToolScrollIndicatorBrush dependency property
 
         [Bindable(true)]
@@ -1152,154 +1102,6 @@ namespace WpfOpenControls.DockManager
         protected virtual void OnToolHeaderBackgroundChanged(DependencyPropertyChangedEventArgs e)
         {
             if ((Brush)e.NewValue != ToolHeaderBackground)
-            {
-                UpdateProperties();
-            }
-        }
-
-        #endregion
-
-        #region SelectedToolTabHeaderBackground dependency property
-
-        [Bindable(true)]
-        [DesignerSerializationVisibility(DesignerSerializationVisibility.Hidden)]
-        public static readonly DependencyProperty SelectedToolTabHeaderBackgroundProperty = DependencyProperty.Register("SelectedToolTabHeaderBackground", typeof(Brush), typeof(TabHeaderControl), new FrameworkPropertyMetadata(Brushes.LightSteelBlue, new PropertyChangedCallback(OnSelectedToolTabHeaderBackgroundChanged)));
-
-        public Brush SelectedToolTabHeaderBackground
-        {
-            get
-            {
-                return (Brush)GetValue(SelectedToolTabHeaderBackgroundProperty);
-            }
-            set
-            {
-                if (value != SelectedToolTabHeaderBackground)
-                {
-                    SetValue(SelectedToolTabHeaderBackgroundProperty, value);
-                    UpdateProperties();
-                }
-            }
-        }
-
-        private static void OnSelectedToolTabHeaderBackgroundChanged(DependencyObject d, DependencyPropertyChangedEventArgs e)
-        {
-            ((LayoutManager)d).OnSelectedToolTabHeaderBackgroundChanged(e);
-        }
-
-        protected virtual void OnSelectedToolTabHeaderBackgroundChanged(DependencyPropertyChangedEventArgs e)
-        {
-            if ((Brush)e.NewValue != SelectedToolTabHeaderBackground)
-            {
-                UpdateProperties();
-            }
-        }
-
-        #endregion
-
-        #region UnselectedToolTabHeaderBackground dependency property
-
-        [Bindable(true)]
-        [DesignerSerializationVisibility(DesignerSerializationVisibility.Hidden)]
-        public static readonly DependencyProperty UnselectedToolTabHeaderBackgroundProperty = DependencyProperty.Register("UnselectedToolTabHeaderBackground", typeof(Brush), typeof(TabHeaderControl), new FrameworkPropertyMetadata(Brushes.Navy, new PropertyChangedCallback(OnSelectedToolTabHeaderBackgroundChanged)));
-
-        public Brush UnselectedToolTabHeaderBackground
-        {
-            get
-            {
-                return (Brush)GetValue(UnselectedToolTabHeaderBackgroundProperty);
-            }
-            set
-            {
-                if (value != UnselectedToolTabHeaderBackground)
-                {
-                    SetValue(UnselectedToolTabHeaderBackgroundProperty, value);
-                    UpdateProperties();
-                }
-            }
-        }
-
-        private static void OnUnselectedToolTabHeaderBackgroundChanged(DependencyObject d, DependencyPropertyChangedEventArgs e)
-        {
-            ((LayoutManager)d).OnUnselectedToolTabHeaderBackgroundChanged(e);
-        }
-
-        protected virtual void OnUnselectedToolTabHeaderBackgroundChanged(DependencyPropertyChangedEventArgs e)
-        {
-            if ((Brush)e.NewValue != UnselectedToolTabHeaderBackground)
-            {
-                UpdateProperties();
-            }
-        }
-
-        #endregion
-
-        #region SelectedToolTabHeaderForeground dependency property
-
-        [Bindable(true)]
-        [DesignerSerializationVisibility(DesignerSerializationVisibility.Hidden)]
-        public static readonly DependencyProperty SelectedToolTabHeaderForegroundProperty = DependencyProperty.Register("SelectedToolTabHeaderForeground", typeof(Brush), typeof(TabHeaderControl), new FrameworkPropertyMetadata(Brushes.Khaki, new PropertyChangedCallback(OnSelectedToolTabHeaderForegroundPropertyChanged)));
-
-        public Brush SelectedToolTabHeaderForeground
-        {
-            get
-            {
-                return (Brush)GetValue(SelectedToolTabHeaderForegroundProperty);
-            }
-            set
-            {
-                if (value != SelectedToolTabHeaderForeground)
-                {
-                    SetValue(SelectedToolTabHeaderForegroundProperty, value);
-                    UpdateProperties();
-                }
-            }
-        }
-
-        private static void OnSelectedToolTabHeaderForegroundPropertyChanged(DependencyObject d, DependencyPropertyChangedEventArgs e)
-        {
-            ((LayoutManager)d).OnSelectedToolTabHeaderForegroundPropertyChanged(e);
-        }
-
-        protected virtual void OnSelectedToolTabHeaderForegroundPropertyChanged(DependencyPropertyChangedEventArgs e)
-        {
-            if ((Brush)e.NewValue != SelectedToolTabHeaderForeground)
-            {
-                UpdateProperties();
-            }
-        }
-
-        #endregion
-
-        #region UnselectedToolTabHeaderForeground dependency property
-
-        [Bindable(true)]
-        [DesignerSerializationVisibility(DesignerSerializationVisibility.Hidden)]
-        public static readonly DependencyProperty UnselectedToolTabHeaderForegroundProperty = DependencyProperty.Register("UnselectedToolTabHeaderForeground", typeof(Brush), typeof(TabHeaderControl), new FrameworkPropertyMetadata(Brushes.Navy, new PropertyChangedCallback(OnUnselectedToolTabHeaderForegroundChanged)));
-
-        public Brush UnselectedToolTabHeaderForeground
-        {
-            get
-            {
-                return (Brush)GetValue(UnselectedToolTabHeaderForegroundProperty);
-            }
-            set
-            {
-                if (value != UnselectedToolTabHeaderForeground)
-                {
-                    SetValue(UnselectedToolTabHeaderForegroundProperty, value);
-                    UpdateProperties();
-                }
-            }
-        }
-
-        private static void OnUnselectedToolTabHeaderForegroundChanged(DependencyObject d, DependencyPropertyChangedEventArgs e)
-        {
-            ((LayoutManager)d).OnUnselectedToolTabHeaderForegroundChanged(e);
-        }
-
-        protected virtual void OnUnselectedToolTabHeaderForegroundChanged(DependencyPropertyChangedEventArgs e)
-        {
-            if ((Brush)e.NewValue != SelectedToolTabHeaderForeground)
             {
                 UpdateProperties();
             }
@@ -1526,36 +1328,45 @@ namespace WpfOpenControls.DockManager
 
         #endregion
 
-        #region SelectedDocumentTabBorderThickness dependency property
+        #region SelectedDocumentTabStyle dependency property
 
-        [Bindable(true)]
-        [DesignerSerializationVisibility(DesignerSerializationVisibility.Hidden)]
-        public static readonly DependencyProperty SelectedDocumentTabBorderThicknessProperty = DependencyProperty.Register("SelectedDocumentTabBorderThickness", typeof(Thickness), typeof(TabHeaderControl), new FrameworkPropertyMetadata(new Thickness(0.0), new PropertyChangedCallback(OnSelectedDocumentTabBorderThicknessChanged)));
-
-        public Thickness SelectedDocumentTabBorderThickness
+        private static TabStyle DefaultSelectedDocumentTabStyle
         {
             get
             {
-                return (Thickness)GetValue(SelectedDocumentTabBorderThicknessProperty);
+                return new TabStyle() { Foreground = Brushes.Black, Background = Brushes.AliceBlue, BorderThickness = new Thickness(0), BorderBrush = Brushes.Gray };
+            }
+        }
+
+        [Bindable(true)]
+        [DesignerSerializationVisibility(DesignerSerializationVisibility.Hidden)]
+        public static readonly DependencyProperty SelectedDocumentTabStyleProperty = DependencyProperty.Register("SelectedDocumentTabStyle", typeof(TabStyle), typeof(TabHeaderControl), new FrameworkPropertyMetadata(DefaultSelectedDocumentTabStyle, new PropertyChangedCallback(OnSelectedDocumentTabStyleChanged)));
+
+        public TabStyle SelectedDocumentTabStyle
+        {
+            get
+            {
+                return GetValue(SelectedDocumentTabStyleProperty) as TabStyle;
             }
             set
             {
-                if (value != SelectedDocumentTabBorderThickness)
+                if (value != SelectedDocumentTabStyle)
                 {
-                    SetValue(SelectedDocumentTabBorderThicknessProperty, value);
+                    SetValue(SelectedDocumentTabStyleProperty, value);
+                    // Warning warning
                     UpdateProperties();
                 }
             }
         }
 
-        private static void OnSelectedDocumentTabBorderThicknessChanged(DependencyObject d, DependencyPropertyChangedEventArgs e)
+        private static void OnSelectedDocumentTabStyleChanged(DependencyObject d, DependencyPropertyChangedEventArgs e)
         {
-            ((LayoutManager)d).OnSelectedDocumentTabBorderThicknessChanged(e);
+            ((LayoutManager)d).OnSelectedDocumentTabStyleChanged(e);
         }
 
-        protected virtual void OnSelectedDocumentTabBorderThicknessChanged(DependencyPropertyChangedEventArgs e)
+        protected virtual void OnSelectedDocumentTabStyleChanged(DependencyPropertyChangedEventArgs e)
         {
-            if ((Thickness)e.NewValue != SelectedDocumentTabBorderThickness)
+            if ((TabStyle)e.NewValue != SelectedDocumentTabStyle)
             {
                 UpdateProperties();
             }
@@ -1563,110 +1374,45 @@ namespace WpfOpenControls.DockManager
 
         #endregion
 
-        #region SelectedDocumentTabBorderBrush dependency property
+        #region UnselectedDocumentTabStyle dependency property
 
-        [Bindable(true)]
-        [DesignerSerializationVisibility(DesignerSerializationVisibility.Hidden)]
-        public static readonly DependencyProperty SelectedDocumentTabBorderBrushProperty = DependencyProperty.Register("SelectedDocumentTabBorderBrush", typeof(Brush), typeof(TabHeaderControl), new FrameworkPropertyMetadata(Brushes.Gray, new PropertyChangedCallback(OnSelectedDocumentTabBorderBrushChanged)));
-
-        public Brush SelectedDocumentTabBorderBrush
+        private static TabStyle DefaultUnselectedDocumentTabStyle
         {
             get
             {
-                return (Brush)GetValue(SelectedDocumentTabBorderBrushProperty);
+                return new TabStyle() { Foreground = Brushes.White, Background = Brushes.Navy, BorderThickness = new Thickness(0), BorderBrush = Brushes.Gray };
+            }
+        }
+
+        [Bindable(true)]
+        [DesignerSerializationVisibility(DesignerSerializationVisibility.Hidden)]
+        public static readonly DependencyProperty UnselectedDocumentTabStyleProperty = DependencyProperty.Register("UnselectedDocumentTabStyle", typeof(TabStyle), typeof(TabHeaderControl), new FrameworkPropertyMetadata(DefaultUnselectedDocumentTabStyle, new PropertyChangedCallback(OnUnselectedDocumentTabStyleChanged)));
+
+        public TabStyle UnselectedDocumentTabStyle
+        {
+            get
+            {
+                return GetValue(UnselectedDocumentTabStyleProperty) as TabStyle;
             }
             set
             {
-                if (value != SelectedDocumentTabBorderBrush)
+                if (value != SelectedDocumentTabStyle)
                 {
-                    SetValue(SelectedDocumentTabBorderBrushProperty, value);
+                    SetValue(UnselectedDocumentTabStyleProperty, value);
+                    // Warning warning
                     UpdateProperties();
                 }
             }
         }
 
-        private static void OnSelectedDocumentTabBorderBrushChanged(DependencyObject d, DependencyPropertyChangedEventArgs e)
+        private static void OnUnselectedDocumentTabStyleChanged(DependencyObject d, DependencyPropertyChangedEventArgs e)
         {
-            ((LayoutManager)d).OnSelectedDocumentTabBorderBrushChanged(e);
+            ((LayoutManager)d).OnUnselectedDocumentTabStyleChanged(e);
         }
 
-        protected virtual void OnSelectedDocumentTabBorderBrushChanged(DependencyPropertyChangedEventArgs e)
+        protected virtual void OnUnselectedDocumentTabStyleChanged(DependencyPropertyChangedEventArgs e)
         {
-            if ((Brush)e.NewValue != SelectedDocumentTabBorderBrush)
-            {
-                UpdateProperties();
-            }
-        }
-
-        #endregion
-
-        #region UnselectedDocumentTabBorderThickness dependency property
-
-        [Bindable(true)]
-        [DesignerSerializationVisibility(DesignerSerializationVisibility.Hidden)]
-        public static readonly DependencyProperty UnselectedDocumentTabBorderThicknessProperty = DependencyProperty.Register("UnselectedDocumentTabBorderThickness", typeof(Thickness), typeof(TabHeaderControl), new FrameworkPropertyMetadata(new Thickness(0.0), new PropertyChangedCallback(OnUnselectedDocumentTabBorderThicknessChanged)));
-
-        public Thickness UnselectedDocumentTabBorderThickness
-        {
-            get
-            {
-                return (Thickness)GetValue(UnselectedDocumentTabBorderThicknessProperty);
-            }
-            set
-            {
-                if (value != UnselectedDocumentTabBorderThickness)
-                {
-                    SetValue(UnselectedDocumentTabBorderThicknessProperty, value);
-                    UpdateProperties();
-                }
-            }
-        }
-
-        private static void OnUnselectedDocumentTabBorderThicknessChanged(DependencyObject d, DependencyPropertyChangedEventArgs e)
-        {
-            ((LayoutManager)d).OnUnselectedDocumentTabBorderThicknessChanged(e);
-        }
-
-        protected virtual void OnUnselectedDocumentTabBorderThicknessChanged(DependencyPropertyChangedEventArgs e)
-        {
-            if ((Thickness)e.NewValue != UnselectedDocumentTabBorderThickness)
-            {
-                UpdateProperties();
-            }
-        }
-
-        #endregion
-
-        #region UnselectedDocumentTabBorderBrush dependency property
-
-        [Bindable(true)]
-        [DesignerSerializationVisibility(DesignerSerializationVisibility.Hidden)]
-        public static readonly DependencyProperty UnselectedDocumentTabBorderBrushProperty = DependencyProperty.Register("UnselectedDocumentTabBorderBrush", typeof(Brush), typeof(TabHeaderControl), new FrameworkPropertyMetadata(Brushes.Gray, new PropertyChangedCallback(OnUnselectedDocumentTabBorderBrushChanged)));
-
-        public Brush UnselectedDocumentTabBorderBrush
-        {
-            get
-            {
-                return (Brush)GetValue(UnselectedDocumentTabBorderBrushProperty);
-            }
-            set
-            {
-                if (value != UnselectedDocumentTabBorderBrush)
-                {
-                    SetValue(UnselectedDocumentTabBorderBrushProperty, value);
-                    UpdateProperties();
-                }
-            }
-        }
-
-        private static void OnUnselectedDocumentTabBorderBrushChanged(DependencyObject d, DependencyPropertyChangedEventArgs e)
-        {
-            ((LayoutManager)d).OnUnselectedDocumentTabBorderBrushChanged(e);
-        }
-
-        protected virtual void OnUnselectedDocumentTabBorderBrushChanged(DependencyPropertyChangedEventArgs e)
-        {
-            if ((Brush)e.NewValue != UnselectedDocumentTabBorderBrush)
+            if ((TabStyle)e.NewValue != UnselectedDocumentTabStyle)
             {
                 UpdateProperties();
             }
@@ -1784,150 +1530,6 @@ namespace WpfOpenControls.DockManager
 
         #endregion
 
-        #region SelectedDocumentTabHeaderBackground dependency property
-
-        [Bindable(true)]
-        [DesignerSerializationVisibility(DesignerSerializationVisibility.Hidden)]
-        public static readonly DependencyProperty SelectedDocumentTabHeaderBackgroundProperty = DependencyProperty.Register("SelectedDocumentTabHeaderBackground", typeof(Brush), typeof(TabHeaderControl), new FrameworkPropertyMetadata(Brushes.LightSteelBlue, new PropertyChangedCallback(OnSelectedDocumentTabHeaderBackgroundChanged)));
-
-        public Brush SelectedDocumentTabHeaderBackground
-        {
-            get
-            {
-                return (Brush)GetValue(SelectedDocumentTabHeaderBackgroundProperty);
-            }
-            set
-            {
-                if (value != SelectedDocumentTabHeaderBackground)
-                {
-                    SetValue(SelectedDocumentTabHeaderBackgroundProperty, value);
-                }
-            }
-        }
-
-        private static void OnSelectedDocumentTabHeaderBackgroundChanged(DependencyObject d, DependencyPropertyChangedEventArgs e)
-        {
-            ((LayoutManager)d).OnSelectedDocumentTabHeaderBackgroundChanged(e);
-        }
-
-        protected virtual void OnSelectedDocumentTabHeaderBackgroundChanged(DependencyPropertyChangedEventArgs e)
-        {
-            if ((Brush)e.NewValue != SelectedDocumentTabHeaderBackground)
-            {
-                UpdateProperties();
-            }
-        }
-
-        #endregion
-
-        #region UnselectedDocumentTabHeaderBackground dependency property
-
-        [Bindable(true)]
-        [DesignerSerializationVisibility(DesignerSerializationVisibility.Hidden)]
-        public static readonly DependencyProperty UnselectedDocumentTabHeaderBackgroundProperty = DependencyProperty.Register("UnselectedDocumentTabHeaderBackground", typeof(Brush), typeof(TabHeaderControl), new FrameworkPropertyMetadata(Brushes.Navy, new PropertyChangedCallback(OnSelectedDocumentTabHeaderBackgroundChanged)));
-
-        public Brush UnselectedDocumentTabHeaderBackground
-        {
-            get
-            {
-                return (Brush)GetValue(UnselectedDocumentTabHeaderBackgroundProperty);
-            }
-            set
-            {
-                if (value != UnselectedDocumentTabHeaderBackground)
-                {
-                    SetValue(UnselectedDocumentTabHeaderBackgroundProperty, value);
-                }
-            }
-        }
-
-        private static void OnUnselectedDocumentTabHeaderBackgroundChanged(DependencyObject d, DependencyPropertyChangedEventArgs e)
-        {
-            ((LayoutManager)d).OnUnselectedDocumentTabHeaderBackgroundChanged(e);
-        }
-
-        protected virtual void OnUnselectedDocumentTabHeaderBackgroundChanged(DependencyPropertyChangedEventArgs e)
-        {
-            if ((Brush)e.NewValue != UnselectedDocumentTabHeaderBackground)
-            {
-                UpdateProperties();
-            }
-        }
-
-        #endregion
-
-        #region SelectedDocumentTabHeaderForeground dependency property
-
-        [Bindable(true)]
-        [DesignerSerializationVisibility(DesignerSerializationVisibility.Hidden)]
-        public static readonly DependencyProperty SelectedDocumentTabHeaderForegroundProperty = DependencyProperty.Register("SelectedDocumentTabHeaderForeground", typeof(Brush), typeof(TabHeaderControl), new FrameworkPropertyMetadata(Brushes.Khaki, new PropertyChangedCallback(OnSelectedDocumentTabHeaderForegroundPropertyChanged)));
-
-        public Brush SelectedDocumentTabHeaderForeground
-        {
-            get
-            {
-                return (Brush)GetValue(SelectedDocumentTabHeaderForegroundProperty);
-            }
-            set
-            {
-                if (value != SelectedDocumentTabHeaderForeground)
-                {
-                    SetValue(SelectedDocumentTabHeaderForegroundProperty, value);
-                }
-            }
-        }
-
-        private static void OnSelectedDocumentTabHeaderForegroundPropertyChanged(DependencyObject d, DependencyPropertyChangedEventArgs e)
-        {
-            ((LayoutManager)d).OnSelectedDocumentTabHeaderForegroundPropertyChanged(e);
-        }
-
-        protected virtual void OnSelectedDocumentTabHeaderForegroundPropertyChanged(DependencyPropertyChangedEventArgs e)
-        {
-            if ((Brush)e.NewValue != SelectedDocumentTabHeaderForeground)
-            {
-                UpdateProperties();
-            }
-        }
-
-        #endregion
-
-        #region UnselectedDocumentTabHeaderForeground dependency property
-
-        [Bindable(true)]
-        [DesignerSerializationVisibility(DesignerSerializationVisibility.Hidden)]
-        public static readonly DependencyProperty UnselectedDocumentTabHeaderForegroundProperty = DependencyProperty.Register("UnselectedDocumentTabHeaderForeground", typeof(Brush), typeof(TabHeaderControl), new FrameworkPropertyMetadata(Brushes.Navy, new PropertyChangedCallback(OnUnselectedDocumentTabHeaderForegroundChanged)));
-
-        public Brush UnselectedDocumentTabHeaderForeground
-        {
-            get
-            {
-                return (Brush)GetValue(UnselectedDocumentTabHeaderForegroundProperty);
-            }
-            set
-            {
-                if (value != UnselectedDocumentTabHeaderForeground)
-                {
-                    SetValue(UnselectedDocumentTabHeaderForegroundProperty, value);
-                }
-            }
-        }
-
-        private static void OnUnselectedDocumentTabHeaderForegroundChanged(DependencyObject d, DependencyPropertyChangedEventArgs e)
-        {
-            ((LayoutManager)d).OnUnselectedDocumentTabHeaderForegroundChanged(e);
-        }
-
-        protected virtual void OnUnselectedDocumentTabHeaderForegroundChanged(DependencyPropertyChangedEventArgs e)
-        {
-            if ((Brush)e.NewValue != UnselectedDocumentTabHeaderForeground)
-            {
-                UpdateProperties();
-            }
-        }
-
-        #endregion
-
         #region FloatingDocumentTitleBarBackground dependency property
 
         [Bindable(true)]
@@ -1964,36 +1566,50 @@ namespace WpfOpenControls.DockManager
 
         #endregion
 
-        #region SideToolForeground dependency property
+        #region SideToolStyle dependency property
 
-        [Bindable(true)]
-        [DesignerSerializationVisibility(DesignerSerializationVisibility.Hidden)]
-        public static readonly DependencyProperty SideToolForegroundProperty = DependencyProperty.Register("SideToolForeground", typeof(Brush), typeof(TabHeaderControl), new FrameworkPropertyMetadata(Brushes.White, new PropertyChangedCallback(OnSideToolForegroundChanged)));
-
-        public Brush SideToolForeground
+        private static SideToolStyle DefaultSideToolStyle
         {
             get
             {
-                return (Brush)GetValue(SideToolForegroundProperty);
+                return new SideToolStyle() 
+                { 
+                    FontSize = 12, 
+                    FontFamily = new FontFamily("Arial"), 
+                    Foreground = Brushes.White, 
+                    BarBrush = Brushes.Navy, 
+                    MouseOverBarBrush = Brushes.AliceBlue };
+            }
+        }
+
+        [Bindable(true)]
+        [DesignerSerializationVisibility(DesignerSerializationVisibility.Hidden)]
+        public static readonly DependencyProperty SideToolStyleProperty = DependencyProperty.Register("SideToolStyle", typeof(SideToolStyle), typeof(TabHeaderControl), new FrameworkPropertyMetadata(DefaultSideToolStyle, new PropertyChangedCallback(OnSideToolStyleChanged)));
+
+        public SideToolStyle SideToolStyle
+        {
+            get
+            {
+                return (SideToolStyle)GetValue(SideToolStyleProperty);
             }
             set
             {
-                if (value != SideToolForeground)
+                if (value != SideToolStyle)
                 {
-                    SetValue(SideToolForegroundProperty, value);
+                    SetValue(SideToolStyleProperty, value);
                     UpdateSideToolProperties();
                 }
             }
         }
 
-        private static void OnSideToolForegroundChanged(DependencyObject d, DependencyPropertyChangedEventArgs e)
+        private static void OnSideToolStyleChanged(DependencyObject d, DependencyPropertyChangedEventArgs e)
         {
-            ((LayoutManager)d).OnSideToolForegroundChanged(e);
+            ((LayoutManager)d).OnSideToolStyleChanged(e);
         }
 
-        protected virtual void OnSideToolForegroundChanged(DependencyPropertyChangedEventArgs e)
+        protected virtual void OnSideToolStyleChanged(DependencyPropertyChangedEventArgs e)
         {
-            if ((Brush)e.NewValue != SideToolForeground)
+            if ((SideToolStyle)e.NewValue != SideToolStyle)
             {
                 UpdateSideToolProperties();
             }
@@ -2001,51 +1617,88 @@ namespace WpfOpenControls.DockManager
 
         #endregion
 
-        #region SideToolBarBrush dependency property
+        //#region SideToolForeground dependency property
 
-        [Bindable(true)]
-        [DesignerSerializationVisibility(DesignerSerializationVisibility.Hidden)]
-        public static readonly DependencyProperty SideToolBarBrushProperty = DependencyProperty.Register("SideToolBarBrush", typeof(Brush), typeof(TabHeaderControl), new FrameworkPropertyMetadata(Brushes.White, null));
+        //[Bindable(true)]
+        //[DesignerSerializationVisibility(DesignerSerializationVisibility.Hidden)]
+        //public static readonly DependencyProperty SideToolForegroundProperty = DependencyProperty.Register("SideToolForeground", typeof(Brush), typeof(TabHeaderControl), new FrameworkPropertyMetadata(Brushes.White, new PropertyChangedCallback(OnSideToolForegroundChanged)));
 
-        public Brush SideToolBarBrush
-        {
-            get
-            {
-                return (Brush)GetValue(SideToolBarBrushProperty);
-            }
-            set
-            {
-                if (value != SideToolBarBrush)
-                {
-                    SetValue(SideToolBarBrushProperty, value);
-                }
-            }
-        }
+        //public Brush SideToolForeground
+        //{
+        //    get
+        //    {
+        //        return (Brush)GetValue(SideToolForegroundProperty);
+        //    }
+        //    set
+        //    {
+        //        if (value != SideToolForeground)
+        //        {
+        //            SetValue(SideToolForegroundProperty, value);
+        //            UpdateSideToolProperties();
+        //        }
+        //    }
+        //}
 
-        #endregion
+        //private static void OnSideToolForegroundChanged(DependencyObject d, DependencyPropertyChangedEventArgs e)
+        //{
+        //    ((LayoutManager)d).OnSideToolForegroundChanged(e);
+        //}
 
-        #region MouseOverSideToolBarBrush dependency property
+        //protected virtual void OnSideToolForegroundChanged(DependencyPropertyChangedEventArgs e)
+        //{
+        //    if ((Brush)e.NewValue != SideToolForeground)
+        //    {
+        //        UpdateSideToolProperties();
+        //    }
+        //}
 
-        [Bindable(true)]
-        [DesignerSerializationVisibility(DesignerSerializationVisibility.Hidden)]
-        public static readonly DependencyProperty MouseOverSideToolBarBrushProperty = DependencyProperty.Register("MouseOverSideToolBarBrush", typeof(Brush), typeof(TabHeaderControl), new FrameworkPropertyMetadata(Brushes.White, null));
+        //#endregion
 
-        public Brush MouseOverSideToolBarBrush
-        {
-            get
-            {
-                return (Brush)GetValue(MouseOverSideToolBarBrushProperty);
-            }
-            set
-            {
-                if (value != MouseOverSideToolBarBrush)
-                {
-                    SetValue(MouseOverSideToolBarBrushProperty, value);
-                }
-            }
-        }
+        //#region SideToolBarBrush dependency property
 
-        #endregion
+        //[Bindable(true)]
+        //[DesignerSerializationVisibility(DesignerSerializationVisibility.Hidden)]
+        //public static readonly DependencyProperty SideToolBarBrushProperty = DependencyProperty.Register("SideToolBarBrush", typeof(Brush), typeof(TabHeaderControl), new FrameworkPropertyMetadata(Brushes.White, null));
+
+        //public Brush SideToolBarBrush
+        //{
+        //    get
+        //    {
+        //        return (Brush)GetValue(SideToolBarBrushProperty);
+        //    }
+        //    set
+        //    {
+        //        if (value != SideToolBarBrush)
+        //        {
+        //            SetValue(SideToolBarBrushProperty, value);
+        //        }
+        //    }
+        //}
+
+        //#endregion
+
+        //#region MouseOverSideToolBarBrush dependency property
+
+        //[Bindable(true)]
+        //[DesignerSerializationVisibility(DesignerSerializationVisibility.Hidden)]
+        //public static readonly DependencyProperty MouseOverSideToolBarBrushProperty = DependencyProperty.Register("MouseOverSideToolBarBrush", typeof(Brush), typeof(TabHeaderControl), new FrameworkPropertyMetadata(Brushes.White, null));
+
+        //public Brush MouseOverSideToolBarBrush
+        //{
+        //    get
+        //    {
+        //        return (Brush)GetValue(MouseOverSideToolBarBrushProperty);
+        //    }
+        //    set
+        //    {
+        //        if (value != MouseOverSideToolBarBrush)
+        //        {
+        //            SetValue(MouseOverSideToolBarBrushProperty, value);
+        //        }
+        //    }
+        //}
+
+        //#endregion
 
         #region SideToolItemContainerStyle dependency property
 
@@ -2454,17 +2107,11 @@ namespace WpfOpenControls.DockManager
             System.Collections.ObjectModel.ObservableCollection<Controls.IToolListBoxItem> items = new System.Collections.ObjectModel.ObservableCollection<Controls.IToolListBoxItem>();
             ToolListBox = new Controls.ToolListBox();
             ToolListBox.WindowLocation = windowLocation;
-            ToolListBox.Foreground = SideToolForeground;
+            UpdateProperties(ToolListBox);
             ToolListBox.Background = System.Windows.Media.Brushes.Transparent;
             ToolListBox.ItemsSource = items;
             ToolListBox.IsHorizontal = isHorizontal;
             ToolListBox.DisplayMemberPath = "Title";
-            ToolListBox.BarBrush = SideToolBarBrush;
-            ToolListBox.BarBrushMouseOver = MouseOverSideToolBarBrush;
-            if (SideToolItemContainerStyle != null)
-            {
-                ToolListBox.ItemContainerStyle = SideToolItemContainerStyle;
-            }
             ToolListBox.ItemClick += ToolListBox_ItemClick;
             Children.Add(ToolListBox);
             Grid.SetRow(ToolListBox, row);
