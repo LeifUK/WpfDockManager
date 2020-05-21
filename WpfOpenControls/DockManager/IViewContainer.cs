@@ -21,7 +21,7 @@ namespace WpfOpenControls.DockManager
         event EventHandler FloatTabRequest;
 
         double FontSize { set; }
-        string FontFamily { set; }
+        FontFamily FontFamily { set; }
         CornerRadius TabCornerRadius { set; }
         Brush Background { set; }
         Brush ButtonForeground { set; }

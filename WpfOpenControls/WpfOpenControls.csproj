@@ -92,6 +92,7 @@
     <Compile Include="DockManager\DockPane.cs" />
     <Compile Include="DockManager\DocumentContainer.cs" />
     <Compile Include="DockManager\DocumentPaneGroup.cs" />
+    <Compile Include="DockManager\DocumentPaneGroupStyle.cs" />
     <Compile Include="DockManager\DocumentPanel.cs" />
     <Compile Include="DockManager\ExtensionMethods.cs" />
     <Compile Include="DockManager\FloatEventArgs.cs" />
@@ -122,6 +123,7 @@
     <Compile Include="DockManager\ToolContainer.cs" />
     <Compile Include="DockManager\ToolListBoxItem.cs" />
     <Compile Include="DockManager\ToolPaneGroup.cs" />
+    <Compile Include="DockManager\ToolPaneGroupStyle.cs" />
     <Compile Include="DockManager\UnpinnedToolData.cs" />
     <Compile Include="DockManager\UnpinnedToolPane.xaml.cs">
       <DependentUpon>UnpinnedToolPane.xaml</DependentUpon>

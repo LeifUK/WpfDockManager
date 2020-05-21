@@ -132,11 +132,11 @@ namespace WpfOpenControls.DockManager
             }
         }
 
-        public string FontFamily
+        public FontFamily FontFamily
         {
             set
             {
-                _tabHeaderControl.FontFamily = new FontFamily(value);
+                _tabHeaderControl.FontFamily = value;
             }
         }
 

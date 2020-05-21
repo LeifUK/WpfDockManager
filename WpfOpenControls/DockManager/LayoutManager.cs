@@ -8,6 +8,7 @@ using System.Xml;
 using System.Windows.Input;
 using System.Windows.Media;
 using WpfOpenControls.Controls;
+//using System.Drawing;
 
 namespace WpfOpenControls.DockManager
 {
@@ -213,97 +214,97 @@ namespace WpfOpenControls.DockManager
 
         #region dependency properties 
 
-        #region SelectedToolTabStyle dependency property
+        //#region SelectedToolTabStyle dependency property
 
-        private static TabStyle DefaultSelectedToolTabStyle
-        {
-            get
-            {
-                return new TabStyle() { Foreground = Brushes.Black, Background = Brushes.AliceBlue, BorderThickness = new Thickness(0), BorderBrush = Brushes.Gray};
-            }
-        }
+        //private static TabStyle DefaultSelectedToolTabStyle
+        //{
+        //    get
+        //    {
+        //        return new TabStyle() { Foreground = Brushes.Black, Background = Brushes.AliceBlue, BorderThickness = new Thickness(0), BorderBrush = Brushes.Gray};
+        //    }
+        //}
 
-        [Bindable(true)]
-        [DesignerSerializationVisibility(DesignerSerializationVisibility.Hidden)]
-        public static readonly DependencyProperty SelectedToolTabStyleProperty = DependencyProperty.Register("SelectedToolTabStyle", typeof(TabStyle), typeof(TabHeaderControl), new FrameworkPropertyMetadata(DefaultSelectedToolTabStyle, new PropertyChangedCallback(OnSelectedToolTabStyleChanged)));
+        //[Bindable(true)]
+        //[DesignerSerializationVisibility(DesignerSerializationVisibility.Hidden)]
+        //public static readonly DependencyProperty SelectedToolTabStyleProperty = DependencyProperty.Register("SelectedToolTabStyle", typeof(TabStyle), typeof(TabHeaderControl), new FrameworkPropertyMetadata(DefaultSelectedToolTabStyle, new PropertyChangedCallback(OnSelectedToolTabStyleChanged)));
 
-        public TabStyle SelectedToolTabStyle
-        {
-            get
-            {
-                return GetValue(SelectedToolTabStyleProperty) as TabStyle;
-            }
-            set
-            {
-                if (value != SelectedToolTabStyle)
-                {
-                    SetValue(SelectedToolTabStyleProperty, value);
-                    // Warning warning
-                    UpdateProperties();
-                }
-            }
-        }
+        //public TabStyle SelectedToolTabStyle
+        //{
+        //    get
+        //    {
+        //        return GetValue(SelectedToolTabStyleProperty) as TabStyle;
+        //    }
+        //    set
+        //    {
+        //        if (value != SelectedToolTabStyle)
+        //        {
+        //            SetValue(SelectedToolTabStyleProperty, value);
+        //            // Warning warning
+        //            UpdateProperties();
+        //        }
+        //    }
+        //}
 
-        private static void OnSelectedToolTabStyleChanged(DependencyObject d, DependencyPropertyChangedEventArgs e)
-        {
-            ((LayoutManager)d).OnSelectedToolTabStyleChanged(e);
-        }
+        //private static void OnSelectedToolTabStyleChanged(DependencyObject d, DependencyPropertyChangedEventArgs e)
+        //{
+        //    ((LayoutManager)d).OnSelectedToolTabStyleChanged(e);
+        //}
 
-        protected virtual void OnSelectedToolTabStyleChanged(DependencyPropertyChangedEventArgs e)
-        {
-            if ((TabStyle)e.NewValue != SelectedToolTabStyle)
-            {
-                UpdateProperties();
-            }
-        }
+        //protected virtual void OnSelectedToolTabStyleChanged(DependencyPropertyChangedEventArgs e)
+        //{
+        //    if ((TabStyle)e.NewValue != SelectedToolTabStyle)
+        //    {
+        //        UpdateProperties();
+        //    }
+        //}
 
-        #endregion
+        //#endregion
 
-        #region UnselectedToolTabStyle dependency property
+        //#region UnselectedToolTabStyle dependency property
 
-        private static TabStyle DefaultUnselectedToolTabStyle
-        {
-            get
-            {
-                return new TabStyle() { Foreground = Brushes.White, Background = Brushes.Navy, BorderThickness = new Thickness(0), BorderBrush = Brushes.Gray };
-            }
-        }
+        //private static TabStyle DefaultUnselectedToolTabStyle
+        //{
+        //    get
+        //    {
+        //        return new TabStyle() { Foreground = Brushes.White, Background = Brushes.Navy, BorderThickness = new Thickness(0), BorderBrush = Brushes.Gray };
+        //    }
+        //}
 
-        [Bindable(true)]
-        [DesignerSerializationVisibility(DesignerSerializationVisibility.Hidden)]
-        public static readonly DependencyProperty UnselectedToolTabStyleProperty = DependencyProperty.Register("UnselectedToolTabStyle", typeof(TabStyle), typeof(TabHeaderControl), new FrameworkPropertyMetadata(DefaultUnselectedToolTabStyle, new PropertyChangedCallback(OnUnselectedToolTabStyleChanged)));
+        //[Bindable(true)]
+        //[DesignerSerializationVisibility(DesignerSerializationVisibility.Hidden)]
+        //public static readonly DependencyProperty UnselectedToolTabStyleProperty = DependencyProperty.Register("UnselectedToolTabStyle", typeof(TabStyle), typeof(TabHeaderControl), new FrameworkPropertyMetadata(DefaultUnselectedToolTabStyle, new PropertyChangedCallback(OnUnselectedToolTabStyleChanged)));
 
-        public TabStyle UnselectedToolTabStyle
-        {
-            get
-            {
-                return GetValue(UnselectedToolTabStyleProperty) as TabStyle;
-            }
-            set
-            {
-                if (value != SelectedToolTabStyle)
-                {
-                    SetValue(UnselectedToolTabStyleProperty, value);
-                    // Warning warning
-                    UpdateProperties();
-                }
-            }
-        }
+        //public TabStyle UnselectedToolTabStyle
+        //{
+        //    get
+        //    {
+        //        return GetValue(UnselectedToolTabStyleProperty) as TabStyle;
+        //    }
+        //    set
+        //    {
+        //        if (value != SelectedToolTabStyle)
+        //        {
+        //            SetValue(UnselectedToolTabStyleProperty, value);
+        //            // Warning warning
+        //            UpdateProperties();
+        //        }
+        //    }
+        //}
 
-        private static void OnUnselectedToolTabStyleChanged(DependencyObject d, DependencyPropertyChangedEventArgs e)
-        {
-            ((LayoutManager)d).OnUnselectedToolTabStyleChanged(e);
-        }
+        //private static void OnUnselectedToolTabStyleChanged(DependencyObject d, DependencyPropertyChangedEventArgs e)
+        //{
+        //    ((LayoutManager)d).OnUnselectedToolTabStyleChanged(e);
+        //}
 
-        protected virtual void OnUnselectedToolTabStyleChanged(DependencyPropertyChangedEventArgs e)
-        {
-            if ((TabStyle)e.NewValue != UnselectedToolTabStyle)
-            {
-                UpdateProperties();
-            }
-        }
+        //protected virtual void OnUnselectedToolTabStyleChanged(DependencyPropertyChangedEventArgs e)
+        //{
+        //    if ((TabStyle)e.NewValue != UnselectedToolTabStyle)
+        //    {
+        //        UpdateProperties();
+        //    }
+        //}
 
-        #endregion
+        //#endregion
 
         #region DocumentsSource dependency property
 
@@ -507,73 +508,76 @@ namespace WpfOpenControls.DockManager
 
         private void UpdateDocumentProperties(IViewContainer iViewContainer)
         {
-            iViewContainer.FontSize = DocumentFontSize;
-            iViewContainer.FontFamily = DocumentFontFamily;
-            iViewContainer.TabCornerRadius = DocumentTabCornerRadius;
-            iViewContainer.ButtonForeground = DocumentButtonForeground;
-            iViewContainer.SelectedTabBorderThickness = SelectedDocumentTabStyle.BorderThickness;
-            iViewContainer.SelectedTabBorderBrush = SelectedDocumentTabStyle.BorderBrush;
-            iViewContainer.UnselectedTabBorderThickness = UnselectedDocumentTabStyle.BorderThickness;
-            iViewContainer.UnselectedTabBorderBrush = UnselectedDocumentTabStyle.BorderBrush;
-            iViewContainer.SelectedTabHeaderBackground = SelectedDocumentTabStyle.Background;
-            iViewContainer.UnselectedTabHeaderBackground = UnselectedDocumentTabStyle.Background;
-            iViewContainer.SelectedTabHeaderForeground = SelectedDocumentTabStyle.Foreground;
-            iViewContainer.UnselectedTabHeaderForeground = UnselectedDocumentTabStyle.Foreground;
-            iViewContainer.ActiveScrollIndicatorBrush = ActiveDocumentScrollIndicatorBrush;
-            iViewContainer.InactiveScrollIndicatorBrush = InactiveDocumentScrollIndicatorBrush;
+            iViewContainer.FontSize = DocumentPaneGroupStyle.FontSize;
+            // Warning warning
+            iViewContainer.FontFamily = DocumentPaneGroupStyle.FontFamily;
+            iViewContainer.TabCornerRadius = DocumentPaneGroupStyle.TabCornerRadius;
+            iViewContainer.ButtonForeground = DocumentPaneGroupStyle.ButtonForeground;
+            iViewContainer.SelectedTabBorderThickness = DocumentPaneGroupStyle.SelectedTabStyle.BorderThickness;
+            iViewContainer.SelectedTabBorderBrush = DocumentPaneGroupStyle.SelectedTabStyle.BorderBrush;
+            iViewContainer.UnselectedTabBorderThickness = DocumentPaneGroupStyle.UnselectedTabStyle.BorderThickness;
+            iViewContainer.UnselectedTabBorderBrush = DocumentPaneGroupStyle.UnselectedTabStyle.BorderBrush;
+            iViewContainer.SelectedTabHeaderBackground = DocumentPaneGroupStyle.SelectedTabStyle.Background;
+            iViewContainer.UnselectedTabHeaderBackground = DocumentPaneGroupStyle.UnselectedTabStyle.Background;
+            iViewContainer.SelectedTabHeaderForeground = DocumentPaneGroupStyle.SelectedTabStyle.Foreground;
+            iViewContainer.UnselectedTabHeaderForeground = DocumentPaneGroupStyle.UnselectedTabStyle.Foreground;
+            iViewContainer.ActiveScrollIndicatorBrush = DocumentPaneGroupStyle.ActiveScrollIndicatorBrush;
+            iViewContainer.InactiveScrollIndicatorBrush = DocumentPaneGroupStyle.InactiveScrollIndicatorBrush;
             iViewContainer.TabItemStyle = DocumentTabItemStyle;
         }
 
         private void UpdateProperties(DocumentPaneGroup documentPaneGroup)
         {
-            documentPaneGroup.HeaderBackground = DocumentHeaderBackground;
+            documentPaneGroup.HeaderBackground = DocumentPaneGroupStyle.HeaderBackground;
             documentPaneGroup.HighlightBrush = SelectedPaneBrush;
             UpdateDocumentProperties(documentPaneGroup.IViewContainer);
         }
 
         private void UpdateToolProperties(IViewContainer iViewContainer)
         {
-            iViewContainer.FontSize = ToolFontSize;
-            iViewContainer.FontFamily = ToolFontFamily;
-            iViewContainer.TabCornerRadius = ToolTabCornerRadius;
-            iViewContainer.ButtonForeground = ToolButtonForeground;
-            iViewContainer.Background = ToolBackground;
-            iViewContainer.SelectedTabBorderThickness = SelectedToolTabStyle.BorderThickness;
-            iViewContainer.SelectedTabBorderBrush = SelectedToolTabStyle.BorderBrush;
-            iViewContainer.SelectedTabHeaderBackground = SelectedToolTabStyle.Background;
-            iViewContainer.SelectedTabHeaderForeground = SelectedToolTabStyle.Foreground;
-            iViewContainer.UnselectedTabBorderThickness = UnselectedToolTabStyle.BorderThickness;
-            iViewContainer.UnselectedTabBorderBrush = UnselectedToolTabStyle.BorderBrush;
-            iViewContainer.UnselectedTabHeaderBackground = UnselectedToolTabStyle.Background;
-            iViewContainer.UnselectedTabHeaderForeground = UnselectedToolTabStyle.Foreground;
-            iViewContainer.ActiveScrollIndicatorBrush = ActiveToolScrollIndicatorBrush;
-            iViewContainer.InactiveScrollIndicatorBrush = InactiveToolScrollIndicatorBrush;
+            iViewContainer.FontSize = ToolPaneGroupStyle.FontSize;
+            iViewContainer.FontFamily = ToolPaneGroupStyle.FontFamily;
+            iViewContainer.TabCornerRadius = ToolPaneGroupStyle.TabCornerRadius;
+            iViewContainer.ButtonForeground = ToolPaneGroupStyle.ButtonForeground;
+            iViewContainer.Background = ToolPaneGroupStyle.Background;
+            // Warning warnig => unset?
+            iViewContainer.SelectedTabBorderThickness = ToolPaneGroupStyle.SelectedTabStyle.BorderThickness;
+            iViewContainer.SelectedTabBorderBrush = ToolPaneGroupStyle.SelectedTabStyle.BorderBrush;
+            iViewContainer.SelectedTabHeaderBackground = ToolPaneGroupStyle.SelectedTabStyle.Background;
+            iViewContainer.SelectedTabHeaderForeground = ToolPaneGroupStyle.SelectedTabStyle.Foreground;
+            iViewContainer.UnselectedTabBorderThickness = ToolPaneGroupStyle.UnselectedTabStyle.BorderThickness;
+            iViewContainer.UnselectedTabBorderBrush = ToolPaneGroupStyle.UnselectedTabStyle.BorderBrush;
+            iViewContainer.UnselectedTabHeaderBackground = ToolPaneGroupStyle.UnselectedTabStyle.Background;
+            iViewContainer.UnselectedTabHeaderForeground = ToolPaneGroupStyle.UnselectedTabStyle.Foreground;
+            iViewContainer.ActiveScrollIndicatorBrush = ToolPaneGroupStyle.ActiveScrollIndicatorBrush;
+            iViewContainer.InactiveScrollIndicatorBrush = ToolPaneGroupStyle.InactiveScrollIndicatorBrush;
             iViewContainer.TabItemStyle = ToolTabItemStyle;
         }
 
         private void UpdateProperties(ToolPaneGroup toolPaneGroup)
         {
-            toolPaneGroup.HeaderBackground = ToolHeaderBackground;
-            toolPaneGroup.FontSize = ToolFontSize;
+            toolPaneGroup.HeaderBackground = ToolPaneGroupStyle.HeaderBackground;
+            toolPaneGroup.FontSize = ToolPaneGroupStyle.FontSize;
+            toolPaneGroup.FontFamily = ToolPaneGroupStyle.FontFamily;
             toolPaneGroup.HighlightBrush = SelectedPaneBrush;
-            toolPaneGroup.ButtonForeground = ToolButtonForeground;
+            toolPaneGroup.ButtonForeground = ToolPaneGroupStyle.ButtonForeground;
             UpdateToolProperties(toolPaneGroup.IViewContainer as ToolContainer);
         }
 
         private void UpdateProperties(FloatingToolPaneGroup floatingToolPaneGroup)
         {
-            floatingToolPaneGroup.FontSize = DocumentFontSize;
-            floatingToolPaneGroup.FontFamily = new FontFamily(DocumentFontFamily);
-            floatingToolPaneGroup.Background = DocumentHeaderBackground;
+            floatingToolPaneGroup.FontSize = DocumentPaneGroupStyle.FontSize;
+            floatingToolPaneGroup.FontFamily = DocumentPaneGroupStyle.FontFamily;
+            floatingToolPaneGroup.Background = DocumentPaneGroupStyle.HeaderBackground;
             floatingToolPaneGroup.HeaderBackground = FloatingDocumentTitleBarBackground;
             UpdateToolProperties(floatingToolPaneGroup.IViewContainer);
         }
 
         private void UpdateProperties(FloatingDocumentPaneGroup floatingDocumentPaneGroup)
         {
-            floatingDocumentPaneGroup.FontSize = DocumentFontSize;
-            floatingDocumentPaneGroup.FontFamily = new FontFamily(DocumentFontFamily);
-            floatingDocumentPaneGroup.Background = DocumentHeaderBackground;
+            floatingDocumentPaneGroup.FontSize = DocumentPaneGroupStyle.FontSize;
+            floatingDocumentPaneGroup.FontFamily = DocumentPaneGroupStyle.FontFamily;
+            floatingDocumentPaneGroup.Background = DocumentPaneGroupStyle.HeaderBackground;
             floatingDocumentPaneGroup.HeaderBackground = FloatingDocumentTitleBarBackground;
             UpdateDocumentProperties(floatingDocumentPaneGroup.IViewContainer);
         }
@@ -813,295 +817,56 @@ namespace WpfOpenControls.DockManager
 
         #endregion
 
-        #region ToolFontFamily dependency property
+        #region ToolPaneGroupStyle dependency property
 
-        [Bindable(true)]
-        [DesignerSerializationVisibility(DesignerSerializationVisibility.Hidden)]
-        public static readonly DependencyProperty ToolFontFamilyProperty = DependencyProperty.Register("ToolFontFamily", typeof(string), typeof(TabHeaderControl), new FrameworkPropertyMetadata("Arial", new PropertyChangedCallback(OnToolFontFamilyChanged)));
-
-        public string ToolFontFamily
+        private static ToolPaneGroupStyle DefaultToolPaneGroupStyle
         {
             get
             {
-                return (string)GetValue(ToolFontFamilyProperty);
+                return new ToolPaneGroupStyle() 
+                {
+                    FontSize = 12,
+                    FontFamily = new FontFamily("Arial"),
+                    Background = Brushes.LightSteelBlue, 
+                    ButtonForeground = Brushes.White, 
+                    HeaderBackground = Brushes.SteelBlue, 
+                    ActiveScrollIndicatorBrush = Brushes.White,
+                    InactiveScrollIndicatorBrush = Brushes.Transparent,
+                    TabCornerRadius = new CornerRadius(0),
+                    SelectedTabStyle = new TabStyle() { Foreground = Brushes.Black, Background = Brushes.AliceBlue, BorderThickness = new Thickness(0), BorderBrush = Brushes.Gray},
+                    UnselectedTabStyle = new TabStyle() { Foreground = Brushes.White, Background = Brushes.Navy, BorderThickness = new Thickness(0), BorderBrush = Brushes.Gray }
+                };
+            }
+        }
+
+        [Bindable(true)]
+        [DesignerSerializationVisibility(DesignerSerializationVisibility.Hidden)]
+        public static readonly DependencyProperty ToolPaneGroupStyleProperty = DependencyProperty.Register("ToolPaneGroupStyle", typeof(ToolPaneGroupStyle), typeof(TabHeaderControl), new FrameworkPropertyMetadata(DefaultToolPaneGroupStyle, new PropertyChangedCallback(OnToolPaneGroupStyleChanged)));
+
+        public ToolPaneGroupStyle ToolPaneGroupStyle
+        {
+            get
+            {
+                return (ToolPaneGroupStyle)GetValue(ToolPaneGroupStyleProperty);
             }
             set
             {
-                if (value != ToolFontFamily)
+                if (value != ToolPaneGroupStyle)
                 {
-                    SetValue(ToolFontFamilyProperty, value);
+                    SetValue(ToolPaneGroupStyleProperty, value);
                     UpdateProperties();
                 }
             }
         }
 
-        private static void OnToolFontFamilyChanged(DependencyObject d, DependencyPropertyChangedEventArgs e)
+        private static void OnToolPaneGroupStyleChanged(DependencyObject d, DependencyPropertyChangedEventArgs e)
         {
-            ((LayoutManager)d).OnToolFontFamilyChanged(e);
+            ((LayoutManager)d).OnToolPaneGroupStyleChanged(e);
         }
 
-        protected virtual void OnToolFontFamilyChanged(DependencyPropertyChangedEventArgs e)
+        protected virtual void OnToolPaneGroupStyleChanged(DependencyPropertyChangedEventArgs e)
         {
-            if ((string)e.NewValue != ToolFontFamily)
-            {
-                UpdateProperties();
-            }
-        }
-
-        #endregion
-
-        #region ToolFontSize dependency property
-
-        [Bindable(true)]
-        [DesignerSerializationVisibility(DesignerSerializationVisibility.Hidden)]
-        public static readonly DependencyProperty ToolFontSizeProperty = DependencyProperty.Register("ToolFontSize", typeof(double), typeof(TabHeaderControl), new FrameworkPropertyMetadata(12.0, new PropertyChangedCallback(OnToolFontSizeChanged)));
-
-        public double ToolFontSize
-        {
-            get
-            {
-                return (double)GetValue(ToolFontSizeProperty);
-            }
-            set
-            {
-                if (value != ToolFontSize)
-                {
-                    SetValue(ToolFontSizeProperty, value);
-                    UpdateProperties();
-                }
-            }
-        }
-
-        private static void OnToolFontSizeChanged(DependencyObject d, DependencyPropertyChangedEventArgs e)
-        {
-            ((LayoutManager)d).OnToolFontSizeChanged(e);
-        }
-
-        protected virtual void OnToolFontSizeChanged(DependencyPropertyChangedEventArgs e)
-        {
-            if ((double)e.NewValue != ToolFontSize)
-            {
-                UpdateProperties();
-            }
-        }
-
-        #endregion
-
-        #region ToolTabCornerRadius dependency property
-
-        [Bindable(true)]
-        [DesignerSerializationVisibility(DesignerSerializationVisibility.Hidden)]
-        public static readonly DependencyProperty ToolTabCornerRadiusProperty = DependencyProperty.Register("ToolTabCornerRadius", typeof(CornerRadius), typeof(TabHeaderControl), new FrameworkPropertyMetadata(new CornerRadius(0.0), new PropertyChangedCallback(OnToolTabCornerRadiusChanged)));
-
-        public CornerRadius ToolTabCornerRadius
-        {
-            get
-            {
-                return (CornerRadius)GetValue(ToolTabCornerRadiusProperty);
-            }
-            set
-            {
-                if (value != ToolTabCornerRadius)
-                {
-                    SetValue(ToolTabCornerRadiusProperty, value);
-                    UpdateProperties();
-                }
-            }
-        }
-
-        private static void OnToolTabCornerRadiusChanged(DependencyObject d, DependencyPropertyChangedEventArgs e)
-        {
-            ((LayoutManager)d).OnToolTabCornerRadiusChanged(e);
-        }
-
-        protected virtual void OnToolTabCornerRadiusChanged(DependencyPropertyChangedEventArgs e)
-        {
-            if ((CornerRadius)e.NewValue != ToolTabCornerRadius)
-            {
-                UpdateProperties();
-            }
-        }
-
-        #endregion
-
-        #region ToolButtonForeground dependency property
-
-        [Bindable(true)]
-        [DesignerSerializationVisibility(DesignerSerializationVisibility.Hidden)]
-        public static readonly DependencyProperty ToolButtonForegroundProperty = DependencyProperty.Register("ToolButtonForeground", typeof(Brush), typeof(TabHeaderControl), new FrameworkPropertyMetadata(Brushes.White, new PropertyChangedCallback(OnToolButtonForegroundChanged)));
-
-        public Brush ToolButtonForeground
-        {
-            get
-            {
-                return (Brush)GetValue(ToolButtonForegroundProperty);
-            }
-            set
-            {
-                if (value != ToolButtonForeground)
-                {
-                    SetValue(ToolButtonForegroundProperty, value);
-                    UpdateProperties();
-                }
-            }
-        }
-
-        private static void OnToolButtonForegroundChanged(DependencyObject d, DependencyPropertyChangedEventArgs e)
-        {
-            ((LayoutManager)d).OnToolButtonForegroundChanged(e);
-        }
-
-        protected virtual void OnToolButtonForegroundChanged(DependencyPropertyChangedEventArgs e)
-        {
-            if ((Brush)e.NewValue != ToolButtonForeground)
-            {
-                UpdateProperties();
-            }
-        }
-
-        #endregion
-
-        #region ActiveToolScrollIndicatorBrush dependency property
-
-        [Bindable(true)]
-        [DesignerSerializationVisibility(DesignerSerializationVisibility.Hidden)]
-        public static readonly DependencyProperty ActiveToolScrollIndicatorBrushProperty = DependencyProperty.Register("ActiveToolScrollIndicatorBrush", typeof(Brush), typeof(TabHeaderControl), new FrameworkPropertyMetadata(Brushes.White, new PropertyChangedCallback(OnActiveToolScrollIndicatorBrushChanged)));
-
-        public Brush ActiveToolScrollIndicatorBrush
-        {
-            get
-            {
-                return (Brush)GetValue(ActiveToolScrollIndicatorBrushProperty);
-            }
-            set
-            {
-                if (value != ActiveToolScrollIndicatorBrush)
-                {
-                    SetValue(ActiveToolScrollIndicatorBrushProperty, value);
-                    UpdateProperties();
-                }
-            }
-        }
-
-        private static void OnActiveToolScrollIndicatorBrushChanged(DependencyObject d, DependencyPropertyChangedEventArgs e)
-        {
-            ((LayoutManager)d).OnActiveToolScrollIndicatorBrushChanged(e);
-        }
-
-        protected virtual void OnActiveToolScrollIndicatorBrushChanged(DependencyPropertyChangedEventArgs e)
-        {
-            if ((Brush)e.NewValue != ActiveToolScrollIndicatorBrush)
-            {
-                UpdateProperties();
-            }
-        }
-
-        #endregion
-
-        #region InactiveToolScrollIndicatorBrush dependency property
-
-        [Bindable(true)]
-        [DesignerSerializationVisibility(DesignerSerializationVisibility.Hidden)]
-        public static readonly DependencyProperty InactiveToolScrollIndicatorBrushProperty = DependencyProperty.Register("InactiveToolScrollIndicatorBrush", typeof(Brush), typeof(TabHeaderControl), new FrameworkPropertyMetadata(Brushes.White, new PropertyChangedCallback(OnInactiveToolScrollIndicatorBrushChanged)));
-
-        public Brush InactiveToolScrollIndicatorBrush
-        {
-            get
-            {
-                return (Brush)GetValue(InactiveToolScrollIndicatorBrushProperty);
-            }
-            set
-            {
-                if (value != InactiveToolScrollIndicatorBrush)
-                {
-                    SetValue(InactiveToolScrollIndicatorBrushProperty, value);
-                    UpdateProperties();
-                }
-            }
-        }
-
-        private static void OnInactiveToolScrollIndicatorBrushChanged(DependencyObject d, DependencyPropertyChangedEventArgs e)
-        {
-            ((LayoutManager)d).OnInactiveToolScrollIndicatorBrushChanged(e);
-        }
-
-        protected virtual void OnInactiveToolScrollIndicatorBrushChanged(DependencyPropertyChangedEventArgs e)
-        {
-            if ((Brush)e.NewValue != InactiveToolScrollIndicatorBrush)
-            {
-                UpdateProperties();
-            }
-        }
-
-        #endregion
-
-        #region ToolBackground dependency property
-
-        [Bindable(true)]
-        [DesignerSerializationVisibility(DesignerSerializationVisibility.Hidden)]
-        public static readonly DependencyProperty ToolBackgroundProperty = DependencyProperty.Register("ToolBackground", typeof(Brush), typeof(TabHeaderControl), new FrameworkPropertyMetadata(Brushes.LightSteelBlue, new PropertyChangedCallback(OnToolBackgroundChanged)));
-
-        public Brush ToolBackground
-        {
-            get
-            {
-                return (Brush)GetValue(ToolBackgroundProperty);
-            }
-            set
-            {
-                if (value != ToolBackground)
-                {
-                    SetValue(ToolBackgroundProperty, value);
-                    UpdateProperties();
-                }
-            }
-        }
-
-        private static void OnToolBackgroundChanged(DependencyObject d, DependencyPropertyChangedEventArgs e)
-        {
-            ((LayoutManager)d).OnToolBackgroundChanged(e);
-        }
-
-        protected virtual void OnToolBackgroundChanged(DependencyPropertyChangedEventArgs e)
-        {
-            if ((Brush)e.NewValue != ToolBackground)
-            {
-                UpdateProperties();
-            }
-        }
-
-        #endregion
-
-        #region ToolHeaderBackground dependency property
-
-        [Bindable(true)]
-        [DesignerSerializationVisibility(DesignerSerializationVisibility.Hidden)]
-        public static readonly DependencyProperty ToolHeaderBackgroundProperty = DependencyProperty.Register("ToolHeaderBackground", typeof(Brush), typeof(TabHeaderControl), new FrameworkPropertyMetadata(Brushes.LightSteelBlue, new PropertyChangedCallback(OnToolHeaderBackgroundChanged)));
-
-        public Brush ToolHeaderBackground
-        {
-            get
-            {
-                return (Brush)GetValue(ToolHeaderBackgroundProperty);
-            }
-            set
-            {
-                if (value != ToolHeaderBackground)
-                {
-                    SetValue(ToolHeaderBackgroundProperty, value);
-                    UpdateProperties();
-                }
-            }
-        }
-
-        private static void OnToolHeaderBackgroundChanged(DependencyObject d, DependencyPropertyChangedEventArgs e)
-        {
-            ((LayoutManager)d).OnToolHeaderBackgroundChanged(e);
-        }
-
-        protected virtual void OnToolHeaderBackgroundChanged(DependencyPropertyChangedEventArgs e)
-        {
-            if ((Brush)e.NewValue != ToolHeaderBackground)
+            if ((ToolPaneGroupStyle)e.NewValue != ToolPaneGroupStyle)
             {
                 UpdateProperties();
             }
@@ -1183,346 +948,57 @@ namespace WpfOpenControls.DockManager
 
         #endregion
 
-        #region DocumentFontFamily dependency property
+        #region DocumentPaneGroupStyle dependency property
 
-        [Bindable(true)]
-        [DesignerSerializationVisibility(DesignerSerializationVisibility.Hidden)]
-        public static readonly DependencyProperty DocumentFontFamilyProperty = DependencyProperty.Register("DocumentFontFamily", typeof(string), typeof(TabHeaderControl), new FrameworkPropertyMetadata("Arial", new PropertyChangedCallback(OnDocumentFontFamilyChanged)));
-
-        public string DocumentFontFamily
+        private static DocumentPaneGroupStyle DefaultDocumentPaneGroupStyle
         {
             get
             {
-                return (string)GetValue(DocumentFontFamilyProperty);
-            }
-            set
-            {
-                if (value != DocumentFontFamily)
+                return new DocumentPaneGroupStyle()
                 {
-                    SetValue(DocumentFontFamilyProperty, value);
-                }
-            }
-        }
-
-        private static void OnDocumentFontFamilyChanged(DependencyObject d, DependencyPropertyChangedEventArgs e)
-        {
-            ((LayoutManager)d).OnDocumentFontFamilyChanged(e);
-        }
-
-        protected virtual void OnDocumentFontFamilyChanged(DependencyPropertyChangedEventArgs e)
-        {
-            if ((string)e.NewValue != DocumentFontFamily)
-            {
-                UpdateProperties();
-            }
-        }
-
-        #endregion
-
-        #region DocumentFontSize dependency property
-
-        [Bindable(true)]
-        [DesignerSerializationVisibility(DesignerSerializationVisibility.Hidden)]
-        public static readonly DependencyProperty DocumentFontSizeProperty = DependencyProperty.Register("DocumentFontSize", typeof(double), typeof(TabHeaderControl), new FrameworkPropertyMetadata(12.0, new PropertyChangedCallback(OnDocumentFontSizeChanged)));
-
-        public double DocumentFontSize
-        {
-            get
-            {
-                return (double)GetValue(DocumentFontSizeProperty);
-            }
-            set
-            {
-                if (value != DocumentFontSize)
-                {
-                    SetValue(DocumentFontSizeProperty, value);
-                }
-            }
-        }
-
-        private static void OnDocumentFontSizeChanged(DependencyObject d, DependencyPropertyChangedEventArgs e)
-        {
-            ((LayoutManager)d).OnDocumentFontSizeChanged(e);
-        }
-
-        protected virtual void OnDocumentFontSizeChanged(DependencyPropertyChangedEventArgs e)
-        {
-            if ((double)e.NewValue != DocumentFontSize)
-            {
-                UpdateProperties();
-            }
-        }
-
-        #endregion
-
-        #region DocumentTabCornerRadius dependency property
-
-        [Bindable(true)]
-        [DesignerSerializationVisibility(DesignerSerializationVisibility.Hidden)]
-        public static readonly DependencyProperty DocumentTabCornerRadiusProperty = DependencyProperty.Register("DocumentTabCornerRadius", typeof(CornerRadius), typeof(TabHeaderControl), new FrameworkPropertyMetadata(new CornerRadius(0.0), new PropertyChangedCallback(OnDocumentTabCornerRadiusChanged)));
-
-        public CornerRadius DocumentTabCornerRadius
-        {
-            get
-            {
-                return (CornerRadius)GetValue(DocumentTabCornerRadiusProperty);
-            }
-            set
-            {
-                if (value != DocumentTabCornerRadius)
-                {
-                    SetValue(DocumentTabCornerRadiusProperty, value);
-                }
-            }
-        }
-
-        private static void OnDocumentTabCornerRadiusChanged(DependencyObject d, DependencyPropertyChangedEventArgs e)
-        {
-            ((LayoutManager)d).OnDocumentTabCornerRadiusChanged(e);
-        }
-
-        protected virtual void OnDocumentTabCornerRadiusChanged(DependencyPropertyChangedEventArgs e)
-        {
-            if ((CornerRadius)e.NewValue != DocumentTabCornerRadius)
-            {
-                UpdateProperties();
-            }
-        }
-
-        #endregion
-
-        #region DocumentButtonForeground dependency property
-
-        [Bindable(true)]
-        [DesignerSerializationVisibility(DesignerSerializationVisibility.Hidden)]
-        public static readonly DependencyProperty DocumentButtonForegroundProperty = DependencyProperty.Register("DocumentButtonForeground", typeof(Brush), typeof(TabHeaderControl), new FrameworkPropertyMetadata(Brushes.White, new PropertyChangedCallback(OnDocumentButtonForegroundChanged)));
-
-        public Brush DocumentButtonForeground
-        {
-            get
-            {
-                return (Brush)GetValue(DocumentButtonForegroundProperty);
-            }
-            set
-            {
-                if (value != DocumentButtonForeground)
-                {
-                    SetValue(DocumentButtonForegroundProperty, value);
-                    UpdateProperties();
-                }
-            }
-        }
-
-        private static void OnDocumentButtonForegroundChanged(DependencyObject d, DependencyPropertyChangedEventArgs e)
-        {
-            ((LayoutManager)d).OnDocumentButtonForegroundChanged(e);
-        }
-
-        protected virtual void OnDocumentButtonForegroundChanged(DependencyPropertyChangedEventArgs e)
-        {
-            if ((Brush)e.NewValue != DocumentButtonForeground)
-            {
-                UpdateProperties();
-            }
-        }
-
-        #endregion
-
-        #region SelectedDocumentTabStyle dependency property
-
-        private static TabStyle DefaultSelectedDocumentTabStyle
-        {
-            get
-            {
-                return new TabStyle() { Foreground = Brushes.Black, Background = Brushes.AliceBlue, BorderThickness = new Thickness(0), BorderBrush = Brushes.Gray };
-            }
-        }
-
-        [Bindable(true)]
-        [DesignerSerializationVisibility(DesignerSerializationVisibility.Hidden)]
-        public static readonly DependencyProperty SelectedDocumentTabStyleProperty = DependencyProperty.Register("SelectedDocumentTabStyle", typeof(TabStyle), typeof(TabHeaderControl), new FrameworkPropertyMetadata(DefaultSelectedDocumentTabStyle, new PropertyChangedCallback(OnSelectedDocumentTabStyleChanged)));
-
-        public TabStyle SelectedDocumentTabStyle
-        {
-            get
-            {
-                return GetValue(SelectedDocumentTabStyleProperty) as TabStyle;
-            }
-            set
-            {
-                if (value != SelectedDocumentTabStyle)
-                {
-                    SetValue(SelectedDocumentTabStyleProperty, value);
+                    FontSize = 12,
+                    FontFamily = new FontFamily("Arial"),
                     // Warning warning
-                    UpdateProperties();
-                }
-            }
-        }
-
-        private static void OnSelectedDocumentTabStyleChanged(DependencyObject d, DependencyPropertyChangedEventArgs e)
-        {
-            ((LayoutManager)d).OnSelectedDocumentTabStyleChanged(e);
-        }
-
-        protected virtual void OnSelectedDocumentTabStyleChanged(DependencyPropertyChangedEventArgs e)
-        {
-            if ((TabStyle)e.NewValue != SelectedDocumentTabStyle)
-            {
-                UpdateProperties();
-            }
-        }
-
-        #endregion
-
-        #region UnselectedDocumentTabStyle dependency property
-
-        private static TabStyle DefaultUnselectedDocumentTabStyle
-        {
-            get
-            {
-                return new TabStyle() { Foreground = Brushes.White, Background = Brushes.Navy, BorderThickness = new Thickness(0), BorderBrush = Brushes.Gray };
+                    //Background = Brushes.LightSteelBlue,
+                    ButtonForeground = Brushes.White,
+                    HeaderBackground = Brushes.SteelBlue,
+                    ActiveScrollIndicatorBrush = Brushes.White,
+                    InactiveScrollIndicatorBrush = Brushes.Transparent,
+                    TabCornerRadius = new CornerRadius(0),
+                    SelectedTabStyle = new TabStyle() { Foreground = Brushes.Black, Background = Brushes.AliceBlue, BorderThickness = new Thickness(0), BorderBrush = Brushes.Gray },
+                    UnselectedTabStyle = new TabStyle() { Foreground = Brushes.White, Background = Brushes.Navy, BorderThickness = new Thickness(0), BorderBrush = Brushes.Gray }
+                };
             }
         }
 
         [Bindable(true)]
         [DesignerSerializationVisibility(DesignerSerializationVisibility.Hidden)]
-        public static readonly DependencyProperty UnselectedDocumentTabStyleProperty = DependencyProperty.Register("UnselectedDocumentTabStyle", typeof(TabStyle), typeof(TabHeaderControl), new FrameworkPropertyMetadata(DefaultUnselectedDocumentTabStyle, new PropertyChangedCallback(OnUnselectedDocumentTabStyleChanged)));
+        public static readonly DependencyProperty DocumentPaneGroupStyleProperty = DependencyProperty.Register("DocumentPaneGroupStyle", typeof(DocumentPaneGroupStyle), typeof(TabHeaderControl), new FrameworkPropertyMetadata(DefaultDocumentPaneGroupStyle, new PropertyChangedCallback(OnDocumentPaneGroupStyleChanged)));
 
-        public TabStyle UnselectedDocumentTabStyle
+        public DocumentPaneGroupStyle DocumentPaneGroupStyle
         {
             get
             {
-                return GetValue(UnselectedDocumentTabStyleProperty) as TabStyle;
+                return (DocumentPaneGroupStyle)GetValue(DocumentPaneGroupStyleProperty);
             }
             set
             {
-                if (value != SelectedDocumentTabStyle)
+                if (value != DocumentPaneGroupStyle)
                 {
-                    SetValue(UnselectedDocumentTabStyleProperty, value);
-                    // Warning warning
+                    SetValue(DocumentPaneGroupStyleProperty, value);
                     UpdateProperties();
                 }
             }
         }
 
-        private static void OnUnselectedDocumentTabStyleChanged(DependencyObject d, DependencyPropertyChangedEventArgs e)
+        private static void OnDocumentPaneGroupStyleChanged(DependencyObject d, DependencyPropertyChangedEventArgs e)
         {
-            ((LayoutManager)d).OnUnselectedDocumentTabStyleChanged(e);
+            ((LayoutManager)d).OnDocumentPaneGroupStyleChanged(e);
         }
 
-        protected virtual void OnUnselectedDocumentTabStyleChanged(DependencyPropertyChangedEventArgs e)
+        protected virtual void OnDocumentPaneGroupStyleChanged(DependencyPropertyChangedEventArgs e)
         {
-            if ((TabStyle)e.NewValue != UnselectedDocumentTabStyle)
-            {
-                UpdateProperties();
-            }
-        }
-
-        #endregion
-
-        #region ActiveDocumentScrollIndicatorBrush dependency property
-
-        [Bindable(true)]
-        [DesignerSerializationVisibility(DesignerSerializationVisibility.Hidden)]
-        public static readonly DependencyProperty ActiveDocumentScrollIndicatorBrushProperty = DependencyProperty.Register("ActiveDocumentScrollIndicatorBrush", typeof(Brush), typeof(TabHeaderControl), new FrameworkPropertyMetadata(Brushes.White, new PropertyChangedCallback(OnActiveDocumentScrollIndicatorBrushChanged)));
-
-        public Brush ActiveDocumentScrollIndicatorBrush
-        {
-            get
-            {
-                return (Brush)GetValue(ActiveDocumentScrollIndicatorBrushProperty);
-            }
-            set
-            {
-                if (value != ActiveDocumentScrollIndicatorBrush)
-                {
-                    SetValue(ActiveDocumentScrollIndicatorBrushProperty, value);
-                    UpdateProperties();
-                }
-            }
-        }
-
-        private static void OnActiveDocumentScrollIndicatorBrushChanged(DependencyObject d, DependencyPropertyChangedEventArgs e)
-        {
-            ((LayoutManager)d).OnActiveDocumentScrollIndicatorBrushChanged(e);
-        }
-
-        protected virtual void OnActiveDocumentScrollIndicatorBrushChanged(DependencyPropertyChangedEventArgs e)
-        {
-            if ((Brush)e.NewValue != ActiveDocumentScrollIndicatorBrush)
-            {
-                UpdateProperties();
-            }
-        }
-
-        #endregion
-
-        #region InactiveDocumentScrollIndicatorBrush dependency property
-
-        [Bindable(true)]
-        [DesignerSerializationVisibility(DesignerSerializationVisibility.Hidden)]
-        public static readonly DependencyProperty InactiveDocumentScrollIndicatorBrushProperty = DependencyProperty.Register("InactiveDocumentScrollIndicatorBrush", typeof(Brush), typeof(TabHeaderControl), new FrameworkPropertyMetadata(Brushes.White, new PropertyChangedCallback(OnInactiveDocumentScrollIndicatorBrushChanged)));
-
-        public Brush InactiveDocumentScrollIndicatorBrush
-        {
-            get
-            {
-                return (Brush)GetValue(InactiveDocumentScrollIndicatorBrushProperty);
-            }
-            set
-            {
-                if (value != InactiveDocumentScrollIndicatorBrush)
-                {
-                    SetValue(InactiveDocumentScrollIndicatorBrushProperty, value);
-                    UpdateProperties();
-                }
-            }
-        }
-
-        private static void OnInactiveDocumentScrollIndicatorBrushChanged(DependencyObject d, DependencyPropertyChangedEventArgs e)
-        {
-            ((LayoutManager)d).OnInactiveDocumentScrollIndicatorBrushChanged(e);
-        }
-
-        protected virtual void OnInactiveDocumentScrollIndicatorBrushChanged(DependencyPropertyChangedEventArgs e)
-        {
-            if ((Brush)e.NewValue != InactiveDocumentScrollIndicatorBrush)
-            {
-                UpdateProperties();
-            }
-        }
-
-        #endregion
-
-        #region DocumentHeaderBackground dependency property
-
-        [Bindable(true)]
-        [DesignerSerializationVisibility(DesignerSerializationVisibility.Hidden)]
-        public static readonly DependencyProperty DocumentHeaderBackgroundProperty = DependencyProperty.Register("DocumentHeaderBackground", typeof(Brush), typeof(TabHeaderControl), new FrameworkPropertyMetadata(Brushes.LightBlue, new PropertyChangedCallback(OnDocumentHeaderBackgroundChanged)));
-
-        public Brush DocumentHeaderBackground
-        {
-            get
-            {
-                return (Brush)GetValue(DocumentHeaderBackgroundProperty);
-            }
-            set
-            {
-                if (value != DocumentHeaderBackground)
-                {
-                    SetValue(DocumentHeaderBackgroundProperty, value);
-                }
-            }
-        }
-
-        private static void OnDocumentHeaderBackgroundChanged(DependencyObject d, DependencyPropertyChangedEventArgs e)
-        {
-            ((LayoutManager)d).OnDocumentHeaderBackgroundChanged(e);
-        }
-
-        protected virtual void OnDocumentHeaderBackgroundChanged(DependencyPropertyChangedEventArgs e)
-        {
-            if ((Brush)e.NewValue != DocumentHeaderBackground)
+            if ((DocumentPaneGroupStyle)e.NewValue != DocumentPaneGroupStyle)
             {
                 UpdateProperties();
             }
@@ -1616,89 +1092,6 @@ namespace WpfOpenControls.DockManager
         }
 
         #endregion
-
-        //#region SideToolForeground dependency property
-
-        //[Bindable(true)]
-        //[DesignerSerializationVisibility(DesignerSerializationVisibility.Hidden)]
-        //public static readonly DependencyProperty SideToolForegroundProperty = DependencyProperty.Register("SideToolForeground", typeof(Brush), typeof(TabHeaderControl), new FrameworkPropertyMetadata(Brushes.White, new PropertyChangedCallback(OnSideToolForegroundChanged)));
-
-        //public Brush SideToolForeground
-        //{
-        //    get
-        //    {
-        //        return (Brush)GetValue(SideToolForegroundProperty);
-        //    }
-        //    set
-        //    {
-        //        if (value != SideToolForeground)
-        //        {
-        //            SetValue(SideToolForegroundProperty, value);
-        //            UpdateSideToolProperties();
-        //        }
-        //    }
-        //}
-
-        //private static void OnSideToolForegroundChanged(DependencyObject d, DependencyPropertyChangedEventArgs e)
-        //{
-        //    ((LayoutManager)d).OnSideToolForegroundChanged(e);
-        //}
-
-        //protected virtual void OnSideToolForegroundChanged(DependencyPropertyChangedEventArgs e)
-        //{
-        //    if ((Brush)e.NewValue != SideToolForeground)
-        //    {
-        //        UpdateSideToolProperties();
-        //    }
-        //}
-
-        //#endregion
-
-        //#region SideToolBarBrush dependency property
-
-        //[Bindable(true)]
-        //[DesignerSerializationVisibility(DesignerSerializationVisibility.Hidden)]
-        //public static readonly DependencyProperty SideToolBarBrushProperty = DependencyProperty.Register("SideToolBarBrush", typeof(Brush), typeof(TabHeaderControl), new FrameworkPropertyMetadata(Brushes.White, null));
-
-        //public Brush SideToolBarBrush
-        //{
-        //    get
-        //    {
-        //        return (Brush)GetValue(SideToolBarBrushProperty);
-        //    }
-        //    set
-        //    {
-        //        if (value != SideToolBarBrush)
-        //        {
-        //            SetValue(SideToolBarBrushProperty, value);
-        //        }
-        //    }
-        //}
-
-        //#endregion
-
-        //#region MouseOverSideToolBarBrush dependency property
-
-        //[Bindable(true)]
-        //[DesignerSerializationVisibility(DesignerSerializationVisibility.Hidden)]
-        //public static readonly DependencyProperty MouseOverSideToolBarBrushProperty = DependencyProperty.Register("MouseOverSideToolBarBrush", typeof(Brush), typeof(TabHeaderControl), new FrameworkPropertyMetadata(Brushes.White, null));
-
-        //public Brush MouseOverSideToolBarBrush
-        //{
-        //    get
-        //    {
-        //        return (Brush)GetValue(MouseOverSideToolBarBrushProperty);
-        //    }
-        //    set
-        //    {
-        //        if (value != MouseOverSideToolBarBrush)
-        //        {
-        //            SetValue(MouseOverSideToolBarBrushProperty, value);
-        //        }
-        //    }
-        //}
-
-        //#endregion
 
         #region SideToolItemContainerStyle dependency property
 

@@ -77,47 +77,55 @@
                 <dockManager:LayoutManager.SplitterWidth>6</dockManager:LayoutManager.SplitterWidth>
                 <dockManager:LayoutManager.SelectedPaneBrush>DarkRed</dockManager:LayoutManager.SelectedPaneBrush>
 
-                <dockManager:LayoutManager.SelectedToolTabStyle>
+                <dockManager:LayoutManager.SideToolStyle>
+                    <dockManager:SideToolStyle FontSize="12" FontFamily="Arial" Foreground="White" BarBrush="#3b4f81" MouseOverBarBrush="AliceBlue"/>
+                </dockManager:LayoutManager.SideToolStyle>
+
+                <!--<dockManager:LayoutManager.SelectedToolTabStyle>
                     <dockManager:TabStyle BorderBrush="Transparent" BorderThickness="0" Background="AliceBlue" Foreground="Black"/>
                 </dockManager:LayoutManager.SelectedToolTabStyle>
                 <dockManager:LayoutManager.UnselectedToolTabStyle>
                     <dockManager:TabStyle BorderBrush="Transparent" BorderThickness="0" Background="#3b4f81" Foreground="White"/>
-                </dockManager:LayoutManager.UnselectedToolTabStyle>
+                </dockManager:LayoutManager.UnselectedToolTabStyle>-->
                 
-                <dockManager:LayoutManager.ToolTabCornerRadius>
-                    <CornerRadius BottomLeft="8" BottomRight="4"/>
-                </dockManager:LayoutManager.ToolTabCornerRadius>
-                <dockManager:LayoutManager.ToolFontSize>12</dockManager:LayoutManager.ToolFontSize>
-                <dockManager:LayoutManager.ToolFontFamily>Arial</dockManager:LayoutManager.ToolFontFamily>
-                <dockManager:LayoutManager.ToolBackground>#5d6b99</dockManager:LayoutManager.ToolBackground>
-                <dockManager:LayoutManager.ToolButtonForeground>White</dockManager:LayoutManager.ToolButtonForeground>
-                <dockManager:LayoutManager.ToolHeaderBackground>#3b4f81</dockManager:LayoutManager.ToolHeaderBackground>
-                <dockManager:LayoutManager.ActiveToolScrollIndicatorBrush>White</dockManager:LayoutManager.ActiveToolScrollIndicatorBrush>
-                <dockManager:LayoutManager.InactiveToolScrollIndicatorBrush>Transparent</dockManager:LayoutManager.InactiveToolScrollIndicatorBrush>
-
-                <dockManager:LayoutManager.SideToolStyle>
-                    <dockManager:SideToolStyle FontSize="24" FontFamily="Courier New" Foreground="White" BarBrush="#3b4f81" MouseOverBarBrush="AliceBlue"/>
-                </dockManager:LayoutManager.SideToolStyle>
+                <dockManager:LayoutManager.ToolPaneGroupStyle>
+                    <dockManager:ToolPaneGroupStyle>
+                        <dockManager:ToolPaneGroupStyle.TabCornerRadius>0,0,4,8</dockManager:ToolPaneGroupStyle.TabCornerRadius>
+                        <dockManager:ToolPaneGroupStyle.FontSize>12</dockManager:ToolPaneGroupStyle.FontSize>
+                        <dockManager:ToolPaneGroupStyle.FontFamily>Arial</dockManager:ToolPaneGroupStyle.FontFamily>
+                        <dockManager:ToolPaneGroupStyle.Background>#5d6b99</dockManager:ToolPaneGroupStyle.Background>
+                        <dockManager:ToolPaneGroupStyle.HeaderBackground>#3b4f81</dockManager:ToolPaneGroupStyle.HeaderBackground>
+                        <dockManager:ToolPaneGroupStyle.ButtonForeground>White</dockManager:ToolPaneGroupStyle.ButtonForeground>
+                        <dockManager:ToolPaneGroupStyle.ActiveScrollIndicatorBrush>White</dockManager:ToolPaneGroupStyle.ActiveScrollIndicatorBrush>
+                        <dockManager:ToolPaneGroupStyle.InactiveScrollIndicatorBrush>Transparent</dockManager:ToolPaneGroupStyle.InactiveScrollIndicatorBrush>
+                        <dockManager:ToolPaneGroupStyle.SelectedTabStyle>
+                            <dockManager:TabStyle BorderBrush="Transparent" BorderThickness="0" Background="AliceBlue" Foreground="Black"/>
+                        </dockManager:ToolPaneGroupStyle.SelectedTabStyle>
+                        <dockManager:ToolPaneGroupStyle.UnselectedTabStyle>
+                            <dockManager:TabStyle BorderBrush="Transparent" BorderThickness="0" Background="#3b4f81" Foreground="White"/>
+                        </dockManager:ToolPaneGroupStyle.UnselectedTabStyle>
+                    </dockManager:ToolPaneGroupStyle>
+                </dockManager:LayoutManager.ToolPaneGroupStyle>
                 
                 <dockManager:LayoutManager.FloatingToolTitleBarBackground>#ccd5f0</dockManager:LayoutManager.FloatingToolTitleBarBackground>
 
-                <dockManager:LayoutManager.DocumentTabCornerRadius>
-                    <CornerRadius TopLeft="8" TopRight="4"/>
-                </dockManager:LayoutManager.DocumentTabCornerRadius>
-                <dockManager:LayoutManager.DocumentFontSize>12</dockManager:LayoutManager.DocumentFontSize>
-                <dockManager:LayoutManager.DocumentFontFamily>Arial</dockManager:LayoutManager.DocumentFontFamily>
-                <dockManager:LayoutManager.DocumentButtonForeground>White</dockManager:LayoutManager.DocumentButtonForeground>
-                <dockManager:LayoutManager.DocumentHeaderBackground>#5d6b99</dockManager:LayoutManager.DocumentHeaderBackground>
-
-                <dockManager:LayoutManager.SelectedDocumentTabStyle>
-                    <dockManager:TabStyle BorderBrush="Transparent" BorderThickness="0" Background="#f5cc84" Foreground="Black"/>
-                </dockManager:LayoutManager.SelectedDocumentTabStyle>
-                <dockManager:LayoutManager.UnselectedDocumentTabStyle>
-                    <dockManager:TabStyle BorderBrush="Transparent" BorderThickness="0" Background="#3b4f81" Foreground="White"/>
-                </dockManager:LayoutManager.UnselectedDocumentTabStyle>
-
-                <dockManager:LayoutManager.ActiveDocumentScrollIndicatorBrush>White</dockManager:LayoutManager.ActiveDocumentScrollIndicatorBrush>
-                <dockManager:LayoutManager.InactiveDocumentScrollIndicatorBrush>Transparent</dockManager:LayoutManager.InactiveDocumentScrollIndicatorBrush>
+                <dockManager:LayoutManager.DocumentPaneGroupStyle>
+                    <dockManager:DocumentPaneGroupStyle>
+                        <dockManager:DocumentPaneGroupStyle.TabCornerRadius>8,4,0,0</dockManager:DocumentPaneGroupStyle.TabCornerRadius>
+                        <dockManager:DocumentPaneGroupStyle.FontSize>12</dockManager:DocumentPaneGroupStyle.FontSize>
+                        <dockManager:DocumentPaneGroupStyle.FontFamily>Arial</dockManager:DocumentPaneGroupStyle.FontFamily>
+                        <dockManager:DocumentPaneGroupStyle.HeaderBackground>#5d6b99</dockManager:DocumentPaneGroupStyle.HeaderBackground>
+                        <dockManager:DocumentPaneGroupStyle.ButtonForeground>White</dockManager:DocumentPaneGroupStyle.ButtonForeground>
+                        <dockManager:DocumentPaneGroupStyle.ActiveScrollIndicatorBrush>White</dockManager:DocumentPaneGroupStyle.ActiveScrollIndicatorBrush>
+                        <dockManager:DocumentPaneGroupStyle.InactiveScrollIndicatorBrush>Transparent</dockManager:DocumentPaneGroupStyle.InactiveScrollIndicatorBrush>
+                        <dockManager:DocumentPaneGroupStyle.SelectedTabStyle>
+                            <dockManager:TabStyle BorderBrush="Transparent" BorderThickness="0" Background="#f5cc84" Foreground="Black"/>
+                        </dockManager:DocumentPaneGroupStyle.SelectedTabStyle>
+                        <dockManager:DocumentPaneGroupStyle.UnselectedTabStyle>
+                            <dockManager:TabStyle BorderBrush="Transparent" BorderThickness="0" Background="#3b4f81" Foreground="White"/>
+                        </dockManager:DocumentPaneGroupStyle.UnselectedTabStyle>
+                    </dockManager:DocumentPaneGroupStyle>
+                </dockManager:LayoutManager.DocumentPaneGroupStyle>
 
                 <dockManager:LayoutManager.FloatingDocumentTitleBarBackground>#ccd5f0</dockManager:LayoutManager.FloatingDocumentTitleBarBackground>
                 

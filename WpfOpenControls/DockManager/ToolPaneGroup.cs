@@ -114,6 +114,17 @@ namespace WpfOpenControls.DockManager
             }
         }
 
+        public FontFamily FontFamily
+        {
+            set
+            {
+                if (_titleLabel != null)
+                {
+                    _titleLabel.FontFamily = value;
+                }
+            }
+        }
+
         public void ShowAsUnPinned()
         {
             (_pinButton.LayoutTransform as System.Windows.Media.RotateTransform).Angle = 90.0;
