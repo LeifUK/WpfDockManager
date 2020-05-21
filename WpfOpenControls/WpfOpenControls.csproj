@@ -103,6 +103,7 @@
     <Compile Include="DockManager\FloatingToolPaneGroup.cs" />
     <Compile Include="DockManager\FloatingViewModel.cs" />
     <Compile Include="DockManager\Helpers.cs" />
+    <Compile Include="DockManager\IFloatingPane.cs" />
     <Compile Include="DockManager\ILayoutFactory.cs" />
     <Compile Include="DockManager\InsertionIndicatorManager.cs" />
     <Compile Include="DockManager\IView.cs" />

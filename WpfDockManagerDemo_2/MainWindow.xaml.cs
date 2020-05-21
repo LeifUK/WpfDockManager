@@ -1,12 +1,10 @@
 ﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 using System.Windows;
 using System.Windows.Controls;
+using System.Collections.Generic;
+using WpfDockManagerDemo_2.ViewModel;
 
-namespace WpfDockManagerDemo
+namespace WpfDockManagerDemo_2
 {
     /// <summary>
     /// Interaction logic for MainWindow.xaml
@@ -107,6 +105,28 @@ namespace WpfDockManagerDemo
             contextMenu.Items.Add(menuItem);
 
             contextMenu.IsOpen = true;
+        }
+
+        private void _buttonCloseTool_Click(object sender, RoutedEventArgs e)
+        {
+            KeyValuePair<UserControl,WpfOpenControls.DockManager.IViewModel> item = (KeyValuePair<UserControl, WpfOpenControls.DockManager.IViewModel>)(sender as Button).DataContext;
+
+            MainViewModel mainViewModel = DataContext as MainViewModel;
+            if (mainViewModel.Tools.Contains(item.Value))
+            {
+                mainViewModel.Tools.Remove(item.Value);
+            }
+        }
+
+        private void _buttonCloseDocument_Click(object sender, RoutedEventArgs e)
+        {
+            KeyValuePair<UserControl, WpfOpenControls.DockManager.IViewModel> item = (KeyValuePair<UserControl, WpfOpenControls.DockManager.IViewModel>)(sender as Button).DataContext;
+
+            MainViewModel mainViewModel = DataContext as MainViewModel;
+            if (mainViewModel.Documents.Contains(item.Value))
+            {
+                mainViewModel.Documents.Remove(item.Value);
+            }
         }
     }
 }

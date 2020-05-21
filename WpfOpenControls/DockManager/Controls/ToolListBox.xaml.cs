@@ -23,6 +23,43 @@ namespace WpfOpenControls.DockManager.Controls
 
         #region Dependency properties
 
+        #region ItemContainerStyle dependency property
+
+        [Bindable(true)]
+        [DesignerSerializationVisibility(DesignerSerializationVisibility.Hidden)]
+        public static readonly DependencyProperty ItemContainerStyleProperty = DependencyProperty.Register("ItemContainerStyle", typeof(Style), typeof(ToolListBox), new FrameworkPropertyMetadata(null, new PropertyChangedCallback(OnItemContainerStyleChanged)));
+
+        public Style ItemContainerStyle
+        {
+            get
+            {
+                return (Style)GetValue(ItemContainerStyleProperty);
+            }
+            set
+            {
+                if ((value != ItemContainerStyle) && (value != null))
+                {
+                    SetValue(ItemContainerStyleProperty, value);
+                    _listBox.ItemContainerStyle = value;
+                }
+            }
+        }
+
+        private static void OnItemContainerStyleChanged(DependencyObject d, DependencyPropertyChangedEventArgs e)
+        {
+            ((ToolListBox)d).OnItemContainerStyleChanged(e);
+        }
+
+        protected virtual void OnItemContainerStyleChanged(DependencyPropertyChangedEventArgs e)
+        {
+            if ((Style)e.NewValue != ItemContainerStyle)
+            {
+                _listBox.ItemContainerStyle = e.NewValue as Style;
+            }
+        }
+
+        #endregion
+
         #region ItemsSource dependency property
 
         [Bindable(true)]
@@ -246,7 +283,7 @@ namespace WpfOpenControls.DockManager.Controls
 
         #endregion Dependency properties
 
-        private void Border_MouseLeftButtonDown(object sender, System.Windows.Input.MouseButtonEventArgs e)
+        private void _listBox_PreviewMouseLeftButtonDown(object sender, System.Windows.Input.MouseButtonEventArgs e)
         {
             if (_listBox.ItemContainerGenerator.Status != System.Windows.Controls.Primitives.GeneratorStatus.ContainersGenerated)
             {
@@ -267,11 +304,6 @@ namespace WpfOpenControls.DockManager.Controls
                     return;
                 }
             }
-        }
-
-        private void _listBox_MouseLeftButtonDown(object sender, System.Windows.Input.MouseButtonEventArgs e)
-        {
-            // Warning warning TBD
         }
     }
 }

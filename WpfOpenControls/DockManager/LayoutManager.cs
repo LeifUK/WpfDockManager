@@ -17,8 +17,8 @@ namespace WpfOpenControls.DockManager
         {
             Tag = new Guid("3c81a424-ef66-4de7-a361-9968cd88071c");
 
-            FloatingToolPaneGroups = new List<FloatingToolPaneGroup>();
-            FloatingDocumentPaneGroups = new List<FloatingDocumentPaneGroup>();
+            FloatingToolPaneGroups = new List<IFloatingPane>();
+            FloatingDocumentPaneGroups = new List<IFloatingPane>();
 
             RowDefinitions.Add(new RowDefinition() { Height = new System.Windows.GridLength(1, System.Windows.GridUnitType.Auto) });
             RowDefinitions.Add(new RowDefinition() { Height = new System.Windows.GridLength(1, System.Windows.GridUnitType.Star) });
@@ -119,8 +119,8 @@ namespace WpfOpenControls.DockManager
         public event EventHandler DocumentClosed;
         public event EventHandler ToolClosed;
 
-        internal List<FloatingToolPaneGroup> FloatingToolPaneGroups;
-        internal List<FloatingDocumentPaneGroup> FloatingDocumentPaneGroups;
+        internal List<IFloatingPane> FloatingToolPaneGroups;
+        internal List<IFloatingPane> FloatingDocumentPaneGroups;
 
         internal Controls.ToolListBox _leftToolListBox;
         internal Controls.ToolListBox _topToolListBox;
@@ -146,6 +146,30 @@ namespace WpfOpenControls.DockManager
         [DesignerSerializationVisibility(DesignerSerializationVisibility.Hidden)]
         public static readonly DependencyProperty DocumentsSourceProperty = DependencyProperty.Register("DocumentsSource", typeof(System.Collections.Generic.IEnumerable<IViewModel>), typeof(LayoutManager), new FrameworkPropertyMetadata(null, new PropertyChangedCallback(OnDocumentsSourceChanged)));
 
+        private void ValidatePanes(Type paneType, IEnumerable<IViewModel> enumerable, List<IFloatingPane> floatingPanes)
+        {
+            List<IViewModel> viewModels = new List<IViewModel>();
+
+            var enumerator = enumerable.GetEnumerator();
+            while (enumerator.MoveNext())
+            {
+                viewModels.Add(enumerator.Current as IViewModel);
+            }
+            List<DockPane> emptyDockPanes = new List<DockPane>();
+            ValidateDockPanes(_root, viewModels, emptyDockPanes, paneType);
+            foreach (var dockPane in emptyDockPanes)
+            {
+                ExtractDockPane(dockPane, out FrameworkElement frameworkElement);
+            }
+
+            ValidateFloatingPanes(viewModels, floatingPanes);
+        }
+
+        private void LayoutManager_DocumentsSourceCollectionChanged(object sender, System.Collections.Specialized.NotifyCollectionChangedEventArgs e)
+        {
+            ValidatePanes(typeof(DocumentPaneGroup), DocumentsSource, FloatingDocumentPaneGroups);
+        }
+
         public System.Collections.Generic.IEnumerable<IViewModel> DocumentsSource
         {
             get
@@ -155,6 +179,7 @@ namespace WpfOpenControls.DockManager
             set
             {
                 SetValue(DocumentsSourceProperty, value);
+                (value as System.Collections.Specialized.INotifyCollectionChanged).CollectionChanged += LayoutManager_DocumentsSourceCollectionChanged;
             }
         }
 
@@ -180,16 +205,95 @@ namespace WpfOpenControls.DockManager
         [DesignerSerializationVisibility(DesignerSerializationVisibility.Hidden)]
         public static readonly DependencyProperty ToolsSourceProperty = DependencyProperty.Register("ToolsSource", typeof(System.Collections.IEnumerable), typeof(LayoutManager), new FrameworkPropertyMetadata(null, new PropertyChangedCallback(OnToolsSourceChanged)));
 
-        public System.Collections.IEnumerable ToolsSource
+        public System.Collections.Generic.IEnumerable<IViewModel> ToolsSource
         {
             get
             {
-                return (System.Collections.IEnumerable)GetValue(ToolsSourceProperty);
+                return (System.Collections.Generic.IEnumerable<IViewModel>)GetValue(ToolsSourceProperty);
             }
             set
             {
                 SetValue(ToolsSourceProperty, value);
+                (value as System.Collections.Specialized.INotifyCollectionChanged).CollectionChanged += LayoutManager_ToolsSourceCollectionChanged;
             }
+        }
+
+        /*
+         * Remove tool views not in ToolsSource
+         */
+        private void ValidateDockPanes(Grid grid, List<IViewModel> viewModels, List<DockPane> emptyDockPanes, Type type)
+        {
+            if (grid == null)
+            {
+                return;
+            }
+
+            int numberOfChildren = grid.Children.Count;
+
+            for (int iChild = numberOfChildren - 1; iChild > -1; --iChild)
+            {
+                UIElement child = grid.Children[iChild];
+                if (child.GetType() == type)
+                {
+                    DockPane dockPane = child as DockPane;
+                    int count = dockPane.IViewContainer.GetUserControlCount();
+                    for (int index = count - 1; index > -1; --index)
+                    {
+                        IViewModel iViewModel = dockPane.IViewContainer.GetIViewModel(index);
+                        if (!viewModels.Contains(iViewModel))
+                        {
+                            dockPane.IViewContainer.ExtractUserControl(index);
+                        }
+                        else
+                        {
+                            viewModels.Remove(iViewModel);
+                        }
+                    }
+
+                    if (dockPane.IViewContainer.GetUserControlCount() == 0)
+                    {
+                        emptyDockPanes.Add(dockPane);
+                    }
+                }
+
+                if (child is Grid)
+                {
+                    ValidateDockPanes(child as Grid, viewModels, emptyDockPanes, type);
+                }
+            }
+        }
+
+        private void ValidateFloatingPanes(List<IViewModel> viewModels, List<IFloatingPane> floatingPanes)
+        {
+            int count = floatingPanes.Count;
+            for (int index = count - 1; index > -1; --index)
+            {
+                IViewContainer iViewContainer = floatingPanes[index].IViewContainer;
+                int tabCount = iViewContainer.GetUserControlCount();
+
+                for (int iTab = tabCount - 1; iTab > -1; --iTab)
+                {
+                    IViewModel iViewModel = iViewContainer.GetIViewModel(iTab);
+                    if (!viewModels.Contains(iViewModel))
+                    {
+                        iViewContainer.ExtractUserControl(iTab);
+                    }
+                    else
+                    {
+                        viewModels.Remove(iViewModel);
+                    }
+                }
+
+                if (iViewContainer.GetUserControlCount() == 0)
+                {
+                    floatingPanes[index].Close();
+                }
+            }
+        }
+
+        private void LayoutManager_ToolsSourceCollectionChanged(object sender, System.Collections.Specialized.NotifyCollectionChangedEventArgs e)
+        {
+            ValidatePanes(typeof(ToolPaneGroup), ToolsSource, FloatingToolPaneGroups);
         }
 
         private static void OnToolsSourceChanged(DependencyObject d, DependencyPropertyChangedEventArgs e)
@@ -201,7 +305,7 @@ namespace WpfOpenControls.DockManager
         {
             if (e.NewValue != null)
             {
-                ToolsSource = (System.Collections.IEnumerable)e.NewValue;
+                ToolsSource = e.NewValue as System.Collections.Generic.IEnumerable<IViewModel>;
                 Create();
             }
         }
@@ -325,6 +429,7 @@ namespace WpfOpenControls.DockManager
             iViewContainer.UnselectedTabHeaderForeground = UnselectedDocumentTabHeaderForeground;
             iViewContainer.ActiveScrollIndicatorBrush = ActiveDocumentScrollIndicatorBrush;
             iViewContainer.InactiveScrollIndicatorBrush = InactiveDocumentScrollIndicatorBrush;
+            iViewContainer.TabItemStyle = DocumentTabItemStyle;
         }
 
         private void UpdateProperties(DocumentPaneGroup documentPaneGroup)
@@ -351,6 +456,7 @@ namespace WpfOpenControls.DockManager
             iViewContainer.UnselectedTabHeaderForeground = UnselectedToolTabHeaderForeground;
             iViewContainer.ActiveScrollIndicatorBrush = ActiveToolScrollIndicatorBrush;
             iViewContainer.InactiveScrollIndicatorBrush = InactiveToolScrollIndicatorBrush;
+            iViewContainer.TabItemStyle = ToolTabItemStyle;
         }
 
         private void UpdateProperties(ToolPaneGroup toolPaneGroup)
@@ -362,23 +468,44 @@ namespace WpfOpenControls.DockManager
             UpdateToolProperties(toolPaneGroup.IViewContainer as ToolContainer);
         }
 
-        private void UpdateProperties(FloatingDocumentPaneGroup floatingDocumentPaneGroup)
+        private void UpdateProperties(IFloatingPane iFloatingPane)
         {
-            floatingDocumentPaneGroup.FontSize = DocumentFontSize;
-            floatingDocumentPaneGroup.FontFamily = new FontFamily(DocumentFontFamily);
-            floatingDocumentPaneGroup.Background = DocumentHeaderBackground;
-            floatingDocumentPaneGroup.HeaderBackground = FloatingDocumentTitleBarBackground;
-            IViewContainer iViewContainer = floatingDocumentPaneGroup.IViewContainer;
-            UpdateDocumentProperties(floatingDocumentPaneGroup.IViewContainer);
+            iFloatingPane.FontSize = DocumentFontSize;
+            iFloatingPane.FontFamily = new FontFamily(DocumentFontFamily);
+            iFloatingPane.Background = DocumentHeaderBackground;
+            iFloatingPane.HeaderBackground = FloatingDocumentTitleBarBackground;
+            UpdateDocumentProperties(iFloatingPane.IViewContainer);
         }
 
-        private void UpdateProperties(FloatingToolPaneGroup floatingToolPaneGroup)
+        private void UpdateSideToolProperties()
         {
-            floatingToolPaneGroup.FontSize = ToolFontSize;
-            floatingToolPaneGroup.FontFamily = new FontFamily(ToolFontFamily);
-            floatingToolPaneGroup.Background = ToolBackground;
-            floatingToolPaneGroup.HeaderBackground = FloatingToolTitleBarBackground;
-            UpdateToolProperties(floatingToolPaneGroup.IViewContainer);
+            if (SideToolItemContainerStyle != null)
+            {
+                _leftToolListBox.ItemContainerStyle = SideToolItemContainerStyle;
+                _topToolListBox.ItemContainerStyle = SideToolItemContainerStyle;
+                _rightToolListBox.ItemContainerStyle = SideToolItemContainerStyle;
+                _bottomToolListBox.ItemContainerStyle = SideToolItemContainerStyle;
+            }
+            _leftToolListBox.Foreground = SideToolForeground;
+            _topToolListBox.Foreground = SideToolForeground;
+            _rightToolListBox.Foreground = SideToolForeground;
+            _bottomToolListBox.Foreground = SideToolForeground;
+        }
+
+        private void UpdateFloatingToolPaneGroupProperties()
+        {
+            foreach (var floatingToolPaneGroup in FloatingToolPaneGroups)
+            {
+                UpdateProperties(floatingToolPaneGroup);
+            }
+        }
+
+        private void UpdateFloatingDocumentPaneGroupProperties()
+        {
+            foreach (var floatingDocumentPaneGroup in FloatingDocumentPaneGroups)
+            {
+                UpdateProperties(floatingDocumentPaneGroup);
+            }
         }
 
         private void UpdateProperties(Grid grid)
@@ -422,24 +549,13 @@ namespace WpfOpenControls.DockManager
                     UpdateProperties(child as Grid);
                 }
             }
+        }
 
-            if (grid == _root)
-            {
-                _leftToolListBox.Foreground = SideToolForeground;
-                _topToolListBox.Foreground = SideToolForeground;
-                _rightToolListBox.Foreground = SideToolForeground;
-                _bottomToolListBox.Foreground = SideToolForeground;
-
-                foreach (var floatingDocumentPaneGroup in FloatingDocumentPaneGroups)
-                {
-                    UpdateProperties(floatingDocumentPaneGroup);
-                }
-
-                foreach (var floatingToolPaneGroup in FloatingToolPaneGroups)
-                {
-                    UpdateProperties(floatingToolPaneGroup);
-                }
-            }
+        private void UpdateProperties()
+        {
+            UpdateProperties(_root);
+            UpdateFloatingToolPaneGroupProperties();
+            UpdateFloatingDocumentPaneGroupProperties();
         }
 
         #region SplitterWidth dependency property
@@ -459,7 +575,7 @@ namespace WpfOpenControls.DockManager
                 if (value != SplitterWidth)
                 {
                     SetValue(SplitterWidthProperty, value);
-                    UpdateProperties(_root);
+                    UpdateProperties();
                 }
             }
         }
@@ -473,7 +589,7 @@ namespace WpfOpenControls.DockManager
         {
             if ((double)e.NewValue != SplitterWidth)
             {
-                UpdateProperties(_root);
+                UpdateProperties();
             }
         }
 
@@ -496,7 +612,7 @@ namespace WpfOpenControls.DockManager
                 if (value != SplitterBrush)
                 {
                     SetValue(SplitterBrushProperty, value);
-                    UpdateProperties(_root);
+                    UpdateProperties();
                 }
             }
         }
@@ -510,7 +626,7 @@ namespace WpfOpenControls.DockManager
         {
             if ((Brush)e.NewValue != SplitterBrush)
             {
-                UpdateProperties(_root);
+                UpdateProperties();
             }
         }
 
@@ -533,7 +649,7 @@ namespace WpfOpenControls.DockManager
                 if (value != SelectedPaneBrush)
                 {
                     SetValue(SelectedPaneBrushProperty, value);
-                    UpdateProperties(_root);
+                    UpdateProperties();
                 }
             }
         }
@@ -547,7 +663,44 @@ namespace WpfOpenControls.DockManager
         {
             if ((Brush)e.NewValue != SelectedPaneBrush)
             {
-                UpdateProperties(_root);
+                UpdateProperties();
+            }
+        }
+
+        #endregion
+
+        #region ToolTabItemStyle dependency property
+
+        [Bindable(true)]
+        [DesignerSerializationVisibility(DesignerSerializationVisibility.Hidden)]
+        public static readonly DependencyProperty ToolTabItemStyleProperty = DependencyProperty.Register("ToolTabItemStyle", typeof(Style), typeof(TabHeaderControl), new FrameworkPropertyMetadata(null, new PropertyChangedCallback(OnToolTabItemStyleChanged)));
+
+        public Style ToolTabItemStyle
+        {
+            get
+            {
+                return (Style)GetValue(ToolTabItemStyleProperty);
+            }
+            set
+            {
+                if (value != ToolTabItemStyle)
+                {
+                    SetValue(ToolTabItemStyleProperty, value);
+                    UpdateSideToolProperties();
+                }
+            }
+        }
+
+        private static void OnToolTabItemStyleChanged(DependencyObject d, DependencyPropertyChangedEventArgs e)
+        {
+            ((LayoutManager)d).OnToolTabItemStyleChanged(e);
+        }
+
+        protected virtual void OnToolTabItemStyleChanged(DependencyPropertyChangedEventArgs e)
+        {
+            if ((Style)e.NewValue != ToolTabItemStyle)
+            {
+                UpdateProperties();
             }
         }
 
@@ -570,7 +723,7 @@ namespace WpfOpenControls.DockManager
                 if (value != ToolFontFamily)
                 {
                     SetValue(ToolFontFamilyProperty, value);
-                    UpdateProperties(_root);
+                    UpdateProperties();
                 }
             }
         }
@@ -584,7 +737,7 @@ namespace WpfOpenControls.DockManager
         {
             if ((string)e.NewValue != ToolFontFamily)
             {
-                UpdateProperties(_root);
+                UpdateProperties();
             }
         }
 
@@ -607,7 +760,7 @@ namespace WpfOpenControls.DockManager
                 if (value != ToolFontSize)
                 {
                     SetValue(ToolFontSizeProperty, value);
-                    UpdateProperties(_root);
+                    UpdateProperties();
                 }
             }
         }
@@ -621,7 +774,7 @@ namespace WpfOpenControls.DockManager
         {
             if ((double)e.NewValue != ToolFontSize)
             {
-                UpdateProperties(_root);
+                UpdateProperties();
             }
         }
 
@@ -644,7 +797,7 @@ namespace WpfOpenControls.DockManager
                 if (value != ToolTabCornerRadius)
                 {
                     SetValue(ToolTabCornerRadiusProperty, value);
-                    UpdateProperties(_root);
+                    UpdateProperties();
                 }
             }
         }
@@ -658,7 +811,7 @@ namespace WpfOpenControls.DockManager
         {
             if ((CornerRadius)e.NewValue != ToolTabCornerRadius)
             {
-                UpdateProperties(_root);
+                UpdateProperties();
             }
         }
 
@@ -681,7 +834,7 @@ namespace WpfOpenControls.DockManager
                 if (value != ToolButtonForeground)
                 {
                     SetValue(ToolButtonForegroundProperty, value);
-                    UpdateProperties(_root);
+                    UpdateProperties();
                 }
             }
         }
@@ -695,7 +848,7 @@ namespace WpfOpenControls.DockManager
         {
             if ((Brush)e.NewValue != ToolButtonForeground)
             {
-                UpdateProperties(_root);
+                UpdateProperties();
             }
         }
 
@@ -718,7 +871,7 @@ namespace WpfOpenControls.DockManager
                 if (value != SelectedToolTabBorderThickness)
                 {
                     SetValue(SelectedToolTabBorderThicknessProperty, value);
-                    UpdateProperties(_root);
+                    UpdateProperties();
                 }
             }
         }
@@ -732,7 +885,7 @@ namespace WpfOpenControls.DockManager
         {
             if ((Thickness)e.NewValue != SelectedToolTabBorderThickness)
             {
-                UpdateProperties(_root);
+                UpdateProperties();
             }
         }
 
@@ -755,7 +908,7 @@ namespace WpfOpenControls.DockManager
                 if (value != SelectedToolTabBorderBrush)
                 {
                     SetValue(SelectedToolTabBorderBrushProperty, value);
-                    UpdateProperties(_root);
+                    UpdateProperties();
                 }
             }
         }
@@ -769,7 +922,7 @@ namespace WpfOpenControls.DockManager
         {
             if ((Brush)e.NewValue != SelectedToolTabBorderBrush)
             {
-                UpdateProperties(_root);
+                UpdateProperties();
             }
         }
 
@@ -792,7 +945,7 @@ namespace WpfOpenControls.DockManager
                 if (value != UnselectedToolTabBorderThickness)
                 {
                     SetValue(UnselectedToolTabBorderThicknessProperty, value);
-                    UpdateProperties(_root);
+                    UpdateProperties();
                 }
             }
         }
@@ -806,7 +959,7 @@ namespace WpfOpenControls.DockManager
         {
             if ((Thickness)e.NewValue != UnselectedToolTabBorderThickness)
             {
-                UpdateProperties(_root);
+                UpdateProperties();
             }
         }
 
@@ -829,7 +982,7 @@ namespace WpfOpenControls.DockManager
                 if (value != UnselectedToolTabBorderBrush)
                 {
                     SetValue(UnselectedToolTabBorderBrushProperty, value);
-                    UpdateProperties(_root);
+                    UpdateProperties();
                 }
             }
         }
@@ -843,7 +996,7 @@ namespace WpfOpenControls.DockManager
         {
             if ((Brush)e.NewValue != UnselectedToolTabBorderBrush)
             {
-                UpdateProperties(_root);
+                UpdateProperties();
             }
         }
 
@@ -866,7 +1019,7 @@ namespace WpfOpenControls.DockManager
                 if (value != ActiveToolScrollIndicatorBrush)
                 {
                     SetValue(ActiveToolScrollIndicatorBrushProperty, value);
-                    UpdateProperties(_root);
+                    UpdateProperties();
                 }
             }
         }
@@ -880,7 +1033,7 @@ namespace WpfOpenControls.DockManager
         {
             if ((Brush)e.NewValue != ActiveToolScrollIndicatorBrush)
             {
-                UpdateProperties(_root);
+                UpdateProperties();
             }
         }
 
@@ -903,7 +1056,7 @@ namespace WpfOpenControls.DockManager
                 if (value != InactiveToolScrollIndicatorBrush)
                 {
                     SetValue(InactiveToolScrollIndicatorBrushProperty, value);
-                    UpdateProperties(_root);
+                    UpdateProperties();
                 }
             }
         }
@@ -917,7 +1070,7 @@ namespace WpfOpenControls.DockManager
         {
             if ((Brush)e.NewValue != InactiveToolScrollIndicatorBrush)
             {
-                UpdateProperties(_root);
+                UpdateProperties();
             }
         }
 
@@ -940,7 +1093,7 @@ namespace WpfOpenControls.DockManager
                 if (value != ToolBackground)
                 {
                     SetValue(ToolBackgroundProperty, value);
-                    UpdateProperties(_root);
+                    UpdateProperties();
                 }
             }
         }
@@ -954,7 +1107,7 @@ namespace WpfOpenControls.DockManager
         {
             if ((Brush)e.NewValue != ToolBackground)
             {
-                UpdateProperties(_root);
+                UpdateProperties();
             }
         }
 
@@ -977,7 +1130,7 @@ namespace WpfOpenControls.DockManager
                 if (value != ToolHeaderBackground)
                 {
                     SetValue(ToolHeaderBackgroundProperty, value);
-                    UpdateProperties(_root);
+                    UpdateProperties();
                 }
             }
         }
@@ -991,7 +1144,7 @@ namespace WpfOpenControls.DockManager
         {
             if ((Brush)e.NewValue != ToolHeaderBackground)
             {
-                UpdateProperties(_root);
+                UpdateProperties();
             }
         }
 
@@ -1014,7 +1167,7 @@ namespace WpfOpenControls.DockManager
                 if (value != SelectedToolTabHeaderBackground)
                 {
                     SetValue(SelectedToolTabHeaderBackgroundProperty, value);
-                    UpdateProperties(_root);
+                    UpdateProperties();
                 }
             }
         }
@@ -1028,7 +1181,7 @@ namespace WpfOpenControls.DockManager
         {
             if ((Brush)e.NewValue != SelectedToolTabHeaderBackground)
             {
-                UpdateProperties(_root);
+                UpdateProperties();
             }
         }
 
@@ -1051,7 +1204,7 @@ namespace WpfOpenControls.DockManager
                 if (value != UnselectedToolTabHeaderBackground)
                 {
                     SetValue(UnselectedToolTabHeaderBackgroundProperty, value);
-                    UpdateProperties(_root);
+                    UpdateProperties();
                 }
             }
         }
@@ -1065,7 +1218,7 @@ namespace WpfOpenControls.DockManager
         {
             if ((Brush)e.NewValue != UnselectedToolTabHeaderBackground)
             {
-                UpdateProperties(_root);
+                UpdateProperties();
             }
         }
 
@@ -1088,7 +1241,7 @@ namespace WpfOpenControls.DockManager
                 if (value != SelectedToolTabHeaderForeground)
                 {
                     SetValue(SelectedToolTabHeaderForegroundProperty, value);
-                    UpdateProperties(_root);
+                    UpdateProperties();
                 }
             }
         }
@@ -1102,7 +1255,7 @@ namespace WpfOpenControls.DockManager
         {
             if ((Brush)e.NewValue != SelectedToolTabHeaderForeground)
             {
-                UpdateProperties(_root);
+                UpdateProperties();
             }
         }
 
@@ -1125,7 +1278,7 @@ namespace WpfOpenControls.DockManager
                 if (value != UnselectedToolTabHeaderForeground)
                 {
                     SetValue(UnselectedToolTabHeaderForegroundProperty, value);
-                    UpdateProperties(_root);
+                    UpdateProperties();
                 }
             }
         }
@@ -1139,7 +1292,7 @@ namespace WpfOpenControls.DockManager
         {
             if ((Brush)e.NewValue != SelectedToolTabHeaderForeground)
             {
-                UpdateProperties(_root);
+                UpdateProperties();
             }
         }
 
@@ -1162,7 +1315,7 @@ namespace WpfOpenControls.DockManager
                 if (value != FloatingToolTitleBarBackground)
                 {
                     SetValue(FloatingToolTitleBarBackgroundProperty, value);
-                    UpdateProperties(_root);
+                    UpdateProperties();
                 }
             }
         }
@@ -1176,7 +1329,44 @@ namespace WpfOpenControls.DockManager
         {
             if ((Brush)e.NewValue != FloatingToolTitleBarBackground)
             {
-                UpdateProperties(_root);
+                UpdateProperties();
+            }
+        }
+
+        #endregion
+
+        #region DocumentTabItemStyle dependency property
+
+        [Bindable(true)]
+        [DesignerSerializationVisibility(DesignerSerializationVisibility.Hidden)]
+        public static readonly DependencyProperty DocumentTabItemStyleProperty = DependencyProperty.Register("DocumentTabItemStyle", typeof(Style), typeof(TabHeaderControl), new FrameworkPropertyMetadata(null, new PropertyChangedCallback(OnDocumentTabItemStyleChanged)));
+
+        public Style DocumentTabItemStyle
+        {
+            get
+            {
+                return (Style)GetValue(DocumentTabItemStyleProperty);
+            }
+            set
+            {
+                if (value != DocumentTabItemStyle)
+                {
+                    SetValue(DocumentTabItemStyleProperty, value);
+                    UpdateSideToolProperties();
+                }
+            }
+        }
+
+        private static void OnDocumentTabItemStyleChanged(DependencyObject d, DependencyPropertyChangedEventArgs e)
+        {
+            ((LayoutManager)d).OnDocumentTabItemStyleChanged(e);
+        }
+
+        protected virtual void OnDocumentTabItemStyleChanged(DependencyPropertyChangedEventArgs e)
+        {
+            if ((Style)e.NewValue != DocumentTabItemStyle)
+            {
+                UpdateProperties();
             }
         }
 
@@ -1212,7 +1402,7 @@ namespace WpfOpenControls.DockManager
         {
             if ((string)e.NewValue != DocumentFontFamily)
             {
-                UpdateProperties(_root);
+                UpdateProperties();
             }
         }
 
@@ -1248,7 +1438,7 @@ namespace WpfOpenControls.DockManager
         {
             if ((double)e.NewValue != DocumentFontSize)
             {
-                UpdateProperties(_root);
+                UpdateProperties();
             }
         }
 
@@ -1284,7 +1474,7 @@ namespace WpfOpenControls.DockManager
         {
             if ((CornerRadius)e.NewValue != DocumentTabCornerRadius)
             {
-                UpdateProperties(_root);
+                UpdateProperties();
             }
         }
 
@@ -1307,7 +1497,7 @@ namespace WpfOpenControls.DockManager
                 if (value != DocumentButtonForeground)
                 {
                     SetValue(DocumentButtonForegroundProperty, value);
-                    UpdateProperties(_root);
+                    UpdateProperties();
                 }
             }
         }
@@ -1321,7 +1511,7 @@ namespace WpfOpenControls.DockManager
         {
             if ((Brush)e.NewValue != DocumentButtonForeground)
             {
-                UpdateProperties(_root);
+                UpdateProperties();
             }
         }
 
@@ -1344,7 +1534,7 @@ namespace WpfOpenControls.DockManager
                 if (value != SelectedDocumentTabBorderThickness)
                 {
                     SetValue(SelectedDocumentTabBorderThicknessProperty, value);
-                    UpdateProperties(_root);
+                    UpdateProperties();
                 }
             }
         }
@@ -1358,7 +1548,7 @@ namespace WpfOpenControls.DockManager
         {
             if ((Thickness)e.NewValue != SelectedDocumentTabBorderThickness)
             {
-                UpdateProperties(_root);
+                UpdateProperties();
             }
         }
 
@@ -1381,7 +1571,7 @@ namespace WpfOpenControls.DockManager
                 if (value != SelectedDocumentTabBorderBrush)
                 {
                     SetValue(SelectedDocumentTabBorderBrushProperty, value);
-                    UpdateProperties(_root);
+                    UpdateProperties();
                 }
             }
         }
@@ -1395,7 +1585,7 @@ namespace WpfOpenControls.DockManager
         {
             if ((Brush)e.NewValue != SelectedDocumentTabBorderBrush)
             {
-                UpdateProperties(_root);
+                UpdateProperties();
             }
         }
 
@@ -1418,7 +1608,7 @@ namespace WpfOpenControls.DockManager
                 if (value != UnselectedDocumentTabBorderThickness)
                 {
                     SetValue(UnselectedDocumentTabBorderThicknessProperty, value);
-                    UpdateProperties(_root);
+                    UpdateProperties();
                 }
             }
         }
@@ -1432,7 +1622,7 @@ namespace WpfOpenControls.DockManager
         {
             if ((Thickness)e.NewValue != UnselectedDocumentTabBorderThickness)
             {
-                UpdateProperties(_root);
+                UpdateProperties();
             }
         }
 
@@ -1455,7 +1645,7 @@ namespace WpfOpenControls.DockManager
                 if (value != UnselectedDocumentTabBorderBrush)
                 {
                     SetValue(UnselectedDocumentTabBorderBrushProperty, value);
-                    UpdateProperties(_root);
+                    UpdateProperties();
                 }
             }
         }
@@ -1469,7 +1659,7 @@ namespace WpfOpenControls.DockManager
         {
             if ((Brush)e.NewValue != UnselectedDocumentTabBorderBrush)
             {
-                UpdateProperties(_root);
+                UpdateProperties();
             }
         }
 
@@ -1492,7 +1682,7 @@ namespace WpfOpenControls.DockManager
                 if (value != ActiveDocumentScrollIndicatorBrush)
                 {
                     SetValue(ActiveDocumentScrollIndicatorBrushProperty, value);
-                    UpdateProperties(_root);
+                    UpdateProperties();
                 }
             }
         }
@@ -1506,7 +1696,7 @@ namespace WpfOpenControls.DockManager
         {
             if ((Brush)e.NewValue != ActiveDocumentScrollIndicatorBrush)
             {
-                UpdateProperties(_root);
+                UpdateProperties();
             }
         }
 
@@ -1529,7 +1719,7 @@ namespace WpfOpenControls.DockManager
                 if (value != InactiveDocumentScrollIndicatorBrush)
                 {
                     SetValue(InactiveDocumentScrollIndicatorBrushProperty, value);
-                    UpdateProperties(_root);
+                    UpdateProperties();
                 }
             }
         }
@@ -1543,7 +1733,7 @@ namespace WpfOpenControls.DockManager
         {
             if ((Brush)e.NewValue != InactiveDocumentScrollIndicatorBrush)
             {
-                UpdateProperties(_root);
+                UpdateProperties();
             }
         }
 
@@ -1579,7 +1769,7 @@ namespace WpfOpenControls.DockManager
         {
             if ((Brush)e.NewValue != DocumentHeaderBackground)
             {
-                UpdateProperties(_root);
+                UpdateProperties();
             }
         }
 
@@ -1615,7 +1805,7 @@ namespace WpfOpenControls.DockManager
         {
             if ((Brush)e.NewValue != SelectedDocumentTabHeaderBackground)
             {
-                UpdateProperties(_root);
+                UpdateProperties();
             }
         }
 
@@ -1651,7 +1841,7 @@ namespace WpfOpenControls.DockManager
         {
             if ((Brush)e.NewValue != UnselectedDocumentTabHeaderBackground)
             {
-                UpdateProperties(_root);
+                UpdateProperties();
             }
         }
 
@@ -1687,7 +1877,7 @@ namespace WpfOpenControls.DockManager
         {
             if ((Brush)e.NewValue != SelectedDocumentTabHeaderForeground)
             {
-                UpdateProperties(_root);
+                UpdateProperties();
             }
         }
 
@@ -1723,7 +1913,7 @@ namespace WpfOpenControls.DockManager
         {
             if ((Brush)e.NewValue != UnselectedDocumentTabHeaderForeground)
             {
-                UpdateProperties(_root);
+                UpdateProperties();
             }
         }
 
@@ -1759,7 +1949,7 @@ namespace WpfOpenControls.DockManager
         {
             if ((Brush)e.NewValue != FloatingDocumentTitleBarBackground)
             {
-                UpdateProperties(_root);
+                UpdateProperties();
             }
         }
 
@@ -1782,7 +1972,7 @@ namespace WpfOpenControls.DockManager
                 if (value != SideToolForeground)
                 {
                     SetValue(SideToolForegroundProperty, value);
-                    UpdateProperties(_root);
+                    UpdateSideToolProperties();
                 }
             }
         }
@@ -1796,7 +1986,7 @@ namespace WpfOpenControls.DockManager
         {
             if ((Brush)e.NewValue != SideToolForeground)
             {
-                UpdateProperties(_root);
+                UpdateSideToolProperties();
             }
         }
 
@@ -1843,6 +2033,43 @@ namespace WpfOpenControls.DockManager
                 {
                     SetValue(MouseOverSideToolBarBrushProperty, value);
                 }
+            }
+        }
+
+        #endregion
+
+        #region SideToolItemContainerStyle dependency property
+
+        [Bindable(true)]
+        [DesignerSerializationVisibility(DesignerSerializationVisibility.Hidden)]
+        public static readonly DependencyProperty SideToolItemContainerStyleProperty = DependencyProperty.Register("SideToolItemContainerStyle", typeof(Style), typeof(TabHeaderControl), new FrameworkPropertyMetadata(null, new PropertyChangedCallback(OnSideToolItemContainerStyleChanged)));
+
+        public Style SideToolItemContainerStyle
+        {
+            get
+            {
+                return (Style)GetValue(SideToolItemContainerStyleProperty);
+            }
+            set
+            {
+                if (value != SideToolItemContainerStyle)
+                {
+                    SetValue(SideToolItemContainerStyleProperty, value);
+                    UpdateSideToolProperties();
+                }
+            }
+        }
+
+        private static void OnSideToolItemContainerStyleChanged(DependencyObject d, DependencyPropertyChangedEventArgs e)
+        {
+            ((LayoutManager)d).OnSideToolItemContainerStyleChanged(e);
+        }
+
+        protected virtual void OnSideToolItemContainerStyleChanged(DependencyPropertyChangedEventArgs e)
+        {
+            if ((Style)e.NewValue != SideToolItemContainerStyle)
+            {
+                UpdateSideToolProperties();
             }
         }
 
@@ -2225,6 +2452,10 @@ namespace WpfOpenControls.DockManager
             ToolListBox.DisplayMemberPath = "Title";
             ToolListBox.BarBrush = SideToolBarBrush;
             ToolListBox.BarBrushMouseOver = MouseOverSideToolBarBrush;
+            if (SideToolItemContainerStyle != null)
+            {
+                ToolListBox.ItemContainerStyle = SideToolItemContainerStyle;
+            }
             ToolListBox.ItemClick += ToolListBox_ItemClick;
             Children.Add(ToolListBox);
             Grid.SetRow(ToolListBox, row);

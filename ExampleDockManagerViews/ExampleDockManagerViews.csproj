@@ -4,20 +4,17 @@
   <PropertyGroup>
     <Configuration Condition=" '$(Configuration)' == '' ">Debug</Configuration>
     <Platform Condition=" '$(Platform)' == '' ">AnyCPU</Platform>
-    <ProjectGuid>{9843B6E4-5B93-46FA-96B8-05E423118E9F}</ProjectGuid>
-    <OutputType>WinExe</OutputType>
-    <RootNamespace>WpfDockManagerDemo</RootNamespace>
-    <AssemblyName>WpfDockManagerDemo</AssemblyName>
+    <ProjectGuid>{F83C1BA1-ABCC-40BE-A01F-B3055CEEC229}</ProjectGuid>
+    <OutputType>library</OutputType>
+    <RootNamespace>ExampleDockManagerViews</RootNamespace>
+    <AssemblyName>ExampleDockManagerViews</AssemblyName>
     <TargetFrameworkVersion>v4.7.2</TargetFrameworkVersion>
     <FileAlignment>512</FileAlignment>
     <ProjectTypeGuids>{60dc8134-eba5-43b8-bcc9-bb4bc16c2548};{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}</ProjectTypeGuids>
     <WarningLevel>4</WarningLevel>
-    <AutoGenerateBindingRedirects>true</AutoGenerateBindingRedirects>
     <Deterministic>true</Deterministic>
-    <TargetFrameworkProfile />
   </PropertyGroup>
   <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Debug|AnyCPU' ">
-    <PlatformTarget>AnyCPU</PlatformTarget>
     <DebugSymbols>true</DebugSymbols>
     <DebugType>full</DebugType>
     <Optimize>false</Optimize>
@@ -27,7 +24,6 @@
     <WarningLevel>4</WarningLevel>
   </PropertyGroup>
   <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Release|AnyCPU' ">
-    <PlatformTarget>AnyCPU</PlatformTarget>
     <DebugType>pdbonly</DebugType>
     <Optimize>true</Optimize>
     <OutputPath>bin\Release\</OutputPath>
@@ -38,8 +34,6 @@
   <ItemGroup>
     <Reference Include="System" />
     <Reference Include="System.Data" />
-    <Reference Include="System.Drawing" />
-    <Reference Include="System.Windows.Forms" />
     <Reference Include="System.Xml" />
     <Reference Include="Microsoft.CSharp" />
     <Reference Include="System.Core" />
@@ -54,23 +48,71 @@
     <Reference Include="PresentationFramework" />
   </ItemGroup>
   <ItemGroup>
-    <ApplicationDefinition Include="App.xaml">
-      <Generator>MSBuild:Compile</Generator>
-      <SubType>Designer</SubType>
-    </ApplicationDefinition>
-    <Compile Include="ViewModel\MainViewModel.cs" />
-    <Page Include="MainWindow.xaml">
+    <Compile Include="ViewModel\DocumentOneViewModel.cs" />
+    <Compile Include="ViewModel\DocumentThreeViewModel.cs" />
+    <Compile Include="ViewModel\DocumentTwoViewModel.cs" />
+    <Compile Include="ViewModel\DummyViewModel.cs" />
+    <Compile Include="ViewModel\ToolFiveViewModel.cs" />
+    <Compile Include="ViewModel\ToolFourViewModel.cs" />
+    <Compile Include="ViewModel\ToolOneViewModel.cs" />
+    <Compile Include="ViewModel\ToolThreeViewModel.cs" />
+    <Compile Include="ViewModel\ToolTwoViewModel.cs" />
+    <Compile Include="View\DocumentOneView.xaml.cs">
+      <DependentUpon>DocumentOneView.xaml</DependentUpon>
+    </Compile>
+    <Compile Include="View\DocumentThreeView.xaml.cs">
+      <DependentUpon>DocumentThreeView.xaml</DependentUpon>
+    </Compile>
+    <Compile Include="View\DocumentTwoView.xaml.cs">
+      <DependentUpon>DocumentTwoView.xaml</DependentUpon>
+    </Compile>
+    <Compile Include="View\ToolFiveView.xaml.cs">
+      <DependentUpon>ToolFiveView.xaml</DependentUpon>
+    </Compile>
+    <Compile Include="View\ToolFourView.xaml.cs">
+      <DependentUpon>ToolFourView.xaml</DependentUpon>
+    </Compile>
+    <Compile Include="View\ToolOneView.xaml.cs">
+      <DependentUpon>ToolOneView.xaml</DependentUpon>
+    </Compile>
+    <Compile Include="View\ToolThreeView.xaml.cs">
+      <DependentUpon>ToolThreeView.xaml</DependentUpon>
+    </Compile>
+    <Compile Include="View\ToolTwoView.xaml.cs">
+      <DependentUpon>ToolTwoView.xaml</DependentUpon>
+    </Compile>
+    <Page Include="View\DocumentOneView.xaml">
       <Generator>MSBuild:Compile</Generator>
       <SubType>Designer</SubType>
     </Page>
-    <Compile Include="App.xaml.cs">
-      <DependentUpon>App.xaml</DependentUpon>
-      <SubType>Code</SubType>
-    </Compile>
-    <Compile Include="MainWindow.xaml.cs">
-      <DependentUpon>MainWindow.xaml</DependentUpon>
-      <SubType>Code</SubType>
-    </Compile>
+    <Page Include="View\DocumentThreeView.xaml">
+      <Generator>MSBuild:Compile</Generator>
+      <SubType>Designer</SubType>
+    </Page>
+    <Page Include="View\DocumentTwoView.xaml">
+      <Generator>MSBuild:Compile</Generator>
+      <SubType>Designer</SubType>
+    </Page>
+    <Page Include="View\ToolFiveView.xaml">
+      <Generator>MSBuild:Compile</Generator>
+      <SubType>Designer</SubType>
+    </Page>
+    <Page Include="View\ToolFourView.xaml">
+      <Generator>MSBuild:Compile</Generator>
+      <SubType>Designer</SubType>
+    </Page>
+    <Page Include="View\ToolOneView.xaml">
+      <Generator>MSBuild:Compile</Generator>
+      <SubType>Designer</SubType>
+    </Page>
+    <Page Include="View\ToolThreeView.xaml">
+      <Generator>MSBuild:Compile</Generator>
+      <SubType>Designer</SubType>
+    </Page>
+    <Page Include="View\ToolTwoView.xaml">
+      <Generator>MSBuild:Compile</Generator>
+      <SubType>Designer</SubType>
+    </Page>
   </ItemGroup>
   <ItemGroup>
     <Compile Include="Properties\AssemblyInfo.cs">
@@ -96,18 +138,10 @@
     </None>
   </ItemGroup>
   <ItemGroup>
-    <None Include="App.config" />
-  </ItemGroup>
-  <ItemGroup>
-    <ProjectReference Include="..\ExampleDockManagerViews\ExampleDockManagerViews.csproj">
-      <Project>{f83c1ba1-abcc-40be-a01f-b3055ceec229}</Project>
-      <Name>ExampleDockManagerViews</Name>
-    </ProjectReference>
     <ProjectReference Include="..\WpfOpenControls\WpfOpenControls.csproj">
       <Project>{c4d43e50-84b0-47ff-888e-7c8351368bd6}</Project>
       <Name>WpfOpenControls</Name>
     </ProjectReference>
   </ItemGroup>
-  <ItemGroup />
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
 </Project>

@@ -7,6 +7,10 @@ Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "WpfDockManagerDemo", "WpfDo
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "WpfOpenControls", "WpfOpenControls\WpfOpenControls.csproj", "{C4D43E50-84B0-47FF-888E-7C8351368BD6}"
 EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "ExampleDockManagerViews", "ExampleDockManagerViews\ExampleDockManagerViews.csproj", "{F83C1BA1-ABCC-40BE-A01F-B3055CEEC229}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "WpfDockManagerDemo_2", "WpfDockManagerDemo_2\WpfDockManagerDemo_2.csproj", "{EC695FC3-A093-4F99-A13C-8885E529C5B7}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -21,6 +25,14 @@ Global
 		{C4D43E50-84B0-47FF-888E-7C8351368BD6}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{C4D43E50-84B0-47FF-888E-7C8351368BD6}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{C4D43E50-84B0-47FF-888E-7C8351368BD6}.Release|Any CPU.Build.0 = Release|Any CPU
+		{F83C1BA1-ABCC-40BE-A01F-B3055CEEC229}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{F83C1BA1-ABCC-40BE-A01F-B3055CEEC229}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{F83C1BA1-ABCC-40BE-A01F-B3055CEEC229}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{F83C1BA1-ABCC-40BE-A01F-B3055CEEC229}.Release|Any CPU.Build.0 = Release|Any CPU
+		{EC695FC3-A093-4F99-A13C-8885E529C5B7}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{EC695FC3-A093-4F99-A13C-8885E529C5B7}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{EC695FC3-A093-4F99-A13C-8885E529C5B7}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{EC695FC3-A093-4F99-A13C-8885E529C5B7}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE

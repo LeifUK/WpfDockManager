@@ -9,7 +9,7 @@ namespace WpfOpenControls.DockManager
         public DockPane(IViewContainer iViewContainer)
         {
             IViewContainer = iViewContainer;
-            IViewContainer.TabClosed += IDocumentContainer_TabClosed;
+            IViewContainer.TabClosed += IViewContainer_TabClosed;
             IViewContainer.FloatTabRequest += IViewContainer_FloatTabRequest;
             Children.Add(iViewContainer as System.Windows.UIElement);
         }
@@ -48,7 +48,7 @@ namespace WpfOpenControls.DockManager
             FloatTabRequest?.Invoke(this, e);
         }
 
-        private void IDocumentContainer_TabClosed(object sender, EventArgs e)
+        private void IViewContainer_TabClosed(object sender, EventArgs e)
         {
             if (IViewContainer.GetUserControlCount() == 0)
             {

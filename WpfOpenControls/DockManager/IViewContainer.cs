@@ -35,5 +35,6 @@ namespace WpfOpenControls.DockManager
         Brush UnselectedTabHeaderForeground { set; }
         Brush ActiveScrollIndicatorBrush { set; }
         Brush InactiveScrollIndicatorBrush { set; }
+        Style TabItemStyle { set; }
     }
 }

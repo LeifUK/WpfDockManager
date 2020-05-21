@@ -4,7 +4,6 @@ using System.Windows;
 using System.Windows.Controls;
 using System.ComponentModel;
 using System.Windows.Media;
-using System.Collections.Generic;
 
 namespace WpfOpenControls.Controls
 {

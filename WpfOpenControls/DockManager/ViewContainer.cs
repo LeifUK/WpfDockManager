@@ -231,6 +231,14 @@ namespace WpfOpenControls.DockManager
             }
         }
 
+        public Style TabItemStyle 
+        { 
+            set
+            {
+                _tabHeaderControl.ItemContainerStyle = value;
+            }
+        }
+
         public event EventHandler SelectionChanged;
         public event EventHandler TabClosed;
         public event EventHandler FloatTabRequest;

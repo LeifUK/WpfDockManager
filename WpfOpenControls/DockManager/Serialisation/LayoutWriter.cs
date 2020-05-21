@@ -276,9 +276,8 @@ namespace WpfOpenControls.DockManager.Serialisation
         public static void SaveLayout(
             XmlDocument xmlDocument, 
             Grid rootGrid, 
-            List<FloatingToolPaneGroup> 
-            floatingToolPaneGroups, 
-            List<FloatingDocumentPaneGroup> floatingDocumentPaneGroups,
+            List<IFloatingPane> floatingToolPaneGroups, 
+            List<IFloatingPane> floatingDocumentPaneGroups,
             Dictionary<WindowLocation, List<UnpinnedToolData>> dictUnpinnedToolData)
         {
             XmlElement xmlLayoutManager = xmlDocument.CreateElement("LayoutManager");

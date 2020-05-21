@@ -10,7 +10,7 @@ namespace WpfOpenControls.DockManager
     /// <summary>
     /// Interaction logic for FloatingWindow.xaml
     /// </summary>
-    internal partial class FloatingPane : Window
+    internal partial class FloatingPane : Window, IFloatingPane
     {
         internal FloatingPane(IViewContainer iViewContainer)
         {
@@ -145,6 +145,6 @@ namespace WpfOpenControls.DockManager
             }
         }
 
-        internal readonly IViewContainer IViewContainer;
+        public IViewContainer IViewContainer { get; private set; }
     }
 }
