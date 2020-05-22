@@ -158,6 +158,7 @@ namespace WpfOpenControls.DockManager
                 _tabHeaderControl.SelectedTabBorderBrush = value.BorderBrush;
                 _tabHeaderControl.SelectedTabBackground = value.Background;
                 _tabHeaderControl.SelectedTabForeground = value.Foreground;
+                _gap.Background = value.Background;
             }
         }
 

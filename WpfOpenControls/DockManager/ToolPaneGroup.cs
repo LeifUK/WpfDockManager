@@ -105,7 +105,7 @@ namespace WpfOpenControls.DockManager
             Grid.SetColumnSpan(IViewContainer as System.Windows.UIElement, ColumnDefinitions.Count - 2);
         }
 
-        protected Border HeaderBorder;
+        public Border HeaderBorder;
 
         protected Brush _headerBackground;
         public Brush HeaderBackground

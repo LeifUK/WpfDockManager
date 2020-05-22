@@ -75,11 +75,13 @@
                 
                 <dockManager:LayoutManager.ToolPaneGroupStyle>
                     <dockManager:ToolPaneGroupStyle>
-                        <dockManager:ToolPaneGroupStyle.TabCornerRadius>0,0,4,8</dockManager:ToolPaneGroupStyle.TabCornerRadius>
+                        <dockManager:ToolPaneGroupStyle.TabCornerRadius>0,0,4,4</dockManager:ToolPaneGroupStyle.TabCornerRadius>
                         <dockManager:ToolPaneGroupStyle.FontSize>12</dockManager:ToolPaneGroupStyle.FontSize>
                         <dockManager:ToolPaneGroupStyle.FontFamily>Arial</dockManager:ToolPaneGroupStyle.FontFamily>
                         <dockManager:ToolPaneGroupStyle.Background>#5d6b99</dockManager:ToolPaneGroupStyle.Background>
-                        <dockManager:ToolPaneGroupStyle.HeaderBackground>#3b4f81</dockManager:ToolPaneGroupStyle.HeaderBackground>
+                        <dockManager:ToolPaneGroupStyle.HeaderStyle>
+                            <dockManager:ToolHeaderStyle Background="#3b4f81" BorderBrush="Gainsboro" BorderThickness="0" CornerRadius="4,4,0,0"/>
+                        </dockManager:ToolPaneGroupStyle.HeaderStyle>
                         <dockManager:ToolPaneGroupStyle.ButtonForeground>White</dockManager:ToolPaneGroupStyle.ButtonForeground>
                         <dockManager:ToolPaneGroupStyle.ActiveScrollIndicatorBrush>White</dockManager:ToolPaneGroupStyle.ActiveScrollIndicatorBrush>
                         <dockManager:ToolPaneGroupStyle.InactiveScrollIndicatorBrush>Transparent</dockManager:ToolPaneGroupStyle.InactiveScrollIndicatorBrush>
@@ -96,18 +98,21 @@
 
                 <dockManager:LayoutManager.DocumentPaneGroupStyle>
                     <dockManager:DocumentPaneGroupStyle>
-                        <dockManager:DocumentPaneGroupStyle.TabCornerRadius>8,4,0,0</dockManager:DocumentPaneGroupStyle.TabCornerRadius>
+                        <dockManager:DocumentPaneGroupStyle.BorderBrush>LightSteelBlue</dockManager:DocumentPaneGroupStyle.BorderBrush>
+                        <dockManager:DocumentPaneGroupStyle.BorderThickness>0</dockManager:DocumentPaneGroupStyle.BorderThickness>
+                        <dockManager:DocumentPaneGroupStyle.CornerRadius>4,4,0,0</dockManager:DocumentPaneGroupStyle.CornerRadius>
                         <dockManager:DocumentPaneGroupStyle.FontSize>12</dockManager:DocumentPaneGroupStyle.FontSize>
                         <dockManager:DocumentPaneGroupStyle.FontFamily>Arial</dockManager:DocumentPaneGroupStyle.FontFamily>
                         <dockManager:DocumentPaneGroupStyle.Background>#5d6b99</dockManager:DocumentPaneGroupStyle.Background>
                         <dockManager:DocumentPaneGroupStyle.ButtonForeground>White</dockManager:DocumentPaneGroupStyle.ButtonForeground>
                         <dockManager:DocumentPaneGroupStyle.ActiveScrollIndicatorBrush>White</dockManager:DocumentPaneGroupStyle.ActiveScrollIndicatorBrush>
                         <dockManager:DocumentPaneGroupStyle.InactiveScrollIndicatorBrush>Transparent</dockManager:DocumentPaneGroupStyle.InactiveScrollIndicatorBrush>
+                        <dockManager:DocumentPaneGroupStyle.TabCornerRadius>4,4,0,0</dockManager:DocumentPaneGroupStyle.TabCornerRadius>
                         <dockManager:DocumentPaneGroupStyle.SelectedTabStyle>
                             <dockManager:TabStyle BorderBrush="Transparent" BorderThickness="0" Background="#f5cc84" Foreground="Black"/>
                         </dockManager:DocumentPaneGroupStyle.SelectedTabStyle>
                         <dockManager:DocumentPaneGroupStyle.UnselectedTabStyle>
-                            <dockManager:TabStyle BorderBrush="Transparent" BorderThickness="0" Background="#3b4f81" Foreground="White"/>
+                            <dockManager:TabStyle BorderBrush="White" BorderThickness="0" Background="#3b4f81" Foreground="White"/>
                         </dockManager:DocumentPaneGroupStyle.UnselectedTabStyle>
                     </dockManager:DocumentPaneGroupStyle>
                 </dockManager:LayoutManager.DocumentPaneGroupStyle>

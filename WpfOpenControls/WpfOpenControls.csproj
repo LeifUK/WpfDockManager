@@ -121,6 +121,7 @@
     <Compile Include="DockManager\SplitterPane.cs" />
     <Compile Include="DockManager\TabStyle.cs" />
     <Compile Include="DockManager\ToolContainer.cs" />
+    <Compile Include="DockManager\ToolHeaderStyle.cs" />
     <Compile Include="DockManager\ToolListBoxItem.cs" />
     <Compile Include="DockManager\ToolPaneGroup.cs" />
     <Compile Include="DockManager\ToolPaneGroupStyle.cs" />

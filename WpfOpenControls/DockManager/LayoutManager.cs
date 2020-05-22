@@ -455,7 +455,11 @@ namespace WpfOpenControls.DockManager
             toolPaneGroup.Border.BorderThickness = ToolPaneGroupStyle.BorderThickness;
             toolPaneGroup.Border.BorderBrush = ToolPaneGroupStyle.BorderBrush;
             toolPaneGroup.Border.CornerRadius = ToolPaneGroupStyle.CornerRadius;
-            toolPaneGroup.HeaderBackground = ToolPaneGroupStyle.HeaderBackground;
+            toolPaneGroup.HeaderBackground = ToolPaneGroupStyle.HeaderStyle.Background;
+            toolPaneGroup.HeaderBorder.BorderBrush = ToolPaneGroupStyle.HeaderStyle.BorderBrush;
+            toolPaneGroup.HeaderBorder.BorderThickness = ToolPaneGroupStyle.HeaderStyle.BorderThickness;
+            toolPaneGroup.HeaderBorder.Background = ToolPaneGroupStyle.HeaderStyle.Background;
+            toolPaneGroup.HeaderBorder.CornerRadius = ToolPaneGroupStyle.HeaderStyle.CornerRadius;
             toolPaneGroup.FontSize = ToolPaneGroupStyle.FontSize;
             toolPaneGroup.FontFamily = ToolPaneGroupStyle.FontFamily;
             toolPaneGroup.HighlightBrush = SelectedPaneBrush;
@@ -718,33 +722,9 @@ namespace WpfOpenControls.DockManager
 
         #region ToolPaneGroupStyle dependency property
 
-        private static ToolPaneGroupStyle DefaultToolPaneGroupStyle
-        {
-            get
-            {
-                // Warning warning => move to class constructor!
-                return new ToolPaneGroupStyle() 
-                {
-                    BorderThickness = new Thickness(0),
-                    BorderBrush = Brushes.Black,
-                    CornerRadius = new CornerRadius(0),
-                    FontSize = 12,
-                    FontFamily = new FontFamily("Arial"),
-                    Background = Brushes.LightSteelBlue, 
-                    ButtonForeground = Brushes.White, 
-                    HeaderBackground = Brushes.SteelBlue, 
-                    ActiveScrollIndicatorBrush = Brushes.White,
-                    InactiveScrollIndicatorBrush = Brushes.Transparent,
-                    TabCornerRadius = new CornerRadius(0),
-                    SelectedTabStyle = new TabStyle() { Foreground = Brushes.Black, Background = Brushes.AliceBlue, BorderThickness = new Thickness(0), BorderBrush = Brushes.Gray},
-                    UnselectedTabStyle = new TabStyle() { Foreground = Brushes.White, Background = Brushes.Navy, BorderThickness = new Thickness(0), BorderBrush = Brushes.Gray }
-                };
-            }
-        }
-
         [Bindable(true)]
         [DesignerSerializationVisibility(DesignerSerializationVisibility.Hidden)]
-        public static readonly DependencyProperty ToolPaneGroupStyleProperty = DependencyProperty.Register("ToolPaneGroupStyle", typeof(ToolPaneGroupStyle), typeof(TabHeaderControl), new FrameworkPropertyMetadata(DefaultToolPaneGroupStyle, new PropertyChangedCallback(OnToolPaneGroupStyleChanged)));
+        public static readonly DependencyProperty ToolPaneGroupStyleProperty = DependencyProperty.Register("ToolPaneGroupStyle", typeof(ToolPaneGroupStyle), typeof(TabHeaderControl), new FrameworkPropertyMetadata(new ToolPaneGroupStyle(), new PropertyChangedCallback(OnToolPaneGroupStyleChanged)));
 
         public ToolPaneGroupStyle ToolPaneGroupStyle
         {
@@ -758,11 +738,11 @@ namespace WpfOpenControls.DockManager
                 {
                     if (value.SelectedTabStyle == null)
                     {
-                        value.SelectedTabStyle = DefaultToolPaneGroupStyle.SelectedTabStyle;
+                        value.SelectedTabStyle = (new ToolPaneGroupStyle()).SelectedTabStyle;
                     }
                     if (value.UnselectedTabStyle == null)
                     {
-                        value.UnselectedTabStyle = DefaultToolPaneGroupStyle.UnselectedTabStyle;
+                        value.UnselectedTabStyle = (new ToolPaneGroupStyle()).UnselectedTabStyle;
                     }
                     SetValue(ToolPaneGroupStyleProperty, value);
                     UpdateProperties();
@@ -861,31 +841,9 @@ namespace WpfOpenControls.DockManager
 
         #region DocumentPaneGroupStyle dependency property
 
-        private static DocumentPaneGroupStyle DefaultDocumentPaneGroupStyle
-        {
-            get
-            {
-                return new DocumentPaneGroupStyle()
-                {
-                    BorderThickness = new Thickness(0),
-                    BorderBrush = Brushes.Black,
-                    CornerRadius = new CornerRadius(0),
-                    FontSize = 12,
-                    FontFamily = new FontFamily("Arial"),
-                    ButtonForeground = Brushes.White,
-                    Background = Brushes.SteelBlue,
-                    ActiveScrollIndicatorBrush = Brushes.White,
-                    InactiveScrollIndicatorBrush = Brushes.Transparent,
-                    TabCornerRadius = new CornerRadius(0),
-                    SelectedTabStyle = new TabStyle() { Foreground = Brushes.Black, Background = Brushes.AliceBlue, BorderThickness = new Thickness(0), BorderBrush = Brushes.Gray },
-                    UnselectedTabStyle = new TabStyle() { Foreground = Brushes.White, Background = Brushes.Navy, BorderThickness = new Thickness(0), BorderBrush = Brushes.Gray }
-                };
-            }
-        }
-
         [Bindable(true)]
         [DesignerSerializationVisibility(DesignerSerializationVisibility.Hidden)]
-        public static readonly DependencyProperty DocumentPaneGroupStyleProperty = DependencyProperty.Register("DocumentPaneGroupStyle", typeof(DocumentPaneGroupStyle), typeof(TabHeaderControl), new FrameworkPropertyMetadata(DefaultDocumentPaneGroupStyle, new PropertyChangedCallback(OnDocumentPaneGroupStyleChanged)));
+        public static readonly DependencyProperty DocumentPaneGroupStyleProperty = DependencyProperty.Register("DocumentPaneGroupStyle", typeof(DocumentPaneGroupStyle), typeof(TabHeaderControl), new FrameworkPropertyMetadata(new DocumentPaneGroupStyle(), new PropertyChangedCallback(OnDocumentPaneGroupStyleChanged)));
 
         public DocumentPaneGroupStyle DocumentPaneGroupStyle
         {
@@ -899,11 +857,11 @@ namespace WpfOpenControls.DockManager
                 {
                     if (value.SelectedTabStyle == null)
                     {
-                        value.SelectedTabStyle = DefaultDocumentPaneGroupStyle.SelectedTabStyle;
+                        value.SelectedTabStyle = (new DocumentPaneGroupStyle()).SelectedTabStyle;
                     }
                     if (value.UnselectedTabStyle == null)
                     {
-                        value.UnselectedTabStyle = DefaultDocumentPaneGroupStyle.UnselectedTabStyle;
+                        value.UnselectedTabStyle = (new DocumentPaneGroupStyle()).UnselectedTabStyle;
                     }
                     SetValue(DocumentPaneGroupStyleProperty, value);
                     UpdateProperties();

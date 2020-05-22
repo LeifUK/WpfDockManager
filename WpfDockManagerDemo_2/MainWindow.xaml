@@ -124,7 +124,9 @@
                         <dockManager:ToolPaneGroupStyle.FontSize>12</dockManager:ToolPaneGroupStyle.FontSize>
                         <dockManager:ToolPaneGroupStyle.FontFamily>Arial</dockManager:ToolPaneGroupStyle.FontFamily>
                         <dockManager:ToolPaneGroupStyle.Background>#5d6b99</dockManager:ToolPaneGroupStyle.Background>
-                        <dockManager:ToolPaneGroupStyle.HeaderBackground>#3b4f81</dockManager:ToolPaneGroupStyle.HeaderBackground>
+                        <dockManager:ToolPaneGroupStyle.HeaderStyle>
+                            <dockManager:ToolHeaderStyle Background="#3b4f81" BorderBrush="Gainsboro" BorderThickness="0" CornerRadius="4,4,0,0"/>
+                        </dockManager:ToolPaneGroupStyle.HeaderStyle>
                         <dockManager:ToolPaneGroupStyle.ButtonForeground>White</dockManager:ToolPaneGroupStyle.ButtonForeground>
                         <dockManager:ToolPaneGroupStyle.ActiveScrollIndicatorBrush>White</dockManager:ToolPaneGroupStyle.ActiveScrollIndicatorBrush>
                         <dockManager:ToolPaneGroupStyle.InactiveScrollIndicatorBrush>Transparent</dockManager:ToolPaneGroupStyle.InactiveScrollIndicatorBrush>
