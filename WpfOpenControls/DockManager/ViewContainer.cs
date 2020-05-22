@@ -150,68 +150,25 @@ namespace WpfOpenControls.DockManager
 
         public abstract Brush ButtonForeground { set; }
 
-        public Thickness SelectedTabBorderThickness
+        public TabStyle SelectedTabStyle
         {
             set
             {
-                _tabHeaderControl.SelectedTabBorderThickness = value;
+                _tabHeaderControl.SelectedTabBorderThickness = value.BorderThickness;
+                _tabHeaderControl.SelectedTabBorderBrush = value.BorderBrush;
+                _tabHeaderControl.SelectedTabBackground = value.Background;
+                _tabHeaderControl.SelectedTabForeground = value.Foreground;
             }
         }
 
-        public Brush SelectedTabBorderBrush
+        public TabStyle UnselectedTabStyle
         {
             set
             {
-                _tabHeaderControl.SelectedTabBorderBrush = value;
-            }
-        }
-
-        public Thickness UnselectedTabBorderThickness
-        {
-            set
-            {
-                _tabHeaderControl.UnselectedTabBorderThickness = value;
-            }
-        }
-
-        public Brush UnselectedTabBorderBrush
-        {
-            set
-            {
-                _tabHeaderControl.UnselectedTabBorderBrush = value;
-            }
-        }
-
-        public Brush SelectedTabHeaderBackground
-        {
-            set
-            {
-                _tabHeaderControl.SelectedTabBackground = value;
-                _gap.Background = value;
-            }
-        }
-
-        public Brush UnselectedTabHeaderBackground
-        {
-            set
-            {
-                _tabHeaderControl.UnselectedTabBackground = value;
-            }
-        }
-
-        public Brush SelectedTabHeaderForeground
-        {
-            set
-            {
-                _tabHeaderControl.SelectedTabForeground = value;
-            }
-        }
-
-        public Brush UnselectedTabHeaderForeground
-        {
-            set
-            {
-                _tabHeaderControl.UnselectedTabForeground = value;
+                _tabHeaderControl.UnselectedTabBorderThickness = value.BorderThickness;
+                _tabHeaderControl.UnselectedTabBorderBrush = value.BorderBrush;
+                _tabHeaderControl.UnselectedTabBackground = value.Background;
+                _tabHeaderControl.UnselectedTabForeground = value.Foreground;
             }
         }
 

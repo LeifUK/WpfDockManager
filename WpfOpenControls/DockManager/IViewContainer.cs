@@ -25,14 +25,8 @@ namespace WpfOpenControls.DockManager
         CornerRadius TabCornerRadius { set; }
         Brush Background { set; }
         Brush ButtonForeground { set; }
-        Thickness SelectedTabBorderThickness { set; }
-        Brush SelectedTabBorderBrush { set; }
-        Thickness UnselectedTabBorderThickness { set; }
-        Brush UnselectedTabBorderBrush { set; }
-        Brush SelectedTabHeaderBackground { set; }
-        Brush UnselectedTabHeaderBackground { set; }
-        Brush SelectedTabHeaderForeground { set; }
-        Brush UnselectedTabHeaderForeground { set; }
+        TabStyle SelectedTabStyle { set; }
+        TabStyle UnselectedTabStyle { set; }
         Brush ActiveScrollIndicatorBrush { set; }
         Brush InactiveScrollIndicatorBrush { set; }
         Style TabItemStyle { set; }

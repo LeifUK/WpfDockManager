@@ -8,7 +8,6 @@ using System.Xml;
 using System.Windows.Input;
 using System.Windows.Media;
 using WpfOpenControls.Controls;
-//using System.Drawing;
 
 namespace WpfOpenControls.DockManager
 {
@@ -214,98 +213,6 @@ namespace WpfOpenControls.DockManager
 
         #region dependency properties 
 
-        //#region SelectedToolTabStyle dependency property
-
-        //private static TabStyle DefaultSelectedToolTabStyle
-        //{
-        //    get
-        //    {
-        //        return new TabStyle() { Foreground = Brushes.Black, Background = Brushes.AliceBlue, BorderThickness = new Thickness(0), BorderBrush = Brushes.Gray};
-        //    }
-        //}
-
-        //[Bindable(true)]
-        //[DesignerSerializationVisibility(DesignerSerializationVisibility.Hidden)]
-        //public static readonly DependencyProperty SelectedToolTabStyleProperty = DependencyProperty.Register("SelectedToolTabStyle", typeof(TabStyle), typeof(TabHeaderControl), new FrameworkPropertyMetadata(DefaultSelectedToolTabStyle, new PropertyChangedCallback(OnSelectedToolTabStyleChanged)));
-
-        //public TabStyle SelectedToolTabStyle
-        //{
-        //    get
-        //    {
-        //        return GetValue(SelectedToolTabStyleProperty) as TabStyle;
-        //    }
-        //    set
-        //    {
-        //        if (value != SelectedToolTabStyle)
-        //        {
-        //            SetValue(SelectedToolTabStyleProperty, value);
-        //            // Warning warning
-        //            UpdateProperties();
-        //        }
-        //    }
-        //}
-
-        //private static void OnSelectedToolTabStyleChanged(DependencyObject d, DependencyPropertyChangedEventArgs e)
-        //{
-        //    ((LayoutManager)d).OnSelectedToolTabStyleChanged(e);
-        //}
-
-        //protected virtual void OnSelectedToolTabStyleChanged(DependencyPropertyChangedEventArgs e)
-        //{
-        //    if ((TabStyle)e.NewValue != SelectedToolTabStyle)
-        //    {
-        //        UpdateProperties();
-        //    }
-        //}
-
-        //#endregion
-
-        //#region UnselectedToolTabStyle dependency property
-
-        //private static TabStyle DefaultUnselectedToolTabStyle
-        //{
-        //    get
-        //    {
-        //        return new TabStyle() { Foreground = Brushes.White, Background = Brushes.Navy, BorderThickness = new Thickness(0), BorderBrush = Brushes.Gray };
-        //    }
-        //}
-
-        //[Bindable(true)]
-        //[DesignerSerializationVisibility(DesignerSerializationVisibility.Hidden)]
-        //public static readonly DependencyProperty UnselectedToolTabStyleProperty = DependencyProperty.Register("UnselectedToolTabStyle", typeof(TabStyle), typeof(TabHeaderControl), new FrameworkPropertyMetadata(DefaultUnselectedToolTabStyle, new PropertyChangedCallback(OnUnselectedToolTabStyleChanged)));
-
-        //public TabStyle UnselectedToolTabStyle
-        //{
-        //    get
-        //    {
-        //        return GetValue(UnselectedToolTabStyleProperty) as TabStyle;
-        //    }
-        //    set
-        //    {
-        //        if (value != SelectedToolTabStyle)
-        //        {
-        //            SetValue(UnselectedToolTabStyleProperty, value);
-        //            // Warning warning
-        //            UpdateProperties();
-        //        }
-        //    }
-        //}
-
-        //private static void OnUnselectedToolTabStyleChanged(DependencyObject d, DependencyPropertyChangedEventArgs e)
-        //{
-        //    ((LayoutManager)d).OnUnselectedToolTabStyleChanged(e);
-        //}
-
-        //protected virtual void OnUnselectedToolTabStyleChanged(DependencyPropertyChangedEventArgs e)
-        //{
-        //    if ((TabStyle)e.NewValue != UnselectedToolTabStyle)
-        //    {
-        //        UpdateProperties();
-        //    }
-        //}
-
-        //#endregion
-
         #region DocumentsSource dependency property
 
         [Bindable(true)]
@@ -509,18 +416,11 @@ namespace WpfOpenControls.DockManager
         private void UpdateDocumentProperties(IViewContainer iViewContainer)
         {
             iViewContainer.FontSize = DocumentPaneGroupStyle.FontSize;
-            // Warning warning
             iViewContainer.FontFamily = DocumentPaneGroupStyle.FontFamily;
             iViewContainer.TabCornerRadius = DocumentPaneGroupStyle.TabCornerRadius;
             iViewContainer.ButtonForeground = DocumentPaneGroupStyle.ButtonForeground;
-            iViewContainer.SelectedTabBorderThickness = DocumentPaneGroupStyle.SelectedTabStyle.BorderThickness;
-            iViewContainer.SelectedTabBorderBrush = DocumentPaneGroupStyle.SelectedTabStyle.BorderBrush;
-            iViewContainer.UnselectedTabBorderThickness = DocumentPaneGroupStyle.UnselectedTabStyle.BorderThickness;
-            iViewContainer.UnselectedTabBorderBrush = DocumentPaneGroupStyle.UnselectedTabStyle.BorderBrush;
-            iViewContainer.SelectedTabHeaderBackground = DocumentPaneGroupStyle.SelectedTabStyle.Background;
-            iViewContainer.UnselectedTabHeaderBackground = DocumentPaneGroupStyle.UnselectedTabStyle.Background;
-            iViewContainer.SelectedTabHeaderForeground = DocumentPaneGroupStyle.SelectedTabStyle.Foreground;
-            iViewContainer.UnselectedTabHeaderForeground = DocumentPaneGroupStyle.UnselectedTabStyle.Foreground;
+            iViewContainer.SelectedTabStyle = DocumentPaneGroupStyle.SelectedTabStyle;
+            iViewContainer.UnselectedTabStyle = DocumentPaneGroupStyle.UnselectedTabStyle;
             iViewContainer.ActiveScrollIndicatorBrush = DocumentPaneGroupStyle.ActiveScrollIndicatorBrush;
             iViewContainer.InactiveScrollIndicatorBrush = DocumentPaneGroupStyle.InactiveScrollIndicatorBrush;
             iViewContainer.TabItemStyle = DocumentTabItemStyle;
@@ -528,7 +428,7 @@ namespace WpfOpenControls.DockManager
 
         private void UpdateProperties(DocumentPaneGroup documentPaneGroup)
         {
-            documentPaneGroup.HeaderBackground = DocumentPaneGroupStyle.HeaderBackground;
+            documentPaneGroup.Background = DocumentPaneGroupStyle.Background;
             documentPaneGroup.HighlightBrush = SelectedPaneBrush;
             UpdateDocumentProperties(documentPaneGroup.IViewContainer);
         }
@@ -540,15 +440,8 @@ namespace WpfOpenControls.DockManager
             iViewContainer.TabCornerRadius = ToolPaneGroupStyle.TabCornerRadius;
             iViewContainer.ButtonForeground = ToolPaneGroupStyle.ButtonForeground;
             iViewContainer.Background = ToolPaneGroupStyle.Background;
-            // Warning warnig => unset?
-            iViewContainer.SelectedTabBorderThickness = ToolPaneGroupStyle.SelectedTabStyle.BorderThickness;
-            iViewContainer.SelectedTabBorderBrush = ToolPaneGroupStyle.SelectedTabStyle.BorderBrush;
-            iViewContainer.SelectedTabHeaderBackground = ToolPaneGroupStyle.SelectedTabStyle.Background;
-            iViewContainer.SelectedTabHeaderForeground = ToolPaneGroupStyle.SelectedTabStyle.Foreground;
-            iViewContainer.UnselectedTabBorderThickness = ToolPaneGroupStyle.UnselectedTabStyle.BorderThickness;
-            iViewContainer.UnselectedTabBorderBrush = ToolPaneGroupStyle.UnselectedTabStyle.BorderBrush;
-            iViewContainer.UnselectedTabHeaderBackground = ToolPaneGroupStyle.UnselectedTabStyle.Background;
-            iViewContainer.UnselectedTabHeaderForeground = ToolPaneGroupStyle.UnselectedTabStyle.Foreground;
+            iViewContainer.SelectedTabStyle = ToolPaneGroupStyle.SelectedTabStyle;
+            iViewContainer.UnselectedTabStyle = ToolPaneGroupStyle.UnselectedTabStyle;
             iViewContainer.ActiveScrollIndicatorBrush = ToolPaneGroupStyle.ActiveScrollIndicatorBrush;
             iViewContainer.InactiveScrollIndicatorBrush = ToolPaneGroupStyle.InactiveScrollIndicatorBrush;
             iViewContainer.TabItemStyle = ToolTabItemStyle;
@@ -566,9 +459,9 @@ namespace WpfOpenControls.DockManager
 
         private void UpdateProperties(FloatingToolPaneGroup floatingToolPaneGroup)
         {
-            floatingToolPaneGroup.FontSize = DocumentPaneGroupStyle.FontSize;
-            floatingToolPaneGroup.FontFamily = DocumentPaneGroupStyle.FontFamily;
-            floatingToolPaneGroup.Background = DocumentPaneGroupStyle.HeaderBackground;
+            floatingToolPaneGroup.FontSize = ToolPaneGroupStyle.FontSize;
+            floatingToolPaneGroup.FontFamily = ToolPaneGroupStyle.FontFamily;
+            floatingToolPaneGroup.Background = ToolPaneGroupStyle.Background;
             floatingToolPaneGroup.HeaderBackground = FloatingDocumentTitleBarBackground;
             UpdateToolProperties(floatingToolPaneGroup.IViewContainer);
         }
@@ -577,7 +470,7 @@ namespace WpfOpenControls.DockManager
         {
             floatingDocumentPaneGroup.FontSize = DocumentPaneGroupStyle.FontSize;
             floatingDocumentPaneGroup.FontFamily = DocumentPaneGroupStyle.FontFamily;
-            floatingDocumentPaneGroup.Background = DocumentPaneGroupStyle.HeaderBackground;
+            floatingDocumentPaneGroup.Background = DocumentPaneGroupStyle.Background;
             floatingDocumentPaneGroup.HeaderBackground = FloatingDocumentTitleBarBackground;
             UpdateDocumentProperties(floatingDocumentPaneGroup.IViewContainer);
         }
@@ -853,6 +746,14 @@ namespace WpfOpenControls.DockManager
             {
                 if (value != ToolPaneGroupStyle)
                 {
+                    if (value.SelectedTabStyle == null)
+                    {
+                        value.SelectedTabStyle = DefaultToolPaneGroupStyle.SelectedTabStyle;
+                    }
+                    if (value.UnselectedTabStyle == null)
+                    {
+                        value.UnselectedTabStyle = DefaultToolPaneGroupStyle.UnselectedTabStyle;
+                    }
                     SetValue(ToolPaneGroupStyleProperty, value);
                     UpdateProperties();
                 }
@@ -958,10 +859,8 @@ namespace WpfOpenControls.DockManager
                 {
                     FontSize = 12,
                     FontFamily = new FontFamily("Arial"),
-                    // Warning warning
-                    //Background = Brushes.LightSteelBlue,
                     ButtonForeground = Brushes.White,
-                    HeaderBackground = Brushes.SteelBlue,
+                    Background = Brushes.SteelBlue,
                     ActiveScrollIndicatorBrush = Brushes.White,
                     InactiveScrollIndicatorBrush = Brushes.Transparent,
                     TabCornerRadius = new CornerRadius(0),
@@ -985,6 +884,14 @@ namespace WpfOpenControls.DockManager
             {
                 if (value != DocumentPaneGroupStyle)
                 {
+                    if (value.SelectedTabStyle == null)
+                    {
+                        value.SelectedTabStyle = DefaultDocumentPaneGroupStyle.SelectedTabStyle;
+                    }
+                    if (value.UnselectedTabStyle == null)
+                    {
+                        value.UnselectedTabStyle = DefaultDocumentPaneGroupStyle.UnselectedTabStyle;
+                    }
                     SetValue(DocumentPaneGroupStyleProperty, value);
                     UpdateProperties();
                 }

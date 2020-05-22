@@ -80,13 +80,6 @@
                 <dockManager:LayoutManager.SideToolStyle>
                     <dockManager:SideToolStyle FontSize="12" FontFamily="Arial" Foreground="White" BarBrush="#3b4f81" MouseOverBarBrush="AliceBlue"/>
                 </dockManager:LayoutManager.SideToolStyle>
-
-                <!--<dockManager:LayoutManager.SelectedToolTabStyle>
-                    <dockManager:TabStyle BorderBrush="Transparent" BorderThickness="0" Background="AliceBlue" Foreground="Black"/>
-                </dockManager:LayoutManager.SelectedToolTabStyle>
-                <dockManager:LayoutManager.UnselectedToolTabStyle>
-                    <dockManager:TabStyle BorderBrush="Transparent" BorderThickness="0" Background="#3b4f81" Foreground="White"/>
-                </dockManager:LayoutManager.UnselectedToolTabStyle>-->
                 
                 <dockManager:LayoutManager.ToolPaneGroupStyle>
                     <dockManager:ToolPaneGroupStyle>
@@ -114,7 +107,7 @@
                         <dockManager:DocumentPaneGroupStyle.TabCornerRadius>8,4,0,0</dockManager:DocumentPaneGroupStyle.TabCornerRadius>
                         <dockManager:DocumentPaneGroupStyle.FontSize>12</dockManager:DocumentPaneGroupStyle.FontSize>
                         <dockManager:DocumentPaneGroupStyle.FontFamily>Arial</dockManager:DocumentPaneGroupStyle.FontFamily>
-                        <dockManager:DocumentPaneGroupStyle.HeaderBackground>#5d6b99</dockManager:DocumentPaneGroupStyle.HeaderBackground>
+                        <dockManager:DocumentPaneGroupStyle.Background>#5d6b99</dockManager:DocumentPaneGroupStyle.Background>
                         <dockManager:DocumentPaneGroupStyle.ButtonForeground>White</dockManager:DocumentPaneGroupStyle.ButtonForeground>
                         <dockManager:DocumentPaneGroupStyle.ActiveScrollIndicatorBrush>White</dockManager:DocumentPaneGroupStyle.ActiveScrollIndicatorBrush>
                         <dockManager:DocumentPaneGroupStyle.InactiveScrollIndicatorBrush>Transparent</dockManager:DocumentPaneGroupStyle.InactiveScrollIndicatorBrush>

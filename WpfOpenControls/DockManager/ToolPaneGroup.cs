@@ -93,6 +93,38 @@ namespace WpfOpenControls.DockManager
             Grid.SetColumnSpan(IViewContainer as System.Windows.UIElement, ColumnDefinitions.Count);
         }
 
+        protected Border HeaderBorder;
+
+        protected Brush _headerBackground;
+        public Brush HeaderBackground
+        {
+            set
+            {
+                _headerBackground = value;
+                if (HeaderBorder != null)
+                {
+                    HeaderBorder.Background = value;
+                }
+            }
+        }
+
+        private bool _isHighlighted;
+        public override bool IsHighlighted
+        {
+            get
+            {
+                return _isHighlighted;
+            }
+            set
+            {
+                _isHighlighted = value;
+                if (HeaderBorder != null)
+                {
+                    HeaderBorder.Background = IsHighlighted ? HighlightBrush : _headerBackground;
+                }
+            }
+        }
+
         public Brush ButtonForeground
         {
             set
@@ -183,5 +215,4 @@ namespace WpfOpenControls.DockManager
             }
         }
     }
-
 }

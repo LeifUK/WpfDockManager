@@ -14,35 +14,6 @@ namespace WpfOpenControls.DockManager
             Children.Add(iViewContainer as System.Windows.UIElement);
         }
 
-        protected Border HeaderBorder;
-
-        protected Brush _headerBackground;
-        public Brush HeaderBackground
-        {
-            set
-            {
-                _headerBackground = value;
-                if (HeaderBorder != null)
-                {
-                    HeaderBorder.Background = value;
-                }
-            }
-        }
-
-        private bool _isHighlighted;
-        public override bool IsHighlighted
-        {
-            get
-            {
-                return _isHighlighted;
-            }
-            set
-            {
-                _isHighlighted = value;
-                HeaderBorder.Background = IsHighlighted ? HighlightBrush : _headerBackground;
-            }
-        }
-
         private void IViewContainer_FloatTabRequest(object sender, EventArgs e)
         {
             FloatTabRequest?.Invoke(this, e);

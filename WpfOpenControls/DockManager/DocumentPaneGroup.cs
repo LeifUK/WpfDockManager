@@ -1,7 +1,7 @@
 ﻿using System;
 using System.Windows;
 using System.Windows.Controls;
-using System.Windows.Input;
+using System.Windows.Media;
 
 namespace WpfOpenControls.DockManager
 {
@@ -37,22 +37,32 @@ namespace WpfOpenControls.DockManager
             RowDefinitions.Add(new RowDefinition());
             RowDefinitions[0].Height = new GridLength(1, GridUnitType.Star);
 
-            HeaderBorder = new Border();
-            HeaderBorder.VerticalAlignment = VerticalAlignment.Stretch;
-            HeaderBorder.HorizontalAlignment = HorizontalAlignment.Stretch;
-            HeaderBorder.BorderThickness = new Thickness(0);
-            Grid.SetRow(HeaderBorder, 0);
-            Grid.SetColumn(HeaderBorder, 0);
-            Grid.SetColumnSpan(HeaderBorder, 5);
-            Grid.SetZIndex(HeaderBorder, -1);
-            Children.Add(HeaderBorder);
-
             IViewContainer.SelectionChanged += DocumentContainer_SelectionChanged;
             Grid.SetRow(IViewContainer as System.Windows.UIElement, 0);
             Grid.SetColumn(IViewContainer as System.Windows.UIElement, 0);
             Grid.SetColumnSpan(IViewContainer as System.Windows.UIElement, ColumnDefinitions.Count);
 
             IsHighlighted = false;
+        }
+
+        private Brush _background;
+
+        private bool _isHighlighted;
+        public override bool IsHighlighted
+        {
+            get
+            {
+                return _isHighlighted;
+            }
+            set
+            {
+                if (value && !IsHighlighted)
+                {
+                    _background = Background;
+                }
+                _isHighlighted = value;
+                base.Background = IsHighlighted ? HighlightBrush : _background;
+            }
         }
 
         private void DocumentContainer_SelectionChanged(object sender, EventArgs e)
