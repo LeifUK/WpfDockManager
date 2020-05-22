@@ -428,6 +428,9 @@ namespace WpfOpenControls.DockManager
 
         private void UpdateProperties(DocumentPaneGroup documentPaneGroup)
         {
+            documentPaneGroup.Border.BorderThickness = DocumentPaneGroupStyle.BorderThickness;
+            documentPaneGroup.Border.BorderBrush = DocumentPaneGroupStyle.BorderBrush;
+            documentPaneGroup.Border.CornerRadius = DocumentPaneGroupStyle.CornerRadius;
             documentPaneGroup.Background = DocumentPaneGroupStyle.Background;
             documentPaneGroup.HighlightBrush = SelectedPaneBrush;
             UpdateDocumentProperties(documentPaneGroup.IViewContainer);
@@ -449,6 +452,9 @@ namespace WpfOpenControls.DockManager
 
         private void UpdateProperties(ToolPaneGroup toolPaneGroup)
         {
+            toolPaneGroup.Border.BorderThickness = ToolPaneGroupStyle.BorderThickness;
+            toolPaneGroup.Border.BorderBrush = ToolPaneGroupStyle.BorderBrush;
+            toolPaneGroup.Border.CornerRadius = ToolPaneGroupStyle.CornerRadius;
             toolPaneGroup.HeaderBackground = ToolPaneGroupStyle.HeaderBackground;
             toolPaneGroup.FontSize = ToolPaneGroupStyle.FontSize;
             toolPaneGroup.FontFamily = ToolPaneGroupStyle.FontFamily;
@@ -462,7 +468,7 @@ namespace WpfOpenControls.DockManager
             floatingToolPaneGroup.FontSize = ToolPaneGroupStyle.FontSize;
             floatingToolPaneGroup.FontFamily = ToolPaneGroupStyle.FontFamily;
             floatingToolPaneGroup.Background = ToolPaneGroupStyle.Background;
-            floatingToolPaneGroup.HeaderBackground = FloatingDocumentTitleBarBackground;
+            floatingToolPaneGroup.TitleBarBackground = FloatingDocumentTitleBarBackground;
             UpdateToolProperties(floatingToolPaneGroup.IViewContainer);
         }
 
@@ -471,7 +477,7 @@ namespace WpfOpenControls.DockManager
             floatingDocumentPaneGroup.FontSize = DocumentPaneGroupStyle.FontSize;
             floatingDocumentPaneGroup.FontFamily = DocumentPaneGroupStyle.FontFamily;
             floatingDocumentPaneGroup.Background = DocumentPaneGroupStyle.Background;
-            floatingDocumentPaneGroup.HeaderBackground = FloatingDocumentTitleBarBackground;
+            floatingDocumentPaneGroup.TitleBarBackground = FloatingDocumentTitleBarBackground;
             UpdateDocumentProperties(floatingDocumentPaneGroup.IViewContainer);
         }
 
@@ -716,8 +722,12 @@ namespace WpfOpenControls.DockManager
         {
             get
             {
+                // Warning warning => move to class constructor!
                 return new ToolPaneGroupStyle() 
                 {
+                    BorderThickness = new Thickness(0),
+                    BorderBrush = Brushes.Black,
+                    CornerRadius = new CornerRadius(0),
                     FontSize = 12,
                     FontFamily = new FontFamily("Arial"),
                     Background = Brushes.LightSteelBlue, 
@@ -857,6 +867,9 @@ namespace WpfOpenControls.DockManager
             {
                 return new DocumentPaneGroupStyle()
                 {
+                    BorderThickness = new Thickness(0),
+                    BorderBrush = Brushes.Black,
+                    CornerRadius = new CornerRadius(0),
                     FontSize = 12,
                     FontFamily = new FontFamily("Arial"),
                     ButtonForeground = Brushes.White,

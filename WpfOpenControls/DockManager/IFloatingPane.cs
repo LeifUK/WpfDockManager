@@ -9,6 +9,6 @@ namespace WpfOpenControls.DockManager
         double FontSize { set; }
         FontFamily FontFamily { set; }
         Brush Background { set; }
-        Brush HeaderBackground { set; }
+        Brush TitleBarBackground { set; }
     }
 }

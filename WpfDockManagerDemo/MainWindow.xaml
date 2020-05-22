@@ -29,18 +29,10 @@
                 <Setter Property="Width" Value="4"/>
             </Style>
             <ResourceDictionary.MergedDictionaries>
-                <!--<ResourceDictionary Source="./DockManager/Dictionary.xaml"/>-->
                 <ResourceDictionary Source="pack://application:,,,/WpfOpenControls;component/DockManager/Dictionary.xaml"/>
             </ResourceDictionary.MergedDictionaries>
         </ResourceDictionary>
     </Window.Resources>
-    <!--Title bar button commands-->
-    <!--<Window.CommandBindings>
-        <CommandBinding Command="{x:Static SystemCommands.CloseWindowCommand}" CanExecute="CommandBinding_CanExecute" Executed="CommandBinding_Executed_Close" />
-        <CommandBinding Command="{x:Static SystemCommands.MaximizeWindowCommand}" CanExecute="CommandBinding_CanExecute" Executed="CommandBinding_Executed_Maximize" />
-        <CommandBinding Command="{x:Static SystemCommands.MinimizeWindowCommand}" CanExecute="CommandBinding_CanExecute" Executed="CommandBinding_Executed_Minimize" />
-        <CommandBinding Command="{x:Static SystemCommands.RestoreWindowCommand}" CanExecute="CommandBinding_CanExecute" Executed="CommandBinding_Executed_Restore" />
-    </Window.CommandBindings>-->
 
     <Border x:Name="MainWindowBorder" BorderBrush="LightCoral" BorderThickness="0">
         <Grid x:Name="parentContainer" Background="#ccd5f0">

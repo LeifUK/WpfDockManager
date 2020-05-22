@@ -28,7 +28,7 @@ namespace WpfOpenControls.DockManager
             (DataContext as FloatingViewModel).Title = Application.Current.MainWindow.Title + " - " + IViewContainer.Title;
         }
 
-        public Brush HeaderBackground
+        public Brush TitleBarBackground
         {
             set
             {

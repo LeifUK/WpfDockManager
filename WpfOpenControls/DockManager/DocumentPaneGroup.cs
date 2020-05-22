@@ -15,6 +15,10 @@ namespace WpfOpenControls.DockManager
             HorizontalAlignment = HorizontalAlignment.Stretch;
 
             ColumnDefinition columnDefinition = new ColumnDefinition();
+            columnDefinition.Width = new GridLength(Border.BorderThickness.Left, GridUnitType.Pixel);
+            ColumnDefinitions.Add(columnDefinition);
+
+            columnDefinition = new ColumnDefinition();
             columnDefinition.Width = new GridLength(1, GridUnitType.Auto);
             ColumnDefinitions.Add(columnDefinition);
 
@@ -34,13 +38,21 @@ namespace WpfOpenControls.DockManager
             columnDefinition.Width = new GridLength(1, GridUnitType.Auto);
             ColumnDefinitions.Add(columnDefinition);
 
+            columnDefinition = new ColumnDefinition();
+            columnDefinition.Width = new GridLength(Border.BorderThickness.Right, GridUnitType.Pixel);
+            ColumnDefinitions.Add(columnDefinition);
+
             RowDefinitions.Add(new RowDefinition());
-            RowDefinitions[0].Height = new GridLength(1, GridUnitType.Star);
+            RowDefinitions[0].Height = new GridLength(Border.BorderThickness.Top, GridUnitType.Pixel);
+            RowDefinitions.Add(new RowDefinition());
+            RowDefinitions[1].Height = new GridLength(1, GridUnitType.Star);
+            RowDefinitions.Add(new RowDefinition());
+            RowDefinitions[2].Height = new GridLength(Border.BorderThickness.Bottom, GridUnitType.Pixel);
 
             IViewContainer.SelectionChanged += DocumentContainer_SelectionChanged;
-            Grid.SetRow(IViewContainer as System.Windows.UIElement, 0);
-            Grid.SetColumn(IViewContainer as System.Windows.UIElement, 0);
-            Grid.SetColumnSpan(IViewContainer as System.Windows.UIElement, ColumnDefinitions.Count);
+            Grid.SetRow(IViewContainer as System.Windows.UIElement, 1);
+            Grid.SetColumn(IViewContainer as System.Windows.UIElement, 1);
+            Grid.SetColumnSpan(IViewContainer as System.Windows.UIElement, ColumnDefinitions.Count - 2);
 
             IsHighlighted = false;
         }

@@ -106,7 +106,7 @@
                                     <ControlTemplate.Triggers>
                                         <Trigger Property="IsSelected" Value="true">
                                             <Setter TargetName="Label" Property="Foreground" Value="Black"/>
-                                            <Setter TargetName="Border" Property="Background" Value="White"/>
+                                            <Setter TargetName="Border" Property="Background" Value="AliceBlue"/>
                                         </Trigger>
                                     </ControlTemplate.Triggers>
                                 </ControlTemplate>
@@ -114,28 +114,49 @@
                         </Setter>
                     </Style>
                 </dockManager:LayoutManager.ToolTabItemStyle>
-                <dockManager:LayoutManager.ToolTabCornerRadius>
-                    <CornerRadius BottomLeft="8" BottomRight="4"/>
-                </dockManager:LayoutManager.ToolTabCornerRadius>
-                <dockManager:LayoutManager.ToolFontSize>12</dockManager:LayoutManager.ToolFontSize>
-                <dockManager:LayoutManager.ToolFontFamily>Arial</dockManager:LayoutManager.ToolFontFamily>
-                <dockManager:LayoutManager.ToolBackground>#5d6b99</dockManager:LayoutManager.ToolBackground>
-                <dockManager:LayoutManager.ToolButtonForeground>White</dockManager:LayoutManager.ToolButtonForeground>
-                <dockManager:LayoutManager.ToolHeaderBackground>#3b4f81</dockManager:LayoutManager.ToolHeaderBackground>
-                <dockManager:LayoutManager.SelectedToolTabBorderBrush>White</dockManager:LayoutManager.SelectedToolTabBorderBrush>
-                <dockManager:LayoutManager.SelectedToolTabBorderThickness>0</dockManager:LayoutManager.SelectedToolTabBorderThickness>
-                <dockManager:LayoutManager.UnselectedToolTabBorderBrush>Transparent</dockManager:LayoutManager.UnselectedToolTabBorderBrush>
-                <dockManager:LayoutManager.UnselectedToolTabBorderThickness>0</dockManager:LayoutManager.UnselectedToolTabBorderThickness>
-                <dockManager:LayoutManager.SelectedToolTabHeaderBackground>AliceBlue</dockManager:LayoutManager.SelectedToolTabHeaderBackground>
-                <dockManager:LayoutManager.UnselectedToolTabHeaderBackground>#3b4f81</dockManager:LayoutManager.UnselectedToolTabHeaderBackground>
-                <dockManager:LayoutManager.SelectedToolTabHeaderForeground>Black</dockManager:LayoutManager.SelectedToolTabHeaderForeground>
-                <dockManager:LayoutManager.UnselectedToolTabHeaderForeground>White</dockManager:LayoutManager.UnselectedToolTabHeaderForeground>
-                <dockManager:LayoutManager.ActiveToolScrollIndicatorBrush>White</dockManager:LayoutManager.ActiveToolScrollIndicatorBrush>
-                <dockManager:LayoutManager.InactiveToolScrollIndicatorBrush>Transparent</dockManager:LayoutManager.InactiveToolScrollIndicatorBrush>
-
-                <dockManager:LayoutManager.SideToolForeground>White</dockManager:LayoutManager.SideToolForeground>
-                <dockManager:LayoutManager.SideToolBarBrush>#3b4f81</dockManager:LayoutManager.SideToolBarBrush>
-                <dockManager:LayoutManager.MouseOverSideToolBarBrush>AliceBlue</dockManager:LayoutManager.MouseOverSideToolBarBrush>
+                
+                <dockManager:LayoutManager.ToolPaneGroupStyle>
+                    <dockManager:ToolPaneGroupStyle>
+                        <dockManager:ToolPaneGroupStyle.BorderBrush>Gainsboro</dockManager:ToolPaneGroupStyle.BorderBrush>
+                        <dockManager:ToolPaneGroupStyle.BorderThickness>1</dockManager:ToolPaneGroupStyle.BorderThickness>
+                        <dockManager:ToolPaneGroupStyle.CornerRadius>4</dockManager:ToolPaneGroupStyle.CornerRadius>
+                        <dockManager:ToolPaneGroupStyle.TabCornerRadius>0,0,4,8</dockManager:ToolPaneGroupStyle.TabCornerRadius>
+                        <dockManager:ToolPaneGroupStyle.FontSize>12</dockManager:ToolPaneGroupStyle.FontSize>
+                        <dockManager:ToolPaneGroupStyle.FontFamily>Arial</dockManager:ToolPaneGroupStyle.FontFamily>
+                        <dockManager:ToolPaneGroupStyle.Background>#5d6b99</dockManager:ToolPaneGroupStyle.Background>
+                        <dockManager:ToolPaneGroupStyle.HeaderBackground>#3b4f81</dockManager:ToolPaneGroupStyle.HeaderBackground>
+                        <dockManager:ToolPaneGroupStyle.ButtonForeground>White</dockManager:ToolPaneGroupStyle.ButtonForeground>
+                        <dockManager:ToolPaneGroupStyle.ActiveScrollIndicatorBrush>White</dockManager:ToolPaneGroupStyle.ActiveScrollIndicatorBrush>
+                        <dockManager:ToolPaneGroupStyle.InactiveScrollIndicatorBrush>Transparent</dockManager:ToolPaneGroupStyle.InactiveScrollIndicatorBrush>
+                        <dockManager:ToolPaneGroupStyle.SelectedTabStyle>
+                            <dockManager:TabStyle BorderBrush="Transparent" BorderThickness="0" Background="AliceBlue" Foreground="Black"/>
+                        </dockManager:ToolPaneGroupStyle.SelectedTabStyle>
+                        <dockManager:ToolPaneGroupStyle.UnselectedTabStyle>
+                            <dockManager:TabStyle BorderBrush="Transparent" BorderThickness="0" Background="#3b4f81" Foreground="White"/>
+                        </dockManager:ToolPaneGroupStyle.UnselectedTabStyle>
+                    </dockManager:ToolPaneGroupStyle>
+                </dockManager:LayoutManager.ToolPaneGroupStyle>
+                
+                <dockManager:LayoutManager.DocumentPaneGroupStyle>
+                    <dockManager:DocumentPaneGroupStyle>
+                        <dockManager:DocumentPaneGroupStyle.BorderBrush>Gainsboro</dockManager:DocumentPaneGroupStyle.BorderBrush>
+                        <dockManager:DocumentPaneGroupStyle.BorderThickness>1</dockManager:DocumentPaneGroupStyle.BorderThickness>
+                        <dockManager:DocumentPaneGroupStyle.CornerRadius>4</dockManager:DocumentPaneGroupStyle.CornerRadius>
+                        <dockManager:DocumentPaneGroupStyle.TabCornerRadius>8,4,0,0</dockManager:DocumentPaneGroupStyle.TabCornerRadius>
+                        <dockManager:DocumentPaneGroupStyle.FontSize>12</dockManager:DocumentPaneGroupStyle.FontSize>
+                        <dockManager:DocumentPaneGroupStyle.FontFamily>Arial</dockManager:DocumentPaneGroupStyle.FontFamily>
+                        <dockManager:DocumentPaneGroupStyle.Background>#5d6b99</dockManager:DocumentPaneGroupStyle.Background>
+                        <dockManager:DocumentPaneGroupStyle.ButtonForeground>White</dockManager:DocumentPaneGroupStyle.ButtonForeground>
+                        <dockManager:DocumentPaneGroupStyle.ActiveScrollIndicatorBrush>White</dockManager:DocumentPaneGroupStyle.ActiveScrollIndicatorBrush>
+                        <dockManager:DocumentPaneGroupStyle.InactiveScrollIndicatorBrush>Transparent</dockManager:DocumentPaneGroupStyle.InactiveScrollIndicatorBrush>
+                        <dockManager:DocumentPaneGroupStyle.SelectedTabStyle>
+                            <dockManager:TabStyle BorderBrush="Transparent" BorderThickness="0" Background="#f5cc84" Foreground="Black"/>
+                        </dockManager:DocumentPaneGroupStyle.SelectedTabStyle>
+                        <dockManager:DocumentPaneGroupStyle.UnselectedTabStyle>
+                            <dockManager:TabStyle BorderBrush="Transparent" BorderThickness="0" Background="#3b4f81" Foreground="White"/>
+                        </dockManager:DocumentPaneGroupStyle.UnselectedTabStyle>
+                    </dockManager:DocumentPaneGroupStyle>
+                </dockManager:LayoutManager.DocumentPaneGroupStyle>
 
                 <dockManager:LayoutManager.SideToolItemContainerStyle>
                     <Style TargetType="ListBoxItem">
@@ -158,7 +179,7 @@
                                     <ControlTemplate.Triggers>
                                         <Trigger Property="IsMouseOver" Value="true">
                                             <Setter TargetName="Label" Property="Foreground" Value="Black"/>
-                                            <Setter TargetName="Border" Property="Background" Value="White"/>
+                                            <Setter TargetName="Border" Property="Background" Value="AliceBlue"/>
                                         </Trigger>
                                     </ControlTemplate.Triggers>
                                 </ControlTemplate>
@@ -167,7 +188,6 @@
                     </Style>
 
                 </dockManager:LayoutManager.SideToolItemContainerStyle>
-
 
                 <dockManager:LayoutManager.FloatingToolTitleBarBackground>#ccd5f0</dockManager:LayoutManager.FloatingToolTitleBarBackground>
 
@@ -208,7 +228,8 @@
                         </Setter>
                     </Style>
                 </dockManager:LayoutManager.DocumentTabItemStyle>
-                <dockManager:LayoutManager.DocumentTabCornerRadius>
+                
+                <!--<dockManager:LayoutManager.DocumentTabCornerRadius>
                     <CornerRadius TopLeft="8" TopRight="4"/>
                 </dockManager:LayoutManager.DocumentTabCornerRadius>
                 <dockManager:LayoutManager.DocumentFontSize>12</dockManager:LayoutManager.DocumentFontSize>
@@ -225,7 +246,7 @@
                 <dockManager:LayoutManager.SelectedDocumentTabHeaderForeground>Black</dockManager:LayoutManager.SelectedDocumentTabHeaderForeground>
                 <dockManager:LayoutManager.UnselectedDocumentTabHeaderForeground>White</dockManager:LayoutManager.UnselectedDocumentTabHeaderForeground>
                 <dockManager:LayoutManager.ActiveDocumentScrollIndicatorBrush>White</dockManager:LayoutManager.ActiveDocumentScrollIndicatorBrush>
-                <dockManager:LayoutManager.InactiveDocumentScrollIndicatorBrush>Transparent</dockManager:LayoutManager.InactiveDocumentScrollIndicatorBrush>
+                <dockManager:LayoutManager.InactiveDocumentScrollIndicatorBrush>Transparent</dockManager:LayoutManager.InactiveDocumentScrollIndicatorBrush>-->
 
                 <dockManager:LayoutManager.FloatingDocumentTitleBarBackground>#ccd5f0</dockManager:LayoutManager.FloatingDocumentTitleBarBackground>
 

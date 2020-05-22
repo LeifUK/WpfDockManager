@@ -14,6 +14,10 @@ namespace WpfOpenControls.DockManager
             HorizontalAlignment = HorizontalAlignment.Stretch;
 
             ColumnDefinition columnDefinition = new ColumnDefinition();
+            columnDefinition.Width = new GridLength(Border.BorderThickness.Left, GridUnitType.Pixel);
+            ColumnDefinitions.Add(columnDefinition);
+
+            columnDefinition = new ColumnDefinition();
             columnDefinition.Width = new GridLength(1, GridUnitType.Auto);
             ColumnDefinitions.Add(columnDefinition);
 
@@ -33,10 +37,18 @@ namespace WpfOpenControls.DockManager
             columnDefinition.Width = new GridLength(1, GridUnitType.Auto);
             ColumnDefinitions.Add(columnDefinition);
 
+            columnDefinition = new ColumnDefinition();
+            columnDefinition.Width = new GridLength(Border.BorderThickness.Right, GridUnitType.Pixel);
+            ColumnDefinitions.Add(columnDefinition);
+
             RowDefinitions.Add(new RowDefinition());
-            RowDefinitions[0].Height = new GridLength(1, GridUnitType.Auto);
+            RowDefinitions[0].Height = new GridLength(Border.BorderThickness.Top, GridUnitType.Pixel);
             RowDefinitions.Add(new RowDefinition());
-            RowDefinitions[1].Height = new GridLength(1, GridUnitType.Star);
+            RowDefinitions[1].Height = new GridLength(1, GridUnitType.Auto);
+            RowDefinitions.Add(new RowDefinition());
+            RowDefinitions[2].Height = new GridLength(1, GridUnitType.Star);
+            RowDefinitions.Add(new RowDefinition());
+            RowDefinitions[3].Height = new GridLength(Border.BorderThickness.Bottom, GridUnitType.Pixel);
 
             HeaderBorder = new Border();
             HeaderBorder.VerticalAlignment = VerticalAlignment.Stretch;
@@ -44,8 +56,8 @@ namespace WpfOpenControls.DockManager
             HeaderBorder.BorderBrush = System.Windows.Media.Brushes.Black;
             HeaderBackground = System.Windows.Media.Brushes.MidnightBlue;
             HeaderBorder.BorderThickness = new Thickness(0);
-            Grid.SetRow(HeaderBorder, 0);
-            Grid.SetColumn(HeaderBorder, 0);
+            Grid.SetRow(HeaderBorder, 1);
+            Grid.SetColumn(HeaderBorder, 1);
             Grid.SetColumnSpan(HeaderBorder, 5);
             Children.Add(HeaderBorder);
 
@@ -55,8 +67,8 @@ namespace WpfOpenControls.DockManager
             _titleLabel.VerticalAlignment = VerticalAlignment.Center;
             _titleLabel.Background = System.Windows.Media.Brushes.Transparent;
             _titleLabel.Foreground = System.Windows.Media.Brushes.White;
-            Grid.SetRow(_titleLabel, 0);
-            Grid.SetColumn(_titleLabel, 0);
+            Grid.SetRow(_titleLabel, 1);
+            Grid.SetColumn(_titleLabel, 1);
             Children.Add(_titleLabel);
 
             System.Windows.ResourceDictionary res = WpfOpenControls.Controls.Utilities.GetResourceDictionary();
@@ -65,8 +77,8 @@ namespace WpfOpenControls.DockManager
             _toolListButton.VerticalAlignment = VerticalAlignment.Center;
             _toolListButton.Style = res["StyleViewListButton"] as Style;
             _toolListButton.Click += delegate { DisplayGeneralMenu(); };
-            Grid.SetRow(_toolListButton, 0);
-            Grid.SetColumn(_toolListButton, 2);
+            Grid.SetRow(_toolListButton, 1);
+            Grid.SetColumn(_toolListButton, 3);
             Children.Add(_toolListButton);
 
             _pinButton = new Button();
@@ -74,23 +86,23 @@ namespace WpfOpenControls.DockManager
             _pinButton.LayoutTransform = new System.Windows.Media.RotateTransform();
             _pinButton.Style = res["StylePinButton"] as Style;
             _pinButton.Click += PinButton_Click;
-            Grid.SetRow(_pinButton, 0);
-            Grid.SetColumn(_pinButton, 3);
+            Grid.SetRow(_pinButton, 1);
+            Grid.SetColumn(_pinButton, 4);
             Children.Add(_pinButton);
 
             _closeButton = new Button();
             _closeButton.VerticalAlignment = VerticalAlignment.Center;
             _closeButton.Style = res["StyleCloseButton"] as Style;
-            Grid.SetRow(_closeButton, 0);
-            Grid.SetColumn(_closeButton, 4);
+            Grid.SetRow(_closeButton, 1);
+            Grid.SetColumn(_closeButton, 5);
             Panel.SetZIndex(_closeButton, 99);
             Children.Add(_closeButton);
             _closeButton.Click += delegate { FireClose(); };
 
             IViewContainer.SelectionChanged += DocumentContainer_SelectionChanged;
-            Grid.SetRow(IViewContainer as System.Windows.UIElement, 1);
-            Grid.SetColumn(IViewContainer as System.Windows.UIElement, 0);
-            Grid.SetColumnSpan(IViewContainer as System.Windows.UIElement, ColumnDefinitions.Count);
+            Grid.SetRow(IViewContainer as System.Windows.UIElement, 2);
+            Grid.SetColumn(IViewContainer as System.Windows.UIElement, 1);
+            Grid.SetColumnSpan(IViewContainer as System.Windows.UIElement, ColumnDefinitions.Count - 2);
         }
 
         protected Border HeaderBorder;

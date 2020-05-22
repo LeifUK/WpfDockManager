@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Windows;
 using System.Windows.Controls;
 using System.Windows.Media;
 
@@ -11,7 +12,19 @@ namespace WpfOpenControls.DockManager
             IViewContainer = iViewContainer;
             IViewContainer.TabClosed += IViewContainer_TabClosed;
             IViewContainer.FloatTabRequest += IViewContainer_FloatTabRequest;
-            Children.Add(iViewContainer as System.Windows.UIElement);
+            Children.Add(iViewContainer as UIElement);
+            Border = new Border();
+            Border.Background = Brushes.Transparent;
+            Border.BorderBrush = Brushes.Gray;
+            Border.CornerRadius = new CornerRadius(2);
+            Border.BorderThickness = new Thickness(1);
+            Border.IsHitTestVisible = false;
+            Grid.SetRow(Border, 0);
+            Grid.SetRowSpan(Border, 99);
+            Grid.SetColumn(Border, 0);
+            Grid.SetColumnSpan(Border, 99);
+            Grid.SetZIndex(Border, 1);
+            Children.Add(Border);
         }
 
         private void IViewContainer_FloatTabRequest(object sender, EventArgs e)
@@ -32,6 +45,8 @@ namespace WpfOpenControls.DockManager
         public event EventHandler FloatTabRequest;
         public event EventHandler UngroupCurrent;
         public event EventHandler Ungroup;
+
+        public Border Border;
 
         protected void FireClose()
         {

@@ -8,14 +8,14 @@ namespace WpfOpenControls.DockManager
     {
         public ToolContainer()
         {
-            rowDefinition_UserControl = new RowDefinition() { Height = new System.Windows.GridLength(1, System.Windows.GridUnitType.Star) };
-            rowDefinition_Gap = new RowDefinition() { Height = new System.Windows.GridLength(2, System.Windows.GridUnitType.Pixel) };
-            rowDefinition_TabHeader = new RowDefinition() { Height = new System.Windows.GridLength(1, System.Windows.GridUnitType.Auto) };
-            rowDefinition_Spacer = new RowDefinition() { Height = new System.Windows.GridLength(4, System.Windows.GridUnitType.Pixel) };
-            RowDefinitions.Add(rowDefinition_UserControl);
-            RowDefinitions.Add(rowDefinition_Gap);
-            RowDefinitions.Add(rowDefinition_TabHeader);
-            RowDefinitions.Add(rowDefinition_Spacer);
+            _rowDefinition_UserControl = new RowDefinition() { Height = new System.Windows.GridLength(1, System.Windows.GridUnitType.Star) };
+            _rowDefinition_Gap = new RowDefinition() { Height = new System.Windows.GridLength(2, System.Windows.GridUnitType.Pixel) };
+            _rowDefinition_TabHeader = new RowDefinition() { Height = new System.Windows.GridLength(1, System.Windows.GridUnitType.Auto) };
+            _rowDefinition_Spacer = new RowDefinition() { Height = new System.Windows.GridLength(4, System.Windows.GridUnitType.Pixel) };
+            RowDefinitions.Add(_rowDefinition_UserControl);
+            RowDefinitions.Add(_rowDefinition_Gap);
+            RowDefinitions.Add(_rowDefinition_TabHeader);
+            RowDefinitions.Add(_rowDefinition_Spacer);
 
             ColumnDefinitions.Add(new ColumnDefinition() { Width = new System.Windows.GridLength(1, System.Windows.GridUnitType.Star) });
             ColumnDefinitions.Add(new ColumnDefinition() { Width = new System.Windows.GridLength(4, System.Windows.GridUnitType.Pixel) });
@@ -52,10 +52,10 @@ namespace WpfOpenControls.DockManager
             _viewListButton.Style = WpfOpenControls.Controls.Utilities.GetResourceDictionary()["StyleViewListButton"] as Style;
         }
 
-        private RowDefinition rowDefinition_UserControl;
-        private RowDefinition rowDefinition_Gap;
-        private RowDefinition rowDefinition_TabHeader;
-        private RowDefinition rowDefinition_Spacer;
+        private RowDefinition _rowDefinition_UserControl;
+        private RowDefinition _rowDefinition_Gap;
+        private RowDefinition _rowDefinition_TabHeader;
+        private RowDefinition _rowDefinition_Spacer;
 
         private Button _viewListButton;
         private Border _border;
@@ -79,13 +79,15 @@ namespace WpfOpenControls.DockManager
         {
             if (_items.Count == 1)
             {
-                rowDefinition_TabHeader.Height = new GridLength(0);
-                rowDefinition_Spacer.Height = new GridLength(0);
+                _rowDefinition_Gap.Height = new GridLength(0);
+                _rowDefinition_TabHeader.Height = new GridLength(0);
+                _rowDefinition_Spacer.Height = new GridLength(0);
             }
             else
             {
-                rowDefinition_TabHeader.Height = new System.Windows.GridLength(1, System.Windows.GridUnitType.Auto);
-                rowDefinition_Spacer.Height = new System.Windows.GridLength(4, System.Windows.GridUnitType.Pixel);
+                _rowDefinition_Gap.Height = new System.Windows.GridLength(2, System.Windows.GridUnitType.Pixel);
+                _rowDefinition_TabHeader.Height = new System.Windows.GridLength(1, System.Windows.GridUnitType.Auto);
+                _rowDefinition_Spacer.Height = new System.Windows.GridLength(4, System.Windows.GridUnitType.Pixel);
             }
         }
     }
