@@ -73,13 +73,13 @@ namespace WpfOpenControls.DockManager
 
             System.Windows.ResourceDictionary res = WpfOpenControls.Controls.Utilities.GetResourceDictionary();
 
-            _toolListButton = new Button();
-            _toolListButton.VerticalAlignment = VerticalAlignment.Center;
-            _toolListButton.Style = res["StyleViewListButton"] as Style;
-            _toolListButton.Click += delegate { DisplayGeneralMenu(); };
-            Grid.SetRow(_toolListButton, 1);
-            Grid.SetColumn(_toolListButton, 3);
-            Children.Add(_toolListButton);
+            _commandsButton = new Button();
+            _commandsButton.VerticalAlignment = VerticalAlignment.Center;
+            _commandsButton.Style = res["StyleViewListButton"] as Style;
+            _commandsButton.Click += delegate { DisplayGeneralMenu(); };
+            Grid.SetRow(_commandsButton, 1);
+            Grid.SetColumn(_commandsButton, 3);
+            Children.Add(_commandsButton);
 
             _pinButton = new Button();
             _pinButton.VerticalAlignment = VerticalAlignment.Center;
@@ -103,6 +103,39 @@ namespace WpfOpenControls.DockManager
             Grid.SetRow(IViewContainer as System.Windows.UIElement, 2);
             Grid.SetColumn(IViewContainer as System.Windows.UIElement, 1);
             Grid.SetColumnSpan(IViewContainer as System.Windows.UIElement, ColumnDefinitions.Count - 2);
+        }
+
+        public Style CloseButtonStyle
+        {
+            set
+            {
+                if (value != null)
+                {
+                    _closeButton.Style = value;
+                }
+            }
+        }
+
+        public Style PinButtonStyle
+        {
+            set
+            {
+                if (value != null)
+                {
+                    _pinButton.Style = value;
+                }
+            }
+        }
+
+        public Style CommandsButtonStyle
+        {
+            set
+            {
+                if (value != null)
+                {
+                    _commandsButton.Style = value;
+                }
+            }
         }
 
         public Border HeaderBorder;
@@ -143,7 +176,7 @@ namespace WpfOpenControls.DockManager
             {
                 _pinButton.Foreground = value;
                 _closeButton.Foreground = value;
-                _toolListButton.Foreground = value;
+                _commandsButton.Foreground = value;
             }
         }
 
@@ -194,7 +227,7 @@ namespace WpfOpenControls.DockManager
 
         private Button _pinButton;
         private Button _closeButton;
-        private Button _toolListButton;
+        private Button _commandsButton;
         private Point _mouseDownPosition;
 
         protected override void OnMouseLeftButtonDown(MouseButtonEventArgs e)

@@ -42,29 +42,27 @@ namespace WpfOpenControls.DockManager
             _border.VerticalAlignment = System.Windows.VerticalAlignment.Stretch;
             _border.Background = System.Windows.Media.Brushes.Transparent;
 
-            _viewListButton = new Button();
-            _viewListButton.VerticalAlignment = VerticalAlignment.Center;
-            Children.Add(_viewListButton);
-            Grid.SetRow(_viewListButton, 2);
-            Grid.SetColumn(_viewListButton, 2);
-            _viewListButton.Click += delegate { Helpers.DisplayItemsMenu(_items, _tabHeaderControl, _selectedUserControl); };
+            _listButton = new Button();
+            _listButton.VerticalAlignment = VerticalAlignment.Center;
+            Children.Add(_listButton);
+            Grid.SetRow(_listButton, 2);
+            Grid.SetColumn(_listButton, 2);
+            _listButton.Click += delegate { Helpers.DisplayItemsMenu(_items, _tabHeaderControl, _selectedUserControl); };
             System.Windows.ResourceDictionary res = (System.Windows.ResourceDictionary)Application.LoadComponent(new System.Uri("/WpfOpenControls;component/DockManager/Dictionary.xaml", System.UriKind.Relative));
-            _viewListButton.Style = WpfOpenControls.Controls.Utilities.GetResourceDictionary()["StyleViewListButton"] as Style;
+            _listButton.Style = WpfOpenControls.Controls.Utilities.GetResourceDictionary()["StyleViewListButton"] as Style;
         }
 
         private RowDefinition _rowDefinition_UserControl;
         private RowDefinition _rowDefinition_Gap;
         private RowDefinition _rowDefinition_TabHeader;
         private RowDefinition _rowDefinition_Spacer;
-
-        private Button _viewListButton;
         private Border _border;
 
         public override Brush ButtonForeground
         {
             set
             {
-                _viewListButton.Foreground = value;
+                _listButton.Foreground = value;
             }
         }
 

@@ -30,5 +30,6 @@ namespace WpfOpenControls.DockManager
         Brush ActiveScrollIndicatorBrush { set; }
         Brush InactiveScrollIndicatorBrush { set; }
         Style TabItemStyle { set; }
+        Style ListButtonStyle { set; }
     }
 }

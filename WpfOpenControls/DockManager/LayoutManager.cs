@@ -380,39 +380,6 @@ namespace WpfOpenControls.DockManager
 
         #endregion
 
-        #region CloseControlTemplate dependency property
-
-        [Bindable(true)]
-        [DesignerSerializationVisibility(DesignerSerializationVisibility.Hidden)]
-        public static readonly DependencyProperty CloseControlTemplateProperty = DependencyProperty.Register("CloseControlTemplate", typeof(System.Windows.Controls.ControlTemplate), typeof(LayoutManager), new FrameworkPropertyMetadata(null, new PropertyChangedCallback(OnCloseControlTemplateChanged)));
-
-        public System.Windows.Controls.ControlTemplate CloseControlTemplate
-        {
-            get
-            {
-                return (System.Windows.Controls.ControlTemplate)GetValue(ToolsSourceProperty);
-            }
-            set
-            {
-                SetValue(CloseControlTemplateProperty, value);
-            }
-        }
-
-        private static void OnCloseControlTemplateChanged(DependencyObject d, DependencyPropertyChangedEventArgs e)
-        {
-            ((LayoutManager)d).OnCloseControlTemplateChanged(e);
-        }
-
-        protected virtual void OnCloseControlTemplateChanged(DependencyPropertyChangedEventArgs e)
-        {
-            if (e.NewValue != null)
-            {
-                CloseControlTemplate = (System.Windows.Controls.ControlTemplate)e.NewValue;
-            }
-        }
-
-        #endregion
-
         private void UpdateDocumentProperties(IViewContainer iViewContainer)
         {
             iViewContainer.FontSize = DocumentPaneGroupStyle.FontSize;
@@ -448,6 +415,7 @@ namespace WpfOpenControls.DockManager
             iViewContainer.ActiveScrollIndicatorBrush = ToolPaneGroupStyle.ActiveScrollIndicatorBrush;
             iViewContainer.InactiveScrollIndicatorBrush = ToolPaneGroupStyle.InactiveScrollIndicatorBrush;
             iViewContainer.TabItemStyle = ToolTabItemStyle;
+            iViewContainer.ListButtonStyle = ToolPaneGroupStyle.ToolListButtonStyle;
         }
 
         private void UpdateProperties(ToolPaneGroup toolPaneGroup)
@@ -464,6 +432,9 @@ namespace WpfOpenControls.DockManager
             toolPaneGroup.FontFamily = ToolPaneGroupStyle.FontFamily;
             toolPaneGroup.HighlightBrush = SelectedPaneBrush;
             toolPaneGroup.ButtonForeground = ToolPaneGroupStyle.ButtonForeground;
+            toolPaneGroup.CloseButtonStyle = ToolPaneGroupStyle.CloseButtonStyle;
+            toolPaneGroup.PinButtonStyle = ToolPaneGroupStyle.PinButtonStyle;
+            toolPaneGroup.CommandsButtonStyle = ToolPaneGroupStyle.CommandsButtonStyle;
             UpdateToolProperties(toolPaneGroup.IViewContainer as ToolContainer);
         }
 

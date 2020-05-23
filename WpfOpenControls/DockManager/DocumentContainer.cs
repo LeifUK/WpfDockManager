@@ -38,15 +38,14 @@ namespace WpfOpenControls.DockManager
             _menuButton.Click += delegate { if (DisplayGeneralMenu != null) DisplayGeneralMenu(); };
             _menuButton.Style = res["StyleSettingsButton"] as Style;
 
-            _documentButton = new Button();
-            Children.Add(_documentButton);
-            Grid.SetRow(_documentButton, 1);
-            Grid.SetColumn(_documentButton, 4);
-            _documentButton.Click += delegate { Helpers.DisplayItemsMenu(_items, _tabHeaderControl, _selectedUserControl); };
-            _documentButton.Style = res["StyleViewListButton"] as Style;
+            _listButton = new Button();
+            Children.Add(_listButton);
+            Grid.SetRow(_listButton, 1);
+            Grid.SetColumn(_listButton, 4);
+            _listButton.Click += delegate { Helpers.DisplayItemsMenu(_items, _tabHeaderControl, _selectedUserControl); };
+            _listButton.Style = res["StyleViewListButton"] as Style;
         }
 
-        private Button _documentButton;
         private Button _menuButton;
 
         public Action DisplayGeneralMenu;
@@ -55,7 +54,7 @@ namespace WpfOpenControls.DockManager
         {
             set
             {
-                _documentButton.Foreground = value;
+                _listButton.Foreground = value;
                 _menuButton.Foreground = value;
             } 
         }

@@ -11,6 +11,7 @@ namespace WpfOpenControls.DockManager
         public WpfOpenControls.Controls.TabHeaderControl _tabHeaderControl;
         protected UserControl _selectedUserControl;
         protected Border _gap;
+        protected Button _listButton;
 
         protected void CreateTabControl(int row, int column)
         {
@@ -194,6 +195,17 @@ namespace WpfOpenControls.DockManager
             set
             {
                 _tabHeaderControl.ItemContainerStyle = value;
+            }
+        }
+        
+        public Style ListButtonStyle
+        {
+            set
+            {
+                if (value != null)
+                {
+                    _listButton.Style = value;
+                }
             }
         }
 
