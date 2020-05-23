@@ -147,15 +147,6 @@
                         <view:ToolFiveView x:Name="_toolFiveView"/>
                     </DataTemplate>
                 </dockManager:LayoutManager.ToolTemplates>
-                <dockManager:LayoutManager.CloseControlTemplate>
-                    <ControlTemplate TargetType="Button">
-                        <Grid>
-                            <Ellipse Fill="{TemplateBinding Background}"/>
-                            <ContentPresenter HorizontalAlignment="Center"
-                            VerticalAlignment="Center"/>
-                        </Grid>
-                    </ControlTemplate>
-                </dockManager:LayoutManager.CloseControlTemplate>
             </dockManager:LayoutManager>
         </Grid>
     </Border>
