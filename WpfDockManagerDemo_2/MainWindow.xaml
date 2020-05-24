@@ -208,8 +208,7 @@
                         <Setter Property="Template">
                             <Setter.Value>
                                 <ControlTemplate TargetType="ListBoxItem">
-                                    <Border Name="Border" Padding="0" SnapsToDevicePixels="true" BorderThickness="0" Margin="1,0,1,0" CornerRadius="0,0,4,4"
-                                        Background="#505050">
+                                    <Border Name="Border" Padding="0" SnapsToDevicePixels="true" BorderThickness="0" Margin="1,0,1,0" CornerRadius="0,0,4,4" Background="#505050">
                                         <Grid>
                                             <Grid.ColumnDefinitions>
                                                 <ColumnDefinition Width="Auto"/>
@@ -291,7 +290,7 @@
                         <dockManager:DocumentPaneGroupStyle.FontFamily>Arial</dockManager:DocumentPaneGroupStyle.FontFamily>
                         <dockManager:DocumentPaneGroupStyle.Background>Gray</dockManager:DocumentPaneGroupStyle.Background>
                         <dockManager:DocumentPaneGroupStyle.GapBrush>Gainsboro</dockManager:DocumentPaneGroupStyle.GapBrush>
-                        <dockManager:DocumentPaneGroupStyle.GapHeight>3</dockManager:DocumentPaneGroupStyle.GapHeight>
+                        <dockManager:DocumentPaneGroupStyle.GapHeight>2</dockManager:DocumentPaneGroupStyle.GapHeight>
                         <dockManager:DocumentPaneGroupStyle.ButtonForeground>White</dockManager:DocumentPaneGroupStyle.ButtonForeground>
                         <dockManager:DocumentPaneGroupStyle.ActiveScrollIndicatorBrush>White</dockManager:DocumentPaneGroupStyle.ActiveScrollIndicatorBrush>
                         <dockManager:DocumentPaneGroupStyle.InactiveScrollIndicatorBrush>Transparent</dockManager:DocumentPaneGroupStyle.InactiveScrollIndicatorBrush>
