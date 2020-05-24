@@ -9,16 +9,14 @@ namespace WpfOpenControls.DockManager
 {
     internal class DockPaneTreeManager : IDockPaneTreeManager
     {
-        public DockPaneTreeManager(Grid parent, IDockPaneTree iDockPaneTree, ILayoutFactory iLayoutFactory)
+        public DockPaneTreeManager(IDockPaneTree iDockPaneTree, ILayoutFactory iLayoutFactory)
         {
             ILayoutFactory = iLayoutFactory;
             IDockPaneTree = iDockPaneTree;
-            Parent = parent;
         }
 
         private readonly IDockPaneTree IDockPaneTree;
         private readonly ILayoutFactory ILayoutFactory;
-        private readonly Grid Parent;
 
         public DockPane ExtractDockPane(DockPane dockPane, out FrameworkElement frameworkElement)
         {
@@ -32,9 +30,9 @@ namespace WpfOpenControls.DockManager
             Grid parentGrid = dockPane.Parent as Grid;
             System.Diagnostics.Trace.Assert(parentGrid != null, System.Reflection.MethodBase.GetCurrentMethod().Name + ": DockPane parent must be a Grid");
 
-            if (parentGrid == Parent)
+            if (parentGrid == IDockPaneTree)
             {
-                Parent.Children.Remove(dockPane);
+                IDockPaneTree.Children.Remove(dockPane);
             }
             else
             {
@@ -62,7 +60,7 @@ namespace WpfOpenControls.DockManager
                     int column = Grid.GetColumn(parentGrid);
                     IDockPaneTree.FrameworkElementRemoved(parentGrid);
                     grandparentGrid.Children.Remove(parentGrid);
-                    if (grandparentGrid == Parent)
+                    if (grandparentGrid == IDockPaneTree)
                     {
                         IDockPaneTree.RootPane = frameworkElement as Grid;
                     }
@@ -229,7 +227,7 @@ namespace WpfOpenControls.DockManager
             {
                 if (
                         (floatingPane == null) ||
-                        ((selectedPane != null) && !(selectedPane.Parent is SplitterPane) && !(selectedPane.Parent is DocumentPanel) && (selectedPane.Parent != Parent))
+                        ((selectedPane != null) && !(selectedPane.Parent is SplitterPane) && !(selectedPane.Parent is DocumentPanel) && (selectedPane.Parent != IDockPaneTree))
                    )
                 {
                     return;
@@ -259,9 +257,9 @@ namespace WpfOpenControls.DockManager
                         bool isFirst = (windowLocation == WindowLocation.TopSide) || (windowLocation == WindowLocation.LeftSide);
                         parentSplitterPane.AddChild(dockPane, isFirst);
 
-                        if (Parent.Children.Count == 0)
+                        if (IDockPaneTree.Children.Count == 0)
                         {
-                            Parent.Children.Add(parentSplitterPane);
+                            IDockPaneTree.Children.Add(parentSplitterPane);
                         }
                         else
                         {

@@ -39,7 +39,7 @@ namespace WpfOpenControls.DockManager
             _dictUnpinnedToolData.Add(WindowLocation.RightSide, new List<UnpinnedToolData>());
             _dictUnpinnedToolData.Add(WindowLocation.BottomSide, new List<UnpinnedToolData>());
 
-            IDockPaneTreeManager = new DockPaneTreeManager(this, this, this);
+            IDockPaneTreeManager = new DockPaneTreeManager(this, this);
         }
 
         private void LayoutManager_PreviewMouseDown(object sender, MouseButtonEventArgs e)
