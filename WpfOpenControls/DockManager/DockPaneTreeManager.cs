@@ -1,7 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Linq;
-using System.Text;
 using System.Windows;
 using System.Windows.Controls;
 
@@ -17,6 +16,48 @@ namespace WpfOpenControls.DockManager
 
         private readonly IDockPaneTree IDockPaneTree;
         private readonly ILayoutFactory ILayoutFactory;
+
+        private Grid FindElement(Guid guid, Grid parentGrid)
+        {
+            Grid grid = null;
+
+            foreach (var child in parentGrid.Children)
+            {
+                grid = child as Grid;
+                if (grid != null)
+                {
+                    if ((grid.Tag != null) && ((Guid)grid.Tag == guid))
+                    {
+                        return grid;
+                    }
+
+                    grid = FindElement(guid, grid);
+                    if (grid != null)
+                    {
+                        return grid;
+                    }
+                }
+            }
+
+            return grid;
+        }
+
+        private static void ExtractDocuments(FloatingPane floatingPane, DockPane dockPane)
+        {
+            while (true)
+            {
+                UserControl userControl = floatingPane.IViewContainer.ExtractUserControl(0);
+                if (userControl == null)
+                {
+                    break;
+                }
+
+                dockPane.IViewContainer.AddUserControl(userControl);
+            }
+            floatingPane.Close();
+        }
+
+        #region IDockPaneTreeManager
 
         public DockPane ExtractDockPane(DockPane dockPane, out FrameworkElement frameworkElement)
         {
@@ -206,21 +247,6 @@ namespace WpfOpenControls.DockManager
             return null;
         }
 
-        private static void ExtractDocuments(FloatingPane floatingPane, DockPane dockPane)
-        {
-            while (true)
-            {
-                UserControl userControl = floatingPane.IViewContainer.ExtractUserControl(0);
-                if (userControl == null)
-                {
-                    break;
-                }
-
-                dockPane.IViewContainer.AddUserControl(userControl);
-            }
-            floatingPane.Close();
-        }
-
         public void Unfloat(FloatingPane floatingPane, SelectablePane selectedPane, WindowLocation windowLocation)
         {
             Application.Current.Dispatcher.Invoke((Action)delegate
@@ -325,42 +351,16 @@ namespace WpfOpenControls.DockManager
             });
         }
 
-        private Grid FindElement(Guid guid, Grid parentGrid)
-        {
-            Grid grid = null;
-
-            foreach (var child in parentGrid.Children)
-            {
-                grid = child as Grid;
-                if (grid != null)
-                {
-                    if ((grid.Tag != null) && ((Guid)grid.Tag == guid))
-                    {
-                        return grid;
-                    }
-
-                    grid = FindElement(guid, grid);
-                    if (grid != null)
-                    {
-                        return grid;
-                    }
-                }
-            }
-
-            return grid;
-        }
-
-        // Warning warning => split arg?
         public void PinToolPane(UnpinnedToolData unpinnedToolData)
         {
             Grid sibling = null;
-            if (unpinnedToolData.Sibling == (Guid)IDockPaneTree.ParentGrid.Tag)
+            if (unpinnedToolData.SiblingGuid == (Guid)IDockPaneTree.ParentGrid.Tag)
             {
                 sibling = IDockPaneTree.ParentGrid;
             }
             else
             {
-                sibling = FindElement(unpinnedToolData.Sibling, IDockPaneTree.ParentGrid);
+                sibling = FindElement(unpinnedToolData.SiblingGuid, IDockPaneTree.ParentGrid);
             }
 
             // This can happen when loading a layout
@@ -435,7 +435,7 @@ namespace WpfOpenControls.DockManager
             return null;
         }
 
-        public void UnpinToolPane(ToolPaneGroup toolPaneGroup, out bool isHorizontal, out int row, out int column, out Guid siblingGuid)
+        public void UnpinToolPane(ToolPaneGroup toolPaneGroup, out UnpinnedToolData unpinnedToolData)
         { 
             System.Diagnostics.Trace.Assert(toolPaneGroup != null);
 
@@ -465,19 +465,17 @@ namespace WpfOpenControls.DockManager
                 frameworkElement = frameworkElement.Parent as FrameworkElement;
             }
 
-            SplitterPane splitterPane = frameworkElement.Parent as SplitterPane;
-            row = Grid.GetRow(frameworkElement);
-            column = Grid.GetColumn(frameworkElement);
-            isHorizontal = splitterPane.IsHorizontal;
-
-            frameworkElement = toolPaneGroup;
-            FrameworkElement parentFrameworkElement = toolPaneGroup.Parent as FrameworkElement;
+            unpinnedToolData = new UnpinnedToolData();
+            unpinnedToolData.ToolPaneGroup = toolPaneGroup;
+            unpinnedToolData.IsFirst = (Grid.GetRow(frameworkElement) == 0) && (Grid.GetColumn(frameworkElement) == 0);
+            unpinnedToolData.IsHorizontal = (frameworkElement.Parent as SplitterPane).IsHorizontal;
 
             ExtractDockPane(toolPaneGroup, out frameworkElement);
-
             System.Diagnostics.Trace.Assert(frameworkElement != null);
 
-            siblingGuid = (Guid)((frameworkElement as Grid).Tag);
+            unpinnedToolData.SiblingGuid = (Guid)((frameworkElement as Grid).Tag);
         }
+
+        #endregion IDockPaneTreeManager
     }
 }

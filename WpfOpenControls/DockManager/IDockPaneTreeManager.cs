@@ -20,6 +20,6 @@ namespace WpfOpenControls.DockManager
 
         void PinToolPane(UnpinnedToolData unpinnedToolData);
 
-        void UnpinToolPane(ToolPaneGroup toolPaneGroup, out bool isHorizontal, out int row, out int column, out Guid siblingGuid);
+        void UnpinToolPane(ToolPaneGroup toolPaneGroup, out UnpinnedToolData unpinnedToolData);
      }
 }

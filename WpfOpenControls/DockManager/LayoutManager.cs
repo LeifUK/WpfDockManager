@@ -129,22 +129,19 @@ namespace WpfOpenControls.DockManager
         public event EventHandler DocumentClosed;
         public event EventHandler ToolClosed;
 
-        internal List<IFloatingPane> FloatingToolPaneGroups;
-        internal List<IFloatingPane> FloatingDocumentPaneGroups;
+        private List<IFloatingPane> FloatingToolPaneGroups;
+        private List<IFloatingPane> FloatingDocumentPaneGroups;
 
-        internal Controls.ToolListBox _leftToolListBox;
-        internal Controls.ToolListBox _topToolListBox;
-        internal Controls.ToolListBox _rightToolListBox;
-        internal Controls.ToolListBox _bottomToolListBox;
+        private Dictionary<WindowLocation, Controls.ToolListBox> _dictToolListBoxes;
 
-        internal ToolListBoxItem _activeToolListBoxItem;
-        internal UnpinnedToolPane _activeUnpinnedToolPane;
-        internal UnpinnedToolData _activeUnpinnedToolData;
-        internal Controls.ToolListBox _activeToolListBox;
+        private ToolListBoxItem _activeToolListBoxItem;
+        private UnpinnedToolPane _activeUnpinnedToolPane;
+        private UnpinnedToolData _activeUnpinnedToolData;
+        private Controls.ToolListBox _activeToolListBox;
 
         private Dictionary<WindowLocation, List<UnpinnedToolData>> _dictUnpinnedToolData;
 
-        internal Grid _root;
+        private Grid _root;
 
         private SelectablePane SelectedPane;
 
@@ -487,10 +484,10 @@ namespace WpfOpenControls.DockManager
 
         private void UpdateSideToolProperties()
         {
-            UpdateProperties(_leftToolListBox);
-            UpdateProperties(_topToolListBox);
-            UpdateProperties(_rightToolListBox);
-            UpdateProperties(_bottomToolListBox);
+            foreach (var keyValuePair in _dictToolListBoxes)
+            {
+                UpdateProperties(keyValuePair.Value);
+            }
         }
 
         private void UpdateFloatingToolPaneGroupProperties()
@@ -1179,70 +1176,63 @@ namespace WpfOpenControls.DockManager
         {
             System.Diagnostics.Trace.Assert(sender is ToolPaneGroup);
 
-            // Warning warning 
             ToolPaneGroup toolPaneGroup = sender as ToolPaneGroup;
-            IDockPaneTreeManager.UnpinToolPane(toolPaneGroup, out bool isHorizontal, out int row, out int column, out Guid siblingGuid);
+            IDockPaneTreeManager.UnpinToolPane(toolPaneGroup, out UnpinnedToolData unpinnedToolData);
 
-            UnpinnedToolData unpinnedToolData = new UnpinnedToolData();
-            unpinnedToolData.ToolPaneGroup = toolPaneGroup;
-            unpinnedToolData.IsHorizontal = isHorizontal;
-            unpinnedToolData.IsFirst = (row == 0) && (column == 0);
-            unpinnedToolData.Sibling = siblingGuid;
-
-            Controls.ToolListBox ToolListBox = null;
+            Controls.ToolListBox toolListBox = null;
             WindowLocation windowLocation = WindowLocation.None;
-            if (isHorizontal)
+            if (unpinnedToolData.IsHorizontal)
             {
-                if (row == 0)
+                if (unpinnedToolData.IsFirst)
                 {
-                    ToolListBox = _topToolListBox;
                     windowLocation = WindowLocation.TopSide;
                 }
                 else
                 {
-                    ToolListBox = _bottomToolListBox;
                     windowLocation = WindowLocation.BottomSide;
                 }
             }
             else
             {
-                if (column == 0)
+                if (unpinnedToolData.IsFirst)
                 {
-                    ToolListBox = _leftToolListBox;
                     windowLocation = WindowLocation.LeftSide;
                 }
                 else
                 {
-                    ToolListBox = _rightToolListBox;
                     windowLocation = WindowLocation.RightSide;
                 }
             }
+            toolListBox = _dictToolListBoxes[windowLocation];
 
-            AddUnpinnedToolData(unpinnedToolData, windowLocation, ToolListBox);
+            AddUnpinnedToolData(unpinnedToolData, windowLocation, toolListBox);
         }
 
-        private void CreateToolListBox(out Controls.ToolListBox ToolListBox, int row, int column, bool isHorizontal, WindowLocation windowLocation)
+        private void CreateToolListBox(int row, int column, bool isHorizontal, WindowLocation windowLocation)
         {
             System.Collections.ObjectModel.ObservableCollection<Controls.IToolListBoxItem> items = new System.Collections.ObjectModel.ObservableCollection<Controls.IToolListBoxItem>();
-            ToolListBox = new Controls.ToolListBox();
-            ToolListBox.WindowLocation = windowLocation;
-            UpdateProperties(ToolListBox);
-            ToolListBox.Background = System.Windows.Media.Brushes.Transparent;
-            ToolListBox.ItemsSource = items;
-            ToolListBox.IsHorizontal = isHorizontal;
-            ToolListBox.DisplayMemberPath = "Title";
-            ToolListBox.ItemClick += ToolListBox_ItemClick;
-            Children.Add(ToolListBox);
-            Grid.SetRow(ToolListBox, row);
-            Grid.SetColumn(ToolListBox, column);
+            Controls.ToolListBox toolListBox = new Controls.ToolListBox();
+            toolListBox.WindowLocation = windowLocation;
+            UpdateProperties(toolListBox);
+            toolListBox.Background = System.Windows.Media.Brushes.Transparent;
+            toolListBox.ItemsSource = items;
+            toolListBox.IsHorizontal = isHorizontal;
+            toolListBox.DisplayMemberPath = "Title";
+            toolListBox.ItemClick += ToolListBox_ItemClick;
+            Children.Add(toolListBox);
+            Grid.SetRow(toolListBox, row);
+            Grid.SetColumn(toolListBox, column);
+
+            _dictToolListBoxes.Add(windowLocation, toolListBox);
         }
 
         private void CreateToolListBoxes()
         {
-            CreateToolListBox(out _leftToolListBox, 1, 0, false, WindowLocation.LeftSide);
-            CreateToolListBox(out _rightToolListBox, 1, 2, false, WindowLocation.RightSide);
-            CreateToolListBox(out _topToolListBox, 0, 1, true, WindowLocation.TopSide);
-            CreateToolListBox(out _bottomToolListBox, 2, 1, true, WindowLocation.BottomSide);
+            _dictToolListBoxes = new Dictionary<WindowLocation, Controls.ToolListBox>();
+            CreateToolListBox(1, 0, false, WindowLocation.LeftSide);
+            CreateToolListBox(1, 2, false, WindowLocation.RightSide);
+            CreateToolListBox(0, 1, true, WindowLocation.TopSide);
+            CreateToolListBox(2, 1, true, WindowLocation.BottomSide);
         }
 
         public void Clear()
@@ -1304,6 +1294,7 @@ namespace WpfOpenControls.DockManager
 
         private delegate DockPane DelegateCreateDockPane();
 
+        // Warning warning => move
         private void AddViews(List<UserControl> views, List<FrameworkElement> list_N, DelegateCreateDockPane createDockPane)
         {
             List<FrameworkElement> list_N_plus_1 = new List<FrameworkElement>();
@@ -1421,26 +1412,13 @@ namespace WpfOpenControls.DockManager
 
         void ILayoutFactory.MakeUnpinnedToolPaneGroup(WindowLocation windowLocation, ToolPaneGroup toolPaneGroup, string siblingGuid, bool isHorizontal, bool isFirst)
         {
-            Controls.ToolListBox toolListBox = null;
-            switch (windowLocation)
-            {
-                case WindowLocation.LeftSide:
-                    toolListBox = _leftToolListBox;
-                    break;
-                case WindowLocation.TopSide:
-                    toolListBox = _topToolListBox;
-                    break;
-                case WindowLocation.RightSide:
-                    toolListBox = _rightToolListBox;
-                    break;
-                case WindowLocation.BottomSide:
-                    toolListBox = _bottomToolListBox;
-                    break;
-            }
+            System.Diagnostics.Trace.Assert(_dictToolListBoxes.ContainsKey(windowLocation));
+
+            Controls.ToolListBox toolListBox = _dictToolListBoxes[windowLocation];
 
             UnpinnedToolData unpinnedToolData = new UnpinnedToolData();
             unpinnedToolData.ToolPaneGroup = toolPaneGroup;
-            unpinnedToolData.Sibling = new Guid(siblingGuid);
+            unpinnedToolData.SiblingGuid = new Guid(siblingGuid);
             unpinnedToolData.IsFirst = isFirst;
             unpinnedToolData.IsHorizontal = isHorizontal;
 
@@ -1469,9 +1447,9 @@ namespace WpfOpenControls.DockManager
             {
                 foreach (var item in keyValuePair.Value)
                 {
-                    if (item.Sibling == (Guid)frameworkElement.Tag)
+                    if (item.SiblingGuid == (Guid)frameworkElement.Tag)
                     {
-                        item.Sibling = (Guid)(frameworkElement.Parent as FrameworkElement).Tag;
+                        item.SiblingGuid = (Guid)(frameworkElement.Parent as FrameworkElement).Tag;
                     }
                 }
             }

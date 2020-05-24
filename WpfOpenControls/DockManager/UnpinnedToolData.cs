@@ -14,7 +14,7 @@ namespace WpfOpenControls.DockManager
         }
 
         public ToolPaneGroup ToolPaneGroup { get; set; }
-        public Guid Sibling { get; set; }
+        public Guid SiblingGuid { get; set; }
 
         public List<ToolListBoxItem> Items;
 

@@ -256,7 +256,7 @@ namespace WpfOpenControls.DockManager.Serialisation
             XmlElement xmlUnpinnedToolData = xmlDocument.CreateElement("UnpinnedToolData");
 
             XmlAttribute xmlAttribute = xmlDocument.CreateAttribute("Sibling");
-            xmlAttribute.Value = unpinnedToolData.Sibling.ToString();
+            xmlAttribute.Value = unpinnedToolData.SiblingGuid.ToString();
             xmlUnpinnedToolData.Attributes.Append(xmlAttribute);
 
             xmlAttribute = xmlDocument.CreateAttribute("IsHorizontal");
