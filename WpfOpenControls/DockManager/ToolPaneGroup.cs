@@ -24,9 +24,9 @@ namespace WpfOpenControls.DockManager
             columnDefinition = new ColumnDefinition();
             columnDefinition.Width = new GridLength(1, GridUnitType.Star);
             ColumnDefinitions.Add(columnDefinition);
-
+            
             columnDefinition = new ColumnDefinition();
-            columnDefinition.Width = new GridLength(1, GridUnitType.Auto);
+            columnDefinition.Width = new GridLength(2, GridUnitType.Pixel);
             ColumnDefinitions.Add(columnDefinition);
 
             columnDefinition = new ColumnDefinition();
@@ -34,7 +34,23 @@ namespace WpfOpenControls.DockManager
             ColumnDefinitions.Add(columnDefinition);
 
             columnDefinition = new ColumnDefinition();
+            columnDefinition.Width = new GridLength(2, GridUnitType.Pixel);
+            ColumnDefinitions.Add(columnDefinition);
+
+            columnDefinition = new ColumnDefinition();
             columnDefinition.Width = new GridLength(1, GridUnitType.Auto);
+            ColumnDefinitions.Add(columnDefinition);
+
+            columnDefinition = new ColumnDefinition();
+            columnDefinition.Width = new GridLength(2, GridUnitType.Pixel);
+            ColumnDefinitions.Add(columnDefinition);
+
+            columnDefinition = new ColumnDefinition();
+            columnDefinition.Width = new GridLength(1, GridUnitType.Auto);
+            ColumnDefinitions.Add(columnDefinition);
+
+            columnDefinition = new ColumnDefinition();
+            columnDefinition.Width = new GridLength(2, GridUnitType.Pixel);
             ColumnDefinitions.Add(columnDefinition);
 
             columnDefinition = new ColumnDefinition();
@@ -58,7 +74,7 @@ namespace WpfOpenControls.DockManager
             HeaderBorder.BorderThickness = new Thickness(0);
             Grid.SetRow(HeaderBorder, 1);
             Grid.SetColumn(HeaderBorder, 1);
-            Grid.SetColumnSpan(HeaderBorder, 5);
+            Grid.SetColumnSpan(HeaderBorder, ColumnDefinitions.Count);
             Children.Add(HeaderBorder);
 
             _titleLabel = new Label();
@@ -78,7 +94,7 @@ namespace WpfOpenControls.DockManager
             _commandsButton.Style = res["StyleViewListButton"] as Style;
             _commandsButton.Click += delegate { DisplayGeneralMenu(); };
             Grid.SetRow(_commandsButton, 1);
-            Grid.SetColumn(_commandsButton, 3);
+            Grid.SetColumn(_commandsButton, 4);
             Children.Add(_commandsButton);
 
             _pinButton = new Button();
@@ -87,14 +103,14 @@ namespace WpfOpenControls.DockManager
             _pinButton.Style = res["StylePinButton"] as Style;
             _pinButton.Click += PinButton_Click;
             Grid.SetRow(_pinButton, 1);
-            Grid.SetColumn(_pinButton, 4);
+            Grid.SetColumn(_pinButton, 6);
             Children.Add(_pinButton);
 
             _closeButton = new Button();
             _closeButton.VerticalAlignment = VerticalAlignment.Center;
             _closeButton.Style = res["StyleCloseButton"] as Style;
             Grid.SetRow(_closeButton, 1);
-            Grid.SetColumn(_closeButton, 5);
+            Grid.SetColumn(_closeButton, 8);
             Panel.SetZIndex(_closeButton, 99);
             Children.Add(_closeButton);
             _closeButton.Click += delegate { FireClose(); };

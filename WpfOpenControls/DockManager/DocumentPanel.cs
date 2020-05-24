@@ -25,7 +25,7 @@ namespace WpfOpenControls.DockManager
                 }
                 else
                 {
-                    Background = System.Windows.Media.Brushes.White;
+                    Background = System.Windows.Media.Brushes.Transparent;
                 }
             }
         }

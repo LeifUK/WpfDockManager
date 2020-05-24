@@ -7,7 +7,6 @@
         xmlns:viewModel="clr-namespace:ExampleDockManagerViews.ViewModel;assembly=ExampleDockManagerViews"
         xmlns:dockManager="clr-namespace:WpfOpenControls.DockManager;assembly=WpfOpenControls"
         mc:Ignorable="d"
-        Background="LightSteelBlue"
         Loaded="Window_Loaded"
         Unloaded="Window_Unloaded"
         Title="WPF Dock Manager Demo" Height="450" Width="800">
@@ -19,15 +18,15 @@
             <Style x:Key="NewCommandsButtonStyle" TargetType="Button">
                 <Setter Property="Width" Value="20"/>
                 <Setter Property="Height" Value="20"/>
-                <Setter Property="VerticalAlignment" Value="Top"/>
+                <Setter Property="VerticalAlignment" Value="Center"/>
                 <Setter Property="Background" Value="Transparent"/>
                 <Setter Property="Foreground" Value="White"/>
                 <Setter Property="BorderThickness" Value="0"/>
-                <Setter Property="Margin" Value="2"/>
+                <Setter Property="Margin" Value="1,2,0,2"/>
                 <Setter Property="Template">
                     <Setter.Value>
                         <ControlTemplate TargetType="Button">
-                            <Grid Margin="0,0,0,0">
+                            <Grid >
                                 <Ellipse Name="_ellipse" Fill="Transparent" Width="18" Height="18" Stroke="White" StrokeThickness="1"/>
                                 <Polygon Name="_triangle" Points="0,1 8,1 4,5" Fill="{TemplateBinding Foreground}" HorizontalAlignment="Center" VerticalAlignment="Center"/>
                             </Grid>
@@ -46,10 +45,10 @@
             <Style x:Key="NewCloseButtonStyle" TargetType="Button">
                 <Setter Property="Width" Value="20"/>
                 <Setter Property="Height" Value="20"/>
-                <Setter Property="VerticalAlignment" Value="Top"/>
+                <Setter Property="VerticalAlignment" Value="Center"/>
                 <Setter Property="Background" Value="Transparent"/>
                 <Setter Property="BorderThickness" Value="0"/>
-                <Setter Property="Margin" Value="2"/>
+                <Setter Property="Margin" Value="1,2,0,2"/>
                 <Setter Property="Template">
                     <Setter.Value>
                         <ControlTemplate TargetType="Button">
@@ -70,13 +69,40 @@
                     </Setter.Value>
                 </Setter>
             </Style>
+            <Style x:Key="NewCloseTabButtonStyle" TargetType="Button">
+                <Setter Property="Width" Value="20"/>
+                <Setter Property="Height" Value="20"/>
+                <Setter Property="VerticalAlignment" Value="Center"/>
+                <Setter Property="BorderThickness" Value="0"/>
+                <Setter Property="Margin" Value="1,2,0,2"/>
+                <Setter Property="Template">
+                    <Setter.Value>
+                        <ControlTemplate TargetType="Button">
+                            <Grid Margin="0">
+                                <Ellipse Name="_ellipse" Fill="Transparent" Width="18" Height="18" Stroke="{TemplateBinding Foreground}" StrokeThickness="1"/>
+                                <Line Name="_line_1" X1="6" X2="14" Y1="6" Y2="14" Stroke="{TemplateBinding Foreground}" StrokeThickness="1"/>
+                                <Line Name="_line_2" X1="14" X2="6" Y1="6" Y2="14" Stroke="{TemplateBinding Foreground}" StrokeThickness="1"/>
+                            </Grid>
+
+                            <ControlTemplate.Triggers>
+                                <Trigger Property="IsMouseOver" Value="True">
+                                    <Setter TargetName="_ellipse" Property="Fill" Value="{Binding RelativeSource={RelativeSource TemplatedParent}, Path=Foreground}" />
+                                    <Setter TargetName="_ellipse" Property="Stroke" Value="{Binding RelativeSource={RelativeSource TemplatedParent}, Path=Background}" />
+                                    <Setter TargetName="_line_1" Property="Stroke" Value="{Binding RelativeSource={RelativeSource TemplatedParent}, Path=Background}" />
+                                    <Setter TargetName="_line_2" Property="Stroke" Value="{Binding RelativeSource={RelativeSource TemplatedParent}, Path=Background}" />
+                                </Trigger>
+                            </ControlTemplate.Triggers>
+                        </ControlTemplate>
+                    </Setter.Value>
+                </Setter>
+            </Style>
             <Style x:Key="NewListButtonStyle" TargetType="Button">
                 <Setter Property="Width" Value="20"/>
                 <Setter Property="Height" Value="20"/>
-                <Setter Property="VerticalAlignment" Value="Top"/>
+                <Setter Property="VerticalAlignment" Value="Center"/>
                 <Setter Property="Background" Value="Transparent"/>
                 <Setter Property="BorderThickness" Value="0"/>
-                <Setter Property="Margin" Value="2"/>
+                <Setter Property="Margin" Value="1,2,0,2"/>
                 <Setter Property="Template">
                     <Setter.Value>
                         <ControlTemplate TargetType="Button">
@@ -102,14 +128,14 @@
             <Style x:Key="NewPinButtonStyle" TargetType="Button">
                 <Setter Property="Width" Value="20"/>
                 <Setter Property="Height" Value="20"/>
-                <Setter Property="VerticalAlignment" Value="Top"/>
+                <Setter Property="VerticalAlignment" Value="Center"/>
                 <Setter Property="Background" Value="Transparent"/>
                 <Setter Property="BorderThickness" Value="0"/>
-                <Setter Property="Margin" Value="2"/>
+                <Setter Property="Margin" Value="1,2,0,2"/>
                 <Setter Property="Template">
                     <Setter.Value>
                         <ControlTemplate TargetType="Button">
-                            <Grid Margin="0,0,0,0">
+                            <Grid Margin="0">
                                 <Ellipse Name="_ellipse" Fill="Transparent" Width="18" Height="18" Stroke="White" StrokeThickness="1"/>
                                 <Grid Margin="2,1,0,0">
                                     <Line Name="_pin1" X1="8" Y1="-2" X2="8" Y2="4" Stroke="{TemplateBinding Foreground}" StrokeThickness="5" VerticalAlignment="Center"/>
@@ -138,7 +164,7 @@
     </Window.Resources>
 
     <Border x:Name="MainWindowBorder" BorderBrush="LightCoral" BorderThickness="0">
-        <Grid x:Name="parentContainer" Background="#ccd5f0">
+        <Grid x:Name="parentContainer" Background="Gainsboro">
 
             <Grid.RowDefinitions>
                 <RowDefinition Height ="Auto"/>
@@ -167,23 +193,23 @@
                             Command="{x:Static SystemCommands.CloseWindowCommand}"/>
                 </StackPanel>
             </Grid>
-            <dockManager:LayoutManager x:Name="_layoutManager" Grid.Row="1" Grid.Column="0" DocumentsSource="{Binding Documents}" ToolsSource="{Binding Tools}" VerticalAlignment="Stretch" HorizontalAlignment="Stretch" Background="#5d6b99" >
-                <dockManager:LayoutManager.SplitterBrush>#5d6b99</dockManager:LayoutManager.SplitterBrush>
-                <dockManager:LayoutManager.SplitterWidth>6</dockManager:LayoutManager.SplitterWidth>
+            <dockManager:LayoutManager x:Name="_layoutManager" Grid.Row="1" Grid.Column="0" DocumentsSource="{Binding Documents}" ToolsSource="{Binding Tools}" VerticalAlignment="Stretch" HorizontalAlignment="Stretch" Background="Gray" >
+                <dockManager:LayoutManager.SplitterBrush>Transparent</dockManager:LayoutManager.SplitterBrush>
+                <dockManager:LayoutManager.SplitterWidth>3</dockManager:LayoutManager.SplitterWidth>
                 <dockManager:LayoutManager.SelectedPaneBrush>DarkRed</dockManager:LayoutManager.SelectedPaneBrush>
 
                 <dockManager:LayoutManager.ToolTabItemStyle>
                     <Style TargetType="ListBoxItem">
                         <Setter Property="FrameworkElement.Margin" Value="0"/>
                         <Setter Property="FocusVisualStyle" Value="{x:Null}" />
-                        <Setter Property="Padding" Value="10" />
+                        <Setter Property="Padding" Value="0" />
                         <Setter Property="Margin" Value="0" />
 
                         <Setter Property="Template">
                             <Setter.Value>
                                 <ControlTemplate TargetType="ListBoxItem">
-                                    <Border Name="Border" Padding="2" SnapsToDevicePixels="true" BorderThickness="0" Margin="1,0,1,0" CornerRadius="0,0,4,4"
-                                        Background="Navy">
+                                    <Border Name="Border" Padding="0" SnapsToDevicePixels="true" BorderThickness="0" Margin="1,0,1,0" CornerRadius="0,0,4,4"
+                                        Background="#505050">
                                         <Grid>
                                             <Grid.ColumnDefinitions>
                                                 <ColumnDefinition Width="Auto"/>
@@ -195,13 +221,17 @@
                                                Width="Auto" Padding="2,0,2,0" Margin="0" VerticalAlignment="Center">
                                             <ContentPresenter />
                                         </Label>
-                                            <Button Grid.Row="0" Grid.Column="2" x:Name="_buttonCloseTool" Content="X" Click="_buttonCloseTool_Click"/>
+                                            <Button Grid.Row="0" Grid.Column="2" x:Name="_buttonCloseTool" Content="X" Click="_buttonCloseTool_Click" Style="{StaticResource NewCloseTabButtonStyle}"/>
                                         </Grid>
                                     </Border>
                                     <ControlTemplate.Triggers>
                                         <Trigger Property="IsSelected" Value="true">
                                             <Setter TargetName="Label" Property="Foreground" Value="Black"/>
-                                            <Setter TargetName="Border" Property="Background" Value="AliceBlue"/>
+                                            <Setter TargetName="Border" Property="Background" Value="Gainsboro"/>
+                                            <Setter TargetName="_buttonCloseTool" Property="Foreground" Value="Black"/>
+                                        </Trigger>
+                                        <Trigger Property="IsSelected" Value="false">
+                                            <Setter TargetName="_buttonCloseTool" Property="Foreground" Value="White"/>
                                         </Trigger>
                                     </ControlTemplate.Triggers>
                                 </ControlTemplate>
@@ -218,9 +248,11 @@
                         <dockManager:ToolPaneGroupStyle.TabCornerRadius>0,0,4,8</dockManager:ToolPaneGroupStyle.TabCornerRadius>
                         <dockManager:ToolPaneGroupStyle.FontSize>12</dockManager:ToolPaneGroupStyle.FontSize>
                         <dockManager:ToolPaneGroupStyle.FontFamily>Arial</dockManager:ToolPaneGroupStyle.FontFamily>
-                        <dockManager:ToolPaneGroupStyle.Background>#5d6b99</dockManager:ToolPaneGroupStyle.Background>
+                        <dockManager:ToolPaneGroupStyle.Background>Gray</dockManager:ToolPaneGroupStyle.Background>
+                        <dockManager:ToolPaneGroupStyle.GapBrush>Gainsboro</dockManager:ToolPaneGroupStyle.GapBrush>
+                        <dockManager:ToolPaneGroupStyle.GapHeight>2</dockManager:ToolPaneGroupStyle.GapHeight>
                         <dockManager:ToolPaneGroupStyle.HeaderStyle>
-                            <dockManager:ToolHeaderStyle Background="#3b4f81" BorderBrush="Gainsboro" BorderThickness="0" CornerRadius="4,4,0,0"/>
+                            <dockManager:ToolHeaderStyle Background="#505050" BorderBrush="Gainsboro" BorderThickness="0" CornerRadius="4,4,0,0"/>
                         </dockManager:ToolPaneGroupStyle.HeaderStyle>
                         <dockManager:ToolPaneGroupStyle.ButtonForeground>White</dockManager:ToolPaneGroupStyle.ButtonForeground>
                         <dockManager:ToolPaneGroupStyle.ActiveScrollIndicatorBrush>White</dockManager:ToolPaneGroupStyle.ActiveScrollIndicatorBrush>
@@ -257,16 +289,27 @@
                         <dockManager:DocumentPaneGroupStyle.TabCornerRadius>8,4,0,0</dockManager:DocumentPaneGroupStyle.TabCornerRadius>
                         <dockManager:DocumentPaneGroupStyle.FontSize>12</dockManager:DocumentPaneGroupStyle.FontSize>
                         <dockManager:DocumentPaneGroupStyle.FontFamily>Arial</dockManager:DocumentPaneGroupStyle.FontFamily>
-                        <dockManager:DocumentPaneGroupStyle.Background>#5d6b99</dockManager:DocumentPaneGroupStyle.Background>
+                        <dockManager:DocumentPaneGroupStyle.Background>Gray</dockManager:DocumentPaneGroupStyle.Background>
+                        <dockManager:DocumentPaneGroupStyle.GapBrush>Gainsboro</dockManager:DocumentPaneGroupStyle.GapBrush>
+                        <dockManager:DocumentPaneGroupStyle.GapHeight>3</dockManager:DocumentPaneGroupStyle.GapHeight>
                         <dockManager:DocumentPaneGroupStyle.ButtonForeground>White</dockManager:DocumentPaneGroupStyle.ButtonForeground>
                         <dockManager:DocumentPaneGroupStyle.ActiveScrollIndicatorBrush>White</dockManager:DocumentPaneGroupStyle.ActiveScrollIndicatorBrush>
                         <dockManager:DocumentPaneGroupStyle.InactiveScrollIndicatorBrush>Transparent</dockManager:DocumentPaneGroupStyle.InactiveScrollIndicatorBrush>
                         <dockManager:DocumentPaneGroupStyle.SelectedTabStyle>
-                            <dockManager:TabStyle BorderBrush="Transparent" BorderThickness="0" Background="#f5cc84" Foreground="Black"/>
+                            <dockManager:TabStyle BorderBrush="Transparent" BorderThickness="0" Background="Gainsboro" Foreground="Black"/>
                         </dockManager:DocumentPaneGroupStyle.SelectedTabStyle>
                         <dockManager:DocumentPaneGroupStyle.UnselectedTabStyle>
                             <dockManager:TabStyle BorderBrush="Transparent" BorderThickness="0" Background="#3b4f81" Foreground="White"/>
                         </dockManager:DocumentPaneGroupStyle.UnselectedTabStyle>
+                        <dockManager:DocumentPaneGroupStyle.DocumentListButtonStyle>
+                            <Style BasedOn="{StaticResource NewListButtonStyle}" TargetType="Button"/>
+                        </dockManager:DocumentPaneGroupStyle.DocumentListButtonStyle>
+                        <dockManager:DocumentPaneGroupStyle.CloseTabButtonStyle>
+                            <Style BasedOn="{StaticResource NewCloseButtonStyle}" TargetType="Button"/>
+                        </dockManager:DocumentPaneGroupStyle.CloseTabButtonStyle>
+                        <dockManager:DocumentPaneGroupStyle.CommandsButtonStyle>
+                            <Style BasedOn="{StaticResource NewCommandsButtonStyle}" TargetType="Button"/>
+                        </dockManager:DocumentPaneGroupStyle.CommandsButtonStyle>
                     </dockManager:DocumentPaneGroupStyle>
                 </dockManager:LayoutManager.DocumentPaneGroupStyle>
 
@@ -301,20 +344,20 @@
 
                 </dockManager:LayoutManager.SideToolItemContainerStyle>
 
-                <dockManager:LayoutManager.FloatingToolTitleBarBackground>#ccd5f0</dockManager:LayoutManager.FloatingToolTitleBarBackground>
+                <dockManager:LayoutManager.FloatingToolTitleBarBackground>Gainsboro</dockManager:LayoutManager.FloatingToolTitleBarBackground>
 
                 <dockManager:LayoutManager.DocumentTabItemStyle>
                     <Style TargetType="ListBoxItem">
                         <Setter Property="FrameworkElement.Margin" Value="0"/>
                         <Setter Property="FocusVisualStyle" Value="{x:Null}" />
-                        <Setter Property="Padding" Value="10" />
+                        <Setter Property="Padding" Value="0" />
                         <Setter Property="Margin" Value="0" />
 
                         <Setter Property="Template">
                             <Setter.Value>
                                 <ControlTemplate TargetType="ListBoxItem">
-                                    <Border Name="Border" Padding="2" SnapsToDevicePixels="true" BorderThickness="0" Margin="1,0,1,0" CornerRadius="4,4,0,0"
-                                        Background="Navy">
+                                    <Border Name="Border" Padding="0" SnapsToDevicePixels="true" BorderThickness="0" Margin="1,0,1,0" CornerRadius="4,4,0,0"
+                                        Background="#505050">
                                         <Grid>
                                             <Grid.ColumnDefinitions>
                                                 <ColumnDefinition Width="Auto"/>
@@ -326,13 +369,17 @@
                                                Width="Auto" Padding="2,0,2,0" Margin="0" VerticalAlignment="Center">
                                                 <ContentPresenter />
                                             </Label>
-                                            <Button Grid.Row="0" Grid.Column="2" x:Name="_buttonCloseDocument" Content="X" Click="_buttonCloseDocument_Click"/>
+                                            <Button Grid.Row="0" Grid.Column="2" x:Name="_buttonCloseDocument" Content="X" Click="_buttonCloseDocument_Click" Style="{StaticResource NewCloseTabButtonStyle}"/>
                                         </Grid>
                                     </Border>
                                     <ControlTemplate.Triggers>
                                         <Trigger Property="IsSelected" Value="true">
                                             <Setter TargetName="Label" Property="Foreground" Value="Black"/>
-                                            <Setter TargetName="Border" Property="Background" Value="White"/>
+                                            <Setter TargetName="Border" Property="Background" Value="Gainsboro"/>
+                                            <Setter TargetName="_buttonCloseDocument" Property="Foreground" Value="Black"/>
+                                        </Trigger>
+                                        <Trigger Property="IsSelected" Value="false">
+                                            <Setter TargetName="_buttonCloseDocument" Property="Foreground" Value="White"/>
                                         </Trigger>
                                     </ControlTemplate.Triggers>
                                 </ControlTemplate>
@@ -340,8 +387,8 @@
                         </Setter>
                     </Style>
                 </dockManager:LayoutManager.DocumentTabItemStyle>
-                
-                <dockManager:LayoutManager.FloatingDocumentTitleBarBackground>#ccd5f0</dockManager:LayoutManager.FloatingDocumentTitleBarBackground>
+
+                <dockManager:LayoutManager.FloatingDocumentTitleBarBackground>Gainsboro</dockManager:LayoutManager.FloatingDocumentTitleBarBackground>
 
                 <dockManager:LayoutManager.DocumentTemplates>
                     <DataTemplate DataType="{x:Type viewModel:DocumentOneViewModel}">

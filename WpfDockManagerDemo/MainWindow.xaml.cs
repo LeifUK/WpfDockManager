@@ -23,10 +23,6 @@ namespace WpfDockManagerDemo
         private void Window_Loaded(object sender, RoutedEventArgs e)
         {
             _layoutManager.Initialise();
-
-            //_layoutManager.SaveLayout(out System.Xml.XmlDocument xmlDocument, "C:\\Temp\\Layout.xml");
-            //_layoutManager.LoadLayout(out System.Xml.XmlDocument xmlDocument_Loaded, "C:\\Temp\\Layout.xml");
-            //_layoutManager.SaveLayout(out System.Xml.XmlDocument xmlDocument_saved, "C:\\Temp\\Layout_2.xml");
         }
 
         private void Window_Unloaded(object sender, RoutedEventArgs e)

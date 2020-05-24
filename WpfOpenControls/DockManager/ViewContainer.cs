@@ -149,6 +149,22 @@ namespace WpfOpenControls.DockManager
             }
         }
 
+        public Brush GapBrush 
+        { 
+            set
+            {
+                _gap.Background = value;
+            }
+        }
+
+        public double GapHeight 
+        {
+            set
+            {
+                _gap.Height = value;
+            }
+        }
+
         public abstract Brush ButtonForeground { set; }
 
         public TabStyle SelectedTabStyle
@@ -159,7 +175,6 @@ namespace WpfOpenControls.DockManager
                 _tabHeaderControl.SelectedTabBorderBrush = value.BorderBrush;
                 _tabHeaderControl.SelectedTabBackground = value.Background;
                 _tabHeaderControl.SelectedTabForeground = value.Foreground;
-                _gap.Background = value.Background;
             }
         }
 

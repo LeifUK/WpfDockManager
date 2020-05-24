@@ -385,12 +385,16 @@ namespace WpfOpenControls.DockManager
             iViewContainer.FontSize = DocumentPaneGroupStyle.FontSize;
             iViewContainer.FontFamily = DocumentPaneGroupStyle.FontFamily;
             iViewContainer.TabCornerRadius = DocumentPaneGroupStyle.TabCornerRadius;
+            iViewContainer.GapBrush = DocumentPaneGroupStyle.GapBrush;
+            iViewContainer.GapHeight = DocumentPaneGroupStyle.GapHeight;
             iViewContainer.ButtonForeground = DocumentPaneGroupStyle.ButtonForeground;
             iViewContainer.SelectedTabStyle = DocumentPaneGroupStyle.SelectedTabStyle;
             iViewContainer.UnselectedTabStyle = DocumentPaneGroupStyle.UnselectedTabStyle;
             iViewContainer.ActiveScrollIndicatorBrush = DocumentPaneGroupStyle.ActiveScrollIndicatorBrush;
             iViewContainer.InactiveScrollIndicatorBrush = DocumentPaneGroupStyle.InactiveScrollIndicatorBrush;
             iViewContainer.TabItemStyle = DocumentTabItemStyle;
+            iViewContainer.ListButtonStyle = DocumentPaneGroupStyle.DocumentListButtonStyle;
+            (iViewContainer as DocumentContainer).CommandsButtonStyle = DocumentPaneGroupStyle.CommandsButtonStyle;
         }
 
         private void UpdateProperties(DocumentPaneGroup documentPaneGroup)
@@ -410,6 +414,8 @@ namespace WpfOpenControls.DockManager
             iViewContainer.TabCornerRadius = ToolPaneGroupStyle.TabCornerRadius;
             iViewContainer.ButtonForeground = ToolPaneGroupStyle.ButtonForeground;
             iViewContainer.Background = ToolPaneGroupStyle.Background;
+            iViewContainer.GapBrush = ToolPaneGroupStyle.GapBrush;
+            iViewContainer.GapHeight = ToolPaneGroupStyle.GapHeight;
             iViewContainer.SelectedTabStyle = ToolPaneGroupStyle.SelectedTabStyle;
             iViewContainer.UnselectedTabStyle = ToolPaneGroupStyle.UnselectedTabStyle;
             iViewContainer.ActiveScrollIndicatorBrush = ToolPaneGroupStyle.ActiveScrollIndicatorBrush;
@@ -443,7 +449,7 @@ namespace WpfOpenControls.DockManager
             floatingToolPaneGroup.FontSize = ToolPaneGroupStyle.FontSize;
             floatingToolPaneGroup.FontFamily = ToolPaneGroupStyle.FontFamily;
             floatingToolPaneGroup.Background = ToolPaneGroupStyle.Background;
-            floatingToolPaneGroup.TitleBarBackground = FloatingDocumentTitleBarBackground;
+            floatingToolPaneGroup.TitleBarBackground = FloatingToolTitleBarBackground;
             UpdateToolProperties(floatingToolPaneGroup.IViewContainer);
         }
 

@@ -13,6 +13,8 @@ namespace WpfOpenControls.DockManager
             FontSize = 12;
             FontFamily = new FontFamily("Arial");
             Background = Brushes.LightSteelBlue;
+            GapBrush = Brushes.AliceBlue;
+            GapHeight = 2;
             ButtonForeground = Brushes.White;
             HeaderStyle = new ToolHeaderStyle()
             {
@@ -46,6 +48,8 @@ namespace WpfOpenControls.DockManager
         public double FontSize { get; set; }
         public FontFamily FontFamily { get; set; }
         public Brush Background { get; set; }
+        public Brush GapBrush { get; set; }
+        public double GapHeight { get; set; }
         public Brush ButtonForeground { get; set; }
         public ToolHeaderStyle HeaderStyle { get; set; }
         public Brush ActiveScrollIndicatorBrush { get; set; }

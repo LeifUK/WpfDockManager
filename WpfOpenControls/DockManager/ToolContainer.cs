@@ -9,7 +9,7 @@ namespace WpfOpenControls.DockManager
         public ToolContainer()
         {
             _rowDefinition_UserControl = new RowDefinition() { Height = new System.Windows.GridLength(1, System.Windows.GridUnitType.Star) };
-            _rowDefinition_Gap = new RowDefinition() { Height = new System.Windows.GridLength(2, System.Windows.GridUnitType.Pixel) };
+            _rowDefinition_Gap = new RowDefinition() { Height = new System.Windows.GridLength(1, System.Windows.GridUnitType.Auto) };
             _rowDefinition_TabHeader = new RowDefinition() { Height = new System.Windows.GridLength(1, System.Windows.GridUnitType.Auto) };
             _rowDefinition_Spacer = new RowDefinition() { Height = new System.Windows.GridLength(4, System.Windows.GridUnitType.Pixel) };
             RowDefinitions.Add(_rowDefinition_UserControl);
@@ -26,6 +26,7 @@ namespace WpfOpenControls.DockManager
             Grid.SetZIndex(_tabHeaderControl, 1);
             
             _gap = new Border();
+            _gap.Height = 2;
             Children.Add(_gap);
             Grid.SetRow(_gap, 1);
             Grid.SetColumn(_gap, 0);
@@ -83,7 +84,7 @@ namespace WpfOpenControls.DockManager
             }
             else
             {
-                _rowDefinition_Gap.Height = new System.Windows.GridLength(2, System.Windows.GridUnitType.Pixel);
+                _rowDefinition_Gap.Height = new System.Windows.GridLength(1, System.Windows.GridUnitType.Auto);
                 _rowDefinition_TabHeader.Height = new System.Windows.GridLength(1, System.Windows.GridUnitType.Auto);
                 _rowDefinition_Spacer.Height = new System.Windows.GridLength(4, System.Windows.GridUnitType.Pixel);
             }
