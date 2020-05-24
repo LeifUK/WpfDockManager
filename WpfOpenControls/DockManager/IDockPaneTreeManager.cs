@@ -14,5 +14,7 @@ namespace WpfOpenControls.DockManager
         SelectablePane FindSelectablePane(Grid grid, Point pointOnScreen);
 
         void Unfloat(FloatingPane floatingPane, SelectablePane selectedPane, WindowLocation windowLocation);
-    }
+
+        void PinToolPane(UnpinnedToolData unpinnedToolData);
+     }
 }

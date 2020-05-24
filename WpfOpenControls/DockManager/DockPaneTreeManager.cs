@@ -205,7 +205,7 @@ namespace WpfOpenControls.DockManager
 
             return null;
         }
-        
+
         private static void ExtractDocuments(FloatingPane floatingPane, DockPane dockPane)
         {
             while (true)
@@ -323,6 +323,81 @@ namespace WpfOpenControls.DockManager
 
                 Application.Current.MainWindow.Activate();
             });
+        }
+
+        private Grid FindElement(Guid guid, Grid parentGrid)
+        {
+            Grid grid = null;
+
+            foreach (var child in parentGrid.Children)
+            {
+                grid = child as Grid;
+                if (grid != null)
+                {
+                    if ((grid.Tag != null) && ((Guid)grid.Tag == guid))
+                    {
+                        return grid;
+                    }
+
+                    grid = FindElement(guid, grid);
+                    if (grid != null)
+                    {
+                        return grid;
+                    }
+                }
+            }
+
+            return grid;
+        }
+
+        // Warning warning => split arg?
+        public void PinToolPane(UnpinnedToolData unpinnedToolData)
+        {
+            Grid sibling = null;
+            SplitterPane newSplitterPane = ILayoutFactory.MakeSplitterPane(unpinnedToolData.IsHorizontal);
+
+            if (sibling == IDockPaneTree)
+            {
+                IEnumerable<SplitterPane> enumerableSplitterPanes = IDockPaneTree.Children.OfType<SplitterPane>();
+                if (enumerableSplitterPanes.Count() == 1)
+                {
+                    SplitterPane splitterPane = enumerableSplitterPanes.First();
+
+                    IDockPaneTree.RootPane = newSplitterPane;
+                    newSplitterPane.AddChild(splitterPane, !unpinnedToolData.IsFirst);
+                    newSplitterPane.AddChild(unpinnedToolData.ToolPaneGroup, unpinnedToolData.IsFirst);
+                }
+                else
+                {
+                    IEnumerable<DocumentPanel> enumerableDocumentPanels = IDockPaneTree.Children.OfType<DocumentPanel>();
+                    System.Diagnostics.Trace.Assert(enumerableDocumentPanels.Count() == 1);
+
+                    DocumentPanel documentPanel = enumerableDocumentPanels.First();
+
+                    IDockPaneTree.RootPane = newSplitterPane;
+                    newSplitterPane.AddChild(documentPanel, !unpinnedToolData.IsFirst);
+                    newSplitterPane.AddChild(unpinnedToolData.ToolPaneGroup, unpinnedToolData.IsFirst);
+                }
+            }
+            else if (sibling.Parent == IDockPaneTree)
+            {
+                IDockPaneTree.RootPane = newSplitterPane;
+                newSplitterPane.AddChild(sibling, !unpinnedToolData.IsFirst);
+                newSplitterPane.AddChild(unpinnedToolData.ToolPaneGroup, unpinnedToolData.IsFirst);
+            }
+            else
+            {
+                SplitterPane parentSplitterPane = sibling.Parent as SplitterPane;
+                int row = Grid.GetRow(sibling);
+                int column = Grid.GetColumn(sibling);
+                bool isFirst = (parentSplitterPane.IsHorizontal && (row == 0)) || (!parentSplitterPane.IsHorizontal && (column == 0));
+                parentSplitterPane.Children.Remove(sibling);
+
+                parentSplitterPane.AddChild(newSplitterPane, isFirst);
+
+                newSplitterPane.AddChild(sibling, !unpinnedToolData.IsFirst);
+                newSplitterPane.AddChild(unpinnedToolData.ToolPaneGroup, unpinnedToolData.IsFirst);
+            }
         }
     }
 }

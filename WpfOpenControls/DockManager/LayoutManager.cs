@@ -1115,71 +1115,6 @@ namespace WpfOpenControls.DockManager
             _activeUnpinnedToolPane = CreateUnpinnedToolPane(sender as ToolListBoxItem, e.ToolListBox.WindowLocation);
         }
 
-        private void PinToolPane(UnpinnedToolData unpinnedToolData)
-        {
-            Grid sibling = null;
-            if (unpinnedToolData.Sibling == (Guid)this.Tag)
-            {
-                sibling = this;
-            }
-            else
-            {
-                sibling = FindElement(unpinnedToolData.Sibling, this);
-            }
-
-            // This can happen when loading a layout
-            if (sibling == null)
-            {
-                sibling = this;
-            }
-
-            SplitterPane newSplitterPane = ILayoutFactory.MakeSplitterPane(unpinnedToolData.IsHorizontal);
-
-            if (sibling == this)
-            {
-
-                IEnumerable<SplitterPane> enumerableSplitterPanes = Children.OfType<SplitterPane>();
-                if (enumerableSplitterPanes.Count() == 1)
-                {
-                    SplitterPane splitterPane = enumerableSplitterPanes.First();
-
-                    IDockPaneTree.RootPane = newSplitterPane;
-                    newSplitterPane.AddChild(splitterPane, !unpinnedToolData.IsFirst);
-                    newSplitterPane.AddChild(unpinnedToolData.ToolPaneGroup, unpinnedToolData.IsFirst);
-                }
-                else
-                {
-                    IEnumerable<DocumentPanel> enumerableDocumentPanels = Children.OfType<DocumentPanel>();
-                    System.Diagnostics.Trace.Assert(enumerableDocumentPanels.Count() == 1);
-
-                    DocumentPanel documentPanel = enumerableDocumentPanels.First();
-
-                    IDockPaneTree.RootPane = newSplitterPane;
-                    newSplitterPane.AddChild(documentPanel, !unpinnedToolData.IsFirst);
-                    newSplitterPane.AddChild(unpinnedToolData.ToolPaneGroup, unpinnedToolData.IsFirst);
-                }
-            }
-            else if (sibling.Parent == this)
-            {
-                IDockPaneTree.RootPane = newSplitterPane;
-                newSplitterPane.AddChild(sibling, !unpinnedToolData.IsFirst);
-                newSplitterPane.AddChild(unpinnedToolData.ToolPaneGroup, unpinnedToolData.IsFirst);
-            }
-            else
-            {
-                SplitterPane parentSplitterPane = sibling.Parent as SplitterPane;
-                int row = Grid.GetRow(sibling);
-                int column = Grid.GetColumn(sibling);
-                bool isFirst = (parentSplitterPane.IsHorizontal && (row == 0)) || (!parentSplitterPane.IsHorizontal && (column == 0));
-                parentSplitterPane.Children.Remove(sibling);
-
-                parentSplitterPane.AddChild(newSplitterPane, isFirst);
-
-                newSplitterPane.AddChild(sibling, !unpinnedToolData.IsFirst);
-                newSplitterPane.AddChild(unpinnedToolData.ToolPaneGroup, unpinnedToolData.IsFirst);
-            }
-        }
-
         private void UnpinnedToolPane_PinClick(object sender, EventArgs e)
         {
             System.Diagnostics.Trace.Assert(_activeUnpinnedToolPane == sender);
@@ -1196,7 +1131,7 @@ namespace WpfOpenControls.DockManager
              * Restore the pane in the view tree
              */
 
-            PinToolPane(_activeUnpinnedToolData);
+           IDockPaneTreeManager.PinToolPane(_activeUnpinnedToolData);
 
             /*
              * Remove the tool list items from the side bar
@@ -1265,6 +1200,8 @@ namespace WpfOpenControls.DockManager
         {
             System.Diagnostics.Trace.Assert(sender is ToolPaneGroup);
 
+            // Warning warning 
+
             DocumentPanel documentPanel = FindDocumentPanel(_root) as DocumentPanel;
             System.Diagnostics.Trace.Assert(documentPanel != null);
 
@@ -1279,7 +1216,7 @@ namespace WpfOpenControls.DockManager
             ToolPaneGroup toolPaneGroup = sender as ToolPaneGroup;
 
             /*
-             * Fidn the first common ancestor for the document panel and the tool pane group
+             * Find the first common ancestor for the document panel and the tool pane group
              */
 
             FrameworkElement frameworkElement = toolPaneGroup;
@@ -1544,31 +1481,6 @@ namespace WpfOpenControls.DockManager
             return floatingToolPaneGroup;
         }
 
-        Grid FindElement(Guid guid, Grid parentGrid)
-        {
-            Grid grid = null;
-
-            foreach (var child in parentGrid.Children)
-            {
-                grid = child as Grid;
-                if (grid != null)
-                {
-                    if ((grid.Tag != null) && ((Guid)grid.Tag == guid))
-                    {
-                        return grid;
-                    }
-
-                    grid = FindElement(guid, grid);
-                    if (grid != null)
-                    {
-                        return grid;
-                    }
-                }
-            }
-
-            return grid;
-        }
-
         void ILayoutFactory.MakeUnpinnedToolPaneGroup(WindowLocation windowLocation, ToolPaneGroup toolPaneGroup, string siblingGuid, bool isHorizontal, bool isFirst)
         {
             Controls.ToolListBox toolListBox = null;
@@ -1793,104 +1705,6 @@ namespace WpfOpenControls.DockManager
 
             return true;
         }
-
-        /*
-         * Remove a dock pane from the tree
-         */
-        //private DockPane ExtractDockPane(DockPane dockPane, out FrameworkElement frameworkElement)
-        //{
-        //    frameworkElement = null;
-
-        //    if (dockPane == null)
-        //    {
-        //        return null;
-        //    }
-
-        //    Grid parentGrid = dockPane.Parent as Grid;
-        //    System.Diagnostics.Trace.Assert(parentGrid != null, System.Reflection.MethodBase.GetCurrentMethod().Name + ": DockPane parent must be a Grid");
-
-        //    if (parentGrid == this)
-        //    {
-        //        this.Children.Remove(dockPane);
-        //    }
-        //    else
-        //    {
-        //        Grid grandparentGrid = parentGrid.Parent as Grid;
-        //        System.Diagnostics.Trace.Assert(grandparentGrid != null, System.Reflection.MethodBase.GetCurrentMethod().Name + ": Grid parent not a Grid");
-
-        //        IDockPaneTree.FrameworkElementRemoved(dockPane);
-        //        parentGrid.Children.Remove(dockPane);
-
-        //        if (!(parentGrid is DocumentPanel))
-        //        {
-        //            foreach (var item in parentGrid.Children)
-        //            {
-        //                if (!(item is GridSplitter))
-        //                {
-        //                    frameworkElement = item as FrameworkElement;
-        //                    break;
-        //                }
-        //            }
-
-        //            System.Diagnostics.Trace.Assert(frameworkElement != null);
-
-        //            parentGrid.Children.Remove(frameworkElement);
-        //            int row = Grid.GetRow(parentGrid);
-        //            int column = Grid.GetColumn(parentGrid);
-        //            IDockPaneTree.FrameworkElementRemoved(parentGrid);
-        //            grandparentGrid.Children.Remove(parentGrid);
-        //            if (grandparentGrid == this)
-        //            {
-        //                IDockPaneTree.RootPane = frameworkElement as Grid;
-        //            }
-        //            else
-        //            {
-        //                grandparentGrid.Children.Add(frameworkElement);
-        //                Grid.SetRow(frameworkElement, row);
-        //                Grid.SetColumn(frameworkElement, column);
-        //            }
-        //        }
-        //    }
-
-        //    return dockPane;
-        //}
-
-        //private bool UngroupDockPane(DockPane dockPane, int index, double paneWidth)
-        //{
-        //    System.Diagnostics.Trace.Assert(dockPane != null, System.Reflection.MethodBase.GetCurrentMethod().Name + ": dockPane is null");
-
-        //    int viewCount = dockPane.IViewContainer.GetUserControlCount();
-        //    if (viewCount < 2)
-        //    {
-        //        // Cannot ungroup one item!
-        //        return false;
-        //    }
-
-        //    // The parent must be a SplitterPane or the LayoutManager
-        //    Grid parentSplitterPane = dockPane.Parent as Grid;
-        //    System.Diagnostics.Trace.Assert(parentSplitterPane != null, System.Reflection.MethodBase.GetCurrentMethod().Name + ": dockPane.Parent not a Grid");
-
-        //    UserControl userControl = dockPane.IViewContainer.ExtractUserControl(index);
-        //    if (userControl == null)
-        //    {
-        //        return false;
-        //    }
-
-        //    DockPane newDockPane = (dockPane is ToolPaneGroup) ? (DockPane)ILayoutFactory.MakeToolPaneGroup() : ILayoutFactory.MakeDocumentPaneGroup();
-        //    newDockPane.IViewContainer.AddUserControl(userControl);
-
-        //    parentSplitterPane.Children.Remove(dockPane);
-
-        //    SplitterPane newGrid = ILayoutFactory.MakeSplitterPane(false);
-        //    parentSplitterPane.Children.Add(newGrid);
-        //    Grid.SetRow(newGrid, Grid.GetRow(dockPane));
-        //    Grid.SetColumn(newGrid, Grid.GetColumn(dockPane));
-
-        //    newGrid.AddChild(dockPane, true);
-        //    newGrid.AddChild(newDockPane, false);
-
-        //    return true;
-        //}
 
         private void DockPane_Ungroup(object sender, EventArgs e)
         {
