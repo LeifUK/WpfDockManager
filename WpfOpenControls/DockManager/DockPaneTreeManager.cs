@@ -113,7 +113,7 @@ namespace WpfOpenControls.DockManager
             return true;
         }
 
-        public void Float(DockPane dockPane, FloatEventArgs e, bool selectedTabOnly)
+        public void Float(DockPane dockPane, bool drag, bool selectedTabOnly)
         {
             if (!selectedTabOnly || (dockPane.IViewContainer.GetUserControlCount() == 1))
             {
@@ -149,7 +149,7 @@ namespace WpfOpenControls.DockManager
                 }
             }
 
-            if (e.Drag)
+            if (drag)
             {
                 IntPtr hWnd = new System.Windows.Interop.WindowInteropHelper(Application.Current.MainWindow).EnsureHandle();
                 WpfOpenControls.Controls.Utilities.SendLeftMouseButtonUp(hWnd);
@@ -354,6 +354,20 @@ namespace WpfOpenControls.DockManager
         public void PinToolPane(UnpinnedToolData unpinnedToolData)
         {
             Grid sibling = null;
+            if (unpinnedToolData.Sibling == (Guid)IDockPaneTree.ParentGrid.Tag)
+            {
+                sibling = IDockPaneTree.ParentGrid;
+            }
+            else
+            {
+                sibling = FindElement(unpinnedToolData.Sibling, IDockPaneTree.ParentGrid);
+            }
+
+            // This can happen when loading a layout
+            if (sibling == null)
+            {
+                sibling = IDockPaneTree as Grid;
+            }
             SplitterPane newSplitterPane = ILayoutFactory.MakeSplitterPane(unpinnedToolData.IsHorizontal);
 
             if (sibling == IDockPaneTree)
@@ -398,6 +412,72 @@ namespace WpfOpenControls.DockManager
                 newSplitterPane.AddChild(sibling, !unpinnedToolData.IsFirst);
                 newSplitterPane.AddChild(unpinnedToolData.ToolPaneGroup, unpinnedToolData.IsFirst);
             }
+        }
+
+        public SelectablePane FindDocumentPanel(Grid grid)
+        {
+            foreach (var child in grid.Children)
+            {
+                if (child is DocumentPanel)
+                {
+                    return child as SelectablePane;
+                }
+                if (child is SplitterPane)
+                {
+                    SelectablePane selectablePane = FindDocumentPanel(child as SplitterPane);
+                    if (selectablePane != null)
+                    {
+                        return selectablePane;
+                    }
+                }
+            }
+
+            return null;
+        }
+
+        public void UnpinToolPane(ToolPaneGroup toolPaneGroup, out bool isHorizontal, out int row, out int column, out Guid siblingGuid)
+        { 
+            System.Diagnostics.Trace.Assert(toolPaneGroup != null);
+
+            DocumentPanel documentPanel = FindDocumentPanel(IDockPaneTree.RootPane) as DocumentPanel;
+            System.Diagnostics.Trace.Assert(documentPanel != null);
+
+            List<Grid> documentPanelAncestors = new List<Grid>();
+            Grid grid = documentPanel;
+            while (grid.Parent != IDockPaneTree)
+            {
+                grid = grid.Parent as SplitterPane;
+                documentPanelAncestors.Add(grid);
+            }
+
+            /*
+             * Find the first common ancestor for the document panel and the tool pane group
+             */
+
+            FrameworkElement frameworkElement = toolPaneGroup;
+            while (true)
+            {
+                if (documentPanelAncestors.Contains(frameworkElement.Parent as Grid))
+                {
+                    break;
+                }
+
+                frameworkElement = frameworkElement.Parent as FrameworkElement;
+            }
+
+            SplitterPane splitterPane = frameworkElement.Parent as SplitterPane;
+            row = Grid.GetRow(frameworkElement);
+            column = Grid.GetColumn(frameworkElement);
+            isHorizontal = splitterPane.IsHorizontal;
+
+            frameworkElement = toolPaneGroup;
+            FrameworkElement parentFrameworkElement = toolPaneGroup.Parent as FrameworkElement;
+
+            ExtractDockPane(toolPaneGroup, out frameworkElement);
+
+            System.Diagnostics.Trace.Assert(frameworkElement != null);
+
+            siblingGuid = (Guid)((frameworkElement as Grid).Tag);
         }
     }
 }

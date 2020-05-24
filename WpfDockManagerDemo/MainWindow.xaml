@@ -79,6 +79,7 @@
                         <dockManager:ToolPaneGroupStyle.FontSize>12</dockManager:ToolPaneGroupStyle.FontSize>
                         <dockManager:ToolPaneGroupStyle.FontFamily>Arial</dockManager:ToolPaneGroupStyle.FontFamily>
                         <dockManager:ToolPaneGroupStyle.Background>#5d6b99</dockManager:ToolPaneGroupStyle.Background>
+                        <dockManager:ToolPaneGroupStyle.GapBrush>AliceBlue</dockManager:ToolPaneGroupStyle.GapBrush>
                         <dockManager:ToolPaneGroupStyle.HeaderStyle>
                             <dockManager:ToolHeaderStyle Background="#3b4f81" BorderBrush="Gainsboro" BorderThickness="0" CornerRadius="4,4,0,0"/>
                         </dockManager:ToolPaneGroupStyle.HeaderStyle>
@@ -104,6 +105,7 @@
                         <dockManager:DocumentPaneGroupStyle.FontSize>12</dockManager:DocumentPaneGroupStyle.FontSize>
                         <dockManager:DocumentPaneGroupStyle.FontFamily>Arial</dockManager:DocumentPaneGroupStyle.FontFamily>
                         <dockManager:DocumentPaneGroupStyle.Background>#5d6b99</dockManager:DocumentPaneGroupStyle.Background>
+                        <dockManager:DocumentPaneGroupStyle.GapBrush>#f5cc84</dockManager:DocumentPaneGroupStyle.GapBrush>
                         <dockManager:DocumentPaneGroupStyle.ButtonForeground>White</dockManager:DocumentPaneGroupStyle.ButtonForeground>
                         <dockManager:DocumentPaneGroupStyle.ActiveScrollIndicatorBrush>White</dockManager:DocumentPaneGroupStyle.ActiveScrollIndicatorBrush>
                         <dockManager:DocumentPaneGroupStyle.InactiveScrollIndicatorBrush>Transparent</dockManager:DocumentPaneGroupStyle.InactiveScrollIndicatorBrush>

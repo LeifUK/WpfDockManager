@@ -1175,65 +1175,19 @@ namespace WpfOpenControls.DockManager
             }
         }
 
-        private SelectablePane FindDocumentPanel(Grid grid)
-        {
-            foreach (var child in grid.Children)
-            {
-                if (child is DocumentPanel)
-                {
-                    return child as SelectablePane;
-                }
-                if (child is SplitterPane)
-                {
-                    SelectablePane selectablePane = FindDocumentPanel(child as SplitterPane);
-                    if (selectablePane != null)
-                    {
-                        return selectablePane;
-                    }
-                }
-            }
-
-            return null;
-        }
-
         private void ToolPane_UnPinClick(object sender, EventArgs e)
         {
             System.Diagnostics.Trace.Assert(sender is ToolPaneGroup);
 
             // Warning warning 
-
-            DocumentPanel documentPanel = FindDocumentPanel(_root) as DocumentPanel;
-            System.Diagnostics.Trace.Assert(documentPanel != null);
-
-            List<Grid> documentPanelAncestors = new List<Grid>();
-            Grid grid = documentPanel;
-            while (grid.Parent != this)
-            {
-                grid = grid.Parent as SplitterPane;
-                documentPanelAncestors.Add(grid);
-            }
-
             ToolPaneGroup toolPaneGroup = sender as ToolPaneGroup;
+            IDockPaneTreeManager.UnpinToolPane(toolPaneGroup, out bool isHorizontal, out int row, out int column, out Guid siblingGuid);
 
-            /*
-             * Find the first common ancestor for the document panel and the tool pane group
-             */
-
-            FrameworkElement frameworkElement = toolPaneGroup;
-            while (true)
-            {
-                if (documentPanelAncestors.Contains(frameworkElement.Parent as Grid))
-                {
-                    break;
-                }
-
-                frameworkElement = frameworkElement.Parent as FrameworkElement;
-            }
-
-            SplitterPane splitterPane = frameworkElement.Parent as SplitterPane;
-            int row = Grid.GetRow(frameworkElement);
-            int column = Grid.GetColumn(frameworkElement);
-            bool isHorizontal = splitterPane.IsHorizontal;
+            UnpinnedToolData unpinnedToolData = new UnpinnedToolData();
+            unpinnedToolData.ToolPaneGroup = toolPaneGroup;
+            unpinnedToolData.IsHorizontal = isHorizontal;
+            unpinnedToolData.IsFirst = (row == 0) && (column == 0);
+            unpinnedToolData.Sibling = siblingGuid;
 
             Controls.ToolListBox ToolListBox = null;
             WindowLocation windowLocation = WindowLocation.None;
@@ -1263,22 +1217,6 @@ namespace WpfOpenControls.DockManager
                     windowLocation = WindowLocation.RightSide;
                 }
             }
-
-            frameworkElement = toolPaneGroup;
-            FrameworkElement parentFrameworkElement = toolPaneGroup.Parent as FrameworkElement;
-
-            System.Diagnostics.Trace.Assert(ToolListBox != null);
-
-            toolPaneGroup = sender as ToolPaneGroup;
-            IDockPaneTreeManager.ExtractDockPane(toolPaneGroup, out frameworkElement);
-
-            System.Diagnostics.Trace.Assert(frameworkElement != null);
-
-            UnpinnedToolData unpinnedToolData = new UnpinnedToolData();
-            unpinnedToolData.ToolPaneGroup = toolPaneGroup;
-            unpinnedToolData.IsHorizontal = isHorizontal;
-            unpinnedToolData.IsFirst = (row == 0) && (column == 0);
-            unpinnedToolData.Sibling = (Guid)((frameworkElement as Grid).Tag);
 
             AddUnpinnedToolData(unpinnedToolData, windowLocation, ToolListBox);
         }
@@ -1559,6 +1497,14 @@ namespace WpfOpenControls.DockManager
             }
         }
         
+        Grid IDockPaneTree.ParentGrid 
+        { 
+            get
+            {
+                return this;
+            }
+        }
+
         #endregion IDockPaneTree
 
         private void Create()
@@ -1738,15 +1684,14 @@ namespace WpfOpenControls.DockManager
         {
             System.Diagnostics.Trace.Assert(sender is DockPane);
 
-            IDockPaneTreeManager.Float(sender as DockPane, e, false);
+            IDockPaneTreeManager.Float(sender as DockPane, e.Drag, false);
         }
 
         private void DockPane_FloatTabRequest(object sender, EventArgs e)
         {
             System.Diagnostics.Trace.Assert(sender is DockPane);
 
-            FloatEventArgs floatEventArgs = new FloatEventArgs() { Drag = true };
-            IDockPaneTreeManager.Float(sender as DockPane, floatEventArgs, true);
+            IDockPaneTreeManager.Float(sender as DockPane, true, true);
         }
 
         private void DockPane_Close(object sender, EventArgs e)
@@ -1861,21 +1806,6 @@ namespace WpfOpenControls.DockManager
             _windowLocationPane = null;
             _sideLocationPane?.Close();
             _sideLocationPane = null;
-        }
-
-        private static void ExtractDocuments(FloatingPane floatingPane, DockPane dockPane)
-        {
-            while (true)
-            {
-                UserControl userControl = floatingPane.IViewContainer.ExtractUserControl(0);
-                if (userControl == null)
-                {
-                    break;
-                }
-
-                dockPane.IViewContainer.AddUserControl(userControl);
-            }
-            floatingPane.Close();
         }
 
         private void FloatingPane_EndDrag(object sender, EventArgs e)

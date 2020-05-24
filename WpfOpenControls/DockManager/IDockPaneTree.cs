@@ -7,6 +7,7 @@ namespace WpfOpenControls.DockManager
     {
         void FrameworkElementRemoved(FrameworkElement frameworkElement);
         Grid RootPane { get; set; }
+        Grid ParentGrid { get; }
         UIElementCollection Children { get; }
     }
 }
