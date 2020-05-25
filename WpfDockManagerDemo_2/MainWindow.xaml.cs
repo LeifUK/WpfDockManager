@@ -53,7 +53,7 @@ namespace WpfDockManagerDemo_2
 
             try
             {
-                _layoutManager.LoadLayout(out System.Xml.XmlDocument xmlDocument_saved, dialog.FileName);
+                _layoutManager.LoadLayout(dialog.FileName);
             }
             catch (Exception exception)
             {

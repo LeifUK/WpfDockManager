@@ -1357,21 +1357,6 @@ namespace WpfOpenControls.DockManager
             dockPane.TabClosed += DockPane_TabClosed;
         }
 
-        private void DockPane_TabClosed(object sender, Events.TabClosedEventArgs e)
-        {
-            System.Diagnostics.Trace.Assert(e.UserControl.DataContext is IViewModel);
-            if (sender is DocumentPaneGroup)
-            {
-                System.Diagnostics.Trace.Assert(DocumentsSource.Contains(e.UserControl.DataContext as IViewModel));
-                DocumentsSource.Remove(e.UserControl.DataContext as IViewModel);
-            }
-            else if (sender is ToolPaneGroup)
-            {
-                System.Diagnostics.Trace.Assert(ToolsSource.Contains(e.UserControl.DataContext as IViewModel));
-                ToolsSource.Remove(e.UserControl.DataContext as IViewModel);
-            }
-        }
-
         DocumentPaneGroup ILayoutFactory.MakeDocumentPaneGroup()
         {
             DocumentPaneGroup documentPaneGroup = new DocumentPaneGroup();
@@ -1607,11 +1592,11 @@ namespace WpfOpenControls.DockManager
             return true;
         }
 
-        public bool LoadLayout(out XmlDocument xmlDocument, string fileNameAndPath)
+        public bool LoadLayout(string fileNameAndPath)
         {
             Clear();
 
-            xmlDocument = new XmlDocument();
+            XmlDocument xmlDocument = new XmlDocument();
             xmlDocument.Load(fileNameAndPath);
 
             if (xmlDocument.ChildNodes.Count == 0)
@@ -1684,6 +1669,21 @@ namespace WpfOpenControls.DockManager
             System.Diagnostics.Trace.Assert(sender is DockPane);
 
             IDockPaneTreeManager.Float(sender as DockPane, true, true);
+        }
+
+        private void DockPane_TabClosed(object sender, Events.TabClosedEventArgs e)
+        {
+            System.Diagnostics.Trace.Assert(e.UserControl.DataContext is IViewModel);
+            if (sender is DocumentPaneGroup)
+            {
+                System.Diagnostics.Trace.Assert(DocumentsSource.Contains(e.UserControl.DataContext as IViewModel));
+                DocumentsSource.Remove(e.UserControl.DataContext as IViewModel);
+            }
+            else if (sender is ToolPaneGroup)
+            {
+                System.Diagnostics.Trace.Assert(ToolsSource.Contains(e.UserControl.DataContext as IViewModel));
+                ToolsSource.Remove(e.UserControl.DataContext as IViewModel);
+            }
         }
 
         private void DockPane_CloseRequest(object sender, EventArgs e)
