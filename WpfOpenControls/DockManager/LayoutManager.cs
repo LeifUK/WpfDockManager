@@ -1083,6 +1083,7 @@ namespace WpfOpenControls.DockManager
                     unpinnedToolPane.Left += _root.ActualWidth - width;
                 }
             }
+            unpinnedToolPane.ClosePane += UnpinnedToolPane_ClosePane;
             unpinnedToolPane.Closed += UnpinnedToolPane_Closed;
             unpinnedToolPane.PinClick += UnpinnedToolPane_PinClick;
             unpinnedToolPane.WindowLocation = windowLocation;
@@ -1146,7 +1147,33 @@ namespace WpfOpenControls.DockManager
             _activeUnpinnedToolData = null;
         }
 
-        // Warning warning => this should close the tool pane!
+        private void UnpinnedToolPane_ClosePane(object sender, EventArgs e)
+        {
+            System.Diagnostics.Trace.Assert(sender is UnpinnedToolPane);
+
+            UserControl userControl = _activeUnpinnedToolPane.ToolPane.IViewContainer.ExtractUserControl(0);
+            IViewModel iViewModel = userControl.DataContext as IViewModel;
+
+            System.Diagnostics.Trace.Assert(iViewModel != null);
+
+            // Warning warning => remove the view model!
+
+            /*
+             * Remove the tool list items from the side bar
+             */
+
+            _activeToolListBox.ItemsSource.Remove(_activeToolListBoxItem);
+            if (_activeToolListBox.ItemsSource.Count == 0)
+            {
+                _dictUnpinnedToolData[_activeToolListBox.WindowLocation].Remove(_activeUnpinnedToolData);
+            }
+            _activeUnpinnedToolPane.Close();
+            _activeUnpinnedToolPane = null;
+            _activeToolListBoxItem = null;
+            _activeToolListBox = null;
+            _activeUnpinnedToolData = null;
+        }
+
         private void UnpinnedToolPane_Closed(object sender, EventArgs e)
         {
             System.Diagnostics.Trace.Assert(_activeUnpinnedToolPane == sender);
@@ -1290,50 +1317,6 @@ namespace WpfOpenControls.DockManager
             }
 
             return views;
-        }
-
-        private delegate DockPane DelegateCreateDockPane();
-
-        // Warning warning => move
-        private void AddViews(List<UserControl> views, List<FrameworkElement> list_N, DelegateCreateDockPane createDockPane)
-        {
-            List<FrameworkElement> list_N_plus_1 = new List<FrameworkElement>();
-            bool isHorizontal = false;
-            int viewIndex = 1;
-
-            while (viewIndex < views.Count)
-            {
-                for (int i = 0; (i < list_N.Count) && (viewIndex < views.Count); ++i)
-                {
-                    SplitterPane splitterPane = ILayoutFactory.MakeSplitterPane(isHorizontal);
-
-                    var node = list_N[i];
-                    System.Windows.Markup.IAddChild parentElement = (System.Windows.Markup.IAddChild)node.Parent;
-                    (node.Parent as Grid).Children.Remove(node);
-
-                    parentElement.AddChild(splitterPane);
-                    Grid.SetRow(splitterPane, Grid.GetRow(node));
-                    Grid.SetColumn(splitterPane, Grid.GetColumn(node));
-
-                    splitterPane.AddChild(node, true);
-
-                    list_N_plus_1.Add(node);
-
-                    node = views[viewIndex];
-                    DockManager.DockPane dockPane = createDockPane();
-                    dockPane.IViewContainer.AddUserControl(node as UserControl);
-
-                    list_N_plus_1.Add(dockPane);
-
-                    splitterPane.AddChild(dockPane, false);
-
-                    ++viewIndex;
-                }
-
-                isHorizontal = !isHorizontal;
-                list_N = list_N_plus_1;
-                list_N_plus_1 = new List<FrameworkElement>();
-            }
         }
 
         #region ILayoutFactory
@@ -1555,7 +1538,7 @@ namespace WpfOpenControls.DockManager
 
                 documentPanel.Children.Add(documentPane);
                 list_N.Add(documentPane);
-                AddViews(documentViews, list_N, delegate { return ILayoutFactory.MakeDocumentPaneGroup(); });
+                IDockPaneTreeManager.AddViews(documentViews, list_N, delegate { return ILayoutFactory.MakeDocumentPaneGroup(); });
             }
 
             List<UserControl> toolViews = LoadViewsFromTemplates(ToolTemplates, ToolsSource);
@@ -1569,7 +1552,7 @@ namespace WpfOpenControls.DockManager
                 (_root as SplitterPane).AddChild(toolPaneGroup, false);
 
                 list_N.Add(toolPaneGroup);
-                AddViews(toolViews, list_N, delegate { return ILayoutFactory.MakeToolPaneGroup(); });
+                IDockPaneTreeManager.AddViews(toolViews, list_N, delegate { return ILayoutFactory.MakeToolPaneGroup(); });
             }
 
             UpdateLayout();
@@ -1635,11 +1618,9 @@ namespace WpfOpenControls.DockManager
             DockPane dockPane = sender as DockPane;
             var parentGrid = dockPane.Parent as Grid;
 
-            int count = 1;
             double paneWidth = dockPane.ActualWidth / dockPane.IViewContainer.GetUserControlCount();
             while (IDockPaneTreeManager.UngroupDockPane(dockPane, 1, paneWidth))
             {
-                ++count;
                 // Nothing here
             }
         }

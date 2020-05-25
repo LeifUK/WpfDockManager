@@ -14,9 +14,16 @@ namespace WpfOpenControls.DockManager
             _windowChrome.GlassFrameThickness = new Thickness(1);
             _toolPane.ShowAsUnPinned();
             _toolPane.UnPinClick += _toolPane_UnPinClick;
+            _toolPane.Close += _toolPane_Close;
+        }
+
+        private void _toolPane_Close(object sender, EventArgs e)
+        {
+            ClosePane?.Invoke(this, null);
         }
 
         public event EventHandler PinClick;
+        public event EventHandler ClosePane;
 
         private void _toolPane_UnPinClick(object sender, System.EventArgs e)
         {

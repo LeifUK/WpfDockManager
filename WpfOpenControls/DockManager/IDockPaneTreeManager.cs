@@ -1,11 +1,16 @@
 ﻿using System;
 using System.Windows;
+using System.Collections.Generic;
 using System.Windows.Controls;
 
 namespace WpfOpenControls.DockManager
 {
+    internal delegate DockPane DelegateCreateDockPane();
+
     internal interface IDockPaneTreeManager
     {
+        void AddViews(List<UserControl> views, List<FrameworkElement> list_N, DelegateCreateDockPane createDockPane);
+
         DockPane ExtractDockPane(DockPane dockPane, out FrameworkElement frameworkElement);
 
         bool UngroupDockPane(DockPane dockPane, int index, double paneWidth);

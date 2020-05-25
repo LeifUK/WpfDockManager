@@ -59,6 +59,47 @@ namespace WpfOpenControls.DockManager
 
         #region IDockPaneTreeManager
 
+        public void AddViews(List<UserControl> views, List<FrameworkElement> list_N, DelegateCreateDockPane createDockPane)
+        {
+            List<FrameworkElement> list_N_plus_1 = new List<FrameworkElement>();
+            bool isHorizontal = false;
+            int viewIndex = 1;
+
+            while (viewIndex < views.Count)
+            {
+                for (int i = 0; (i < list_N.Count) && (viewIndex < views.Count); ++i)
+                {
+                    SplitterPane splitterPane = ILayoutFactory.MakeSplitterPane(isHorizontal);
+
+                    var node = list_N[i];
+                    System.Windows.Markup.IAddChild parentElement = (System.Windows.Markup.IAddChild)node.Parent;
+                    (node.Parent as Grid).Children.Remove(node);
+
+                    parentElement.AddChild(splitterPane);
+                    Grid.SetRow(splitterPane, Grid.GetRow(node));
+                    Grid.SetColumn(splitterPane, Grid.GetColumn(node));
+
+                    splitterPane.AddChild(node, true);
+
+                    list_N_plus_1.Add(node);
+
+                    node = views[viewIndex];
+                    DockManager.DockPane dockPane = createDockPane();
+                    dockPane.IViewContainer.AddUserControl(node as UserControl);
+
+                    list_N_plus_1.Add(dockPane);
+
+                    splitterPane.AddChild(dockPane, false);
+
+                    ++viewIndex;
+                }
+
+                isHorizontal = !isHorizontal;
+                list_N = list_N_plus_1;
+                list_N_plus_1 = new List<FrameworkElement>();
+            }
+        }
+
         public DockPane ExtractDockPane(DockPane dockPane, out FrameworkElement frameworkElement)
         {
             frameworkElement = null;
