@@ -79,8 +79,6 @@
       <SubType>Designer</SubType>
     </Page>
     <Compile Include="DockManager\Command.cs" />
-    <Compile Include="DockManager\Controls\ItemClickEventArgs.cs" />
-    <Compile Include="DockManager\Controls\ItemClickEventHandler.cs" />
     <Compile Include="DockManager\Controls\IToolListBoxItem.cs" />
     <Compile Include="Controls\TabHeader.cs" />
     <Compile Include="Controls\TabHeaderControl.xaml.cs">
@@ -95,9 +93,13 @@
     <Compile Include="DockManager\DocumentPaneGroup.cs" />
     <Compile Include="DockManager\DocumentPaneGroupStyle.cs" />
     <Compile Include="DockManager\DocumentPanel.cs" />
+    <Compile Include="DockManager\Events\FloatEventArgs.cs" />
+    <Compile Include="DockManager\Events\FloatEventHandler.cs" />
+    <Compile Include="DockManager\Events\ItemClickEventArgs.cs" />
+    <Compile Include="DockManager\Events\ItemClickEventHandler.cs" />
+    <Compile Include="DockManager\Events\TabClosedEventArgs.cs" />
+    <Compile Include="DockManager\Events\TabClosedEventHandler.cs" />
     <Compile Include="DockManager\ExtensionMethods.cs" />
-    <Compile Include="DockManager\FloatEventArgs.cs" />
-    <Compile Include="DockManager\FloatEventHandler.cs" />
     <Compile Include="DockManager\FloatingDocumentPaneGroup.cs" />
     <Compile Include="DockManager\FloatingPane.xaml.cs">
       <DependentUpon>FloatingPane.xaml</DependentUpon>
@@ -163,5 +165,6 @@
       <LastGenOutput>Settings.Designer.cs</LastGenOutput>
     </None>
   </ItemGroup>
+  <ItemGroup />
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
 </Project>

@@ -17,7 +17,7 @@ namespace WpfOpenControls.DockManager
         IViewModel GetIViewModel(int index);
 
         event EventHandler SelectionChanged;
-        event EventHandler TabClosed;
+        event Events.TabClosedEventHandler TabClosed;
         event EventHandler FloatTabRequest;
 
         double FontSize { set; }

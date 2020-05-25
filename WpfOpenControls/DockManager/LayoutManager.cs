@@ -218,14 +218,6 @@ namespace WpfOpenControls.DockManager
             }
         }
 
-        #region dependency properties 
-
-        #region DocumentsSource dependency property
-
-        [Bindable(true)]
-        [DesignerSerializationVisibility(DesignerSerializationVisibility.Hidden)]
-        public static readonly DependencyProperty DocumentsSourceProperty = DependencyProperty.Register("DocumentsSource", typeof(System.Collections.Generic.IEnumerable<IViewModel>), typeof(LayoutManager), new FrameworkPropertyMetadata(null, new PropertyChangedCallback(OnDocumentsSourceChanged)));
-
         private void ValidatePanes(Type paneType, IEnumerable<IViewModel> enumerable, List<IFloatingPane> floatingPanes)
         {
             List<IViewModel> viewModels = new List<IViewModel>();
@@ -245,16 +237,34 @@ namespace WpfOpenControls.DockManager
             ValidateFloatingPanes(viewModels, floatingPanes);
         }
 
+        private void ValidateToolPanes()
+        {
+            ValidatePanes(typeof(ToolPaneGroup), ToolsSource, FloatingToolPaneGroups);
+        }
+
+        private void ValidateDocumentPanes()
+        {
+            ValidatePanes(typeof(DocumentPaneGroup), DocumentsSource, FloatingDocumentPaneGroups);
+        }
+
+        #region dependency properties 
+
+        #region DocumentsSource dependency property
+
+        [Bindable(true)]
+        [DesignerSerializationVisibility(DesignerSerializationVisibility.Hidden)]
+        public static readonly DependencyProperty DocumentsSourceProperty = DependencyProperty.Register("DocumentsSource", typeof(System.Collections.ObjectModel.ObservableCollection<IViewModel>), typeof(LayoutManager), new FrameworkPropertyMetadata(null, new PropertyChangedCallback(OnDocumentsSourceChanged)));
+
         private void LayoutManager_DocumentsSourceCollectionChanged(object sender, System.Collections.Specialized.NotifyCollectionChangedEventArgs e)
         {
             ValidatePanes(typeof(DocumentPaneGroup), DocumentsSource, FloatingDocumentPaneGroups);
         }
 
-        public System.Collections.Generic.IEnumerable<IViewModel> DocumentsSource
+        public System.Collections.ObjectModel.ObservableCollection<IViewModel> DocumentsSource
         {
             get
             {
-                return (System.Collections.Generic.IEnumerable<IViewModel>)GetValue(DocumentsSourceProperty);
+                return (System.Collections.ObjectModel.ObservableCollection<IViewModel>)GetValue(DocumentsSourceProperty);
             }
             set
             {
@@ -272,7 +282,7 @@ namespace WpfOpenControls.DockManager
         {
             if (e.NewValue != null)
             {
-                DocumentsSource = (System.Collections.Generic.IEnumerable<IViewModel>)e.NewValue;
+                DocumentsSource = (System.Collections.ObjectModel.ObservableCollection<IViewModel>)e.NewValue;
                 Create();
             }
         }
@@ -283,18 +293,18 @@ namespace WpfOpenControls.DockManager
 
         [Bindable(true)]
         [DesignerSerializationVisibility(DesignerSerializationVisibility.Hidden)]
-        public static readonly DependencyProperty ToolsSourceProperty = DependencyProperty.Register("ToolsSource", typeof(System.Collections.IEnumerable), typeof(LayoutManager), new FrameworkPropertyMetadata(null, new PropertyChangedCallback(OnToolsSourceChanged)));
+        public static readonly DependencyProperty ToolsSourceProperty = DependencyProperty.Register("ToolsSource", typeof(System.Collections.ObjectModel.ObservableCollection<IViewModel>), typeof(LayoutManager), new FrameworkPropertyMetadata(null, new PropertyChangedCallback(OnToolsSourceChanged)));
 
         private void LayoutManager_ToolsSourceCollectionChanged(object sender, System.Collections.Specialized.NotifyCollectionChangedEventArgs e)
         {
-            ValidatePanes(typeof(ToolPaneGroup), ToolsSource, FloatingToolPaneGroups);
+            ValidateToolPanes();
         }
 
-        public System.Collections.Generic.IEnumerable<IViewModel> ToolsSource
+        public System.Collections.ObjectModel.ObservableCollection<IViewModel> ToolsSource
         {
             get
             {
-                return (System.Collections.Generic.IEnumerable<IViewModel>)GetValue(ToolsSourceProperty);
+                return (System.Collections.ObjectModel.ObservableCollection<IViewModel>)GetValue(ToolsSourceProperty);
             }
             set
             {
@@ -312,7 +322,7 @@ namespace WpfOpenControls.DockManager
         {
             if (e.NewValue != null)
             {
-                ToolsSource = e.NewValue as System.Collections.Generic.IEnumerable<IViewModel>;
+                ToolsSource = e.NewValue as System.Collections.ObjectModel.ObservableCollection<IViewModel>;
                 Create();
             }
         }
@@ -1083,7 +1093,7 @@ namespace WpfOpenControls.DockManager
                     unpinnedToolPane.Left += _root.ActualWidth - width;
                 }
             }
-            unpinnedToolPane.ClosePane += UnpinnedToolPane_ClosePane;
+            unpinnedToolPane.CloseRequest += UnpinnedToolPane_CloseRequest;
             unpinnedToolPane.Closed += UnpinnedToolPane_Closed;
             unpinnedToolPane.PinClick += UnpinnedToolPane_PinClick;
             unpinnedToolPane.WindowLocation = windowLocation;
@@ -1094,7 +1104,7 @@ namespace WpfOpenControls.DockManager
             return unpinnedToolPane;
         }
 
-        private void ToolListBox_ItemClick(object sender, Controls.ItemClickEventArgs e)
+        private void ToolListBox_ItemClick(object sender, Events.ItemClickEventArgs e)
         {
             System.Diagnostics.Trace.Assert(sender is ToolListBoxItem);
             System.Diagnostics.Trace.Assert((e != null) && (e.ToolListBox != null));
@@ -1147,16 +1157,15 @@ namespace WpfOpenControls.DockManager
             _activeUnpinnedToolData = null;
         }
 
-        private void UnpinnedToolPane_ClosePane(object sender, EventArgs e)
+        private void UnpinnedToolPane_CloseRequest(object sender, EventArgs e)
         {
             System.Diagnostics.Trace.Assert(sender is UnpinnedToolPane);
+            System.Diagnostics.Trace.Assert(sender == _activeUnpinnedToolPane);
 
             UserControl userControl = _activeUnpinnedToolPane.ToolPane.IViewContainer.ExtractUserControl(0);
             IViewModel iViewModel = userControl.DataContext as IViewModel;
 
             System.Diagnostics.Trace.Assert(iViewModel != null);
-
-            // Warning warning => remove the view model!
 
             /*
              * Remove the tool list items from the side bar
@@ -1172,6 +1181,9 @@ namespace WpfOpenControls.DockManager
             _activeToolListBoxItem = null;
             _activeToolListBox = null;
             _activeUnpinnedToolData = null;
+
+            System.Diagnostics.Trace.Assert(ToolsSource.Contains(iViewModel));
+            ToolsSource.Remove(iViewModel);
         }
 
         private void UnpinnedToolPane_Closed(object sender, EventArgs e)
@@ -1337,11 +1349,27 @@ namespace WpfOpenControls.DockManager
         {
             System.Diagnostics.Trace.Assert(dockPane != null);
 
-            dockPane.Close += DockPane_Close;
+            dockPane.CloseRequest += DockPane_CloseRequest;
             dockPane.Float += DockPane_Float;
             dockPane.FloatTabRequest += DockPane_FloatTabRequest;
             dockPane.UngroupCurrent += DockPane_UngroupCurrent;
             dockPane.Ungroup += DockPane_Ungroup;
+            dockPane.TabClosed += DockPane_TabClosed;
+        }
+
+        private void DockPane_TabClosed(object sender, Events.TabClosedEventArgs e)
+        {
+            System.Diagnostics.Trace.Assert(e.UserControl.DataContext is IViewModel);
+            if (sender is DocumentPaneGroup)
+            {
+                System.Diagnostics.Trace.Assert(DocumentsSource.Contains(e.UserControl.DataContext as IViewModel));
+                DocumentsSource.Remove(e.UserControl.DataContext as IViewModel);
+            }
+            else if (sender is ToolPaneGroup)
+            {
+                System.Diagnostics.Trace.Assert(ToolsSource.Contains(e.UserControl.DataContext as IViewModel));
+                ToolsSource.Remove(e.UserControl.DataContext as IViewModel);
+            }
         }
 
         DocumentPaneGroup ILayoutFactory.MakeDocumentPaneGroup()
@@ -1610,6 +1638,11 @@ namespace WpfOpenControls.DockManager
 
             Serialisation.LayoutReader.LoadNode(this, viewsMap, this, this, xmlDocument.DocumentElement, true);
 
+            // Remove any view without a view model 
+
+            ValidateToolPanes();
+            ValidateDocumentPanes();
+
             return true;
         }
 
@@ -1639,7 +1672,7 @@ namespace WpfOpenControls.DockManager
             }
         }
 
-        private void DockPane_Float(object sender, FloatEventArgs e)
+        private void DockPane_Float(object sender, Events.FloatEventArgs e)
         {
             System.Diagnostics.Trace.Assert(sender is DockPane);
 
@@ -1653,7 +1686,7 @@ namespace WpfOpenControls.DockManager
             IDockPaneTreeManager.Float(sender as DockPane, true, true);
         }
 
-        private void DockPane_Close(object sender, EventArgs e)
+        private void DockPane_CloseRequest(object sender, EventArgs e)
         {
             DockPane dockPane = sender as DockPane;
 
@@ -1664,13 +1697,27 @@ namespace WpfOpenControls.DockManager
 
             IDockPaneTreeManager.ExtractDockPane(dockPane, out FrameworkElement frameworkElement);
 
-            if (dockPane is DocumentPaneGroup)
+            IViewContainer iViewContainer = dockPane.IViewContainer;
+            while (true)
             {
-                DocumentClosed?.Invoke(sender, null);
-            }
-            else if (dockPane is ToolPaneGroup)
-            {
-                ToolClosed?.Invoke(sender, null);
+                UserControl userControl = iViewContainer.ExtractUserControl(0);
+                if (userControl == null)
+                {
+                    break;
+                }
+                IViewModel iViewModel = (userControl.DataContext as IViewModel);
+                if (dockPane is DocumentPaneGroup)
+                {
+                    System.Diagnostics.Trace.Assert(DocumentsSource.Contains(iViewModel));
+                    DocumentsSource.Remove(iViewModel);
+                    DocumentClosed?.Invoke(iViewModel, null);
+                }
+                else if (dockPane is ToolPaneGroup)
+                {
+                    System.Diagnostics.Trace.Assert(ToolsSource.Contains(iViewModel));
+                    ToolsSource.Remove(iViewModel);
+                    ToolClosed?.Invoke(iViewModel, null);
+                }
             }
         }
 

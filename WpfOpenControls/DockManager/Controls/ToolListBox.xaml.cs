@@ -17,7 +17,7 @@ namespace WpfOpenControls.DockManager.Controls
             InitializeComponent();
         }
 
-        internal event ItemClickEventHandler ItemClick;
+        internal event Events.ItemClickEventHandler ItemClick;
 
         internal WindowLocation WindowLocation { get; set; }
 
@@ -300,7 +300,7 @@ namespace WpfOpenControls.DockManager.Controls
                 Point cursorItemPosition = item.PointFromScreen(cursorScreenPosition);
                 if ((cursorItemPosition.X >= 0) && (cursorItemPosition.Y >= 0) && (cursorItemPosition.X <= item.ActualWidth) && (cursorItemPosition.Y <= item.ActualHeight))
                 {
-                    ItemClick?.Invoke(item.DataContext, new ItemClickEventArgs() { ToolListBox = this });
+                    ItemClick?.Invoke(item.DataContext, new Events.ItemClickEventArgs() { ToolListBox = this });
                     return;
                 }
             }

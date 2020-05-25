@@ -114,7 +114,7 @@ namespace WpfOpenControls.DockManager
 
                 CheckTabCount();
 
-                TabClosed?.Invoke(sender, null);
+                TabClosed?.Invoke(sender, new Events.TabClosedEventArgs() { UserControl = item.Key });
             }
         }
 
@@ -225,7 +225,7 @@ namespace WpfOpenControls.DockManager
         }
 
         public event EventHandler SelectionChanged;
-        public event EventHandler TabClosed;
+        public event Events.TabClosedEventHandler TabClosed;
         public event EventHandler FloatTabRequest;
 
         public string Title

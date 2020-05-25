@@ -113,7 +113,7 @@ namespace WpfOpenControls.DockManager
             Grid.SetColumn(_closeButton, 8);
             Panel.SetZIndex(_closeButton, 99);
             Children.Add(_closeButton);
-            _closeButton.Click += delegate { FireClose(); };
+            _closeButton.Click += delegate { FireCloseRequest(); };
 
             IViewContainer.SelectionChanged += DocumentContainer_SelectionChanged;
             Grid.SetRow(IViewContainer as System.Windows.UIElement, 2);

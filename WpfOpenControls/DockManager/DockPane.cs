@@ -32,30 +32,28 @@ namespace WpfOpenControls.DockManager
             FloatTabRequest?.Invoke(this, e);
         }
 
-        private void IViewContainer_TabClosed(object sender, EventArgs e)
+        private void IViewContainer_TabClosed(object sender, Events.TabClosedEventArgs e)
         {
-            if (IViewContainer.GetUserControlCount() == 0)
-            {
-                FireClose();
-            }
+            TabClosed?.Invoke(this, e);
         }
 
-        public event EventHandler Close;
-        public event FloatEventHandler Float;
+        public event EventHandler CloseRequest;
+        public event Events.FloatEventHandler Float;
+        public event Events.TabClosedEventHandler TabClosed;
         public event EventHandler FloatTabRequest;
         public event EventHandler UngroupCurrent;
         public event EventHandler Ungroup;
 
         public Border Border;
 
-        protected void FireClose()
+        protected void FireCloseRequest()
         {
-            Close?.Invoke(this, null);
+            CloseRequest?.Invoke(this, null);
         }
 
         protected void FireFloat(bool drag)
         {
-            FloatEventArgs floatEventArgs = new FloatEventArgs();
+            Events.FloatEventArgs floatEventArgs = new Events.FloatEventArgs();
             floatEventArgs.Drag = drag;
             Float?.Invoke(this, floatEventArgs);
         }
