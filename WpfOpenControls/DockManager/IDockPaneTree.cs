@@ -5,6 +5,7 @@ namespace WpfOpenControls.DockManager
 {
     internal interface IDockPaneTree
     {
+        void Clear();
         void FrameworkElementRemoved(FrameworkElement frameworkElement);
         Grid RootPane { get; set; }
         Grid ParentGrid { get; }

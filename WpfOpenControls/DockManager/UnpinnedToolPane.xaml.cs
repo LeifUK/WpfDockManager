@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Windows.Media;
 using System.Windows;
 
 namespace WpfOpenControls.DockManager
@@ -15,6 +16,8 @@ namespace WpfOpenControls.DockManager
             _toolPane.ShowAsUnPinned();
             _toolPane.UnPinClick += _toolPane_UnPinClick;
             _toolPane.CloseRequest += _toolPane_CloseRequest;
+
+            _toolPane.Background = Brushes.Transparent;
         }
 
         private void _toolPane_CloseRequest(object sender, EventArgs e)

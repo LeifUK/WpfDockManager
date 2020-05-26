@@ -5,6 +5,7 @@
         xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
         xmlns:local="clr-namespace:WpfOpenControls.DockManager"
         mc:Ignorable="d"
+        Background="Transparent"
         Title="SidePane" Height="450" Width="800">
     <WindowChrome.WindowChrome>
         <WindowChrome x:Name="_windowChrome" CaptionHeight="0" ResizeBorderThickness="0,4,0,0"/>
@@ -17,7 +18,7 @@
             </ResourceDictionary.MergedDictionaries>
         </ResourceDictionary>
     </Window.Resources>
-    <Grid>
+    <Grid Background="Transparent">
         <local:ToolPaneGroup x:Name="_toolPane"/>
     </Grid>
 </Window>

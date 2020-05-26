@@ -26,5 +26,7 @@ namespace WpfOpenControls.DockManager
         void PinToolPane(UnpinnedToolData unpinnedToolData);
 
         void UnpinToolPane(ToolPaneGroup toolPaneGroup, out UnpinnedToolData unpinnedToolData);
-     }
+        
+        void CreateDefaultLayout(List<UserControl> documentViews, List<UserControl> toolViews);
+    }
 }

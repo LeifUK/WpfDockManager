@@ -112,6 +112,8 @@
     <Compile Include="DockManager\IFloatingPane.cs" />
     <Compile Include="DockManager\ILayoutFactory.cs" />
     <Compile Include="DockManager\InsertionIndicatorManager.cs" />
+    <Compile Include="DockManager\IUnpinnedToolManager.cs" />
+    <Compile Include="DockManager\IUnpinnedToolParent.cs" />
     <Compile Include="DockManager\IView.cs" />
     <Compile Include="DockManager\IViewContainer.cs" />
     <Compile Include="DockManager\IViewModel.cs" />
@@ -131,6 +133,7 @@
     <Compile Include="DockManager\ToolPaneGroup.cs" />
     <Compile Include="DockManager\ToolPaneGroupStyle.cs" />
     <Compile Include="DockManager\UnpinnedToolData.cs" />
+    <Compile Include="DockManager\UnpinnedToolManager.cs" />
     <Compile Include="DockManager\UnpinnedToolPane.xaml.cs">
       <DependentUpon>UnpinnedToolPane.xaml</DependentUpon>
     </Compile>

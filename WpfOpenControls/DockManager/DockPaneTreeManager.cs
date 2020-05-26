@@ -517,6 +517,91 @@ namespace WpfOpenControls.DockManager
             unpinnedToolData.SiblingGuid = (Guid)((frameworkElement as Grid).Tag);
         }
 
+        public void CreateDefaultLayout(List<UserControl> documentViews, List<UserControl> toolViews)
+        {
+            IDockPaneTree.Clear();
+
+            /*
+             * We descend the tree level by level, adding a new level when the current one is full. 
+             * We continue adding nodes until we have exhausted the items in views (created above). 
+             * 
+                    Parent              Level Index
+                       G                    1   
+                 /           \              
+                 G           G              2 
+              /     \     /     \           
+              D     D     D     D           3
+              
+                Assume we are building level N where there are potentially 2 ^ (N-1) nodes (denoted by a star). 
+                Maintain two node lists. One for level N and one for level N + 1. 
+                List for level N is denoted list(N). 
+                Assume level N nodes are complete. 
+                Then for each item in list(N) we add two child nodes, and then add these child nodes to list (N+1). 
+
+                First level: 
+
+                       D1
+
+                Add a node -> replace D1 with a grid containing two documents and a splitter: 
+
+                       G
+                 /           \              
+                 D1          D2              
+
+                Add a node -> replace D1 with a grid containing two documents and a splitter: 
+
+                       G
+                 /           \              
+                 G           D2
+              /     \     
+              D1    D3     
+
+                Add a node -> replace D2 with a grid containing two documents and a splitter: 
+
+                       G
+                 /           \              
+                 G           G
+              /     \     /    \
+              D1    D3    D2    D4
+
+                and so on ... 
+
+                Document panes are children of a dock panel. At first this is a child of the top level 
+                splitter pane, or the layout manager if there are no tool panes
+
+             */
+
+            IDockPaneTree.RootPane = ILayoutFactory.MakeSplitterPane(true);
+
+            DocumentPanel documentPanel = ILayoutFactory.MakeDocumentPanel();
+            (IDockPaneTree.RootPane as SplitterPane).AddChild(documentPanel, true);
+
+            if ((documentViews != null) && (documentViews.Count > 0))
+            {
+                List<FrameworkElement> list_N = new List<FrameworkElement>();
+
+                DockManager.DockPane documentPane = ILayoutFactory.MakeDocumentPaneGroup();
+                documentPane.IViewContainer.AddUserControl(documentViews[0]);
+
+                documentPanel.Children.Add(documentPane);
+                list_N.Add(documentPane);
+                AddViews(documentViews, list_N, delegate { return ILayoutFactory.MakeDocumentPaneGroup(); });
+            }
+
+            if ((toolViews != null) && (toolViews.Count > 0))
+            {
+                List<FrameworkElement> list_N = new List<FrameworkElement>();
+
+                DockManager.DockPane toolPaneGroup = ILayoutFactory.MakeToolPaneGroup();
+                toolPaneGroup.IViewContainer.AddUserControl(toolViews[0]);
+
+                (IDockPaneTree.RootPane as SplitterPane).AddChild(toolPaneGroup, false);
+
+                list_N.Add(toolPaneGroup);
+                AddViews(toolViews, list_N, delegate { return ILayoutFactory.MakeToolPaneGroup(); });
+            }
+        }
+
         #endregion IDockPaneTreeManager
     }
 }
