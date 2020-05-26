@@ -1,6 +1,5 @@
 ﻿using System;
 using System.Collections.Generic;
-using System.Linq;
 using System.Windows;
 using System.Windows.Controls;
 using System.ComponentModel;
@@ -134,7 +133,7 @@ namespace WpfOpenControls.DockManager
         private SelectablePane SelectedPane;
 
         /*
-         * Remove tool views not in ToolsSource
+         * Remove tool views not in ToolsSource 
          */
         private void ValidateDockPanes(Grid grid, Dictionary<IViewModel, List<string>> viewModels, List<DockPane> emptyDockPanes, Type type)
         {
@@ -419,6 +418,7 @@ namespace WpfOpenControls.DockManager
             documentPaneGroup.Border.CornerRadius = DocumentPaneGroupStyle.CornerRadius;
             documentPaneGroup.Background = DocumentPaneGroupStyle.Background;
             documentPaneGroup.HighlightBrush = SelectedPaneBrush;
+            documentPaneGroup.ApplyLayout();
             UpdateDocumentProperties(documentPaneGroup.IViewContainer);
         }
 
@@ -456,6 +456,7 @@ namespace WpfOpenControls.DockManager
             toolPaneGroup.CloseButtonStyle = ToolPaneGroupStyle.CloseButtonStyle;
             toolPaneGroup.PinButtonStyle = ToolPaneGroupStyle.PinButtonStyle;
             toolPaneGroup.CommandsButtonStyle = ToolPaneGroupStyle.CommandsButtonStyle;
+            toolPaneGroup.ApplyLayout();
             UpdateToolProperties(toolPaneGroup.IViewContainer as ToolContainer);
         }
 

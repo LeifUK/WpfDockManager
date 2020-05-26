@@ -154,6 +154,11 @@ namespace WpfOpenControls.DockManager
             }
         }
 
+        public void HideCommandsButton()
+        {
+            _commandsButton.Visibility = Visibility.Collapsed;
+        }
+
         public Border HeaderBorder;
 
         protected Brush _headerBackground;

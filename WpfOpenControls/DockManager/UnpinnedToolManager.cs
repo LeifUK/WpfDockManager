@@ -53,6 +53,7 @@ namespace WpfOpenControls.DockManager
 
             UserControl userControl = toolListBoxItem.IViewContainer.ExtractUserControl(toolListBoxItem.Index);
             unpinnedToolPane.ToolPane.IViewContainer.AddUserControl(userControl);
+            unpinnedToolPane.ToolPane.HideCommandsButton();
             Point topLeftPoint = IDockPaneTree.RootPane.PointToScreen(new Point(0, 0));
             unpinnedToolPane.Left = topLeftPoint.X;
             unpinnedToolPane.Top = topLeftPoint.Y;

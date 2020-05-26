@@ -78,6 +78,7 @@
       <Generator>MSBuild:Compile</Generator>
       <SubType>Designer</SubType>
     </Page>
+    <Compile Include="DockManager\BorderStyle.cs" />
     <Compile Include="DockManager\Command.cs" />
     <Compile Include="DockManager\Controls\IToolListBoxItem.cs" />
     <Compile Include="Controls\TabHeader.cs" />

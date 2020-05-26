@@ -242,7 +242,7 @@
                 <dockManager:LayoutManager.ToolPaneGroupStyle>
                     <dockManager:ToolPaneGroupStyle>
                         <dockManager:ToolPaneGroupStyle.BorderBrush>Gainsboro</dockManager:ToolPaneGroupStyle.BorderBrush>
-                        <dockManager:ToolPaneGroupStyle.BorderThickness>1</dockManager:ToolPaneGroupStyle.BorderThickness>
+                        <dockManager:ToolPaneGroupStyle.BorderThickness>3</dockManager:ToolPaneGroupStyle.BorderThickness>
                         <dockManager:ToolPaneGroupStyle.CornerRadius>4</dockManager:ToolPaneGroupStyle.CornerRadius>
                         <dockManager:ToolPaneGroupStyle.TabCornerRadius>0,0,4,8</dockManager:ToolPaneGroupStyle.TabCornerRadius>
                         <dockManager:ToolPaneGroupStyle.FontSize>12</dockManager:ToolPaneGroupStyle.FontSize>
@@ -265,9 +265,6 @@
                         <dockManager:ToolPaneGroupStyle.ToolListButtonStyle>
                             <Style BasedOn="{StaticResource NewListButtonStyle}" TargetType="Button"/>
                         </dockManager:ToolPaneGroupStyle.ToolListButtonStyle>
-                        <dockManager:ToolPaneGroupStyle.CloseTabButtonStyle>
-                            <Style BasedOn="{StaticResource NewCloseButtonStyle}" TargetType="Button"/>
-                        </dockManager:ToolPaneGroupStyle.CloseTabButtonStyle>
                         <dockManager:ToolPaneGroupStyle.CloseButtonStyle>
                             <Style BasedOn="{StaticResource NewCloseButtonStyle}" TargetType="Button"/>
                         </dockManager:ToolPaneGroupStyle.CloseButtonStyle>
@@ -283,7 +280,7 @@
                 <dockManager:LayoutManager.DocumentPaneGroupStyle>
                     <dockManager:DocumentPaneGroupStyle>
                         <dockManager:DocumentPaneGroupStyle.BorderBrush>Gainsboro</dockManager:DocumentPaneGroupStyle.BorderBrush>
-                        <dockManager:DocumentPaneGroupStyle.BorderThickness>1</dockManager:DocumentPaneGroupStyle.BorderThickness>
+                        <dockManager:DocumentPaneGroupStyle.BorderThickness>3</dockManager:DocumentPaneGroupStyle.BorderThickness>
                         <dockManager:DocumentPaneGroupStyle.CornerRadius>4</dockManager:DocumentPaneGroupStyle.CornerRadius>
                         <dockManager:DocumentPaneGroupStyle.TabCornerRadius>8,4,0,0</dockManager:DocumentPaneGroupStyle.TabCornerRadius>
                         <dockManager:DocumentPaneGroupStyle.FontSize>12</dockManager:DocumentPaneGroupStyle.FontSize>
@@ -303,9 +300,6 @@
                         <dockManager:DocumentPaneGroupStyle.DocumentListButtonStyle>
                             <Style BasedOn="{StaticResource NewListButtonStyle}" TargetType="Button"/>
                         </dockManager:DocumentPaneGroupStyle.DocumentListButtonStyle>
-                        <dockManager:DocumentPaneGroupStyle.CloseTabButtonStyle>
-                            <Style BasedOn="{StaticResource NewCloseButtonStyle}" TargetType="Button"/>
-                        </dockManager:DocumentPaneGroupStyle.CloseTabButtonStyle>
                         <dockManager:DocumentPaneGroupStyle.CommandsButtonStyle>
                             <Style BasedOn="{StaticResource NewCommandsButtonStyle}" TargetType="Button"/>
                         </dockManager:DocumentPaneGroupStyle.CommandsButtonStyle>

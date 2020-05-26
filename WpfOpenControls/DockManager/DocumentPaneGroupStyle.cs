@@ -37,9 +37,7 @@ namespace WpfOpenControls.DockManager
         public CornerRadius TabCornerRadius { get; set; }
         public TabStyle SelectedTabStyle { get; set; }
         public TabStyle UnselectedTabStyle { get; set; }
-
         public Style CommandsButtonStyle { get; set; }
-        public Style CloseTabButtonStyle { get; set; }
         public Style DocumentListButtonStyle { get; set; }
     }
 }
