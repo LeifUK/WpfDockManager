@@ -9,7 +9,9 @@ namespace WpfOpenControls.DockManager
 
     internal interface IDockPaneTreeManager
     {
-        void AddViews(List<UserControl> views, List<FrameworkElement> list_N, DelegateCreateDockPane createDockPane);
+        DockPane FindElementOfType(Type type, Grid parentGrid);
+        
+        void InsertDockPane(SplitterPane parentSplitterPane, DockPane dockPane, DockPane dockPaneToInsert, bool isHorizontalSplit);
 
         DockPane ExtractDockPane(DockPane dockPane, out FrameworkElement frameworkElement);
 

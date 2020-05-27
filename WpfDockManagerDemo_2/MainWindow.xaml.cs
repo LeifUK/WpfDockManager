@@ -21,10 +21,6 @@ namespace WpfDockManagerDemo_2
         private void Window_Loaded(object sender, RoutedEventArgs e)
         {
             _layoutManager.Initialise();
-
-            //_layoutManager.SaveLayout(out System.Xml.XmlDocument xmlDocument, "C:\\Temp\\Layout.xml");
-            //_layoutManager.LoadLayout(out System.Xml.XmlDocument xmlDocument_Loaded, "C:\\Temp\\Layout.xml");
-            //_layoutManager.SaveLayout(out System.Xml.XmlDocument xmlDocument_saved, "C:\\Temp\\Layout_2.xml");
         }
 
         private void Window_Unloaded(object sender, RoutedEventArgs e)
@@ -87,7 +83,29 @@ namespace WpfDockManagerDemo_2
             }
         }
 
-        private void _buttonMenu_Click(object sender, RoutedEventArgs e)
+        private void _buttonCloseTool_Click(object sender, RoutedEventArgs e)
+        {
+            KeyValuePair<UserControl, WpfOpenControls.DockManager.IViewModel> item = (KeyValuePair<UserControl, WpfOpenControls.DockManager.IViewModel>)(sender as Button).DataContext;
+
+            MainViewModel mainViewModel = DataContext as MainViewModel;
+            if (mainViewModel.Tools.Contains(item.Value))
+            {
+                mainViewModel.Tools.Remove(item.Value);
+            }
+        }
+
+        private void _buttonCloseDocument_Click(object sender, RoutedEventArgs e)
+        {
+            KeyValuePair<UserControl, WpfOpenControls.DockManager.IViewModel> item = (KeyValuePair<UserControl, WpfOpenControls.DockManager.IViewModel>)(sender as Button).DataContext;
+
+            MainViewModel mainViewModel = DataContext as MainViewModel;
+            if (mainViewModel.Documents.Contains(item.Value))
+            {
+                mainViewModel.Documents.Remove(item.Value);
+            }
+        }
+
+        private void _buttonWindow_Click(object sender, RoutedEventArgs e)
         {
             ContextMenu contextMenu = new ContextMenu();
             MenuItem menuItem = null;
@@ -107,26 +125,34 @@ namespace WpfDockManagerDemo_2
             contextMenu.IsOpen = true;
         }
 
-        private void _buttonCloseTool_Click(object sender, RoutedEventArgs e)
+        private void _buttonTools_Click(object sender, RoutedEventArgs e)
         {
-            KeyValuePair<UserControl,WpfOpenControls.DockManager.IViewModel> item = (KeyValuePair<UserControl, WpfOpenControls.DockManager.IViewModel>)(sender as Button).DataContext;
-
             MainViewModel mainViewModel = DataContext as MainViewModel;
-            if (mainViewModel.Tools.Contains(item.Value))
-            {
-                mainViewModel.Tools.Remove(item.Value);
-            }
-        }
+            System.Diagnostics.Trace.Assert(mainViewModel != null);
 
-        private void _buttonCloseDocument_Click(object sender, RoutedEventArgs e)
-        {
-            KeyValuePair<UserControl, WpfOpenControls.DockManager.IViewModel> item = (KeyValuePair<UserControl, WpfOpenControls.DockManager.IViewModel>)(sender as Button).DataContext;
+            ContextMenu contextMenu = new ContextMenu();
+            MenuItem menuItem = null;
 
-            MainViewModel mainViewModel = DataContext as MainViewModel;
-            if (mainViewModel.Documents.Contains(item.Value))
-            {
-                mainViewModel.Documents.Remove(item.Value);
-            }
+            menuItem = new MenuItem();
+            menuItem.Header = "Tool One";
+            menuItem.IsChecked = mainViewModel.ToolOneVisible;
+            menuItem.Command = new WpfOpenControls.DockManager.Command(delegate { mainViewModel.ToolOneVisible = !mainViewModel.ToolOneVisible; }, delegate { return true; });
+            contextMenu.Items.Add(menuItem);
+
+            menuItem = new MenuItem();
+            menuItem.Header = "Tool Two";
+            menuItem.IsChecked = mainViewModel.ToolTwoVisible;
+            menuItem.Command = new WpfOpenControls.DockManager.Command(delegate { mainViewModel.ToolTwoVisible = !mainViewModel.ToolTwoVisible; }, delegate { return true; });
+            contextMenu.Items.Add(menuItem);
+
+            menuItem = new MenuItem();
+            menuItem.Header = "Tool Three";
+            menuItem.IsChecked = mainViewModel.ToolThreeVisible;
+            menuItem.Command = new WpfOpenControls.DockManager.Command(delegate { mainViewModel.ToolThreeVisible = !mainViewModel.ToolThreeVisible; }, delegate { return true; });
+            contextMenu.Items.Add(menuItem);
+
+            contextMenu.IsOpen = true;
+
         }
     }
 }

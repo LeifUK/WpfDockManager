@@ -42,6 +42,29 @@ namespace WpfOpenControls.DockManager
             return grid;
         }
 
+        public DockPane FindElementOfType(Type type, Grid parentGrid)
+        {
+            System.Diagnostics.Trace.Assert(parentGrid != null);
+
+            foreach (var child in parentGrid.Children)
+            {
+                if (child.GetType() == type)
+                {
+                    return child as DockPane;
+                }
+                if (child is Grid)
+                {
+                    DockPane dockPane = FindElementOfType(type, child as Grid);
+                    if (dockPane != null)
+                    {
+                        return dockPane;
+                    }
+                }
+            }
+
+            return null;
+        }
+
         private static void ExtractDocuments(FloatingPane floatingPane, DockPane dockPane)
         {
             while (true)
@@ -59,7 +82,7 @@ namespace WpfOpenControls.DockManager
 
         #region IDockPaneTreeManager
 
-        public void AddViews(List<UserControl> views, List<FrameworkElement> list_N, DelegateCreateDockPane createDockPane)
+        private void AddViews(List<UserControl> views, List<FrameworkElement> list_N, DelegateCreateDockPane createDockPane)
         {
             List<FrameworkElement> list_N_plus_1 = new List<FrameworkElement>();
             bool isHorizontal = false;
@@ -158,6 +181,19 @@ namespace WpfOpenControls.DockManager
             return dockPane;
         }
 
+        public void InsertDockPane(SplitterPane parentSplitterPane, DockPane dockPane, DockPane dockPaneToInsert, bool isHorizontalSplit)
+        {
+            parentSplitterPane.Children.Remove(dockPane);
+
+            SplitterPane newGrid = ILayoutFactory.MakeSplitterPane(isHorizontalSplit);
+            parentSplitterPane.Children.Add(newGrid);
+            Grid.SetRow(newGrid, Grid.GetRow(dockPane));
+            Grid.SetColumn(newGrid, Grid.GetColumn(dockPane));
+
+            newGrid.AddChild(dockPane, true);
+            newGrid.AddChild(dockPaneToInsert, false);
+        }
+
         public bool UngroupDockPane(DockPane dockPane, int index, double paneWidth)
         {
             System.Diagnostics.Trace.Assert(dockPane != null, System.Reflection.MethodBase.GetCurrentMethod().Name + ": dockPane is null");
@@ -179,6 +215,7 @@ namespace WpfOpenControls.DockManager
                 return false;
             }
 
+            // Warning warning
             DockPane newDockPane = (dockPane is ToolPaneGroup) ? (DockPane)ILayoutFactory.MakeToolPaneGroup() : ILayoutFactory.MakeDocumentPaneGroup();
             newDockPane.IViewContainer.AddUserControl(userControl);
 
