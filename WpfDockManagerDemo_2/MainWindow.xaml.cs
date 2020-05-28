@@ -151,6 +151,18 @@ namespace WpfDockManagerDemo_2
             menuItem.Command = new WpfOpenControls.DockManager.Command(delegate { mainViewModel.ToolThreeVisible = !mainViewModel.ToolThreeVisible; }, delegate { return true; });
             contextMenu.Items.Add(menuItem);
 
+            menuItem = new MenuItem();
+            menuItem.Header = "Tool Four";
+            menuItem.IsChecked = mainViewModel.ToolFourVisible;
+            menuItem.Command = new WpfOpenControls.DockManager.Command(delegate { mainViewModel.ToolFourVisible = !mainViewModel.ToolFourVisible; }, delegate { return true; });
+            contextMenu.Items.Add(menuItem);
+
+            menuItem = new MenuItem();
+            menuItem.Header = "Tool Five";
+            menuItem.IsChecked = mainViewModel.ToolFiveVisible;
+            menuItem.Command = new WpfOpenControls.DockManager.Command(delegate { mainViewModel.ToolFiveVisible = !mainViewModel.ToolFiveVisible; }, delegate { return true; });
+            contextMenu.Items.Add(menuItem);
+
             contextMenu.IsOpen = true;
 
         }

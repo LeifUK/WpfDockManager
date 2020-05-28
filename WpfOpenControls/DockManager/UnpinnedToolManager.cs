@@ -203,8 +203,10 @@ namespace WpfOpenControls.DockManager
             }
         }
 
-        public void MakeUnpinnedToolPaneGroup(Controls.ToolListBox toolListBox, WindowLocation windowLocation, ToolPaneGroup toolPaneGroup, string siblingGuid, bool isHorizontal, bool isFirst)
+        public void MakeUnpinnedToolPaneGroup(WindowLocation windowLocation, ToolPaneGroup toolPaneGroup, string siblingGuid, bool isHorizontal, bool isFirst)
         {
+            Controls.ToolListBox toolListBox = IUnpinnedToolParent.GetToolListBox(windowLocation);
+
             System.Diagnostics.Trace.Assert(toolListBox != null);
             System.Diagnostics.Trace.Assert(toolPaneGroup != null);
 
@@ -288,6 +290,34 @@ namespace WpfOpenControls.DockManager
                     if (item.SiblingGuid == (Guid)frameworkElement.Tag)
                     {
                         item.SiblingGuid = (Guid)(frameworkElement.Parent as FrameworkElement).Tag;
+                    }
+                }
+            }
+        }
+
+        public void Validate(Dictionary<IViewModel, List<string>> viewModelUrlDictionary)
+        {
+            CloseUnpinnedToolPane();
+
+            foreach (KeyValuePair<WindowLocation,List<UnpinnedToolData>> keyValuePair in _dictUnpinnedToolData)
+            {
+                Controls.ToolListBox toolListBox = IUnpinnedToolParent.GetToolListBox(keyValuePair.Key);
+
+                foreach (UnpinnedToolData unpinnedToolData in keyValuePair.Value)
+                {
+                    for(int index = unpinnedToolData.Items.Count - 1; index > -1; --index)
+                    {
+                        IViewModel iViewModel = unpinnedToolData.Items[index].IViewModel;
+                        if (viewModelUrlDictionary.ContainsKey(iViewModel))
+                        {
+                            viewModelUrlDictionary.Remove(iViewModel);
+                        }
+                        else
+                        {
+                            ToolListBoxItem toolListBoxItem = unpinnedToolData.Items[index];
+                            toolListBox.ItemsSource.Remove(toolListBoxItem);
+                            unpinnedToolData.Items.RemoveAt(index);
+                        }
                     }
                 }
             }

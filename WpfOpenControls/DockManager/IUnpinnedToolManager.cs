@@ -10,7 +10,8 @@ namespace WpfOpenControls.DockManager
         void ProcessMoveResize();
         void CloseUnpinnedToolPane();
         void FrameworkElementRemoved(FrameworkElement frameworkElement);
-        void MakeUnpinnedToolPaneGroup(Controls.ToolListBox toolListBox, WindowLocation windowLocation, ToolPaneGroup toolPaneGroup, string siblingGuid, bool isHorizontal, bool isFirst);
+        void MakeUnpinnedToolPaneGroup(WindowLocation windowLocation, ToolPaneGroup toolPaneGroup, string siblingGuid, bool isHorizontal, bool isFirst);
         Dictionary<WindowLocation, List<UnpinnedToolData>> GetUnpinnedToolData();
+        void Validate(Dictionary<IViewModel, List<string>> viewModelUrlDictionary);
     }
 }

@@ -25,5 +25,13 @@
                 (IViewContainer == other.IViewContainer) &&
                 (Index == other.Index);
         }
+
+        public IViewModel IViewModel
+        {
+            get
+            {
+                return IViewContainer.GetIViewModel(Index);
+            }
+        }
     }
 }

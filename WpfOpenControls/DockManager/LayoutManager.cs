@@ -6,6 +6,7 @@ using System.ComponentModel;
 using System.Xml;
 using System.Windows.Input;
 using System.Windows.Media;
+using System.Collections.ObjectModel;
 using WpfOpenControls.Controls;
 using WpfOpenControls.DockManager.Controls;
 
@@ -213,39 +214,94 @@ namespace WpfOpenControls.DockManager
             }
         }
 
-        private void ValidatePanes(Type paneType, IEnumerable<IViewModel> enumerable, List<IFloatingPane> floatingPanes)
+        private Dictionary<IViewModel, List<string>> CreateViewModelUrlDictionary(ObservableCollection<IViewModel> viewModels)
         {
             // The string list contains each URL for the given view model
-            Dictionary<IViewModel, List<string>> viewModels = new Dictionary<IViewModel, List<string>>();
+            Dictionary<IViewModel, List<string>> mapViewModels = new Dictionary<IViewModel, List<string>>();
 
-            var enumerator = enumerable.GetEnumerator();
-            while (enumerator.MoveNext())
+            foreach (var iViewModel in viewModels)
             {
-                IViewModel iViewModel = enumerator.Current as IViewModel;
-                if (!viewModels.ContainsKey(iViewModel))
+                if (!mapViewModels.ContainsKey(iViewModel))
                 {
-                    viewModels.Add(iViewModel, new List<string>());
+                    mapViewModels.Add(iViewModel, new List<string>());
                 }
-                viewModels[iViewModel].Add(iViewModel.URL);
+                mapViewModels[iViewModel].Add(iViewModel.URL);
             }
+
+            return mapViewModels;
+        }
+
+        private void ValidatePanes(Type paneType, Dictionary<IViewModel, List<string>> mapViewModels, List<IFloatingPane> floatingPanes)
+        {
             List<DockPane> emptyDockPanes = new List<DockPane>();
-            ValidateDockPanes(_root, viewModels, emptyDockPanes, paneType);
+            ValidateDockPanes(_root, mapViewModels, emptyDockPanes, paneType);
+
+            /*
+             * Remove dock panes with no matching view model
+             */
+
             foreach (var dockPane in emptyDockPanes)
             {
                 IDockPaneTreeManager.ExtractDockPane(dockPane, out FrameworkElement frameworkElement);
             }
 
-            ValidateFloatingPanes(viewModels, floatingPanes);
+            /*
+             * Create dock panes for view models without dock panes
+             */
+
+            if (mapViewModels.Count > 0)
+            {
+                if (paneType == typeof(ToolPaneGroup))
+                {
+                    DockPane siblingDockPane = IDockPaneTreeManager.FindElementOfType(typeof(ToolPaneGroup), _root) as DockPane;
+                    if (siblingDockPane == null)
+                    {
+                        siblingDockPane = ILayoutFactory.MakeToolPaneGroup();
+
+                        if (_root is DocumentPanel)
+                        {
+                            DocumentPanel documentPanel = _root as DocumentPanel;
+
+                            SplitterPane splitterPane = ILayoutFactory.MakeSplitterPane(true);
+                            IDockPaneTree.RootPane = splitterPane;
+                            splitterPane.AddChild(documentPanel, true);
+                            splitterPane.AddChild(siblingDockPane, false);
+                        }
+                        else
+                        {
+                            // There is always a document panel 
+                            DocumentPanel documentPanel = IDockPaneTreeManager.FindDocumentPanel(_root);
+
+                            IDockPaneTreeManager.InsertDockPane(_root, documentPanel, siblingDockPane, false);
+                        }
+                    }
+                    System.Diagnostics.Trace.Assert(siblingDockPane != null);
+
+                    List<UserControl> userControls = LoadViewsFromTemplates(ToolTemplates, new ObservableCollection<IViewModel>(mapViewModels.Keys));
+                    foreach (UserControl userControl in userControls)
+                    {
+                        siblingDockPane.IViewContainer.AddUserControl(userControl);
+                    }
+                }
+            }
+
+            ValidateFloatingPanes(mapViewModels, floatingPanes);
         }
 
         private void ValidateToolPanes()
         {
-            ValidatePanes(typeof(ToolPaneGroup), ToolsSource, FloatingToolPaneGroups);
+            Dictionary<IViewModel, List<string>> viewModelUrlDictionary = CreateViewModelUrlDictionary(ToolsSource);
+
+            IUnpinnedToolManager.Validate(viewModelUrlDictionary);
+
+            ValidatePanes(typeof(ToolPaneGroup), viewModelUrlDictionary, FloatingToolPaneGroups);
         }
 
         private void ValidateDocumentPanes()
         {
-            ValidatePanes(typeof(DocumentPaneGroup), DocumentsSource, FloatingDocumentPaneGroups);
+            Dictionary<IViewModel, List<string>> mapViewModels = CreateViewModelUrlDictionary(DocumentsSource);
+
+            ValidatePanes(typeof(DocumentPaneGroup), mapViewModels, FloatingDocumentPaneGroups);
         }
 
         #region dependency properties 
@@ -254,18 +310,18 @@ namespace WpfOpenControls.DockManager
 
         [Bindable(true)]
         [DesignerSerializationVisibility(DesignerSerializationVisibility.Hidden)]
-        public static readonly DependencyProperty DocumentsSourceProperty = DependencyProperty.Register("DocumentsSource", typeof(System.Collections.ObjectModel.ObservableCollection<IViewModel>), typeof(LayoutManager), new FrameworkPropertyMetadata(null, new PropertyChangedCallback(OnDocumentsSourceChanged)));
+        public static readonly DependencyProperty DocumentsSourceProperty = DependencyProperty.Register("DocumentsSource", typeof(ObservableCollection<IViewModel>), typeof(LayoutManager), new FrameworkPropertyMetadata(null, new PropertyChangedCallback(OnDocumentsSourceChanged)));
 
         private void LayoutManager_DocumentsSourceCollectionChanged(object sender, System.Collections.Specialized.NotifyCollectionChangedEventArgs e)
         {
-            ValidatePanes(typeof(DocumentPaneGroup), DocumentsSource, FloatingDocumentPaneGroups);
+            ValidateDocumentPanes();
         }
 
-        public System.Collections.ObjectModel.ObservableCollection<IViewModel> DocumentsSource
+        public ObservableCollection<IViewModel> DocumentsSource
         {
             get
             {
-                return (System.Collections.ObjectModel.ObservableCollection<IViewModel>)GetValue(DocumentsSourceProperty);
+                return (ObservableCollection<IViewModel>)GetValue(DocumentsSourceProperty);
             }
             set
             {
@@ -283,7 +339,7 @@ namespace WpfOpenControls.DockManager
         {
             if (e.NewValue != null)
             {
-                DocumentsSource = (System.Collections.ObjectModel.ObservableCollection<IViewModel>)e.NewValue;
+                DocumentsSource = (ObservableCollection<IViewModel>)e.NewValue;
             }
         }
 
@@ -293,18 +349,18 @@ namespace WpfOpenControls.DockManager
 
         [Bindable(true)]
         [DesignerSerializationVisibility(DesignerSerializationVisibility.Hidden)]
-        public static readonly DependencyProperty ToolsSourceProperty = DependencyProperty.Register("ToolsSource", typeof(System.Collections.ObjectModel.ObservableCollection<IViewModel>), typeof(LayoutManager), new FrameworkPropertyMetadata(null, new PropertyChangedCallback(OnToolsSourceChanged)));
+        public static readonly DependencyProperty ToolsSourceProperty = DependencyProperty.Register("ToolsSource", typeof(ObservableCollection<IViewModel>), typeof(LayoutManager), new FrameworkPropertyMetadata(null, new PropertyChangedCallback(OnToolsSourceChanged)));
 
         private void LayoutManager_ToolsSourceCollectionChanged(object sender, System.Collections.Specialized.NotifyCollectionChangedEventArgs e)
         {
             ValidateToolPanes();
         }
 
-        public System.Collections.ObjectModel.ObservableCollection<IViewModel> ToolsSource
+        public ObservableCollection<IViewModel> ToolsSource
         {
             get
             {
-                return (System.Collections.ObjectModel.ObservableCollection<IViewModel>)GetValue(ToolsSourceProperty);
+                return (ObservableCollection<IViewModel>)GetValue(ToolsSourceProperty);
             }
             set
             {
@@ -322,7 +378,7 @@ namespace WpfOpenControls.DockManager
         {
             if (e.NewValue != null)
             {
-                ToolsSource = e.NewValue as System.Collections.ObjectModel.ObservableCollection<IViewModel>;
+                ToolsSource = e.NewValue as ObservableCollection<IViewModel>;
             }
         }
 
@@ -1034,7 +1090,7 @@ namespace WpfOpenControls.DockManager
 
         private void CreateToolListBox(int row, int column, bool isHorizontal, WindowLocation windowLocation)
         {
-            System.Collections.ObjectModel.ObservableCollection<Controls.IToolListBoxItem> items = new System.Collections.ObjectModel.ObservableCollection<Controls.IToolListBoxItem>();
+            ObservableCollection<Controls.IToolListBoxItem> items = new ObservableCollection<Controls.IToolListBoxItem>();
             Controls.ToolListBox toolListBox = new Controls.ToolListBox();
             toolListBox.WindowLocation = windowLocation;
             UpdateProperties(toolListBox);
@@ -1075,7 +1131,7 @@ namespace WpfOpenControls.DockManager
             FloatingDocumentPaneGroups.Clear();
         }
 
-        public List<UserControl> LoadViewsFromTemplates(List<DataTemplate> dataTemplates, System.Collections.IEnumerable viewModels)
+        public List<UserControl> LoadViewsFromTemplates(List<DataTemplate> dataTemplates, ObservableCollection<IViewModel> viewModels)
         {
             List<UserControl> views = new List<UserControl>();
 
@@ -1193,11 +1249,8 @@ namespace WpfOpenControls.DockManager
 
         void ILayoutFactory.MakeUnpinnedToolPaneGroup(WindowLocation windowLocation, ToolPaneGroup toolPaneGroup, string siblingGuid, bool isHorizontal, bool isFirst)
         {
-            System.Diagnostics.Trace.Assert(_dictToolListBoxes.ContainsKey(windowLocation));
-
-            Controls.ToolListBox toolListBox = _dictToolListBoxes[windowLocation];
-
-            IUnpinnedToolManager.MakeUnpinnedToolPaneGroup(toolListBox, windowLocation, toolPaneGroup, siblingGuid, isHorizontal, isFirst);
+            // Warning warning
+            IUnpinnedToolManager.MakeUnpinnedToolPaneGroup(windowLocation, toolPaneGroup, siblingGuid, isHorizontal, isFirst);
         }
 
         string ILayoutFactory.MakeDocumentKey(string contentId, string Url)

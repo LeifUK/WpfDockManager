@@ -42,7 +42,7 @@ namespace WpfOpenControls.DockManager
             return grid;
         }
 
-        public DockPane FindElementOfType(Type type, Grid parentGrid)
+        public SelectablePane FindElementOfType(Type type, Grid parentGrid)
         {
             System.Diagnostics.Trace.Assert(parentGrid != null);
 
@@ -50,14 +50,14 @@ namespace WpfOpenControls.DockManager
             {
                 if (child.GetType() == type)
                 {
-                    return child as DockPane;
+                    return child as SelectablePane;
                 }
                 if (child is Grid)
                 {
-                    DockPane dockPane = FindElementOfType(type, child as Grid);
-                    if (dockPane != null)
+                    SelectablePane selectablePane = FindElementOfType(type, child as Grid);
+                    if (selectablePane != null)
                     {
-                        return dockPane;
+                        return selectablePane;
                     }
                 }
             }
@@ -92,6 +92,7 @@ namespace WpfOpenControls.DockManager
             {
                 for (int i = 0; (i < list_N.Count) && (viewIndex < views.Count); ++i)
                 {
+                    // Warning warning => use insert dock pane method
                     SplitterPane splitterPane = ILayoutFactory.MakeSplitterPane(isHorizontal);
 
                     var node = list_N[i];
@@ -158,6 +159,9 @@ namespace WpfOpenControls.DockManager
                         }
                     }
 
+                    grandparentGrid.Children.Remove(parentGrid);
+
+
                     System.Diagnostics.Trace.Assert(frameworkElement != null);
 
                     parentGrid.Children.Remove(frameworkElement);
@@ -181,16 +185,16 @@ namespace WpfOpenControls.DockManager
             return dockPane;
         }
 
-        public void InsertDockPane(SplitterPane parentSplitterPane, DockPane dockPane, DockPane dockPaneToInsert, bool isHorizontalSplit)
+        public void InsertDockPane(Grid parentSplitterPane, SelectablePane selectablePane, DockPane dockPaneToInsert, bool isHorizontalSplit)
         {
-            parentSplitterPane.Children.Remove(dockPane);
+            parentSplitterPane.Children.Remove(selectablePane);
 
             SplitterPane newGrid = ILayoutFactory.MakeSplitterPane(isHorizontalSplit);
             parentSplitterPane.Children.Add(newGrid);
-            Grid.SetRow(newGrid, Grid.GetRow(dockPane));
-            Grid.SetColumn(newGrid, Grid.GetColumn(dockPane));
+            Grid.SetRow(newGrid, Grid.GetRow(selectablePane));
+            Grid.SetColumn(newGrid, Grid.GetColumn(selectablePane));
 
-            newGrid.AddChild(dockPane, true);
+            newGrid.AddChild(selectablePane, true);
             newGrid.AddChild(dockPaneToInsert, false);
         }
 
@@ -215,19 +219,9 @@ namespace WpfOpenControls.DockManager
                 return false;
             }
 
-            // Warning warning
             DockPane newDockPane = (dockPane is ToolPaneGroup) ? (DockPane)ILayoutFactory.MakeToolPaneGroup() : ILayoutFactory.MakeDocumentPaneGroup();
             newDockPane.IViewContainer.AddUserControl(userControl);
-
-            parentSplitterPane.Children.Remove(dockPane);
-
-            SplitterPane newGrid = ILayoutFactory.MakeSplitterPane(false);
-            parentSplitterPane.Children.Add(newGrid);
-            Grid.SetRow(newGrid, Grid.GetRow(dockPane));
-            Grid.SetColumn(newGrid, Grid.GetColumn(dockPane));
-
-            newGrid.AddChild(dockPane, true);
-            newGrid.AddChild(newDockPane, false);
+            InsertDockPane(parentSplitterPane, dockPane, newDockPane, false);
 
             return true;
         }
@@ -492,17 +486,22 @@ namespace WpfOpenControls.DockManager
             }
         }
 
-        public SelectablePane FindDocumentPanel(Grid grid)
+        public DocumentPanel FindDocumentPanel(Grid grid)
         {
+            if (grid is DocumentPanel)
+            {
+                return grid as DocumentPanel;
+            }
+
             foreach (var child in grid.Children)
             {
                 if (child is DocumentPanel)
                 {
-                    return child as SelectablePane;
+                    return child as DocumentPanel;
                 }
                 if (child is SplitterPane)
                 {
-                    SelectablePane selectablePane = FindDocumentPanel(child as SplitterPane);
+                    DocumentPanel selectablePane = FindDocumentPanel(child as SplitterPane);
                     if (selectablePane != null)
                     {
                         return selectablePane;

@@ -123,6 +123,32 @@ namespace WpfDockManagerDemo_2.ViewModel
             }
         }
 
+        public bool ToolFourVisible
+        {
+            get
+            {
+                return (Tools.Where(n => n.GetType() == typeof(ExampleDockManagerViews.ViewModel.ToolFourViewModel)).Count() > 0);
+            }
+            set
+            {
+                ShowTool(value, typeof(ExampleDockManagerViews.ViewModel.ToolFourViewModel));
+                NotifyPropertyChanged("ToolFourVisible");
+            }
+        }
+
+        public bool ToolFiveVisible
+        {
+            get
+            {
+                return (Tools.Where(n => n.GetType() == typeof(ExampleDockManagerViews.ViewModel.ToolFiveViewModel)).Count() > 0);
+            }
+            set
+            {
+                ShowTool(value, typeof(ExampleDockManagerViews.ViewModel.ToolFiveViewModel));
+                NotifyPropertyChanged("ToolFiveVisible");
+            }
+        }
+
         #region INotifyPropertyChanged
 
         public event PropertyChangedEventHandler PropertyChanged;
