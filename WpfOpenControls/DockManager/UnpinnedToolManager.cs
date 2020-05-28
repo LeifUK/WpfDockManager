@@ -301,6 +301,7 @@ namespace WpfOpenControls.DockManager
 
             foreach (KeyValuePair<WindowLocation,List<UnpinnedToolData>> keyValuePair in _dictUnpinnedToolData)
             {
+                // Warning waning => IToolListBox ???
                 Controls.ToolListBox toolListBox = IUnpinnedToolParent.GetToolListBox(keyValuePair.Key);
 
                 foreach (UnpinnedToolData unpinnedToolData in keyValuePair.Value)

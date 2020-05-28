@@ -133,55 +133,6 @@ namespace WpfOpenControls.DockManager
 
         private SelectablePane SelectedPane;
 
-        /*
-         * Remove tool views not in ToolsSource 
-         */
-        private void ValidateDockPanes(Grid grid, Dictionary<IViewModel, List<string>> viewModels, List<DockPane> emptyDockPanes, Type type)
-        {
-            if (grid == null)
-            {
-                return;
-            }
-
-            int numberOfChildren = grid.Children.Count;
-
-            for (int iChild = numberOfChildren - 1; iChild > -1; --iChild)
-            {
-                UIElement child = grid.Children[iChild];
-                if (child.GetType() == type)
-                {
-                    DockPane dockPane = child as DockPane;
-                    int count = dockPane.IViewContainer.GetUserControlCount();
-                    for (int index = count - 1; index > -1; --index)
-                    {
-                        IViewModel iViewModel = dockPane.IViewContainer.GetIViewModel(index);
-                        if (viewModels.ContainsKey(iViewModel) && (viewModels[iViewModel].Contains(iViewModel.URL)))
-                        {
-                            viewModels[iViewModel].Remove(iViewModel.URL);
-                            if (viewModels[iViewModel].Count == 0)
-                            {
-                                viewModels.Remove(iViewModel);
-                            }
-                        }
-                        else
-                        {
-                            dockPane.IViewContainer.ExtractUserControl(index);
-                        }
-                    }
-
-                    if (dockPane.IViewContainer.GetUserControlCount() == 0)
-                    {
-                        emptyDockPanes.Add(dockPane);
-                    }
-                }
-
-                if (child is Grid)
-                {
-                    ValidateDockPanes(child as Grid, viewModels, emptyDockPanes, type);
-                }
-            }
-        }
-
         private void ValidateFloatingPanes(Dictionary<IViewModel, List<string>> viewModels, List<IFloatingPane> floatingPanes)
         {
             int count = floatingPanes.Count;
@@ -233,58 +184,7 @@ namespace WpfOpenControls.DockManager
 
         private void ValidatePanes(Type paneType, Dictionary<IViewModel, List<string>> mapViewModels, List<IFloatingPane> floatingPanes)
         {
-            List<DockPane> emptyDockPanes = new List<DockPane>();
-            ValidateDockPanes(_root, mapViewModels, emptyDockPanes, paneType);
-
-            /*
-             * Remove dock panes with no matching view model
-             */
-
-            foreach (var dockPane in emptyDockPanes)
-            {
-                IDockPaneTreeManager.ExtractDockPane(dockPane, out FrameworkElement frameworkElement);
-            }
-
-            /*
-             * Create dock panes for view models without dock panes
-             */
-
-            if (mapViewModels.Count > 0)
-            {
-                if (paneType == typeof(ToolPaneGroup))
-                {
-                    DockPane siblingDockPane = IDockPaneTreeManager.FindElementOfType(typeof(ToolPaneGroup), _root) as DockPane;
-                    if (siblingDockPane == null)
-                    {
-                        siblingDockPane = ILayoutFactory.MakeToolPaneGroup();
-
-                        if (_root is DocumentPanel)
-                        {
-                            DocumentPanel documentPanel = _root as DocumentPanel;
-
-                            SplitterPane splitterPane = ILayoutFactory.MakeSplitterPane(true);
-                            IDockPaneTree.RootPane = splitterPane;
-                            splitterPane.AddChild(documentPanel, true);
-                            splitterPane.AddChild(siblingDockPane, false);
-                        }
-                        else
-                        {
-                            // There is always a document panel 
-                            DocumentPanel documentPanel = IDockPaneTreeManager.FindDocumentPanel(_root);
-
-                            IDockPaneTreeManager.InsertDockPane(_root, documentPanel, siblingDockPane, false);
-                        }
-                    }
-                    System.Diagnostics.Trace.Assert(siblingDockPane != null);
-
-                    List<UserControl> userControls = LoadViewsFromTemplates(ToolTemplates, new ObservableCollection<IViewModel>(mapViewModels.Keys));
-                    foreach (UserControl userControl in userControls)
-                    {
-                        siblingDockPane.IViewContainer.AddUserControl(userControl);
-                    }
-                }
-            }
-
+            IDockPaneTreeManager.ValidateDockPanes(_root, mapViewModels, paneType);
             ValidateFloatingPanes(mapViewModels, floatingPanes);
         }
 
@@ -1300,6 +1200,11 @@ namespace WpfOpenControls.DockManager
             {
                 return this;
             }
+        }
+
+        List<UserControl> IDockPaneTree.LoadToolViews(ObservableCollection<IViewModel> viewModels)
+        {
+            return LoadViewsFromTemplates(ToolTemplates, viewModels);
         }
 
         #endregion IDockPaneTree

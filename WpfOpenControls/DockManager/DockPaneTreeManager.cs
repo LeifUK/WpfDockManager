@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Collections.ObjectModel;
 using System.Linq;
 using System.Windows;
 using System.Windows.Controls;
@@ -42,29 +43,6 @@ namespace WpfOpenControls.DockManager
             return grid;
         }
 
-        public SelectablePane FindElementOfType(Type type, Grid parentGrid)
-        {
-            System.Diagnostics.Trace.Assert(parentGrid != null);
-
-            foreach (var child in parentGrid.Children)
-            {
-                if (child.GetType() == type)
-                {
-                    return child as SelectablePane;
-                }
-                if (child is Grid)
-                {
-                    SelectablePane selectablePane = FindElementOfType(type, child as Grid);
-                    if (selectablePane != null)
-                    {
-                        return selectablePane;
-                    }
-                }
-            }
-
-            return null;
-        }
-
         private static void ExtractDocuments(FloatingPane floatingPane, DockPane dockPane)
         {
             while (true)
@@ -81,6 +59,30 @@ namespace WpfOpenControls.DockManager
         }
 
         #region IDockPaneTreeManager
+
+        public SelectablePane FindElementOfType(Type type, Grid parentGrid)
+        {
+            System.Diagnostics.Trace.Assert(parentGrid != null);
+
+            if (parentGrid.GetType() == type)
+            {
+                return parentGrid as SelectablePane;
+            }
+
+            foreach (var child in parentGrid.Children)
+            {
+                if (child is Grid)
+                {
+                    SelectablePane selectablePane = FindElementOfType(type, child as Grid);
+                    if (selectablePane != null)
+                    {
+                        return selectablePane;
+                    }
+                }
+            }
+
+            return null;
+        }
 
         private void AddViews(List<UserControl> views, List<FrameworkElement> list_N, DelegateCreateDockPane createDockPane)
         {
@@ -486,37 +488,11 @@ namespace WpfOpenControls.DockManager
             }
         }
 
-        public DocumentPanel FindDocumentPanel(Grid grid)
-        {
-            if (grid is DocumentPanel)
-            {
-                return grid as DocumentPanel;
-            }
-
-            foreach (var child in grid.Children)
-            {
-                if (child is DocumentPanel)
-                {
-                    return child as DocumentPanel;
-                }
-                if (child is SplitterPane)
-                {
-                    DocumentPanel selectablePane = FindDocumentPanel(child as SplitterPane);
-                    if (selectablePane != null)
-                    {
-                        return selectablePane;
-                    }
-                }
-            }
-
-            return null;
-        }
-
         public void UnpinToolPane(ToolPaneGroup toolPaneGroup, out UnpinnedToolData unpinnedToolData)
-        { 
+        {
             System.Diagnostics.Trace.Assert(toolPaneGroup != null);
 
-            DocumentPanel documentPanel = FindDocumentPanel(IDockPaneTree.RootPane) as DocumentPanel;
+            DocumentPanel documentPanel = FindElementOfType(typeof(DocumentPanel), IDockPaneTree.RootPane) as DocumentPanel;
             System.Diagnostics.Trace.Assert(documentPanel != null);
 
             List<Grid> documentPanelAncestors = new List<Grid>();
@@ -635,6 +611,107 @@ namespace WpfOpenControls.DockManager
 
                 list_N.Add(toolPaneGroup);
                 AddViews(toolViews, list_N, delegate { return ILayoutFactory.MakeToolPaneGroup(); });
+            }
+        }
+
+        /*
+         * Remove dock panes whose view model is not in viewModels 
+         */
+        private void ValidateDockPanes(Grid grid, Dictionary<IViewModel, List<string>> viewModels, List<DockPane> emptyDockPanes, Type paneType)
+        {
+            if (grid == null)
+            {
+                return;
+            }
+
+            int numberOfChildren = grid.Children.Count;
+
+            for (int iChild = numberOfChildren - 1; iChild > -1; --iChild)
+            {
+                UIElement child = grid.Children[iChild];
+                if (child.GetType() == paneType)
+                {
+                    DockPane dockPane = child as DockPane;
+                    int count = dockPane.IViewContainer.GetUserControlCount();
+                    for (int index = count - 1; index > -1; --index)
+                    {
+                        IViewModel iViewModel = dockPane.IViewContainer.GetIViewModel(index);
+                        if (viewModels.ContainsKey(iViewModel) && (viewModels[iViewModel].Contains(iViewModel.URL)))
+                        {
+                            viewModels[iViewModel].Remove(iViewModel.URL);
+                            if (viewModels[iViewModel].Count == 0)
+                            {
+                                viewModels.Remove(iViewModel);
+                            }
+                        }
+                        else
+                        {
+                            dockPane.IViewContainer.ExtractUserControl(index);
+                        }
+                    }
+
+                    if (dockPane.IViewContainer.GetUserControlCount() == 0)
+                    {
+                        emptyDockPanes.Add(dockPane);
+                    }
+                }
+
+                if (child is Grid)
+                {
+                    ValidateDockPanes(child as Grid, viewModels, emptyDockPanes, paneType);
+                }
+            }
+        }
+
+        public void ValidateDockPanes(Grid grid, Dictionary<IViewModel, List<string>> viewModelUrlDictionary, Type paneType)
+        {
+            List<DockPane> emptyDockPanes = new List<DockPane>();
+            
+            ValidateDockPanes(IDockPaneTree.RootPane, viewModelUrlDictionary, emptyDockPanes, paneType);
+
+            /*
+             * Remove dock panes with no matching view model
+             */
+
+            foreach (var dockPane in emptyDockPanes)
+            {
+                ExtractDockPane(dockPane, out FrameworkElement frameworkElement);
+            }
+
+            if (viewModelUrlDictionary.Count > 0)
+            {
+                if (paneType == typeof(ToolPaneGroup))
+                {
+                    DockPane siblingDockPane = FindElementOfType(typeof(ToolPaneGroup), IDockPaneTree.RootPane) as DockPane;
+                    if (siblingDockPane == null)
+                    {
+                        siblingDockPane = ILayoutFactory.MakeToolPaneGroup();
+
+                        if (IDockPaneTree.RootPane is DocumentPanel)
+                        {
+                            DocumentPanel documentPanel = IDockPaneTree.RootPane as DocumentPanel;
+
+                            SplitterPane splitterPane = ILayoutFactory.MakeSplitterPane(true);
+                            IDockPaneTree.RootPane = splitterPane;
+                            splitterPane.AddChild(documentPanel, true);
+                            splitterPane.AddChild(siblingDockPane, false);
+                        }
+                        else
+                        {
+                            // There is always a document panel 
+                            DocumentPanel documentPanel = FindElementOfType(typeof(DocumentPanel), IDockPaneTree.RootPane) as DocumentPanel;
+
+                            InsertDockPane(IDockPaneTree.RootPane, documentPanel, siblingDockPane, false);
+                        }
+                    }
+                    System.Diagnostics.Trace.Assert(siblingDockPane != null);
+
+                    List<UserControl> userControls = IDockPaneTree.LoadToolViews(new ObservableCollection<IViewModel>(viewModelUrlDictionary.Keys));
+                    foreach (UserControl userControl in userControls)
+                    {
+                        siblingDockPane.IViewContainer.AddUserControl(userControl);
+                    }
+                }
             }
         }
 

@@ -10,7 +10,7 @@ namespace WpfOpenControls.DockManager
     internal interface IDockPaneTreeManager
     {
         SelectablePane FindElementOfType(Type type, Grid parentGrid);
-        
+
         void InsertDockPane(Grid parentSplitterPane, SelectablePane selectablePane, DockPane dockPaneToInsert, bool isHorizontalSplit);
 
         DockPane ExtractDockPane(DockPane dockPane, out FrameworkElement frameworkElement);
@@ -23,12 +23,14 @@ namespace WpfOpenControls.DockManager
 
         void Unfloat(FloatingPane floatingPane, SelectablePane selectedPane, WindowLocation windowLocation);
 
-        DocumentPanel FindDocumentPanel(Grid grid);
+        //DocumentPanel FindDocumentPanel(Grid grid);
 
         void PinToolPane(UnpinnedToolData unpinnedToolData);
 
         void UnpinToolPane(ToolPaneGroup toolPaneGroup, out UnpinnedToolData unpinnedToolData);
-        
+
         void CreateDefaultLayout(List<UserControl> documentViews, List<UserControl> toolViews);
+
+        void ValidateDockPanes(Grid grid, Dictionary<IViewModel, List<string>> viewModels, Type paneType);
     }
 }

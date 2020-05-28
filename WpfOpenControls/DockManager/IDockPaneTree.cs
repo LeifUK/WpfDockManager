@@ -1,5 +1,7 @@
 ﻿using System.Windows;
 using System.Windows.Controls;
+using System.Collections.Generic;
+using System.Collections.ObjectModel;
 
 namespace WpfOpenControls.DockManager
 {
@@ -10,5 +12,6 @@ namespace WpfOpenControls.DockManager
         Grid RootPane { get; set; }
         Grid ParentGrid { get; }
         UIElementCollection Children { get; }
+        List<UserControl> LoadToolViews(ObservableCollection<IViewModel> viewModels);
     }
 }
