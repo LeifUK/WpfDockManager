@@ -3,6 +3,6 @@
     internal interface IUnpinnedToolParent
     {
         void ViewModelRemoved(IViewModel iViewModel);
-        Controls.ToolListBox GetToolListBox(WindowLocation windowLocation);
+        Controls.IToolListBox GetToolListBox(WindowLocation windowLocation);
     }
 }

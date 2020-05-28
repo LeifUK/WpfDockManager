@@ -11,8 +11,6 @@ namespace WpfOpenControls.DockManager
     {
         SelectablePane FindElementOfType(Type type, Grid parentGrid);
 
-        void InsertDockPane(Grid parentSplitterPane, SelectablePane selectablePane, DockPane dockPaneToInsert, bool isHorizontalSplit);
-
         DockPane ExtractDockPane(DockPane dockPane, out FrameworkElement frameworkElement);
 
         bool UngroupDockPane(DockPane dockPane, int index, double paneWidth);
@@ -22,8 +20,6 @@ namespace WpfOpenControls.DockManager
         SelectablePane FindSelectablePane(Grid grid, Point pointOnScreen);
 
         void Unfloat(FloatingPane floatingPane, SelectablePane selectedPane, WindowLocation windowLocation);
-
-        //DocumentPanel FindDocumentPanel(Grid grid);
 
         void PinToolPane(UnpinnedToolData unpinnedToolData);
 

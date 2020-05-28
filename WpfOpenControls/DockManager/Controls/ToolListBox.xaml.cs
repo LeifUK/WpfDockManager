@@ -10,7 +10,7 @@ namespace WpfOpenControls.DockManager.Controls
     /// <summary>
     /// Interaction logic for ToolListControl.xaml
     /// </summary>
-    public partial class ToolListBox : UserControl
+    public partial class ToolListBox : UserControl, IToolListBox
     {
         public ToolListBox()
         {
@@ -19,7 +19,7 @@ namespace WpfOpenControls.DockManager.Controls
 
         internal event Events.ItemClickEventHandler ItemClick;
 
-        internal WindowLocation WindowLocation { get; set; }
+        public WindowLocation WindowLocation { get; set; }
 
         #region Dependency properties
 
@@ -66,7 +66,7 @@ namespace WpfOpenControls.DockManager.Controls
         [DesignerSerializationVisibility(DesignerSerializationVisibility.Hidden)]
         public static readonly DependencyProperty ItemsSourceProperty = DependencyProperty.Register("ItemsSource", typeof(System.Collections.ObjectModel.ObservableCollection<IToolListBoxItem>), typeof(ToolListBox), new FrameworkPropertyMetadata((System.Collections.ObjectModel.ObservableCollection<IToolListBoxItem>)null, new PropertyChangedCallback(OnItemsSourceChanged)));
 
-        internal System.Collections.ObjectModel.ObservableCollection<IToolListBoxItem> ItemsSource
+        public System.Collections.ObjectModel.ObservableCollection<IToolListBoxItem> ItemsSource
         {
             get
             {

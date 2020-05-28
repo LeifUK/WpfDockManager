@@ -27,7 +27,7 @@ namespace WpfOpenControls.DockManager
         private ToolListBoxItem _activeToolListBoxItem;
         private UnpinnedToolPane _activeUnpinnedToolPane;
         private UnpinnedToolData _activeUnpinnedToolData;
-        private Controls.ToolListBox _activeToolListBox;
+        private Controls.IToolListBox _activeToolListBox;
         private Dictionary<WindowLocation, List<UnpinnedToolData>> _dictUnpinnedToolData;
 
         public Dictionary<WindowLocation, List<UnpinnedToolData>> GetUnpinnedToolData()
@@ -186,7 +186,7 @@ namespace WpfOpenControls.DockManager
             _activeToolListBoxItem.Height = (sender as UnpinnedToolPane).ActualHeight;
         }
 
-        private void AddUnpinnedToolData(UnpinnedToolData unpinnedToolData, WindowLocation windowLocation, Controls.ToolListBox toolListBox)
+        private void AddUnpinnedToolData(UnpinnedToolData unpinnedToolData, WindowLocation windowLocation, Controls.IToolListBox toolListBox)
         {
             _dictUnpinnedToolData[windowLocation].Add(unpinnedToolData);
 
@@ -205,7 +205,7 @@ namespace WpfOpenControls.DockManager
 
         public void MakeUnpinnedToolPaneGroup(WindowLocation windowLocation, ToolPaneGroup toolPaneGroup, string siblingGuid, bool isHorizontal, bool isFirst)
         {
-            Controls.ToolListBox toolListBox = IUnpinnedToolParent.GetToolListBox(windowLocation);
+            Controls.IToolListBox toolListBox = IUnpinnedToolParent.GetToolListBox(windowLocation);
 
             System.Diagnostics.Trace.Assert(toolListBox != null);
             System.Diagnostics.Trace.Assert(toolPaneGroup != null);
@@ -301,8 +301,7 @@ namespace WpfOpenControls.DockManager
 
             foreach (KeyValuePair<WindowLocation,List<UnpinnedToolData>> keyValuePair in _dictUnpinnedToolData)
             {
-                // Warning waning => IToolListBox ???
-                Controls.ToolListBox toolListBox = IUnpinnedToolParent.GetToolListBox(keyValuePair.Key);
+                Controls.IToolListBox toolListBox = IUnpinnedToolParent.GetToolListBox(keyValuePair.Key);
 
                 foreach (UnpinnedToolData unpinnedToolData in keyValuePair.Value)
                 {

@@ -58,6 +58,19 @@ namespace WpfOpenControls.DockManager
             floatingPane.Close();
         }
 
+        private void InsertDockPane(Grid parentSplitterPane, SelectablePane selectablePane, DockPane dockPaneToInsert, bool isHorizontalSplit)
+        {
+            parentSplitterPane.Children.Remove(selectablePane);
+
+            SplitterPane newGrid = ILayoutFactory.MakeSplitterPane(isHorizontalSplit);
+            parentSplitterPane.Children.Add(newGrid);
+            Grid.SetRow(newGrid, Grid.GetRow(selectablePane));
+            Grid.SetColumn(newGrid, Grid.GetColumn(selectablePane));
+
+            newGrid.AddChild(selectablePane, true);
+            newGrid.AddChild(dockPaneToInsert, false);
+        }
+
         #region IDockPaneTreeManager
 
         public SelectablePane FindElementOfType(Type type, Grid parentGrid)
@@ -185,19 +198,6 @@ namespace WpfOpenControls.DockManager
             }
 
             return dockPane;
-        }
-
-        public void InsertDockPane(Grid parentSplitterPane, SelectablePane selectablePane, DockPane dockPaneToInsert, bool isHorizontalSplit)
-        {
-            parentSplitterPane.Children.Remove(selectablePane);
-
-            SplitterPane newGrid = ILayoutFactory.MakeSplitterPane(isHorizontalSplit);
-            parentSplitterPane.Children.Add(newGrid);
-            Grid.SetRow(newGrid, Grid.GetRow(selectablePane));
-            Grid.SetColumn(newGrid, Grid.GetColumn(selectablePane));
-
-            newGrid.AddChild(selectablePane, true);
-            newGrid.AddChild(dockPaneToInsert, false);
         }
 
         public bool UngroupDockPane(DockPane dockPane, int index, double paneWidth)
@@ -614,9 +614,6 @@ namespace WpfOpenControls.DockManager
             }
         }
 
-        /*
-         * Remove dock panes whose view model is not in viewModels 
-         */
         private void ValidateDockPanes(Grid grid, Dictionary<IViewModel, List<string>> viewModels, List<DockPane> emptyDockPanes, Type paneType)
         {
             if (grid == null)
@@ -663,6 +660,10 @@ namespace WpfOpenControls.DockManager
             }
         }
 
+        /*
+         * Remove tool panes with no corresponding IViewModel
+         * Ensure there is a tool pane for each IViewModel
+         */
         public void ValidateDockPanes(Grid grid, Dictionary<IViewModel, List<string>> viewModelUrlDictionary, Type paneType)
         {
             List<DockPane> emptyDockPanes = new List<DockPane>();

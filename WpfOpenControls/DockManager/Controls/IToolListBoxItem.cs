@@ -6,7 +6,7 @@ using System.Threading.Tasks;
 
 namespace WpfOpenControls.DockManager.Controls
 {
-    interface IToolListBoxItem
+    public interface IToolListBoxItem
     {
         string Title { get; }
     }

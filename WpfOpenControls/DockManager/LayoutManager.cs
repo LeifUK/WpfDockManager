@@ -1630,16 +1630,16 @@ namespace WpfOpenControls.DockManager
             }
         }
 
-        #region IUnpinnedToolPaneOwner
+        #region IUnpinnedToolParent
 
-        public void ViewModelRemoved(IViewModel iViewModel)
+        void IUnpinnedToolParent.ViewModelRemoved(IViewModel iViewModel)
         {
             System.Diagnostics.Trace.Assert(ToolsSource.Contains(iViewModel));
             
             ToolsSource.Remove(iViewModel);
         }
 
-        public ToolListBox GetToolListBox(WindowLocation windowLocation)
+        IToolListBox IUnpinnedToolParent.GetToolListBox(WindowLocation windowLocation)
         {
             System.Diagnostics.Trace.Assert(_dictToolListBoxes.ContainsKey(windowLocation));
 
