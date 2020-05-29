@@ -3,13 +3,14 @@
     public interface IViewModel
     {
         // A user friendly title
-        string Title { get; set; }
+        string Title { get; }
 
         /*
+         * Not used by tools.
          * Uniquely identifies a document instance.
          * For example a file path for a text document. 
          */
-        string URL { get; set; }
+        string URL { get; }
 
         bool CanClose { get; }
         bool CanFloat { get; }

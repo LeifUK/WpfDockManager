@@ -1149,7 +1149,6 @@ namespace WpfOpenControls.DockManager
 
         void ILayoutFactory.MakeUnpinnedToolPaneGroup(WindowLocation windowLocation, ToolPaneGroup toolPaneGroup, string siblingGuid, bool isHorizontal, bool isFirst)
         {
-            // Warning warning
             IUnpinnedToolManager.MakeUnpinnedToolPaneGroup(windowLocation, toolPaneGroup, siblingGuid, isHorizontal, isFirst);
         }
 
@@ -1205,6 +1204,11 @@ namespace WpfOpenControls.DockManager
         List<UserControl> IDockPaneTree.LoadToolViews(ObservableCollection<IViewModel> viewModels)
         {
             return LoadViewsFromTemplates(ToolTemplates, viewModels);
+        }
+
+        List<UserControl> IDockPaneTree.LoadDocumentViews(ObservableCollection<IViewModel> viewModels)
+        {
+            return LoadViewsFromTemplates(DocumentTemplates, viewModels);
         }
 
         #endregion IDockPaneTree

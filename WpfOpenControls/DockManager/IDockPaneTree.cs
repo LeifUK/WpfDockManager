@@ -13,5 +13,6 @@ namespace WpfOpenControls.DockManager
         Grid ParentGrid { get; }
         UIElementCollection Children { get; }
         List<UserControl> LoadToolViews(ObservableCollection<IViewModel> viewModels);
+        List<UserControl> LoadDocumentViews(ObservableCollection<IViewModel> viewModels);
     }
 }

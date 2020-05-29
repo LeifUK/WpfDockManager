@@ -182,8 +182,9 @@
 
                 <!--Caption buttons-->
                 <StackPanel Grid.Row="0" Grid.Column="0" Orientation="Horizontal" HorizontalAlignment="Right" >
+                    <Button Name="_buttonDocuments" Content="Documents" Style="{StaticResource StyleTitleBarButton}" WindowChrome.IsHitTestVisibleInChrome="True" VerticalAlignment="Center" Click="_buttonDocuments_Click"/>
                     <Button Name="_buttonTools" Content="Tools" Style="{StaticResource StyleTitleBarButton}" WindowChrome.IsHitTestVisibleInChrome="True" VerticalAlignment="Center" Click="_buttonTools_Click"/>
-                    <Button Name="_buttonMenu" Content="Window" Style="{StaticResource StyleTitleBarButton}" WindowChrome.IsHitTestVisibleInChrome="True" VerticalAlignment="Center" Click="_buttonWindow_Click"/>
+                    <Button Name="_buttonWindow" Content="Window" Style="{StaticResource StyleTitleBarButton}" WindowChrome.IsHitTestVisibleInChrome="True" VerticalAlignment="Center" Click="_buttonWindow_Click"/>
                     <Button Style="{StaticResource MinimizeButtonStyle}" WindowChrome.IsHitTestVisibleInChrome="True" ToolTip="Minimize"
                             Command="{x:Static SystemCommands.MinimizeWindowCommand}"/>
                     <Button x:Name="RestoreButton" Visibility="Collapsed" Style="{StaticResource RestoreButtonStyle}" 

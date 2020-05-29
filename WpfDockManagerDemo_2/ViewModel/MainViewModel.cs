@@ -1,7 +1,9 @@
 ﻿using System;
 using System.ComponentModel;
+using System.Collections.ObjectModel;
 using System.Linq;
 using WpfOpenControls.DockManager;
+using ExampleDockManagerViews.ViewModel;
 
 namespace WpfDockManagerDemo_2.ViewModel
 {
@@ -9,20 +11,26 @@ namespace WpfDockManagerDemo_2.ViewModel
     {
         public MainViewModel()
         {
-            Tools = new System.Collections.ObjectModel.ObservableCollection<IViewModel>();
-            Tools.Add(new ExampleDockManagerViews.ViewModel.ToolOneViewModel());
-            Tools.Add(new ExampleDockManagerViews.ViewModel.ToolTwoViewModel());
-            Tools.Add(new ExampleDockManagerViews.ViewModel.ToolThreeViewModel());
-            Tools.Add(new ExampleDockManagerViews.ViewModel.ToolFourViewModel());
-            Tools.Add(new ExampleDockManagerViews.ViewModel.ToolFiveViewModel());
+            Tools = new ObservableCollection<IViewModel>();
+            Tools.Add(new ToolOneViewModel());
+            Tools.Add(new ToolTwoViewModel());
+            Tools.Add(new ToolThreeViewModel());
+            Tools.Add(new ToolFourViewModel());
+            Tools.Add(new ToolFiveViewModel());
 
-            Documents = new System.Collections.ObjectModel.ObservableCollection<IViewModel>();
-            Documents.Add(new ExampleDockManagerViews.ViewModel.DocumentOneViewModel() { URL = "C:\\File-C1" });
-            Documents.Add(new ExampleDockManagerViews.ViewModel.DocumentOneViewModel() { URL = "C:\\File-C2" });
-            Documents.Add(new ExampleDockManagerViews.ViewModel.DocumentTwoViewModel() { URL = "D:\\File-D1" });
-            Documents.Add(new ExampleDockManagerViews.ViewModel.DocumentTwoViewModel() { URL = "D:\\File-D2" });
-            Documents.Add(new ExampleDockManagerViews.ViewModel.DocumentTwoViewModel() { URL = "D:\\File-D3" });
+            Documents = new ObservableCollection<IViewModel>();
+            Documents.Add(DocumentOne);
+            Documents.Add(DocumentTwo);
+            Documents.Add(DocumentThree);
+            Documents.Add(DocumentFour);
+            Documents.Add(DocumentFive);
         }
+
+        public readonly IViewModel DocumentOne = new DocumentOneViewModel() { URL = "C:\\Data\\File-1.txt", Title = "File-1.txt" };
+        public readonly IViewModel DocumentTwo = new DocumentOneViewModel() { URL = "C:\\Data\\File-2.txt", Title = "File-2.txt" };
+        public readonly IViewModel DocumentThree = new DocumentTwoViewModel() { URL = "C:\\Data\\Folder\\File-3.txt", Title = "File-3.txt" };
+        public readonly IViewModel DocumentFour = new DocumentTwoViewModel() { URL = "D:\\Data\\Folder\\File-4.txt", Title = "File-4.txt" };
+        public readonly IViewModel DocumentFive = new DocumentTwoViewModel() { URL = "D:\\Data\\Folder\\File-5.txt", Title = "File-5.txt" };
 
         private System.Collections.ObjectModel.ObservableCollection<IViewModel> _documents;
         public System.Collections.ObjectModel.ObservableCollection<IViewModel> Documents
@@ -146,6 +154,94 @@ namespace WpfDockManagerDemo_2.ViewModel
             {
                 ShowTool(value, typeof(ExampleDockManagerViews.ViewModel.ToolFiveViewModel));
                 NotifyPropertyChanged("ToolFiveVisible");
+            }
+        }
+
+        public bool IsDocumentVisible(IViewModel iViewModel)
+        {
+            return (Documents.Contains(iViewModel));
+        }
+
+        public void ShowDocument(bool show, IViewModel iViewModel)
+        {
+            bool isVisible = IsDocumentVisible(iViewModel);
+            if (isVisible == show)
+            {
+                return;
+            }
+
+            if (show == false)
+            {
+                Documents.Remove(iViewModel);
+            }
+            else
+            {
+                Documents.Add(iViewModel);
+            }
+        }
+
+        public bool DocumentOneVisible
+        {
+            get
+            {
+                return IsDocumentVisible(DocumentOne);
+            }
+            set
+            {
+                ShowDocument(value, DocumentOne);
+                NotifyPropertyChanged("DocumentOneVisible");
+            }
+        }
+
+        public bool DocumentTwoVisible
+        {
+            get
+            {
+                return IsDocumentVisible(DocumentTwo);
+            }
+            set
+            {
+                ShowDocument(value, DocumentTwo);
+                NotifyPropertyChanged("DocumentTwoVisible");
+            }
+        }
+
+        public bool DocumentThreeVisible
+        {
+            get
+            {
+                return IsDocumentVisible(DocumentThree);
+            }
+            set
+            {
+                ShowDocument(value, DocumentThree);
+                NotifyPropertyChanged("DocumentThreeVisible");
+            }
+        }
+
+        public bool DocumentFourVisible
+        {
+            get
+            {
+                return IsDocumentVisible(DocumentFour);
+            }
+            set
+            {
+                ShowDocument(value, DocumentFour);
+                NotifyPropertyChanged("DocumentFourVisible");
+            }
+        }
+
+        public bool DocumentFiveVisible
+        {
+            get
+            {
+                return IsDocumentVisible(DocumentFive);
+            }
+            set
+            {
+                ShowDocument(value, DocumentFive);
+                NotifyPropertyChanged("DocumentFiveVisible");
             }
         }
 

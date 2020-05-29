@@ -164,7 +164,47 @@ namespace WpfDockManagerDemo_2
             contextMenu.Items.Add(menuItem);
 
             contextMenu.IsOpen = true;
+        }
 
+        private void _buttonDocuments_Click(object sender, RoutedEventArgs e)
+        {
+            MainViewModel mainViewModel = DataContext as MainViewModel;
+            System.Diagnostics.Trace.Assert(mainViewModel != null);
+
+            ContextMenu contextMenu = new ContextMenu();
+            MenuItem menuItem = null;
+
+            menuItem = new MenuItem();
+            menuItem.Header = mainViewModel.DocumentOne.URL;
+            menuItem.IsChecked = mainViewModel.DocumentOneVisible;
+            menuItem.Command = new WpfOpenControls.DockManager.Command(delegate { mainViewModel.DocumentOneVisible = !mainViewModel.DocumentOneVisible; }, delegate { return true; });
+            contextMenu.Items.Add(menuItem);
+
+            menuItem = new MenuItem();
+            menuItem.Header = mainViewModel.DocumentTwo.URL;
+            menuItem.IsChecked = mainViewModel.DocumentTwoVisible;
+            menuItem.Command = new WpfOpenControls.DockManager.Command(delegate { mainViewModel.DocumentTwoVisible = !mainViewModel.DocumentTwoVisible; }, delegate { return true; });
+            contextMenu.Items.Add(menuItem);
+
+            menuItem = new MenuItem();
+            menuItem.Header = mainViewModel.DocumentThree.URL;
+            menuItem.IsChecked = mainViewModel.DocumentThreeVisible;
+            menuItem.Command = new WpfOpenControls.DockManager.Command(delegate { mainViewModel.DocumentThreeVisible = !mainViewModel.DocumentThreeVisible; }, delegate { return true; });
+            contextMenu.Items.Add(menuItem);
+
+            menuItem = new MenuItem();
+            menuItem.Header = mainViewModel.DocumentFour.URL;
+            menuItem.IsChecked = mainViewModel.DocumentFourVisible;
+            menuItem.Command = new WpfOpenControls.DockManager.Command(delegate { mainViewModel.DocumentFourVisible = !mainViewModel.DocumentFourVisible; }, delegate { return true; });
+            contextMenu.Items.Add(menuItem);
+
+            menuItem = new MenuItem();
+            menuItem.Header = mainViewModel.DocumentFive.URL;
+            menuItem.IsChecked = mainViewModel.DocumentFiveVisible;
+            menuItem.Command = new WpfOpenControls.DockManager.Command(delegate { mainViewModel.DocumentFiveVisible = !mainViewModel.DocumentFiveVisible; }, delegate { return true; });
+            contextMenu.Items.Add(menuItem);
+
+            contextMenu.IsOpen = true;
         }
     }
 }

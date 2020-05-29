@@ -1,8 +1,5 @@
 ﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
+using System.Windows;
 
 namespace WpfOpenControls.DockManager
 {
@@ -10,7 +7,15 @@ namespace WpfOpenControls.DockManager
     {
         internal FloatingDocumentPaneGroup() : base(new DocumentContainer())
         {
+            IViewContainer.SelectionChanged += IViewContainer_SelectionChanged;
+        }
 
+        private void IViewContainer_SelectionChanged(object sender, EventArgs e)
+        {
+            FloatingViewModel floatingViewModel = DataContext as FloatingViewModel;
+            System.Diagnostics.Trace.Assert(floatingViewModel != null);
+
+            floatingViewModel.Title = Application.Current.MainWindow.Title + " - " + IViewContainer.URL;
         }
     }
 }

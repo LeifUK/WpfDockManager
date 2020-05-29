@@ -73,16 +73,16 @@ namespace WpfOpenControls.DockManager
 
         #region IDockPaneTreeManager
 
-        public SelectablePane FindElementOfType(Type type, Grid parentGrid)
+        public SelectablePane FindElementOfType(Type type, Grid grid)
         {
-            System.Diagnostics.Trace.Assert(parentGrid != null);
+            System.Diagnostics.Trace.Assert(grid != null);
 
-            if (parentGrid.GetType() == type)
+            if (grid.GetType() == type)
             {
-                return parentGrid as SelectablePane;
+                return grid as SelectablePane;
             }
 
-            foreach (var child in parentGrid.Children)
+            foreach (var child in grid.Children)
             {
                 if (child is Grid)
                 {
@@ -173,16 +173,13 @@ namespace WpfOpenControls.DockManager
                             break;
                         }
                     }
-
-                    grandparentGrid.Children.Remove(parentGrid);
-
-
                     System.Diagnostics.Trace.Assert(frameworkElement != null);
 
+                    IDockPaneTree.FrameworkElementRemoved(parentGrid);
+                    grandparentGrid.Children.Remove(parentGrid);
                     parentGrid.Children.Remove(frameworkElement);
                     int row = Grid.GetRow(parentGrid);
                     int column = Grid.GetColumn(parentGrid);
-                    IDockPaneTree.FrameworkElementRemoved(parentGrid);
                     grandparentGrid.Children.Remove(parentGrid);
                     if (grandparentGrid == IDockPaneTree)
                     {
@@ -540,10 +537,17 @@ namespace WpfOpenControls.DockManager
                     Parent              Level Index
                        G                    1   
                  /           \              
-                 G           G              2 
+                 G           DP             2 
               /     \     /     \           
-              D     D     D     D           3
+              T     T     D     D           3
               
+                Key: 
+
+                    G = Grid
+                    T = Tool
+                    DP = Document Panel: the root ancestor of all documents. 
+                    D = Documents
+
                 Assume we are building level N where there are potentially 2 ^ (N-1) nodes (denoted by a star). 
                 Maintain two node lists. One for level N and one for level N + 1. 
                 List for level N is denoted list(N). 
@@ -681,7 +685,26 @@ namespace WpfOpenControls.DockManager
 
             if (viewModelUrlDictionary.Count > 0)
             {
-                if (paneType == typeof(ToolPaneGroup))
+                if (paneType == typeof(DocumentPaneGroup))
+                {
+                    DockPane siblingDockPane = FindElementOfType(typeof(DocumentPaneGroup), IDockPaneTree.RootPane) as DockPane;
+                    if (siblingDockPane == null)
+                    {
+                        siblingDockPane = ILayoutFactory.MakeDocumentPaneGroup();
+
+                        // There is always a document panel 
+                        DocumentPanel documentPanel = FindElementOfType(typeof(DocumentPanel), IDockPaneTree.RootPane) as DocumentPanel;
+                        documentPanel.Children.Add(siblingDockPane);
+                    }
+                    System.Diagnostics.Trace.Assert(siblingDockPane != null);
+
+                    List<UserControl> userControls = IDockPaneTree.LoadDocumentViews(new ObservableCollection<IViewModel>(viewModelUrlDictionary.Keys));
+                    foreach (UserControl userControl in userControls)
+                    {
+                        siblingDockPane.IViewContainer.AddUserControl(userControl);
+                    }
+                }
+                else if (paneType == typeof(ToolPaneGroup))
                 {
                     DockPane siblingDockPane = FindElementOfType(typeof(ToolPaneGroup), IDockPaneTree.RootPane) as DockPane;
                     if (siblingDockPane == null)

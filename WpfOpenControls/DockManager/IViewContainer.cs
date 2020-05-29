@@ -8,6 +8,7 @@ namespace WpfOpenControls.DockManager
     internal interface IViewContainer
     {
         string Title { get; }
+        string URL { get; }
         void AddUserControl(UserControl userControl);
         void InsertUserControl(int index, UserControl userControl);
         UserControl ExtractUserControl(int index);

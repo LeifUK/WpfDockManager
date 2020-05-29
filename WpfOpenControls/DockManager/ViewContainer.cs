@@ -241,6 +241,19 @@ namespace WpfOpenControls.DockManager
             }
         }
 
+        public string URL
+        {
+            get
+            {
+                if ((_items.Count == 0) || (_tabHeaderControl.SelectedIndex == -1))
+                {
+                    return null;
+                }
+
+                return _items[_tabHeaderControl.SelectedIndex].Value.URL;
+            }
+        }
+
         protected abstract void CheckTabCount();
 
         public void AddUserControl(UserControl userControl)
