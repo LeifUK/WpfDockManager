@@ -33,11 +33,6 @@ namespace WpfOpenControls.DockManager
             PinClick?.Invoke(this, null);
         }
 
-        private void _buttonMenu_Click(object sender, RoutedEventArgs e)
-        {
-
-        }
-
         internal WindowLocation WindowLocation
         {
             set

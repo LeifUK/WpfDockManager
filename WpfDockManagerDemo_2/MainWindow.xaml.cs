@@ -47,9 +47,13 @@ namespace WpfDockManagerDemo_2
                 return;
             }
 
+            MainViewModel mainViewModel = DataContext as MainViewModel;
+            System.Diagnostics.Trace.Assert(mainViewModel != null);
+
             try
             {
                 _layoutManager.LoadLayout(dialog.FileName);
+                mainViewModel.LayoutLoaded = true;
             }
             catch (Exception exception)
             {
