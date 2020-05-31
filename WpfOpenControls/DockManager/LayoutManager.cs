@@ -182,26 +182,22 @@ namespace WpfOpenControls.DockManager
             return mapViewModels;
         }
 
-        private void ValidatePanes(Type paneType, Dictionary<IViewModel, List<string>> mapViewModels, List<IFloatingPane> floatingPanes)
-        {
-            IDockPaneTreeManager.ValidateDockPanes(_root, mapViewModels, paneType);
-            ValidateFloatingPanes(mapViewModels, floatingPanes);
-        }
-
         private void ValidateToolPanes()
         {
             Dictionary<IViewModel, List<string>> viewModelUrlDictionary = CreateViewModelUrlDictionary(ToolsSource);
 
             IUnpinnedToolManager.Validate(viewModelUrlDictionary);
 
-            ValidatePanes(typeof(ToolPaneGroup), viewModelUrlDictionary, FloatingToolPaneGroups);
+            ValidateFloatingPanes(viewModelUrlDictionary, FloatingToolPaneGroups);
+            IDockPaneTreeManager.ValidateDockPanes(_root, viewModelUrlDictionary, typeof(ToolPaneGroup));
         }
 
         private void ValidateDocumentPanes()
         {
-            Dictionary<IViewModel, List<string>> mapViewModels = CreateViewModelUrlDictionary(DocumentsSource);
+            Dictionary<IViewModel, List<string>> viewModelUrlDictionary = CreateViewModelUrlDictionary(DocumentsSource);
 
-            ValidatePanes(typeof(DocumentPaneGroup), mapViewModels, FloatingDocumentPaneGroups);
+            ValidateFloatingPanes(viewModelUrlDictionary, FloatingDocumentPaneGroups);
+            IDockPaneTreeManager.ValidateDockPanes(_root, viewModelUrlDictionary, typeof(DocumentPaneGroup));
         }
 
         #region dependency properties 
@@ -1018,6 +1014,7 @@ namespace WpfOpenControls.DockManager
         public void Clear()
         {
             Children.Clear();
+            IUnpinnedToolManager.Clear();
             CreateToolListBoxes();
             while (FloatingToolPaneGroups.Count > 0)
             {
@@ -1243,6 +1240,7 @@ namespace WpfOpenControls.DockManager
             {
                 IDockPaneTreeManager.CreateDefaultLayout(documentViews, toolViews);
                 UpdateLayout();
+                CancelSelection();
                 return true;
             }
 
@@ -1277,6 +1275,7 @@ namespace WpfOpenControls.DockManager
 
             ValidateToolPanes();
             ValidateDocumentPanes();
+            CancelSelection();
 
             return true;
         }
@@ -1373,6 +1372,22 @@ namespace WpfOpenControls.DockManager
 
         private void FloatingPane_Closed(object sender, EventArgs e)
         {
+            FloatingPane floatingPane = sender as FloatingPane;
+
+            int count = floatingPane.IViewContainer.GetUserControlCount();
+            for (int index = count - 1; index > -1; --index)
+            {
+                UserControl userControl = floatingPane.IViewContainer.GetUserControl(index);
+                if ((sender is FloatingToolPaneGroup))
+                {
+                    ToolsSource.Remove(userControl.DataContext as IViewModel);
+                }
+                else if ((sender is FloatingDocumentPaneGroup))
+                {
+                    DocumentsSource.Remove(userControl.DataContext as IViewModel);
+                }
+            }
+
             if ((sender is FloatingToolPaneGroup) && (FloatingToolPaneGroups.Contains(sender as FloatingToolPaneGroup)))
             {
                 FloatingToolPaneGroups.Remove(sender as FloatingToolPaneGroup);

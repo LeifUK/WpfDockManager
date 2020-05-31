@@ -10,7 +10,7 @@
             <Setter.Value>
                 <ControlTemplate TargetType="Button">
                     <Grid Margin="0,0,0,0">
-                        <Border Name="_border" Background="Transparent" Padding="6,0,6,2" BorderThickness="0" BorderBrush="Gray" HorizontalAlignment="Center">
+                        <Border Name="_border" Background="Transparent" Padding="6,0,6,2" BorderThickness="1" BorderBrush="Transparent" HorizontalAlignment="Center" VerticalAlignment="Center">
                             <ContentPresenter/>
                         </Border>
                     </Grid>

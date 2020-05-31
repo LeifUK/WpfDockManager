@@ -24,6 +24,8 @@ namespace WpfDockManagerDemo.ViewModel
             Documents.Add(DocumentThree);
             Documents.Add(DocumentFour);
             Documents.Add(DocumentFive);
+
+            LayoutLoaded = false;
         }
 
         public readonly IViewModel DocumentOne = new DocumentOneViewModel() { URL = "C:\\Data\\File-1.txt", Title = "File-1.txt" };
@@ -63,6 +65,20 @@ namespace WpfDockManagerDemo.ViewModel
                     _tools = value;
                     NotifyPropertyChanged("Tools");
                 }
+            }
+        }
+
+        private bool _layoutLoaded;
+        public bool LayoutLoaded
+        {
+            get
+            {
+                return _layoutLoaded;
+            }
+            set
+            {
+                _layoutLoaded = value;
+                NotifyPropertyChanged("LayoutLoaded");
             }
         }
 

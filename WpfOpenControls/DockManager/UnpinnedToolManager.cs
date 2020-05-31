@@ -30,23 +30,6 @@ namespace WpfOpenControls.DockManager
         private Controls.IToolListBox _activeToolListBox;
         private Dictionary<WindowLocation, List<UnpinnedToolData>> _dictUnpinnedToolData;
 
-        public Dictionary<WindowLocation, List<UnpinnedToolData>> GetUnpinnedToolData()
-        {
-            return _dictUnpinnedToolData;
-        }
-
-        public void CloseUnpinnedToolPane()
-        {
-            if (_activeUnpinnedToolPane != null)
-            {
-                UserControl userControl = _activeUnpinnedToolPane.ToolPane.IViewContainer.ExtractUserControl(0);
-                _activeToolListBoxItem.IViewContainer.InsertUserControl(_activeToolListBoxItem.Index, userControl);
-                _activeUnpinnedToolPane.Close();
-                _activeUnpinnedToolPane = null;
-                _activeToolListBoxItem = null;
-            }
-        }
-
         private UnpinnedToolPane CreateUnpinnedToolPane(ToolListBoxItem toolListBoxItem, WindowLocation windowLocation)
         {
             UnpinnedToolPane unpinnedToolPane = new UnpinnedToolPane();
@@ -94,26 +77,6 @@ namespace WpfOpenControls.DockManager
             unpinnedToolPane.Show();
 
             return unpinnedToolPane;
-        }
-
-        public ToolPaneGroup UnpinnedToolClick(ToolListBoxItem toolListBoxItem, Controls.ToolListBox toolListBox)
-        {
-            System.Diagnostics.Trace.Assert(toolListBoxItem != null);
-            System.Diagnostics.Trace.Assert(toolListBox != null);
-
-            ToolListBoxItem activeToolListBoxItem = _activeToolListBoxItem;
-            CloseUnpinnedToolPane();
-
-            if (activeToolListBoxItem == toolListBoxItem)
-            {
-                return null;
-            }
-
-            _activeToolListBox = toolListBox;
-            _activeToolListBoxItem = toolListBoxItem;
-            _activeUnpinnedToolData = _dictUnpinnedToolData[toolListBox.WindowLocation].Where(n => n.Items.Contains(_activeToolListBoxItem)).First();
-            _activeUnpinnedToolPane = CreateUnpinnedToolPane(toolListBoxItem, toolListBox.WindowLocation);
-            return _activeUnpinnedToolPane.ToolPane;
         }
 
         private void UnpinnedToolPane_PinClick(object sender, EventArgs e)
@@ -203,11 +166,58 @@ namespace WpfOpenControls.DockManager
             }
         }
 
+        #region IUnpinnedToolManager
+        
+        public void Clear()
+        {
+            foreach (var keyValuePair in _dictUnpinnedToolData)
+            {
+                keyValuePair.Value.Clear();
+            }
+        }
+
+        public Dictionary<WindowLocation, List<UnpinnedToolData>> GetUnpinnedToolData()
+        {
+            return _dictUnpinnedToolData;
+        }
+
+        public void CloseUnpinnedToolPane()
+        {
+            if (_activeUnpinnedToolPane != null)
+            {
+                UserControl userControl = _activeUnpinnedToolPane.ToolPane.IViewContainer.ExtractUserControl(0);
+                _activeToolListBoxItem.IViewContainer.InsertUserControl(_activeToolListBoxItem.Index, userControl);
+                _activeUnpinnedToolPane.Close();
+                _activeUnpinnedToolPane = null;
+                _activeToolListBoxItem = null;
+            }
+        }
+
+        public ToolPaneGroup UnpinnedToolClick(ToolListBoxItem toolListBoxItem, Controls.IToolListBox iToolListBox)
+        {
+            System.Diagnostics.Trace.Assert(toolListBoxItem != null);
+            System.Diagnostics.Trace.Assert(iToolListBox != null);
+
+            ToolListBoxItem activeToolListBoxItem = _activeToolListBoxItem;
+            CloseUnpinnedToolPane();
+
+            if (activeToolListBoxItem == toolListBoxItem)
+            {
+                return null;
+            }
+
+            _activeToolListBox = iToolListBox;
+            _activeToolListBoxItem = toolListBoxItem;
+            _activeUnpinnedToolData = _dictUnpinnedToolData[iToolListBox.WindowLocation].Where(n => n.Items.Contains(_activeToolListBoxItem)).First();
+            _activeUnpinnedToolPane = CreateUnpinnedToolPane(toolListBoxItem, iToolListBox.WindowLocation);
+            return _activeUnpinnedToolPane.ToolPane;
+        }
+
         public void MakeUnpinnedToolPaneGroup(WindowLocation windowLocation, ToolPaneGroup toolPaneGroup, string siblingGuid, bool isHorizontal, bool isFirst)
         {
-            Controls.IToolListBox toolListBox = IUnpinnedToolParent.GetToolListBox(windowLocation);
+            Controls.IToolListBox iToolListBox = IUnpinnedToolParent.GetToolListBox(windowLocation);
 
-            System.Diagnostics.Trace.Assert(toolListBox != null);
+            System.Diagnostics.Trace.Assert(iToolListBox != null);
             System.Diagnostics.Trace.Assert(toolPaneGroup != null);
 
             UnpinnedToolData unpinnedToolData = new UnpinnedToolData();
@@ -216,7 +226,7 @@ namespace WpfOpenControls.DockManager
             unpinnedToolData.IsFirst = isFirst;
             unpinnedToolData.IsHorizontal = isHorizontal;
 
-            AddUnpinnedToolData(unpinnedToolData, windowLocation, toolListBox);
+            AddUnpinnedToolData(unpinnedToolData, windowLocation, iToolListBox);
         }
 
         public void Unpin(ToolPaneGroup toolPaneGroup)
@@ -322,5 +332,7 @@ namespace WpfOpenControls.DockManager
                 }
             }
         }
+
+        #endregion IUnpinnedToolManager
     }
 }

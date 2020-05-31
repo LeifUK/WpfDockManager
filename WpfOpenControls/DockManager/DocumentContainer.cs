@@ -47,6 +47,11 @@ namespace WpfOpenControls.DockManager
             _listButton.Style = res["StyleViewListButton"] as Style;
         }
 
+        public void HideCommandsButton()
+        {
+            _commandsButton.Visibility = Visibility.Collapsed;
+        }
+
         public Style CommandsButtonStyle
         {
             set
