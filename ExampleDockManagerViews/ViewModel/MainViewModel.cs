@@ -5,9 +5,9 @@ using System.Linq;
 using WpfOpenControls.DockManager;
 using ExampleDockManagerViews.ViewModel;
 
-namespace WpfDockManagerDemo_2.ViewModel
+namespace ExampleDockManagerViews.ViewModel
 {
-    class MainViewModel : System.ComponentModel.INotifyPropertyChanged
+    public class MainViewModel : System.ComponentModel.INotifyPropertyChanged
     {
         public MainViewModel()
         {

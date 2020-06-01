@@ -52,6 +52,7 @@
     <Compile Include="ViewModel\DocumentThreeViewModel.cs" />
     <Compile Include="ViewModel\DocumentTwoViewModel.cs" />
     <Compile Include="ViewModel\DummyViewModel.cs" />
+    <Compile Include="ViewModel\MainViewModel.cs" />
     <Compile Include="ViewModel\ToolFiveViewModel.cs" />
     <Compile Include="ViewModel\ToolFourViewModel.cs" />
     <Compile Include="ViewModel\ToolOneViewModel.cs" />

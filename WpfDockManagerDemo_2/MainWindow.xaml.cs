@@ -2,7 +2,6 @@
 using System.Windows;
 using System.Windows.Controls;
 using System.Collections.Generic;
-using WpfDockManagerDemo_2.ViewModel;
 
 namespace WpfDockManagerDemo_2
 {
@@ -15,7 +14,7 @@ namespace WpfDockManagerDemo_2
         {
             InitializeComponent();
 
-            DataContext = new ViewModel.MainViewModel();
+            DataContext = new ExampleDockManagerViews.ViewModel.MainViewModel();
         }
 
         private void Window_Loaded(object sender, RoutedEventArgs e)
@@ -39,7 +38,6 @@ namespace WpfDockManagerDemo_2
                 return;
             }
 
-            //dialog.FileName = viewModel.FileName;
             dialog.Filter = "Layout Files (*.xml)|*.xml";
             dialog.CheckFileExists = true;
             if (dialog.ShowDialog() != System.Windows.Forms.DialogResult.OK)
@@ -47,7 +45,7 @@ namespace WpfDockManagerDemo_2
                 return;
             }
 
-            MainViewModel mainViewModel = DataContext as MainViewModel;
+            ExampleDockManagerViews.ViewModel.MainViewModel mainViewModel = DataContext as ExampleDockManagerViews.ViewModel.MainViewModel;
             System.Diagnostics.Trace.Assert(mainViewModel != null);
 
             try
@@ -69,7 +67,6 @@ namespace WpfDockManagerDemo_2
                 return;
             }
 
-            //dialog.FileName = viewModel.FileName;
             dialog.Filter = "Layout Files (*.xml)|*.xml";
             dialog.CheckFileExists = false;
             if (dialog.ShowDialog() != System.Windows.Forms.DialogResult.OK)
@@ -91,7 +88,7 @@ namespace WpfDockManagerDemo_2
         {
             KeyValuePair<UserControl, WpfOpenControls.DockManager.IViewModel> item = (KeyValuePair<UserControl, WpfOpenControls.DockManager.IViewModel>)(sender as Button).DataContext;
 
-            MainViewModel mainViewModel = DataContext as MainViewModel;
+            ExampleDockManagerViews.ViewModel.MainViewModel mainViewModel = DataContext as ExampleDockManagerViews.ViewModel.MainViewModel;
             if (mainViewModel.Tools.Contains(item.Value))
             {
                 mainViewModel.Tools.Remove(item.Value);
@@ -102,7 +99,7 @@ namespace WpfDockManagerDemo_2
         {
             KeyValuePair<UserControl, WpfOpenControls.DockManager.IViewModel> item = (KeyValuePair<UserControl, WpfOpenControls.DockManager.IViewModel>)(sender as Button).DataContext;
 
-            MainViewModel mainViewModel = DataContext as MainViewModel;
+            ExampleDockManagerViews.ViewModel.MainViewModel mainViewModel = DataContext as ExampleDockManagerViews.ViewModel.MainViewModel;
             if (mainViewModel.Documents.Contains(item.Value))
             {
                 mainViewModel.Documents.Remove(item.Value);
@@ -131,7 +128,7 @@ namespace WpfDockManagerDemo_2
 
         private void _buttonTools_Click(object sender, RoutedEventArgs e)
         {
-            MainViewModel mainViewModel = DataContext as MainViewModel;
+            ExampleDockManagerViews.ViewModel.MainViewModel mainViewModel = DataContext as ExampleDockManagerViews.ViewModel.MainViewModel;
             System.Diagnostics.Trace.Assert(mainViewModel != null);
 
             ContextMenu contextMenu = new ContextMenu();
@@ -172,7 +169,7 @@ namespace WpfDockManagerDemo_2
 
         private void _buttonDocuments_Click(object sender, RoutedEventArgs e)
         {
-            MainViewModel mainViewModel = DataContext as MainViewModel;
+            ExampleDockManagerViews.ViewModel.MainViewModel mainViewModel = DataContext as ExampleDockManagerViews.ViewModel.MainViewModel;
             System.Diagnostics.Trace.Assert(mainViewModel != null);
 
             ContextMenu contextMenu = new ContextMenu();

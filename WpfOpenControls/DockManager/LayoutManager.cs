@@ -65,12 +65,12 @@ namespace WpfOpenControls.DockManager
                 return this;
             }
         }
-        private IDockPaneTree IDockPaneTree 
-        { 
-            get 
-            { 
-                return this; 
-            } 
+        private IDockPaneTree IDockPaneTree
+        {
+            get
+            {
+                return this;
+            }
         }
         private readonly IDockPaneTreeManager IDockPaneTreeManager;
         private readonly IUnpinnedToolManager IUnpinnedToolManager;
@@ -871,12 +871,12 @@ namespace WpfOpenControls.DockManager
         {
             get
             {
-                return new SideToolStyle() 
-                { 
-                    FontSize = 12, 
-                    FontFamily = new FontFamily("Arial"), 
-                    Foreground = Brushes.White, 
-                    BarBrush = Brushes.Navy, 
+                return new SideToolStyle()
+                {
+                    FontSize = 12,
+                    FontFamily = new FontFamily("Arial"),
+                    Foreground = Brushes.White,
+                    BarBrush = Brushes.Navy,
                     MouseOverBarBrush = Brushes.AliceBlue };
             }
         }
@@ -1189,9 +1189,9 @@ namespace WpfOpenControls.DockManager
                 Grid.SetColumn(_root, 1);
             }
         }
-        
-        Grid IDockPaneTree.ParentGrid 
-        { 
+
+        Grid IDockPaneTree.ParentGrid
+        {
             get
             {
                 return this;
@@ -1210,7 +1210,7 @@ namespace WpfOpenControls.DockManager
 
         #endregion IDockPaneTree
 
-        public bool SaveLayout(out XmlDocument xmlDocument, string fileNameAndPath)
+        public bool SaveLayoutToFile(out XmlDocument xmlDocument, string fileNameAndPath)
         {
             xmlDocument = new XmlDocument();
 
@@ -1220,10 +1220,10 @@ namespace WpfOpenControls.DockManager
             }
 
             Serialisation.LayoutWriter.SaveLayout(
-                xmlDocument, 
-                _root, 
-                FloatingToolPaneGroups, 
-                FloatingDocumentPaneGroups, 
+                xmlDocument,
+                _root,
+                FloatingToolPaneGroups,
+                FloatingDocumentPaneGroups,
                 IUnpinnedToolManager.GetUnpinnedToolData());
 
             xmlDocument.Save(fileNameAndPath);
@@ -1231,28 +1231,25 @@ namespace WpfOpenControls.DockManager
             return true;
         }
 
-        public bool LoadLayout(string fileNameAndPath)
+        private void LoadDefaultLayout()
         {
             List<UserControl> documentViews = LoadViewsFromTemplates(DocumentTemplates, DocumentsSource);
             List<UserControl> toolViews = LoadViewsFromTemplates(ToolTemplates, ToolsSource);
 
-            if (string.IsNullOrEmpty(fileNameAndPath))
-            {
-                IDockPaneTreeManager.CreateDefaultLayout(documentViews, toolViews);
-                UpdateLayout();
-                CancelSelection();
-                return true;
-            }
+            IDockPaneTreeManager.CreateDefaultLayout(documentViews, toolViews);
+            UpdateLayout();
+            CancelSelection();
+        }
 
-            Clear();
-
-            XmlDocument xmlDocument = new XmlDocument();
-            xmlDocument.Load(fileNameAndPath);
-
+        private bool Load(XmlDocument xmlDocument)
+        {
             if (xmlDocument.ChildNodes.Count == 0)
             {
                 return false;
             }
+
+            List<UserControl> documentViews = LoadViewsFromTemplates(DocumentTemplates, DocumentsSource);
+            List<UserControl> toolViews = LoadViewsFromTemplates(ToolTemplates, ToolsSource);
 
             List<UserControl> views = new List<UserControl>();
             Dictionary<string, UserControl> viewsMap = new Dictionary<string, UserControl>();
@@ -1278,6 +1275,34 @@ namespace WpfOpenControls.DockManager
             CancelSelection();
 
             return true;
+        }
+
+        public bool LoadLayout(string layout)
+        {
+            if (string.IsNullOrEmpty(layout))
+            {
+                LoadDefaultLayout();
+                return true;
+            }
+
+            XmlDocument xmlDocument = new XmlDocument();
+            xmlDocument.LoadXml(layout);
+            return Load(xmlDocument);
+        }
+
+        public bool LoadLayoutFromFile(string fileNameAndPath)
+        {
+            if (string.IsNullOrEmpty(fileNameAndPath))
+            {
+                LoadDefaultLayout();
+                return true;
+            }
+
+            Clear();
+
+            XmlDocument xmlDocument = new XmlDocument();
+            xmlDocument.Load(fileNameAndPath);
+            return Load(xmlDocument);
         }
 
         private void DockPane_Ungroup(object sender, EventArgs e)

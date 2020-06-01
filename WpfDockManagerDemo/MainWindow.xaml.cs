@@ -17,7 +17,7 @@ namespace WpfDockManagerDemo
         {
             InitializeComponent();
 
-            DataContext = new ViewModel.MainViewModel();
+            DataContext = new ExampleDockManagerViews.ViewModel.MainViewModel();
         }
 
         private void Window_Loaded(object sender, RoutedEventArgs e)
@@ -38,7 +38,7 @@ namespace WpfDockManagerDemo
             try
             {
                 _layoutManager.LoadLayout(path);
-                ViewModel.MainViewModel mainViewModel = DataContext as ViewModel.MainViewModel;
+                ExampleDockManagerViews.ViewModel.MainViewModel mainViewModel = DataContext as ExampleDockManagerViews.ViewModel.MainViewModel;
                 mainViewModel.LayoutLoaded = true;
             }
             catch (Exception exception)
@@ -80,7 +80,6 @@ namespace WpfDockManagerDemo
                 return;
             }
 
-            //dialog.FileName = viewModel.FileName;
             dialog.Filter = "Layout Files (*.xml)|*.xml";
             dialog.CheckFileExists = false;
             if (dialog.ShowDialog() != System.Windows.Forms.DialogResult.OK)
@@ -138,7 +137,7 @@ namespace WpfDockManagerDemo
 
         private void _buttonTools_Click(object sender, RoutedEventArgs e)
         {
-            ViewModel.MainViewModel mainViewModel = DataContext as ViewModel.MainViewModel;
+            ExampleDockManagerViews.ViewModel.MainViewModel mainViewModel = DataContext as ExampleDockManagerViews.ViewModel.MainViewModel;
             System.Diagnostics.Trace.Assert(mainViewModel != null);
 
             ContextMenu contextMenu = new ContextMenu();
@@ -179,7 +178,7 @@ namespace WpfDockManagerDemo
 
         private void _buttonDocuments_Click(object sender, RoutedEventArgs e)
         {
-            ViewModel.MainViewModel mainViewModel = DataContext as ViewModel.MainViewModel;
+            ExampleDockManagerViews.ViewModel.MainViewModel mainViewModel = DataContext as ExampleDockManagerViews.ViewModel.MainViewModel;
             System.Diagnostics.Trace.Assert(mainViewModel != null);
 
             ContextMenu contextMenu = new ContextMenu();
