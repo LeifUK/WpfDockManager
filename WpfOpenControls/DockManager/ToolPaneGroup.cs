@@ -161,6 +161,14 @@ namespace WpfOpenControls.DockManager
 
         public Border HeaderBorder;
 
+        public Thickness HeaderTitlePadding
+        {
+            set
+            {
+                _titleLabel.Padding = value;
+            }
+        }
+
         protected Brush _headerBackground;
         public Brush HeaderBackground
         {

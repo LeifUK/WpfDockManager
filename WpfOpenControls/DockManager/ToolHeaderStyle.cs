@@ -9,5 +9,6 @@ namespace WpfOpenControls.DockManager
         public Brush BorderBrush { get; set; }
         public Thickness BorderThickness { get; set; }
         public Brush Background { get; set; }
+        public Thickness TitlePadding { get; set; }
     }
 }

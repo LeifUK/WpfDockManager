@@ -19,8 +19,22 @@ namespace WpfOpenControls.DockManager
             ActiveScrollIndicatorBrush = Brushes.White;
             InactiveScrollIndicatorBrush = Brushes.Transparent;
             TabCornerRadius = new CornerRadius(0);
-            SelectedTabStyle = new TabStyle() { Foreground = Brushes.Black, Background = Brushes.AliceBlue, BorderThickness = new Thickness(0), BorderBrush = Brushes.Gray };
-            UnselectedTabStyle = new TabStyle() { Foreground = Brushes.White, Background = Brushes.Navy, BorderThickness = new Thickness(0), BorderBrush = Brushes.Gray };
+            SelectedTabStyle = new TabStyle() 
+            { 
+                Foreground = Brushes.Black, 
+                Background = Brushes.AliceBlue, 
+                BorderThickness = new Thickness(0), 
+                BorderBrush = Brushes.Gray,
+                TitlePadding = new Thickness(4,0,0,0)
+            };
+            UnselectedTabStyle = new TabStyle() 
+            { 
+                Foreground = Brushes.White, 
+                Background = Brushes.Navy, 
+                BorderThickness = new Thickness(0), 
+                BorderBrush = Brushes.Gray,
+                TitlePadding = new Thickness(4,0,0,0)
+            };
         }
 
         public CornerRadius CornerRadius { get; set; }

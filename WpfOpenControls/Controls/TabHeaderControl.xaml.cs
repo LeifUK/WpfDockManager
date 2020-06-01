@@ -301,11 +301,57 @@ namespace WpfOpenControls.Controls
 
         #endregion
 
+        #region SelectedTabTitlePadding dependency property
+
+        [Bindable(true)]
+        [DesignerSerializationVisibility(DesignerSerializationVisibility.Hidden)]
+        public static readonly DependencyProperty SelectedTabTitlePaddingProperty = DependencyProperty.Register("SelectedTabTitlePadding", typeof(Thickness), typeof(TabHeaderControl), new FrameworkPropertyMetadata(new Thickness(2, 0, 2, 0), null));
+
+        public Thickness SelectedTabTitlePadding
+        {
+            get
+            {
+                return (Thickness)GetValue(SelectedTabTitlePaddingProperty);
+            }
+            set
+            {
+                if (value != SelectedTabTitlePadding)
+                {
+                    SetValue(SelectedTabTitlePaddingProperty, value);
+                }
+            }
+        }
+
+        #endregion
+
+        #region UnselectedTabTitlePadding dependency property
+
+        [Bindable(true)]
+        [DesignerSerializationVisibility(DesignerSerializationVisibility.Hidden)]
+        public static readonly DependencyProperty UnselectedTabTitlePaddingProperty = DependencyProperty.Register("UnselectedTabTitlePadding", typeof(Thickness), typeof(TabHeaderControl), new FrameworkPropertyMetadata(new Thickness(2, 0, 2, 0), null));
+
+        public Thickness UnselectedTabTitlePadding
+        {
+            get
+            {
+                return (Thickness)GetValue(UnselectedTabTitlePaddingProperty);
+            }
+            set
+            {
+                if (value != UnselectedTabTitlePadding)
+                {
+                    SetValue(UnselectedTabTitlePaddingProperty, value);
+                }
+            }
+        }
+
+        #endregion
+
         #region SelectedTabBorderThickness dependency property
 
         [Bindable(true)]
         [DesignerSerializationVisibility(DesignerSerializationVisibility.Hidden)]
-        public static readonly DependencyProperty SelectedTabBorderThicknessProperty = DependencyProperty.Register("SelectedTabBorderThickness", typeof(Thickness), typeof(TabHeaderControl), new FrameworkPropertyMetadata(new Thickness(0.0), new PropertyChangedCallback(OnSelectedTabBorderThicknessChanged)));
+        public static readonly DependencyProperty SelectedTabBorderThicknessProperty = DependencyProperty.Register("SelectedTabBorderThickness", typeof(Thickness), typeof(TabHeaderControl), new FrameworkPropertyMetadata(new Thickness(0.0), null));
 
         public Thickness SelectedTabBorderThickness
         {
@@ -322,16 +368,26 @@ namespace WpfOpenControls.Controls
             }
         }
 
-        private static void OnSelectedTabBorderThicknessChanged(DependencyObject d, DependencyPropertyChangedEventArgs e)
-        {
-            ((TabHeaderControl)d).OnSelectedTabBorderThicknessChanged(e);
-        }
+        #endregion
 
-        protected virtual void OnSelectedTabBorderThicknessChanged(DependencyPropertyChangedEventArgs e)
+        #region UnselectedTabBorderThickness dependency property
+
+        [Bindable(true)]
+        [DesignerSerializationVisibility(DesignerSerializationVisibility.Hidden)]
+        public static readonly DependencyProperty UnselectedTabBorderThicknessProperty = DependencyProperty.Register("UnselectedTabBorderThickness", typeof(Thickness), typeof(TabHeaderControl), new FrameworkPropertyMetadata(new Thickness(0.0), null));
+
+        public Thickness UnselectedTabBorderThickness
         {
-            if (e.NewValue != null)
+            get
             {
-                _listBox.SelectedItem = e.NewValue;
+                return (Thickness)GetValue(UnselectedTabBorderThicknessProperty);
+            }
+            set
+            {
+                if ((Thickness)value != UnselectedTabBorderThickness)
+                {
+                    SetValue(UnselectedTabBorderThicknessProperty, value);
+                }
             }
         }
 
@@ -355,42 +411,6 @@ namespace WpfOpenControls.Controls
                 {
                     SetValue(SelectedTabBorderBrushProperty, value);
                 }
-            }
-        }
-
-        #endregion
-
-        #region UnselectedTabBorderThickness dependency property
-
-        [Bindable(true)]
-        [DesignerSerializationVisibility(DesignerSerializationVisibility.Hidden)]
-        public static readonly DependencyProperty UnselectedTabBorderThicknessProperty = DependencyProperty.Register("UnselectedTabBorderThickness", typeof(Thickness), typeof(TabHeaderControl), new FrameworkPropertyMetadata(new Thickness(0.0), new PropertyChangedCallback(OnUnselectedTabBorderThicknessChanged)));
-
-        public Thickness UnselectedTabBorderThickness
-        {
-            get
-            {
-                return (Thickness)GetValue(UnselectedTabBorderThicknessProperty);
-            }
-            set
-            {
-                if ((Thickness)value != UnselectedTabBorderThickness)
-                {
-                    SetValue(UnselectedTabBorderThicknessProperty, value);
-                }
-            }
-        }
-
-        private static void OnUnselectedTabBorderThicknessChanged(DependencyObject d, DependencyPropertyChangedEventArgs e)
-        {
-            ((TabHeaderControl)d).OnUnselectedTabBorderThicknessChanged(e);
-        }
-
-        protected virtual void OnUnselectedTabBorderThicknessChanged(DependencyPropertyChangedEventArgs e)
-        {
-            if (e.NewValue != null)
-            {
-                _listBox.SelectedItem = e.NewValue;
             }
         }
 
@@ -423,7 +443,7 @@ namespace WpfOpenControls.Controls
 
         [Bindable(true)]
         [DesignerSerializationVisibility(DesignerSerializationVisibility.Hidden)]
-        public static readonly DependencyProperty TabCornerRadiusProperty = DependencyProperty.Register("TabCornerRadius", typeof(CornerRadius), typeof(TabHeaderControl), new FrameworkPropertyMetadata(new CornerRadius(0.0), new PropertyChangedCallback(OnTabCornerRadiusChanged)));
+        public static readonly DependencyProperty TabCornerRadiusProperty = DependencyProperty.Register("TabCornerRadius", typeof(CornerRadius), typeof(TabHeaderControl), new FrameworkPropertyMetadata(new CornerRadius(0.0), null));
 
         public CornerRadius TabCornerRadius
         {
@@ -437,20 +457,6 @@ namespace WpfOpenControls.Controls
                 {
                     SetValue(TabCornerRadiusProperty, value);
                 }
-            }
-        }
-
-        private static void OnTabCornerRadiusChanged(DependencyObject d, DependencyPropertyChangedEventArgs e)
-        {
-            ((TabHeaderControl)d).OnTabCornerRadiusChanged(e);
-        }
-
-        protected virtual void OnTabCornerRadiusChanged(DependencyPropertyChangedEventArgs e)
-        {
-            if (e.NewValue != null)
-            {
-                // Warning warning
-                //_listBox.cor = e.NewValue;
             }
         }
 

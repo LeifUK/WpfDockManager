@@ -134,6 +134,7 @@
                                         <Setter TargetName="Border" Property="BorderThickness" Value="{Binding Path=SelectedTabBorderThickness, RelativeSource={RelativeSource AncestorType={x:Type local:TabHeaderControl}}}"/>
                                         <Setter TargetName="Border" Property="BorderBrush" Value="{Binding Path=SelectedTabBorderBrush, RelativeSource={RelativeSource AncestorType={x:Type local:TabHeaderControl}}}"/>
                                         <Setter TargetName="Label" Property="Foreground" Value="{Binding Path=SelectedTabForeground, RelativeSource={RelativeSource AncestorType={x:Type local:TabHeaderControl}}}"/>
+                                        <Setter TargetName="Label" Property="Padding" Value="{Binding Path=SelectedTabTitlePadding, RelativeSource={RelativeSource AncestorType={x:Type local:TabHeaderControl}}}"/>
                                         <Setter TargetName="Button" Property="Foreground" Value="{Binding Path=SelectedTabForeground, RelativeSource={RelativeSource AncestorType={x:Type local:TabHeaderControl}}}"/>
                                     </Trigger>
                                     <Trigger Property="IsSelected" Value="false">
@@ -141,6 +142,7 @@
                                         <Setter TargetName="Border" Property="BorderThickness" Value="{Binding Path=UnselectedTabBorderThickness, RelativeSource={RelativeSource AncestorType={x:Type local:TabHeaderControl}}}"/>
                                         <Setter TargetName="Border" Property="BorderBrush" Value="{Binding Path=UnselectedTabBorderBrush, RelativeSource={RelativeSource AncestorType={x:Type local:TabHeaderControl}}}"/>
                                         <Setter TargetName="Label" Property="Foreground" Value="{Binding Path=UnselectedTabForeground, RelativeSource={RelativeSource AncestorType={x:Type local:TabHeaderControl}}}"/>
+                                        <Setter TargetName="Label" Property="Padding" Value="{Binding Path=UnselectedTabTitlePadding, RelativeSource={RelativeSource AncestorType={x:Type local:TabHeaderControl}}}"/>
                                         <Setter TargetName="Button" Property="Foreground" Value="{Binding Path=UnselectedTabBackground, RelativeSource={RelativeSource AncestorType={x:Type local:TabHeaderControl}}}"/>
                                     </Trigger>
                                 </ControlTemplate.Triggers>

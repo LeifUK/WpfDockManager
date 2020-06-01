@@ -10,5 +10,6 @@ namespace WpfOpenControls.DockManager
         public Brush Background { get; set; }
         public Brush Foreground { get; set; }
         public Style CloseTabButtonStyle { get; set; }
+        public Thickness TitlePadding { get; set; }
     }
 }

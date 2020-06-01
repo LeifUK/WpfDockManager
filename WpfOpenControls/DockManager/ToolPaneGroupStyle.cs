@@ -21,7 +21,8 @@ namespace WpfOpenControls.DockManager
                 Background = Brushes.SteelBlue,
                 BorderBrush = Brushes.Black,
                 BorderThickness = new Thickness(0),
-                CornerRadius = new CornerRadius(0)
+                CornerRadius = new CornerRadius(0),
+                TitlePadding = new Thickness(4,0,0,0)
             };
             ActiveScrollIndicatorBrush = Brushes.White;
             InactiveScrollIndicatorBrush = Brushes.Transparent;
@@ -31,14 +32,16 @@ namespace WpfOpenControls.DockManager
                 Foreground = Brushes.Black,
                 Background = Brushes.AliceBlue,
                 BorderThickness = new Thickness(0),
-                BorderBrush = Brushes.Gray
+                BorderBrush = Brushes.Gray,
+                TitlePadding = new Thickness(4, 0, 0, 0)
             };
             UnselectedTabStyle = new TabStyle()
             {
                 Foreground = Brushes.White,
                 Background = Brushes.Navy,
                 BorderThickness = new Thickness(0),
-                BorderBrush = Brushes.Gray
+                BorderBrush = Brushes.Gray,
+                TitlePadding = new Thickness(4, 0, 0, 0)
             };
         }
 

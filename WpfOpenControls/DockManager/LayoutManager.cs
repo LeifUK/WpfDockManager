@@ -401,6 +401,7 @@ namespace WpfOpenControls.DockManager
             toolPaneGroup.HeaderBorder.BorderThickness = ToolPaneGroupStyle.HeaderStyle.BorderThickness;
             toolPaneGroup.HeaderBorder.Background = ToolPaneGroupStyle.HeaderStyle.Background;
             toolPaneGroup.HeaderBorder.CornerRadius = ToolPaneGroupStyle.HeaderStyle.CornerRadius;
+            toolPaneGroup.HeaderTitlePadding = ToolPaneGroupStyle.HeaderStyle.TitlePadding;
             toolPaneGroup.FontSize = ToolPaneGroupStyle.FontSize;
             toolPaneGroup.FontFamily = ToolPaneGroupStyle.FontFamily;
             toolPaneGroup.HighlightBrush = SelectedPaneBrush;
@@ -1210,9 +1211,9 @@ namespace WpfOpenControls.DockManager
 
         #endregion IDockPaneTree
 
-        public bool SaveLayoutToFile(out XmlDocument xmlDocument, string fileNameAndPath)
+        public bool SaveLayoutToFile(string fileNameAndPath)
         {
-            xmlDocument = new XmlDocument();
+            XmlDocument xmlDocument = new XmlDocument();
 
             if (Children.Count == 0)
             {

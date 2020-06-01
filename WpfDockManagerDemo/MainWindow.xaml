@@ -30,6 +30,9 @@
             </Style>
             <ResourceDictionary.MergedDictionaries>
                 <ResourceDictionary Source="pack://application:,,,/WpfOpenControls;component/DockManager/Dictionary.xaml"/>
+                <ResourceDictionary Source="/PresentationFramework.Aero, Version=3.0.0.0,
+           Culture=neutral, PublicKeyToken=31bf3856ad364e35,
+           ProcessorArchitecture=MSIL;component/themes/aero.normalcolor.xaml" />
             </ResourceDictionary.MergedDictionaries>
         </ResourceDictionary>
     </Window.Resources>
@@ -83,16 +86,34 @@
                         <dockManager:ToolPaneGroupStyle.Background>#5d6b99</dockManager:ToolPaneGroupStyle.Background>
                         <dockManager:ToolPaneGroupStyle.GapBrush>AliceBlue</dockManager:ToolPaneGroupStyle.GapBrush>
                         <dockManager:ToolPaneGroupStyle.HeaderStyle>
-                            <dockManager:ToolHeaderStyle Background="#3b4f81" BorderBrush="Gainsboro" BorderThickness="0" CornerRadius="4,4,0,0"/>
+                            <dockManager:ToolHeaderStyle>
+                                <dockManager:ToolHeaderStyle.Background>#3b4f81</dockManager:ToolHeaderStyle.Background>
+                                <dockManager:ToolHeaderStyle.BorderBrush>Gainsboro</dockManager:ToolHeaderStyle.BorderBrush>
+                                <dockManager:ToolHeaderStyle.BorderThickness>0</dockManager:ToolHeaderStyle.BorderThickness>
+                                <dockManager:ToolHeaderStyle.CornerRadius>4,4,0,0</dockManager:ToolHeaderStyle.CornerRadius>
+                                <dockManager:ToolHeaderStyle.TitlePadding>4,0,0,0</dockManager:ToolHeaderStyle.TitlePadding>
+                            </dockManager:ToolHeaderStyle>
                         </dockManager:ToolPaneGroupStyle.HeaderStyle>
                         <dockManager:ToolPaneGroupStyle.ButtonForeground>White</dockManager:ToolPaneGroupStyle.ButtonForeground>
                         <dockManager:ToolPaneGroupStyle.ActiveScrollIndicatorBrush>White</dockManager:ToolPaneGroupStyle.ActiveScrollIndicatorBrush>
                         <dockManager:ToolPaneGroupStyle.InactiveScrollIndicatorBrush>Transparent</dockManager:ToolPaneGroupStyle.InactiveScrollIndicatorBrush>
                         <dockManager:ToolPaneGroupStyle.SelectedTabStyle>
-                            <dockManager:TabStyle BorderBrush="Transparent" BorderThickness="0" Background="AliceBlue" Foreground="Black"/>
+                            <dockManager:TabStyle>
+                                <dockManager:TabStyle.BorderBrush>Transparent</dockManager:TabStyle.BorderBrush>
+                                <dockManager:TabStyle.BorderThickness>0</dockManager:TabStyle.BorderThickness>
+                                <dockManager:TabStyle.Background>AliceBlue</dockManager:TabStyle.Background>
+                                <dockManager:TabStyle.Foreground>Black</dockManager:TabStyle.Foreground>
+                                <dockManager:TabStyle.TitlePadding>2,0,2,0</dockManager:TabStyle.TitlePadding>
+                            </dockManager:TabStyle>
                         </dockManager:ToolPaneGroupStyle.SelectedTabStyle>
                         <dockManager:ToolPaneGroupStyle.UnselectedTabStyle>
-                            <dockManager:TabStyle BorderBrush="Transparent" BorderThickness="0" Background="#3b4f81" Foreground="White"/>
+                            <dockManager:TabStyle>
+                                <dockManager:TabStyle.BorderBrush>Transparent</dockManager:TabStyle.BorderBrush>
+                                <dockManager:TabStyle.BorderThickness>0</dockManager:TabStyle.BorderThickness>
+                                <dockManager:TabStyle.Background>#3b4f81</dockManager:TabStyle.Background>
+                                <dockManager:TabStyle.Foreground>White</dockManager:TabStyle.Foreground>
+                                <dockManager:TabStyle.TitlePadding>2,0,2,0</dockManager:TabStyle.TitlePadding>
+                            </dockManager:TabStyle>
                         </dockManager:ToolPaneGroupStyle.UnselectedTabStyle>
                     </dockManager:ToolPaneGroupStyle>
                 </dockManager:LayoutManager.ToolPaneGroupStyle>
@@ -113,10 +134,22 @@
                         <dockManager:DocumentPaneGroupStyle.InactiveScrollIndicatorBrush>Transparent</dockManager:DocumentPaneGroupStyle.InactiveScrollIndicatorBrush>
                         <dockManager:DocumentPaneGroupStyle.TabCornerRadius>4,4,0,0</dockManager:DocumentPaneGroupStyle.TabCornerRadius>
                         <dockManager:DocumentPaneGroupStyle.SelectedTabStyle>
-                            <dockManager:TabStyle BorderBrush="Transparent" BorderThickness="0" Background="#f5cc84" Foreground="Black"/>
+                            <dockManager:TabStyle>
+                                <dockManager:TabStyle.BorderBrush>Transparent</dockManager:TabStyle.BorderBrush>
+                                <dockManager:TabStyle.BorderThickness>0</dockManager:TabStyle.BorderThickness>
+                                <dockManager:TabStyle.Background>#f5cc84</dockManager:TabStyle.Background>
+                                <dockManager:TabStyle.Foreground>Black</dockManager:TabStyle.Foreground>
+                                <dockManager:TabStyle.TitlePadding>2,0,2,0</dockManager:TabStyle.TitlePadding>
+                            </dockManager:TabStyle>
                         </dockManager:DocumentPaneGroupStyle.SelectedTabStyle>
                         <dockManager:DocumentPaneGroupStyle.UnselectedTabStyle>
-                            <dockManager:TabStyle BorderBrush="White" BorderThickness="0" Background="#3b4f81" Foreground="White"/>
+                            <dockManager:TabStyle>
+                                <dockManager:TabStyle.BorderBrush>Transparent</dockManager:TabStyle.BorderBrush>
+                                <dockManager:TabStyle.BorderThickness>0</dockManager:TabStyle.BorderThickness>
+                                <dockManager:TabStyle.Background>#3b4f81</dockManager:TabStyle.Background>
+                                <dockManager:TabStyle.Foreground>White</dockManager:TabStyle.Foreground>
+                                <dockManager:TabStyle.TitlePadding>2,0,2,0</dockManager:TabStyle.TitlePadding>
+                            </dockManager:TabStyle>
                         </dockManager:DocumentPaneGroupStyle.UnselectedTabStyle>
                     </dockManager:DocumentPaneGroupStyle>
                 </dockManager:LayoutManager.DocumentPaneGroupStyle>

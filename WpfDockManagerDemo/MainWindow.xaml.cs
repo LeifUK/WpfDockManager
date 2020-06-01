@@ -37,7 +37,7 @@ namespace WpfDockManagerDemo
         {
             try
             {
-                _layoutManager.LoadLayout(path);
+                _layoutManager.LoadLayoutFromFile(path);
                 ExampleDockManagerViews.ViewModel.MainViewModel mainViewModel = DataContext as ExampleDockManagerViews.ViewModel.MainViewModel;
                 mainViewModel.LayoutLoaded = true;
             }
@@ -89,7 +89,7 @@ namespace WpfDockManagerDemo
 
             try
             {
-                _layoutManager.SaveLayout(out System.Xml.XmlDocument xmlDocument_saved, dialog.FileName);
+                _layoutManager.SaveLayoutToFile(dialog.FileName);
             }
             catch (Exception exception)
             {

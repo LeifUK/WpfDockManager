@@ -175,6 +175,7 @@ namespace WpfOpenControls.DockManager
                 _tabHeaderControl.SelectedTabBorderBrush = value.BorderBrush;
                 _tabHeaderControl.SelectedTabBackground = value.Background;
                 _tabHeaderControl.SelectedTabForeground = value.Foreground;
+                _tabHeaderControl.SelectedTabTitlePadding = value.TitlePadding;
             }
         }
 
@@ -186,6 +187,7 @@ namespace WpfOpenControls.DockManager
                 _tabHeaderControl.UnselectedTabBorderBrush = value.BorderBrush;
                 _tabHeaderControl.UnselectedTabBackground = value.Background;
                 _tabHeaderControl.UnselectedTabForeground = value.Foreground;
+                _tabHeaderControl.UnselectedTabTitlePadding = value.TitlePadding;
             }
         }
 
