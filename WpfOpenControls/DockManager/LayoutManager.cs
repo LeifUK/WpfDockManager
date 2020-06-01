@@ -9,6 +9,7 @@ using System.Windows.Media;
 using System.Collections.ObjectModel;
 using WpfOpenControls.Controls;
 using WpfOpenControls.DockManager.Controls;
+using System.Xml.Linq;
 
 namespace WpfOpenControls.DockManager
 {
@@ -971,7 +972,7 @@ namespace WpfOpenControls.DockManager
             System.Diagnostics.Trace.Assert(sender is ToolListBoxItem);
             System.Diagnostics.Trace.Assert((e != null) && (e.ToolListBox != null));
 
-            ToolPaneGroup toolPaneGroup = IUnpinnedToolManager.UnpinnedToolClick(sender as ToolListBoxItem, e.ToolListBox);
+            ToolPaneGroup toolPaneGroup = IUnpinnedToolManager.ShowUnpinnedToolPane(sender as ToolListBoxItem, e.ToolListBox);
             if (toolPaneGroup != null)
             {
                 UpdateProperties(toolPaneGroup);

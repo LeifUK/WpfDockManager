@@ -6,7 +6,7 @@ namespace WpfOpenControls.DockManager
     internal interface IUnpinnedToolManager
     {
         void Clear();
-        ToolPaneGroup UnpinnedToolClick(ToolListBoxItem toolListBoxItem, Controls.IToolListBox iToolListBox);
+        ToolPaneGroup ShowUnpinnedToolPane(ToolListBoxItem toolListBoxItem, Controls.IToolListBox iToolListBox);
         void Unpin(ToolPaneGroup toolPaneGroup);
         void ProcessMoveResize();
         void CloseUnpinnedToolPane();

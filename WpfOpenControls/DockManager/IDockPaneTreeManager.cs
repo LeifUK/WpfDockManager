@@ -2,6 +2,7 @@
 using System.Windows;
 using System.Collections.Generic;
 using System.Windows.Controls;
+using WpfOpenControls.DockManager.Controls;
 
 namespace WpfOpenControls.DockManager
 {
@@ -21,9 +22,9 @@ namespace WpfOpenControls.DockManager
 
         void Unfloat(FloatingPane floatingPane, SelectablePane selectedPane, WindowLocation windowLocation);
 
-        void PinToolPane(UnpinnedToolData unpinnedToolData);
+        void PinToolPane(UnpinnedToolData unpinnedToolData, WindowLocation defaultWindowLocation);
 
-        void UnpinToolPane(ToolPaneGroup toolPaneGroup, out UnpinnedToolData unpinnedToolData);
+        void UnpinToolPane(ToolPaneGroup toolPaneGroup, out UnpinnedToolData unpinnedToolData, out WindowLocation toolListBoxLocation);
 
         void CreateDefaultLayout(List<UserControl> documentViews, List<UserControl> toolViews);
 

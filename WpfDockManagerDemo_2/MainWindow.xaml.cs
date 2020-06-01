@@ -50,7 +50,7 @@ namespace WpfDockManagerDemo_2
 
             try
             {
-                _layoutManager.LoadLayout(dialog.FileName);
+                _layoutManager.LoadLayoutFromFile(dialog.FileName);
                 mainViewModel.LayoutLoaded = true;
             }
             catch (Exception exception)
@@ -76,7 +76,7 @@ namespace WpfDockManagerDemo_2
 
             try
             {
-                _layoutManager.SaveLayout(out System.Xml.XmlDocument xmlDocument_saved, dialog.FileName);
+                _layoutManager.SaveLayoutToFile(dialog.FileName);
             }
             catch (Exception exception)
             {

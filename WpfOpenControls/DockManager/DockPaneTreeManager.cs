@@ -422,7 +422,7 @@ namespace WpfOpenControls.DockManager
             });
         }
 
-        public void PinToolPane(UnpinnedToolData unpinnedToolData)
+        public void PinToolPane(UnpinnedToolData unpinnedToolData, WindowLocation defaultWindowLocation)
         {
             Grid sibling = null;
             if (unpinnedToolData.SiblingGuid == (Guid)IDockPaneTree.ParentGrid.Tag)
@@ -435,11 +435,16 @@ namespace WpfOpenControls.DockManager
             }
 
             // This can happen when loading a layout
+            bool isHorizontal = unpinnedToolData.IsHorizontal;
+            bool isFirst = unpinnedToolData.IsFirst;
             if (sibling == null)
             {
                 sibling = IDockPaneTree as Grid;
+                isHorizontal = (defaultWindowLocation == WindowLocation.TopSide) || (defaultWindowLocation == WindowLocation.BottomSide);
+                isFirst = (defaultWindowLocation == WindowLocation.TopSide) || (defaultWindowLocation == WindowLocation.LeftSide);
             }
-            SplitterPane newSplitterPane = ILayoutFactory.MakeSplitterPane(unpinnedToolData.IsHorizontal);
+        
+            SplitterPane newSplitterPane = ILayoutFactory.MakeSplitterPane(isHorizontal);
 
             if (sibling == IDockPaneTree)
             {
@@ -449,8 +454,8 @@ namespace WpfOpenControls.DockManager
                     SplitterPane splitterPane = enumerableSplitterPanes.First();
 
                     IDockPaneTree.RootPane = newSplitterPane;
-                    newSplitterPane.AddChild(splitterPane, !unpinnedToolData.IsFirst);
-                    newSplitterPane.AddChild(unpinnedToolData.ToolPaneGroup, unpinnedToolData.IsFirst);
+                    newSplitterPane.AddChild(splitterPane, !isFirst);
+                    newSplitterPane.AddChild(unpinnedToolData.ToolPaneGroup, isFirst);
                 }
                 else
                 {
@@ -460,22 +465,22 @@ namespace WpfOpenControls.DockManager
                     DocumentPanel documentPanel = enumerableDocumentPanels.First();
 
                     IDockPaneTree.RootPane = newSplitterPane;
-                    newSplitterPane.AddChild(documentPanel, !unpinnedToolData.IsFirst);
-                    newSplitterPane.AddChild(unpinnedToolData.ToolPaneGroup, unpinnedToolData.IsFirst);
+                    newSplitterPane.AddChild(documentPanel, !isFirst);
+                    newSplitterPane.AddChild(unpinnedToolData.ToolPaneGroup, isFirst);
                 }
             }
             else if (sibling.Parent == IDockPaneTree)
             {
                 IDockPaneTree.RootPane = newSplitterPane;
-                newSplitterPane.AddChild(sibling, !unpinnedToolData.IsFirst);
-                newSplitterPane.AddChild(unpinnedToolData.ToolPaneGroup, unpinnedToolData.IsFirst);
+                newSplitterPane.AddChild(sibling, !isFirst);
+                newSplitterPane.AddChild(unpinnedToolData.ToolPaneGroup, isFirst);
             }
             else
             {
                 SplitterPane parentSplitterPane = sibling.Parent as SplitterPane;
                 int row = Grid.GetRow(sibling);
                 int column = Grid.GetColumn(sibling);
-                bool isFirst = (parentSplitterPane.IsHorizontal && (row == 0)) || (!parentSplitterPane.IsHorizontal && (column == 0));
+                isFirst = (parentSplitterPane.IsHorizontal && (row == 0)) || (!parentSplitterPane.IsHorizontal && (column == 0));
                 parentSplitterPane.Children.Remove(sibling);
 
                 parentSplitterPane.AddChild(newSplitterPane, isFirst);
@@ -485,7 +490,7 @@ namespace WpfOpenControls.DockManager
             }
         }
 
-        public void UnpinToolPane(ToolPaneGroup toolPaneGroup, out UnpinnedToolData unpinnedToolData)
+        public void UnpinToolPane(ToolPaneGroup toolPaneGroup, out UnpinnedToolData unpinnedToolData, out WindowLocation toolListBoxLocation)
         {
             System.Diagnostics.Trace.Assert(toolPaneGroup != null);
 
@@ -515,10 +520,37 @@ namespace WpfOpenControls.DockManager
                 frameworkElement = frameworkElement.Parent as FrameworkElement;
             }
 
+            toolListBoxLocation = WindowLocation.None;
+            bool isFirst = (Grid.GetRow(frameworkElement) == 0) && (Grid.GetColumn(frameworkElement) == 0);
+            bool isHorizontal = (frameworkElement.Parent as SplitterPane).IsHorizontal;
+            if (isHorizontal)
+            {
+                if (isFirst)
+                {
+                    toolListBoxLocation = WindowLocation.TopSide;
+                }
+                else
+                {
+                    toolListBoxLocation = WindowLocation.BottomSide;
+                }
+            }
+            else
+            {
+                if (isFirst)
+                {
+                    toolListBoxLocation = WindowLocation.LeftSide;
+                }
+                else
+                {
+                    toolListBoxLocation = WindowLocation.RightSide;
+                }
+            }
+
             unpinnedToolData = new UnpinnedToolData();
             unpinnedToolData.ToolPaneGroup = toolPaneGroup;
-            unpinnedToolData.IsFirst = (Grid.GetRow(frameworkElement) == 0) && (Grid.GetColumn(frameworkElement) == 0);
-            unpinnedToolData.IsHorizontal = (frameworkElement.Parent as SplitterPane).IsHorizontal;
+            Grid parentGrid = toolPaneGroup.Parent as Grid;
+            unpinnedToolData.IsFirst = (Grid.GetRow(toolPaneGroup) == 0) && (Grid.GetColumn(toolPaneGroup) == 0);
+            unpinnedToolData.IsHorizontal = (parentGrid as SplitterPane).IsHorizontal;
 
             ExtractDockPane(toolPaneGroup, out frameworkElement);
             System.Diagnostics.Trace.Assert(frameworkElement != null);

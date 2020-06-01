@@ -95,7 +95,7 @@ namespace WpfOpenControls.DockManager
              * Restore the pane in the view tree
              */
 
-            IDockPaneTreeManager.PinToolPane(_activeUnpinnedToolData);
+            IDockPaneTreeManager.PinToolPane(_activeUnpinnedToolData, _activeToolListBox.WindowLocation);
 
             /*
              * Remove the tool list items from the side bar
@@ -193,7 +193,7 @@ namespace WpfOpenControls.DockManager
             }
         }
 
-        public ToolPaneGroup UnpinnedToolClick(ToolListBoxItem toolListBoxItem, Controls.IToolListBox iToolListBox)
+        public ToolPaneGroup ShowUnpinnedToolPane(ToolListBoxItem toolListBoxItem, Controls.IToolListBox iToolListBox)
         {
             System.Diagnostics.Trace.Assert(toolListBoxItem != null);
             System.Diagnostics.Trace.Assert(iToolListBox != null);
@@ -233,33 +233,9 @@ namespace WpfOpenControls.DockManager
         {
             System.Diagnostics.Trace.Assert(toolPaneGroup != null);
 
-            IDockPaneTreeManager.UnpinToolPane(toolPaneGroup, out UnpinnedToolData unpinnedToolData);
+            IDockPaneTreeManager.UnpinToolPane(toolPaneGroup, out UnpinnedToolData unpinnedToolData, out WindowLocation toolListBoxLocation);
 
-            WindowLocation windowLocation = WindowLocation.None;
-            if (unpinnedToolData.IsHorizontal)
-            {
-                if (unpinnedToolData.IsFirst)
-                {
-                    windowLocation = WindowLocation.TopSide;
-                }
-                else
-                {
-                    windowLocation = WindowLocation.BottomSide;
-                }
-            }
-            else
-            {
-                if (unpinnedToolData.IsFirst)
-                {
-                    windowLocation = WindowLocation.LeftSide;
-                }
-                else
-                {
-                    windowLocation = WindowLocation.RightSide;
-                }
-            }
-
-            AddUnpinnedToolData(unpinnedToolData, windowLocation, IUnpinnedToolParent.GetToolListBox(windowLocation));
+            AddUnpinnedToolData(unpinnedToolData, toolListBoxLocation, IUnpinnedToolParent.GetToolListBox(toolListBoxLocation));
         }
 
         public void ProcessMoveResize()
@@ -293,16 +269,7 @@ namespace WpfOpenControls.DockManager
 
         public void FrameworkElementRemoved(FrameworkElement frameworkElement)
         {
-            foreach (var keyValuePair in _dictUnpinnedToolData)
-            {
-                foreach (var item in keyValuePair.Value)
-                {
-                    if (item.SiblingGuid == (Guid)frameworkElement.Tag)
-                    {
-                        item.SiblingGuid = (Guid)(frameworkElement.Parent as FrameworkElement).Tag;
-                    }
-                }
-            }
+            // Do nothing
         }
 
         public void Validate(Dictionary<IViewModel, List<string>> viewModelUrlDictionary)
