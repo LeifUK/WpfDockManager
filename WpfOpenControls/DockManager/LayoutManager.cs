@@ -1054,9 +1054,6 @@ namespace WpfOpenControls.DockManager
                             UserControl view = (dataTemplate.LoadContent() as UserControl);
                             if (view != null)
                             {
-                                IView iToolView = (view as IView);
-                                System.Diagnostics.Trace.Assert(iToolView != null, "The UserControl must implement interface IView");
-                                iToolView.IViewModel = viewModel as IViewModel;
                                 view.DataContext = viewModel;
                                 view.HorizontalAlignment = HorizontalAlignment.Stretch;
                                 view.VerticalAlignment = VerticalAlignment.Stretch;

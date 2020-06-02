@@ -5,7 +5,7 @@ namespace ExampleDockManagerViews.View
     /// <summary>
     /// Interaction logic for DemoFiveView.xaml
     /// </summary>
-    public partial class ToolFiveView : UserControl, WpfOpenControls.DockManager.IView
+    public partial class ToolFiveView : UserControl
     {
         public ToolFiveView()
         {

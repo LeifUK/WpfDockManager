@@ -5,7 +5,7 @@ namespace ExampleDockManagerViews.View
     /// <summary>
     /// Interaction logic for DemoOneView.xaml
     /// </summary>
-    public partial class DocumentTwoView : UserControl, WpfOpenControls.DockManager.IView
+    public partial class DocumentTwoView : UserControl
     {
         public DocumentTwoView()
         {

@@ -115,7 +115,6 @@
     <Compile Include="DockManager\InsertionIndicatorManager.cs" />
     <Compile Include="DockManager\IUnpinnedToolManager.cs" />
     <Compile Include="DockManager\IUnpinnedToolParent.cs" />
-    <Compile Include="DockManager\IView.cs" />
     <Compile Include="DockManager\IViewContainer.cs" />
     <Compile Include="DockManager\IViewModel.cs" />
     <Compile Include="DockManager\LayoutManager.cs" />

@@ -5,7 +5,7 @@ namespace ExampleDockManagerViews.View
     /// <summary>
     /// Interaction logic for DemoThreeView.xaml
     /// </summary>
-    public partial class ToolThreeView : UserControl, WpfOpenControls.DockManager.IView
+    public partial class ToolThreeView : UserControl
     {
         public ToolThreeView()
         {
