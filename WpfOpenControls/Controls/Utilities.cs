@@ -1,8 +1,6 @@
 ﻿using System;
-using System.Collections.Generic;
-using System.Linq;
 using System.Windows;
-using System.Windows.Controls;
+using System.Text.RegularExpressions;
 
 namespace WpfOpenControls.Controls
 {
@@ -49,6 +47,46 @@ namespace WpfOpenControls.Controls
                 return new Point(0, 0);
             }
             return new Point(point.X, point.Y);
+        }
+
+        public static bool Parse(string text, out CornerRadius cornerRadius)
+        {
+            cornerRadius = new CornerRadius();
+
+            Match match = Regex.Match(text, @"(\d),(\d),(\d),(\d)");
+            if (!match.Success)
+            {
+                return false;
+            }
+
+            cornerRadius = new System.Windows.CornerRadius(
+                System.Convert.ToDouble(match.Groups[1].Value),
+                    System.Convert.ToDouble(match.Groups[2].Value),
+                    System.Convert.ToDouble(match.Groups[3].Value),
+                    System.Convert.ToDouble(match.Groups[4].Value)
+                    );
+
+            return true;
+        }
+
+        public static bool Parse(string text, out Thickness thickness)
+        {
+            thickness = new Thickness();
+
+            Match match = Regex.Match(text, @"(\d),(\d),(\d),(\d)");
+            if (!match.Success)
+            {
+                return false;
+            }
+
+            thickness = new System.Windows.Thickness(
+                System.Convert.ToDouble(match.Groups[1].Value),
+                    System.Convert.ToDouble(match.Groups[2].Value),
+                    System.Convert.ToDouble(match.Groups[3].Value),
+                    System.Convert.ToDouble(match.Groups[4].Value)
+                    );
+
+            return true;
         }
     }
 }

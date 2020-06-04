@@ -1,8 +1,6 @@
 ﻿using System.Windows.Media;
 using System.Text.RegularExpressions;
 using System.Windows;
-using System.Windows.Markup;
-using System.Runtime.InteropServices.WindowsRuntime;
 
 namespace WpfOpenControls.DockManager
 {
@@ -12,35 +10,41 @@ namespace WpfOpenControls.DockManager
         {
             _layoutManager = layoutManager;
 
-            ToolPaneCornerRadius = _layoutManager.ToolPaneGroupStyle.CornerRadius.ToString();
-            ToolPaneBorderColour = (_layoutManager.ToolPaneGroupStyle.BorderBrush as SolidColorBrush).Color;
-            ToolPaneBorderThickness = _layoutManager.ToolPaneGroupStyle.BorderThickness.ToString();
-            ToolPaneBackgroundColour = (_layoutManager.ToolPaneGroupStyle.Background as SolidColorBrush).Color;
-            ToolPaneGapColour = (_layoutManager.ToolPaneGroupStyle.GapBrush as SolidColorBrush).Color;
+            ToolPaneCornerRadius = _layoutManager.ToolPaneGroupStyle.CornerRadius;
+            ToolPaneBorderBrush = _layoutManager.ToolPaneGroupStyle.BorderBrush;
+            ToolPaneBorderThickness = _layoutManager.ToolPaneGroupStyle.BorderThickness;
+            AvailableFontSizes = new System.Collections.ObjectModel.ObservableCollection<int>();
+            for (int index = 4; index < 42; ++index)
+            {
+                AvailableFontSizes.Add(index);
+            }
+            ToolPaneFontSize = (int)_layoutManager.ToolPaneGroupStyle.FontSize;
+            ToolPaneBackgroundBrush = _layoutManager.ToolPaneGroupStyle.Background;
+            ToolPaneGapBrush = _layoutManager.ToolPaneGroupStyle.GapBrush;
             ToolPaneGapHeight = (int)_layoutManager.ToolPaneGroupStyle.GapHeight;
-            ToolPaneButtonForegroundColour = (_layoutManager.ToolPaneGroupStyle.ButtonForeground as SolidColorBrush).Color;
+            ToolPaneButtonForegroundBrush = _layoutManager.ToolPaneGroupStyle.ButtonForeground;
 
-            ToolPaneHeaderCornerRadius = _layoutManager.ToolPaneGroupStyle.HeaderStyle.CornerRadius.ToString();
-            ToolPaneHeaderBorderColour = (_layoutManager.ToolPaneGroupStyle.HeaderStyle.BorderBrush as SolidColorBrush).Color;
-            ToolPaneHeaderBorderThickness = _layoutManager.ToolPaneGroupStyle.HeaderStyle.BorderThickness.ToString();
-            ToolPaneHeaderBackgroundColour = (_layoutManager.ToolPaneGroupStyle.HeaderStyle.Background as SolidColorBrush).Color;
-            ToolPaneHeaderTitlePadding = _layoutManager.ToolPaneGroupStyle.HeaderStyle.TitlePadding.ToString();
+            ToolPaneHeaderCornerRadius = _layoutManager.ToolPaneGroupStyle.HeaderStyle.CornerRadius;
+            ToolPaneHeaderBorderBrush = _layoutManager.ToolPaneGroupStyle.HeaderStyle.BorderBrush;
+            ToolPaneHeaderBorderThickness = _layoutManager.ToolPaneGroupStyle.HeaderStyle.BorderThickness;
+            ToolPaneHeaderBackgroundBrush = _layoutManager.ToolPaneGroupStyle.HeaderStyle.Background;
+            ToolPaneHeaderTitlePadding = _layoutManager.ToolPaneGroupStyle.HeaderStyle.TitlePadding;
 
-            ToolPaneTabCornerRadius = _layoutManager.ToolPaneGroupStyle.TabCornerRadius.ToString();
-            ActiveScrollIndicatorColour = (_layoutManager.ToolPaneGroupStyle.ActiveScrollIndicatorBrush as SolidColorBrush).Color;
-            InactiveScrollIndicatorColour = (_layoutManager.ToolPaneGroupStyle.InactiveScrollIndicatorBrush as SolidColorBrush).Color;
+            ToolPaneTabCornerRadius = _layoutManager.ToolPaneGroupStyle.TabCornerRadius;
+            ActiveScrollIndicatorBrush = _layoutManager.ToolPaneGroupStyle.ActiveScrollIndicatorBrush;
+            InactiveScrollIndicatorBrush = _layoutManager.ToolPaneGroupStyle.InactiveScrollIndicatorBrush;
 
-            ToolPaneSelectedTabBorderColour = (_layoutManager.ToolPaneGroupStyle.SelectedTabStyle.BorderBrush as SolidColorBrush).Color;
-            ToolPaneSelectedTabBorderThickness = _layoutManager.ToolPaneGroupStyle.SelectedTabStyle.BorderThickness.ToString();
-            ToolPaneSelectedTabBackgroundColour = (_layoutManager.ToolPaneGroupStyle.SelectedTabStyle.Background as SolidColorBrush).Color;
-            ToolPaneSelectedTabForegroundColour = (_layoutManager.ToolPaneGroupStyle.SelectedTabStyle.Foreground as SolidColorBrush).Color;
-            ToolPaneSelectedTabTitlePadding = _layoutManager.ToolPaneGroupStyle.SelectedTabStyle.TitlePadding.ToString();
+            ToolPaneSelectedTabBorderBrush = _layoutManager.ToolPaneGroupStyle.SelectedTabStyle.BorderBrush;
+            ToolPaneSelectedTabBorderThickness = _layoutManager.ToolPaneGroupStyle.SelectedTabStyle.BorderThickness;
+            ToolPaneSelectedTabBackgroundBrush = _layoutManager.ToolPaneGroupStyle.SelectedTabStyle.Background;
+            ToolPaneSelectedTabForegroundBrush = _layoutManager.ToolPaneGroupStyle.SelectedTabStyle.Foreground;
+            ToolPaneSelectedTabTitlePadding = _layoutManager.ToolPaneGroupStyle.SelectedTabStyle.TitlePadding;
 
-            ToolPaneUnselectedTabBorderColour = (_layoutManager.ToolPaneGroupStyle.UnselectedTabStyle.BorderBrush as SolidColorBrush).Color;
-            ToolPaneUnselectedTabBorderThickness = _layoutManager.ToolPaneGroupStyle.UnselectedTabStyle.BorderThickness.ToString();
-            ToolPaneUnselectedTabBackgroundColour = (_layoutManager.ToolPaneGroupStyle.UnselectedTabStyle.Background as SolidColorBrush).Color;
-            ToolPaneUnselectedTabForegroundColour = (_layoutManager.ToolPaneGroupStyle.UnselectedTabStyle.Foreground as SolidColorBrush).Color;
-            ToolPaneUnselectedTabTitlePadding = _layoutManager.ToolPaneGroupStyle.UnselectedTabStyle.TitlePadding.ToString();
+            ToolPaneUnselectedTabBorderBrush = _layoutManager.ToolPaneGroupStyle.UnselectedTabStyle.BorderBrush;
+            ToolPaneUnselectedTabBorderThickness = _layoutManager.ToolPaneGroupStyle.UnselectedTabStyle.BorderThickness;
+            ToolPaneUnselectedTabBackgroundBrush = _layoutManager.ToolPaneGroupStyle.UnselectedTabStyle.Background;
+            ToolPaneUnselectedTabForegroundBrush = _layoutManager.ToolPaneGroupStyle.UnselectedTabStyle.Foreground;
+            ToolPaneUnselectedTabTitlePadding = _layoutManager.ToolPaneGroupStyle.UnselectedTabStyle.TitlePadding;
         }
 
 
@@ -89,78 +93,39 @@ namespace WpfOpenControls.DockManager
         public void Apply()
         {
             ToolPaneGroupStyle toolPaneGroupStyle = new ToolPaneGroupStyle();
-            if (!Parse(_toolPaneCornerRadius, out CornerRadius cornerRadius, "Tool Pane Corner Radius"))
-            {
-                return;
-            }
-            toolPaneGroupStyle.CornerRadius = cornerRadius;
-            toolPaneGroupStyle.BorderBrush = new SolidColorBrush(ToolPaneBorderColour);
-            if (!Parse(ToolPaneBorderThickness, out Thickness thickness, "Tool Pane Border Thickness"))
-            {
-                return;
-            }
-            toolPaneGroupStyle.BorderThickness = thickness;
-            toolPaneGroupStyle.Background = new SolidColorBrush(ToolPaneBackgroundColour);
-            toolPaneGroupStyle.GapBrush = new SolidColorBrush(ToolPaneGapColour);
+            toolPaneGroupStyle.CornerRadius = ToolPaneCornerRadius;
+            toolPaneGroupStyle.BorderBrush = ToolPaneBorderBrush;
+            toolPaneGroupStyle.BorderThickness = ToolPaneBorderThickness;
+            toolPaneGroupStyle.FontSize = (int)ToolPaneFontSize;
+            toolPaneGroupStyle.Background = ToolPaneBackgroundBrush;
+            toolPaneGroupStyle.GapBrush = ToolPaneGapBrush;
             // Warning warning
             //toolPaneGroupStyle.GapHeight = thickness;
-            toolPaneGroupStyle.ButtonForeground = new SolidColorBrush(ToolPaneButtonForegroundColour);
+            toolPaneGroupStyle.ButtonForeground = ToolPaneButtonForegroundBrush;
 
 
-            if (!Parse(ToolPaneHeaderCornerRadius, out cornerRadius, "Tool Pane Header Corner Radius"))
-            {
-                return;
-            }
-            toolPaneGroupStyle.HeaderStyle.CornerRadius = cornerRadius;
-            toolPaneGroupStyle.HeaderStyle.BorderBrush = new SolidColorBrush(ToolPaneHeaderBorderColour);
-            if (!Parse(ToolPaneHeaderBorderThickness, out thickness, "Tool Pane Header Border Thickness"))
-            {
-                return;
-            }
-            toolPaneGroupStyle.HeaderStyle.BorderThickness = thickness;
-            toolPaneGroupStyle.HeaderStyle.Background = new SolidColorBrush(ToolPaneHeaderBackgroundColour);
-            if (!Parse(ToolPaneHeaderTitlePadding, out thickness, "Tool Pane Header Title Padding"))
-            {
-                return;
-            }
-            toolPaneGroupStyle.HeaderStyle.TitlePadding = thickness;
+            toolPaneGroupStyle.HeaderStyle.CornerRadius = ToolPaneHeaderCornerRadius;
+            toolPaneGroupStyle.HeaderStyle.BorderBrush = ToolPaneHeaderBorderBrush;
+            toolPaneGroupStyle.HeaderStyle.BorderThickness = ToolPaneHeaderBorderThickness;
+            toolPaneGroupStyle.HeaderStyle.Background = ToolPaneHeaderBackgroundBrush;
+            toolPaneGroupStyle.HeaderStyle.TitlePadding = ToolPaneHeaderTitlePadding;
 
 
-            if (!Parse(ToolPaneTabCornerRadius, out cornerRadius, "Tool Pane Tab Corner Radius"))
-            {
-                return;
-            }
-            toolPaneGroupStyle.TabCornerRadius = cornerRadius;
-            toolPaneGroupStyle.ActiveScrollIndicatorBrush = new SolidColorBrush(ActiveScrollIndicatorColour);
-            toolPaneGroupStyle.InactiveScrollIndicatorBrush = new SolidColorBrush(InactiveScrollIndicatorColour);
+            toolPaneGroupStyle.TabCornerRadius = ToolPaneTabCornerRadius;
+            toolPaneGroupStyle.ActiveScrollIndicatorBrush = ActiveScrollIndicatorBrush;
+            toolPaneGroupStyle.InactiveScrollIndicatorBrush = InactiveScrollIndicatorBrush;
 
-            toolPaneGroupStyle.SelectedTabStyle.BorderBrush = new SolidColorBrush(ToolPaneSelectedTabBorderColour);
-            if (!Parse(ToolPaneSelectedTabBorderThickness, out thickness, "Tool Pane Selected Tab Border Thickness"))
-            {
-                return;
-            }
-            toolPaneGroupStyle.SelectedTabStyle.BorderThickness = thickness;
-            toolPaneGroupStyle.SelectedTabStyle.Background = new SolidColorBrush(ToolPaneSelectedTabBackgroundColour);
-            toolPaneGroupStyle.SelectedTabStyle.Foreground = new SolidColorBrush(ToolPaneSelectedTabForegroundColour);
-            if (!Parse(_toolPaneSelectedTabTitlePadding, out thickness, "Tool Pane Selected Tab Title Padding"))
-            {
-                return;
-            }
-            toolPaneGroupStyle.SelectedTabStyle.TitlePadding = thickness;
+            toolPaneGroupStyle.SelectedTabStyle.BorderBrush = ToolPaneSelectedTabBorderBrush;
+            toolPaneGroupStyle.SelectedTabStyle.BorderThickness = ToolPaneSelectedTabBorderThickness;
+            toolPaneGroupStyle.SelectedTabStyle.Background = ToolPaneSelectedTabBackgroundBrush;
+            toolPaneGroupStyle.SelectedTabStyle.Foreground = ToolPaneSelectedTabForegroundBrush;
+            toolPaneGroupStyle.SelectedTabStyle.TitlePadding = ToolPaneSelectedTabTitlePadding;
 
-            toolPaneGroupStyle.UnselectedTabStyle.BorderBrush = new SolidColorBrush(ToolPaneUnselectedTabBorderColour);
-            if (!Parse(ToolPaneUnselectedTabBorderThickness, out thickness, "Tool Pane Unselected Tab Border Thickness"))
-            {
-                return;
-            }
-            toolPaneGroupStyle.UnselectedTabStyle.BorderThickness = thickness;
-            toolPaneGroupStyle.UnselectedTabStyle.Background = new SolidColorBrush(ToolPaneUnselectedTabBackgroundColour);
-            toolPaneGroupStyle.UnselectedTabStyle.Foreground = new SolidColorBrush(ToolPaneUnselectedTabForegroundColour);
-            if (!Parse(_toolPaneUnselectedTabTitlePadding, out thickness, "Tool Pane Unselected Tab Title Padding"))
-            {
-                return;
-            }
-            toolPaneGroupStyle.UnselectedTabStyle.TitlePadding = thickness;
+            toolPaneGroupStyle.UnselectedTabStyle.BorderBrush = ToolPaneUnselectedTabBorderBrush;
+            toolPaneGroupStyle.UnselectedTabStyle.BorderThickness = ToolPaneUnselectedTabBorderThickness;
+            toolPaneGroupStyle.UnselectedTabStyle.Background = ToolPaneUnselectedTabBackgroundBrush;
+            toolPaneGroupStyle.UnselectedTabStyle.Foreground = ToolPaneUnselectedTabForegroundBrush;
+            toolPaneGroupStyle.UnselectedTabStyle.TitlePadding = ToolPaneUnselectedTabTitlePadding;
 
 
             _layoutManager.ToolPaneGroupStyle = toolPaneGroupStyle;
@@ -173,8 +138,8 @@ namespace WpfOpenControls.DockManager
             NotifyPropertyChanged(null);
         }
 
-        public string _toolPaneCornerRadius;
-        public string ToolPaneCornerRadius
+        public CornerRadius _toolPaneCornerRadius;
+        public CornerRadius ToolPaneCornerRadius
         {
             get
             {
@@ -187,22 +152,22 @@ namespace WpfOpenControls.DockManager
             }
         }
 
-        public Color _toolPaneBorderColour;
-        public Color ToolPaneBorderColour
+        public Brush _toolPaneBorderBrush;
+        public Brush ToolPaneBorderBrush
         {
             get
             {
-                return _toolPaneBorderColour;
+                return _toolPaneBorderBrush;
             }
             set
             {
-                _toolPaneBorderColour = value;
-                NotifyPropertyChanged("ToolPaneBorderColour");
+                _toolPaneBorderBrush = value;
+                NotifyPropertyChanged("ToolPaneBorderBrush");
             }
         }
 
-        public string _toolPaneBorderThickness;
-        public string ToolPaneBorderThickness
+        public Thickness _toolPaneBorderThickness;
+        public Thickness ToolPaneBorderThickness
         {
             get
             {
@@ -215,31 +180,59 @@ namespace WpfOpenControls.DockManager
             }
         }
 
-        public Color _toolPaneBackgroundColour;
-        public Color ToolPaneBackgroundColour
+        private System.Collections.ObjectModel.ObservableCollection<int> _availableFontSizes;
+        public System.Collections.ObjectModel.ObservableCollection<int> AvailableFontSizes
         {
             get
             {
-                return _toolPaneBackgroundColour;
+                return _availableFontSizes;
             }
             set
             {
-                _toolPaneBackgroundColour = value;
-                NotifyPropertyChanged("ToolPaneBackgroundColour");
+                _availableFontSizes = value;
+                NotifyPropertyChanged("AvailableFontSizes");
             }
         }
 
-        public Color _toolPaneGapColour;
-        public Color ToolPaneGapColour
+        public int _toolPaneFontSize;
+        public int ToolPaneFontSize
         {
             get
             {
-                return _toolPaneGapColour;
+                return _toolPaneFontSize;
             }
             set
             {
-                _toolPaneGapColour = value;
-                NotifyPropertyChanged("ToolPaneGapColour");
+                _toolPaneFontSize = value;
+                NotifyPropertyChanged("ToolPaneFontSize");
+            }
+        }
+
+        public Brush _toolPaneBackgroundBrush;
+        public Brush ToolPaneBackgroundBrush
+        {
+            get
+            {
+                return _toolPaneBackgroundBrush;
+            }
+            set
+            {
+                _toolPaneBackgroundBrush = value;
+                NotifyPropertyChanged("ToolPaneBackgroundBrush");
+            }
+        }
+
+        public Brush _toolPaneGapBrush;
+        public Brush ToolPaneGapBrush
+        {
+            get
+            {
+                return _toolPaneGapBrush;
+            }
+            set
+            {
+                _toolPaneGapBrush = value;
+                NotifyPropertyChanged("ToolPaneGapBrush");
             }
         }
 
@@ -257,22 +250,22 @@ namespace WpfOpenControls.DockManager
             }
         }
 
-        public Color _toolPaneButtonForegroundColour;
-        public Color ToolPaneButtonForegroundColour
+        public Brush _toolPaneButtonForegroundBrush;
+        public Brush ToolPaneButtonForegroundBrush
         {
             get
             {
-                return _toolPaneButtonForegroundColour;
+                return _toolPaneButtonForegroundBrush;
             }
             set
             {
-                _toolPaneButtonForegroundColour = value;
-                NotifyPropertyChanged("ToolPaneButtonForegroundColour");
+                _toolPaneButtonForegroundBrush = value;
+                NotifyPropertyChanged("ToolPaneButtonForegroundBrush");
             }
         }
 
-        public string _toolPaneHeaderCornerRadius;
-        public string ToolPaneHeaderCornerRadius
+        public CornerRadius _toolPaneHeaderCornerRadius;
+        public CornerRadius ToolPaneHeaderCornerRadius
         {
             get
             {
@@ -285,22 +278,22 @@ namespace WpfOpenControls.DockManager
             }
         }
 
-        public Color _toolPaneHeaderBorderColour;
-        public Color ToolPaneHeaderBorderColour
+        public Brush _toolPaneHeaderBorderBrush;
+        public Brush ToolPaneHeaderBorderBrush
         {
             get
             {
-                return _toolPaneHeaderBorderColour;
+                return _toolPaneHeaderBorderBrush;
             }
             set
             {
-                _toolPaneHeaderBorderColour = value;
-                NotifyPropertyChanged("ToolPaneHeaderBorderColour");
+                _toolPaneHeaderBorderBrush = value;
+                NotifyPropertyChanged("ToolPaneHeaderBorderBrush");
             }
         }
 
-        public string _toolPaneHeaderBorderThickness;
-        public string ToolPaneHeaderBorderThickness
+        public Thickness _toolPaneHeaderBorderThickness;
+        public Thickness ToolPaneHeaderBorderThickness
         {
             get
             {
@@ -313,22 +306,22 @@ namespace WpfOpenControls.DockManager
             }
         }
 
-        public Color _toolPaneHeaderBackgroundColour;
-        public Color ToolPaneHeaderBackgroundColour
+        public Brush _toolPaneHeaderBackgroundBrush;
+        public Brush ToolPaneHeaderBackgroundBrush
         {
             get
             {
-                return _toolPaneHeaderBackgroundColour;
+                return _toolPaneHeaderBackgroundBrush;
             }
             set
             {
-                _toolPaneHeaderBackgroundColour = value;
-                NotifyPropertyChanged("ToolPaneBackgroundColour");
+                _toolPaneHeaderBackgroundBrush = value;
+                NotifyPropertyChanged("ToolPaneBackgroundBrush");
             }
         }
 
-        public string _toolPaneHeaderTitlePadding;
-        public string ToolPaneHeaderTitlePadding
+        public Thickness _toolPaneHeaderTitlePadding;
+        public Thickness ToolPaneHeaderTitlePadding
         {
             get
             {
@@ -341,8 +334,8 @@ namespace WpfOpenControls.DockManager
             }
         }
 
-        public string _toolPaneTabCornerRadius;
-        public string ToolPaneTabCornerRadius
+        public CornerRadius _toolPaneTabCornerRadius;
+        public CornerRadius ToolPaneTabCornerRadius
         {
             get
             {
@@ -355,50 +348,50 @@ namespace WpfOpenControls.DockManager
             }
         }
 
-        public Color _activeScrollIndicatorColour;
-        public Color ActiveScrollIndicatorColour
+        public Brush _activeScrollIndicatorBrush;
+        public Brush ActiveScrollIndicatorBrush
         {
             get
             {
-                return _activeScrollIndicatorColour;
+                return _activeScrollIndicatorBrush;
             }
             set
             {
-                _activeScrollIndicatorColour = value;
-                NotifyPropertyChanged("ActiveScrollIndicatorColour");
+                _activeScrollIndicatorBrush = value;
+                NotifyPropertyChanged("ActiveScrollIndicatorBrush");
             }
         }
 
-        public Color _inactiveScrollIndicatorColour;
-        public Color InactiveScrollIndicatorColour
+        public Brush _inactiveScrollIndicatorBrush;
+        public Brush InactiveScrollIndicatorBrush
         {
             get
             {
-                return _inactiveScrollIndicatorColour;
+                return _inactiveScrollIndicatorBrush;
             }
             set
             {
-                _inactiveScrollIndicatorColour = value;
-                NotifyPropertyChanged("InactiveScrollIndicatorColour");
+                _inactiveScrollIndicatorBrush = value;
+                NotifyPropertyChanged("InactiveScrollIndicatorBrush");
             }
         }
 
-        public Color _toolPaneSelectedTabBorderColour;
-        public Color ToolPaneSelectedTabBorderColour
+        public Brush _toolPaneSelectedTabBorderBrush;
+        public Brush ToolPaneSelectedTabBorderBrush
         {
             get
             {
-                return _toolPaneSelectedTabBorderColour;
+                return _toolPaneSelectedTabBorderBrush;
             }
             set
             {
-                _toolPaneSelectedTabBorderColour = value;
-                NotifyPropertyChanged("ToolPaneSelectedTabBorderColour");
+                _toolPaneSelectedTabBorderBrush = value;
+                NotifyPropertyChanged("ToolPaneSelectedTabBorderBrush");
             }
         }
 
-        public string _toolPaneSelectedTabBorderThickness;
-        public string ToolPaneSelectedTabBorderThickness
+        public Thickness _toolPaneSelectedTabBorderThickness;
+        public Thickness ToolPaneSelectedTabBorderThickness
         {
             get
             {
@@ -411,36 +404,36 @@ namespace WpfOpenControls.DockManager
             }
         }
 
-        public Color _toolPaneSelectedTabBackgroundColour;
-        public Color ToolPaneSelectedTabBackgroundColour
+        public Brush _toolPaneSelectedTabBackgroundBrush;
+        public Brush ToolPaneSelectedTabBackgroundBrush
         {
             get
             {
-                return _toolPaneSelectedTabBackgroundColour;
+                return _toolPaneSelectedTabBackgroundBrush;
             }
             set
             {
-                _toolPaneSelectedTabBackgroundColour = value;
-                NotifyPropertyChanged("ToolPaneSelectedTabBackgroundColour");
+                _toolPaneSelectedTabBackgroundBrush = value;
+                NotifyPropertyChanged("ToolPaneSelectedTabBackgroundBrush");
             }
         }
 
-        public Color _toolPaneSelectedTabForegroundColour;
-        public Color ToolPaneSelectedTabForegroundColour
+        public Brush _toolPaneSelectedTabForegroundBrush;
+        public Brush ToolPaneSelectedTabForegroundBrush
         {
             get
             {
-                return _toolPaneSelectedTabForegroundColour;
+                return _toolPaneSelectedTabForegroundBrush;
             }
             set
             {
-                _toolPaneSelectedTabForegroundColour = value;
-                NotifyPropertyChanged("ToolPaneSelectedTabForegroundColour");
+                _toolPaneSelectedTabForegroundBrush = value;
+                NotifyPropertyChanged("ToolPaneSelectedTabForegroundBrush");
             }
         }
 
-        public string _toolPaneSelectedTabTitlePadding;
-        public string ToolPaneSelectedTabTitlePadding
+        public Thickness _toolPaneSelectedTabTitlePadding;
+        public Thickness ToolPaneSelectedTabTitlePadding
         {
             get
             {
@@ -453,22 +446,22 @@ namespace WpfOpenControls.DockManager
             }
         }
 
-        public Color _toolPaneUnselectedTabBorderColour;
-        public Color ToolPaneUnselectedTabBorderColour
+        public Brush _toolPaneUnselectedTabBorderBrush;
+        public Brush ToolPaneUnselectedTabBorderBrush
         {
             get
             {
-                return _toolPaneUnselectedTabBorderColour;
+                return _toolPaneUnselectedTabBorderBrush;
             }
             set
             {
-                _toolPaneUnselectedTabBorderColour = value;
-                NotifyPropertyChanged("ToolPaneUnselectedTabBorderColour");
+                _toolPaneUnselectedTabBorderBrush = value;
+                NotifyPropertyChanged("ToolPaneUnselectedTabBorderBrush");
             }
         }
 
-        public string _toolPaneUnselectedTabBorderThickness;
-        public string ToolPaneUnselectedTabBorderThickness
+        public Thickness _toolPaneUnselectedTabBorderThickness;
+        public Thickness ToolPaneUnselectedTabBorderThickness
         {
             get
             {
@@ -481,36 +474,36 @@ namespace WpfOpenControls.DockManager
             }
         }
 
-        public Color _toolPaneUnselectedTabBackgroundColour;
-        public Color ToolPaneUnselectedTabBackgroundColour
+        public Brush _toolPaneUnselectedTabBackgroundBrush;
+        public Brush ToolPaneUnselectedTabBackgroundBrush
         {
             get
             {
-                return _toolPaneUnselectedTabBackgroundColour;
+                return _toolPaneUnselectedTabBackgroundBrush;
             }
             set
             {
-                _toolPaneUnselectedTabBackgroundColour = value;
-                NotifyPropertyChanged("ToolPaneUnselectedTabBackgroundColour");
+                _toolPaneUnselectedTabBackgroundBrush = value;
+                NotifyPropertyChanged("ToolPaneUnselectedTabBackgroundBrush");
             }
         }
 
-        public Color _toolPaneUnselectedTabForegroundColour;
-        public Color ToolPaneUnselectedTabForegroundColour
+        public Brush _toolPaneUnselectedTabForegroundBrush;
+        public Brush ToolPaneUnselectedTabForegroundBrush
         {
             get
             {
-                return _toolPaneUnselectedTabForegroundColour;
+                return _toolPaneUnselectedTabForegroundBrush;
             }
             set
             {
-                _toolPaneUnselectedTabForegroundColour = value;
-                NotifyPropertyChanged("ToolPaneUnselectedTabForegroundColour");
+                _toolPaneUnselectedTabForegroundBrush = value;
+                NotifyPropertyChanged("ToolPaneUnselectedTabForegroundBrush");
             }
         }
 
-        public string _toolPaneUnselectedTabTitlePadding;
-        public string ToolPaneUnselectedTabTitlePadding
+        public Thickness _toolPaneUnselectedTabTitlePadding;
+        public Thickness ToolPaneUnselectedTabTitlePadding
         {
             get
             {

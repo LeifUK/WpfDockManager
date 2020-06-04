@@ -85,6 +85,8 @@
       <Generator>MSBuild:Compile</Generator>
       <SubType>Designer</SubType>
     </Page>
+    <Compile Include="DockManager\Converters\BrushToColourConverter.cs" />
+    <Compile Include="DockManager\Converters\CornerRadiusToStringConverter.cs" />
     <Compile Include="DockManager\Command.cs" />
     <Compile Include="DockManager\ConfigurationView.xaml.cs">
       <DependentUpon>ConfigurationView.xaml</DependentUpon>
@@ -138,6 +140,7 @@
     <Compile Include="DockManager\SideToolStyle.cs" />
     <Compile Include="DockManager\SplitterPane.cs" />
     <Compile Include="DockManager\TabStyle.cs" />
+    <Compile Include="DockManager\Converters\ThicknessToStringConverter.cs" />
     <Compile Include="DockManager\ToolContainer.cs" />
     <Compile Include="DockManager\ToolHeaderStyle.cs" />
     <Compile Include="DockManager\ToolListBoxItem.cs" />
