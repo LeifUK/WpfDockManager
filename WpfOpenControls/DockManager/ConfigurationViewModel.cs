@@ -8,43 +8,62 @@ namespace WpfOpenControls.DockManager
     {
         public ConfigurationViewModel(DockManager.LayoutManager layoutManager)
         {
-            _layoutManager = layoutManager;
+            LayoutManager = layoutManager;
 
-            ToolPaneCornerRadius = _layoutManager.ToolPaneGroupStyle.CornerRadius;
-            ToolPaneBorderBrush = _layoutManager.ToolPaneGroupStyle.BorderBrush;
-            ToolPaneBorderThickness = _layoutManager.ToolPaneGroupStyle.BorderThickness;
+            string text = Newtonsoft.Json.JsonConvert.SerializeObject(LayoutManager.ToolPaneGroupStyle, Newtonsoft.Json.Formatting.Indented);
+            ToolPaneGroupStyle = Newtonsoft.Json.JsonConvert.DeserializeObject< ToolPaneGroupStyle>(text);
+
+            ToolPaneCornerRadius = LayoutManager.ToolPaneGroupStyle.CornerRadius;
+            ToolPaneBorderBrush = LayoutManager.ToolPaneGroupStyle.BorderBrush;
+            ToolPaneBorderThickness = LayoutManager.ToolPaneGroupStyle.BorderThickness;
             AvailableFontSizes = new System.Collections.ObjectModel.ObservableCollection<int>();
             for (int index = 4; index < 42; ++index)
             {
                 AvailableFontSizes.Add(index);
             }
-            ToolPaneFontSize = (int)_layoutManager.ToolPaneGroupStyle.FontSize;
-            ToolPaneBackgroundBrush = _layoutManager.ToolPaneGroupStyle.Background;
-            ToolPaneGapBrush = _layoutManager.ToolPaneGroupStyle.GapBrush;
-            ToolPaneGapHeight = (int)_layoutManager.ToolPaneGroupStyle.GapHeight;
-            ToolPaneButtonForegroundBrush = _layoutManager.ToolPaneGroupStyle.ButtonForeground;
+            ToolPaneFontSize = (int)LayoutManager.ToolPaneGroupStyle.FontSize;
+            ToolPaneBackgroundBrush = LayoutManager.ToolPaneGroupStyle.Background;
+            ToolPaneGapBrush = LayoutManager.ToolPaneGroupStyle.GapBrush;
+            ToolPaneGapHeight = (int)LayoutManager.ToolPaneGroupStyle.GapHeight;
+            ToolPaneButtonForegroundBrush = LayoutManager.ToolPaneGroupStyle.ButtonForeground;
 
-            ToolPaneHeaderCornerRadius = _layoutManager.ToolPaneGroupStyle.HeaderStyle.CornerRadius;
-            ToolPaneHeaderBorderBrush = _layoutManager.ToolPaneGroupStyle.HeaderStyle.BorderBrush;
-            ToolPaneHeaderBorderThickness = _layoutManager.ToolPaneGroupStyle.HeaderStyle.BorderThickness;
-            ToolPaneHeaderBackgroundBrush = _layoutManager.ToolPaneGroupStyle.HeaderStyle.Background;
-            ToolPaneHeaderTitlePadding = _layoutManager.ToolPaneGroupStyle.HeaderStyle.TitlePadding;
+            ToolPaneHeaderCornerRadius = LayoutManager.ToolPaneGroupStyle.HeaderStyle.CornerRadius;
+            ToolPaneHeaderBorderBrush = LayoutManager.ToolPaneGroupStyle.HeaderStyle.BorderBrush;
+            ToolPaneHeaderBorderThickness = LayoutManager.ToolPaneGroupStyle.HeaderStyle.BorderThickness;
+            ToolPaneHeaderBackgroundBrush = LayoutManager.ToolPaneGroupStyle.HeaderStyle.Background;
+            ToolPaneHeaderTitlePadding = LayoutManager.ToolPaneGroupStyle.HeaderStyle.TitlePadding;
 
-            ToolPaneTabCornerRadius = _layoutManager.ToolPaneGroupStyle.TabCornerRadius;
-            ActiveScrollIndicatorBrush = _layoutManager.ToolPaneGroupStyle.ActiveScrollIndicatorBrush;
-            InactiveScrollIndicatorBrush = _layoutManager.ToolPaneGroupStyle.InactiveScrollIndicatorBrush;
+            ToolPaneTabCornerRadius = LayoutManager.ToolPaneGroupStyle.TabCornerRadius;
+            ActiveScrollIndicatorBrush = LayoutManager.ToolPaneGroupStyle.ActiveScrollIndicatorBrush;
+            InactiveScrollIndicatorBrush = LayoutManager.ToolPaneGroupStyle.InactiveScrollIndicatorBrush;
 
-            ToolPaneSelectedTabBorderBrush = _layoutManager.ToolPaneGroupStyle.SelectedTabStyle.BorderBrush;
-            ToolPaneSelectedTabBorderThickness = _layoutManager.ToolPaneGroupStyle.SelectedTabStyle.BorderThickness;
-            ToolPaneSelectedTabBackgroundBrush = _layoutManager.ToolPaneGroupStyle.SelectedTabStyle.Background;
-            ToolPaneSelectedTabForegroundBrush = _layoutManager.ToolPaneGroupStyle.SelectedTabStyle.Foreground;
-            ToolPaneSelectedTabTitlePadding = _layoutManager.ToolPaneGroupStyle.SelectedTabStyle.TitlePadding;
+            ToolPaneSelectedTabBorderBrush = LayoutManager.ToolPaneGroupStyle.SelectedTabStyle.BorderBrush;
+            ToolPaneSelectedTabBorderThickness = LayoutManager.ToolPaneGroupStyle.SelectedTabStyle.BorderThickness;
+            ToolPaneSelectedTabBackgroundBrush = LayoutManager.ToolPaneGroupStyle.SelectedTabStyle.Background;
+            ToolPaneSelectedTabForegroundBrush = LayoutManager.ToolPaneGroupStyle.SelectedTabStyle.Foreground;
+            ToolPaneSelectedTabTitlePadding = LayoutManager.ToolPaneGroupStyle.SelectedTabStyle.TitlePadding;
 
-            ToolPaneUnselectedTabBorderBrush = _layoutManager.ToolPaneGroupStyle.UnselectedTabStyle.BorderBrush;
-            ToolPaneUnselectedTabBorderThickness = _layoutManager.ToolPaneGroupStyle.UnselectedTabStyle.BorderThickness;
-            ToolPaneUnselectedTabBackgroundBrush = _layoutManager.ToolPaneGroupStyle.UnselectedTabStyle.Background;
-            ToolPaneUnselectedTabForegroundBrush = _layoutManager.ToolPaneGroupStyle.UnselectedTabStyle.Foreground;
-            ToolPaneUnselectedTabTitlePadding = _layoutManager.ToolPaneGroupStyle.UnselectedTabStyle.TitlePadding;
+            ToolPaneUnselectedTabBorderBrush = LayoutManager.ToolPaneGroupStyle.UnselectedTabStyle.BorderBrush;
+            ToolPaneUnselectedTabBorderThickness = LayoutManager.ToolPaneGroupStyle.UnselectedTabStyle.BorderThickness;
+            ToolPaneUnselectedTabBackgroundBrush = LayoutManager.ToolPaneGroupStyle.UnselectedTabStyle.Background;
+            ToolPaneUnselectedTabForegroundBrush = LayoutManager.ToolPaneGroupStyle.UnselectedTabStyle.Foreground;
+            ToolPaneUnselectedTabTitlePadding = LayoutManager.ToolPaneGroupStyle.UnselectedTabStyle.TitlePadding;
+
+            NotifyPropertyChanged(null);
+        }
+
+        public ToolPaneGroupStyle _toolPaneGroupStyle;
+        public ToolPaneGroupStyle ToolPaneGroupStyle
+        {
+            get
+            {
+                return _toolPaneGroupStyle;
+            }
+            set
+            {
+                _toolPaneGroupStyle = value;
+                NotifyPropertyChanged("ToolPaneGroupStyle");
+            }
         }
 
 
@@ -128,10 +147,20 @@ namespace WpfOpenControls.DockManager
             toolPaneGroupStyle.UnselectedTabStyle.TitlePadding = ToolPaneUnselectedTabTitlePadding;
 
 
-            _layoutManager.ToolPaneGroupStyle = toolPaneGroupStyle;
+            LayoutManager.ToolPaneGroupStyle = toolPaneGroupStyle;
         }
 
-        private readonly DockManager.LayoutManager _layoutManager;
+        public string Serialize()
+        {
+            return Newtonsoft.Json.JsonConvert.SerializeObject(LayoutManager.ToolPaneGroupStyle, Newtonsoft.Json.Formatting.Indented);
+        }
+
+        public void Deserialize(string data)
+        {
+            LayoutManager.ToolPaneGroupStyle = Newtonsoft.Json.JsonConvert.DeserializeObject(data) as ToolPaneGroupStyle;
+        }
+
+        public readonly DockManager.LayoutManager LayoutManager;
 
         public void UpdateView()
         {

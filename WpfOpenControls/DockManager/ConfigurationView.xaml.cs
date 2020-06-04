@@ -49,5 +49,37 @@ namespace WpfOpenControls.DockManager
 
             (DataContext as ConfigurationViewModel).UpdateView();
         }
+
+
+
+        //public void Deserialize(string data)
+        //{
+        //    _layoutManager.ToolPaneGroupStyle = Newtonsoft.Json.JsonConvert.DeserializeObject(data) as ToolPaneGroupStyle;
+        //}
+
+        private void _buttonLoad_Click(object sender, RoutedEventArgs e)
+        {
+
+        }
+
+        class LayoutManagerStyle
+        {
+            public ToolPaneGroupStyle ToolPaneGroupStyle;
+            public DocumentPaneGroupStyle DocumentPaneGroupStyle;
+        }
+
+        private void _buttonSave_Click(object sender, RoutedEventArgs e)
+        {
+            System.Diagnostics.Trace.Assert(DataContext is ConfigurationViewModel);
+            LayoutManager layoutManager = (DataContext as ConfigurationViewModel).LayoutManager;
+
+            LayoutManagerStyle layoutManagerStyle = new LayoutManagerStyle();
+            layoutManagerStyle.ToolPaneGroupStyle = layoutManager.ToolPaneGroupStyle;
+            layoutManagerStyle.DocumentPaneGroupStyle = layoutManager.DocumentPaneGroupStyle;
+
+            string text = Newtonsoft.Json.JsonConvert.SerializeObject(layoutManagerStyle, Newtonsoft.Json.Formatting.Indented);
+
+            System.IO.File.WriteAllText("c:\\Temp\\test.txt", text);
+        }
     }
 }

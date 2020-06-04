@@ -65,11 +65,11 @@
                         <ColumnDefinition Width="10"/>
                     </Grid.ColumnDefinitions>
                     <Label Grid.Row="1" Grid.Column="1" Content="Corner Radius"/>
-                    <xceedobsolete:MaskedTextBox x:Name="_textBoxToolPaneCornerRadius" Grid.Row="1" Grid.Column="3" Mask="9\,9\,9\,9" Text="{Binding ToolPaneCornerRadius, Converter={StaticResource CornerRadiusToStringConverter}}" HorizontalAlignment="Left"/>
+                    <xceedobsolete:MaskedTextBox Grid.Row="1" Grid.Column="3" Mask="9\,9\,9\,9" Text="{Binding ToolPaneCornerRadius, Converter={StaticResource CornerRadiusToStringConverter}}" HorizontalAlignment="Left"/>
                     <Label Grid.Row="3" Grid.Column="1" Content="Border Brush"/>
                     <xceed:ColorPicker Grid.Row="3" Grid.Column="3" SelectedColor="{Binding ToolPaneBorderBrush, Converter={StaticResource BrushToColourConverter}}"/>
                     <Label Grid.Row="5" Grid.Column="1" Content="Border Thickness"/>
-                    <xceedobsolete:MaskedTextBox x:Name="_textBoxToolPaneBorderThickness" Grid.Row="5" Grid.Column="3" Mask="9\,9\,9\,9" Text="{Binding ToolPaneBorderThickness, Converter={StaticResource ThicknessToStringConverter}}" HorizontalAlignment="Left"/>
+                    <xceedobsolete:MaskedTextBox Grid.Row="5" Grid.Column="3" Mask="9\,9\,9\,9" Text="{Binding ToolPaneBorderThickness, Converter={StaticResource ThicknessToStringConverter}}" HorizontalAlignment="Left"/>
                     <Label Grid.Row="7" Grid.Column="1" Content="Font Size"/>
                     <ComboBox Grid.Row="7" Grid.Column="3" SelectedValue="{Binding ToolPaneFontSize}" ItemsSource="{Binding AvailableFontSizes}"/>
                     <Label Grid.Row="9" Grid.Column="1" Content="Background"/>
@@ -230,9 +230,15 @@
                 <ColumnDefinition Width="10"/>
                 <ColumnDefinition Width="Auto"/>
                 <ColumnDefinition Width="10"/>
+                <ColumnDefinition Width="Auto"/>
+                <ColumnDefinition Width="10"/>
+                <ColumnDefinition Width="Auto"/>
+                <ColumnDefinition Width="10"/>
             </Grid.ColumnDefinitions>
-            <Button Grid.Row="0" Grid.Column="1" x:Name="_buttonApply" Content="Apply" Click="_buttonApply_Click"/>
-            <Button Grid.Row="0" Grid.Column="3" x:Name="_buttonClose" Content="Close" Click="_buttonClose_Click"/>
+            <Button Grid.Row="0" Grid.Column="1" x:Name="_buttonLoad" Content="Load" Click="_buttonLoad_Click"/>
+            <Button Grid.Row="0" Grid.Column="3" x:Name="_buttonSave" Content="Save" Click="_buttonSave_Click"/>
+            <Button Grid.Row="0" Grid.Column="5" x:Name="_buttonApply" Content="Apply" Click="_buttonApply_Click"/>
+            <Button Grid.Row="0" Grid.Column="7" x:Name="_buttonClose" Content="Close" Click="_buttonClose_Click"/>
         </Grid>
     </Grid>
 </Window>
