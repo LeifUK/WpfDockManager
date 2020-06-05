@@ -10,8 +10,9 @@ namespace WpfOpenControls.DockManager
         {
             LayoutManager = layoutManager;
 
-            string text = Newtonsoft.Json.JsonConvert.SerializeObject(LayoutManager.ToolPaneGroupStyle, Newtonsoft.Json.Formatting.Indented);
-            ToolPaneGroupStyle = Newtonsoft.Json.JsonConvert.DeserializeObject< ToolPaneGroupStyle>(text);
+            /*
+             * Document pane group
+             */
 
             ToolPaneCornerRadius = LayoutManager.ToolPaneGroupStyle.CornerRadius;
             ToolPaneBorderBrush = LayoutManager.ToolPaneGroupStyle.BorderBrush;
@@ -22,9 +23,15 @@ namespace WpfOpenControls.DockManager
                 AvailableFontSizes.Add(index);
             }
             ToolPaneFontSize = (int)LayoutManager.ToolPaneGroupStyle.FontSize;
+            ToolPaneFontFamily = LayoutManager.ToolPaneGroupStyle.FontFamily;
             ToolPaneBackgroundBrush = LayoutManager.ToolPaneGroupStyle.Background;
             ToolPaneGapBrush = LayoutManager.ToolPaneGroupStyle.GapBrush;
-            ToolPaneGapHeight = (int)LayoutManager.ToolPaneGroupStyle.GapHeight;
+            AvailableGapHeights = new System.Collections.ObjectModel.ObservableCollection<double>();
+            for (double index = 0; index < 12; ++index)
+            {
+                AvailableGapHeights.Add(index);
+            }
+            ToolPaneGapHeight = LayoutManager.ToolPaneGroupStyle.GapHeight;
             ToolPaneButtonForegroundBrush = LayoutManager.ToolPaneGroupStyle.ButtonForeground;
 
             ToolPaneHeaderCornerRadius = LayoutManager.ToolPaneGroupStyle.HeaderStyle.CornerRadius;
@@ -34,8 +41,8 @@ namespace WpfOpenControls.DockManager
             ToolPaneHeaderTitlePadding = LayoutManager.ToolPaneGroupStyle.HeaderStyle.TitlePadding;
 
             ToolPaneTabCornerRadius = LayoutManager.ToolPaneGroupStyle.TabCornerRadius;
-            ActiveScrollIndicatorBrush = LayoutManager.ToolPaneGroupStyle.ActiveScrollIndicatorBrush;
-            InactiveScrollIndicatorBrush = LayoutManager.ToolPaneGroupStyle.InactiveScrollIndicatorBrush;
+            ToolPaneActiveScrollIndicatorBrush = LayoutManager.ToolPaneGroupStyle.ActiveScrollIndicatorBrush;
+            ToolPaneInactiveScrollIndicatorBrush = LayoutManager.ToolPaneGroupStyle.InactiveScrollIndicatorBrush;
 
             ToolPaneSelectedTabBorderBrush = LayoutManager.ToolPaneGroupStyle.SelectedTabStyle.BorderBrush;
             ToolPaneSelectedTabBorderThickness = LayoutManager.ToolPaneGroupStyle.SelectedTabStyle.BorderThickness;
@@ -49,66 +56,44 @@ namespace WpfOpenControls.DockManager
             ToolPaneUnselectedTabForegroundBrush = LayoutManager.ToolPaneGroupStyle.UnselectedTabStyle.Foreground;
             ToolPaneUnselectedTabTitlePadding = LayoutManager.ToolPaneGroupStyle.UnselectedTabStyle.TitlePadding;
 
+            /*
+             * Document pane group
+             */
+
+            DocumentPaneCornerRadius = LayoutManager.DocumentPaneGroupStyle.CornerRadius;
+            DocumentPaneBorderBrush = LayoutManager.DocumentPaneGroupStyle.BorderBrush;
+            DocumentPaneBorderThickness = LayoutManager.DocumentPaneGroupStyle.BorderThickness;
+            AvailableFontSizes = new System.Collections.ObjectModel.ObservableCollection<int>();
+            for (int index = 4; index < 42; ++index)
+            {
+                AvailableFontSizes.Add(index);
+            }
+            DocumentPaneFontSize = (int)LayoutManager.DocumentPaneGroupStyle.FontSize;
+            DocumentPaneFontFamily = LayoutManager.DocumentPaneGroupStyle.FontFamily;
+            DocumentPaneBackgroundBrush = LayoutManager.DocumentPaneGroupStyle.Background;
+            DocumentPaneGapBrush = LayoutManager.DocumentPaneGroupStyle.GapBrush;
+            DocumentPaneGapHeight = LayoutManager.DocumentPaneGroupStyle.GapHeight;
+            DocumentPaneButtonForegroundBrush = LayoutManager.DocumentPaneGroupStyle.ButtonForeground;
+
+            DocumentPaneTabCornerRadius = LayoutManager.DocumentPaneGroupStyle.TabCornerRadius;
+            DocumentPaneActiveScrollIndicatorBrush = LayoutManager.DocumentPaneGroupStyle.ActiveScrollIndicatorBrush;
+            DocumentPaneInactiveScrollIndicatorBrush = LayoutManager.DocumentPaneGroupStyle.InactiveScrollIndicatorBrush;
+
+            DocumentPaneSelectedTabBorderBrush = LayoutManager.DocumentPaneGroupStyle.SelectedTabStyle.BorderBrush;
+            DocumentPaneSelectedTabBorderThickness = LayoutManager.DocumentPaneGroupStyle.SelectedTabStyle.BorderThickness;
+            DocumentPaneSelectedTabBackgroundBrush = LayoutManager.DocumentPaneGroupStyle.SelectedTabStyle.Background;
+            DocumentPaneSelectedTabForegroundBrush = LayoutManager.DocumentPaneGroupStyle.SelectedTabStyle.Foreground;
+            DocumentPaneSelectedTabTitlePadding = LayoutManager.DocumentPaneGroupStyle.SelectedTabStyle.TitlePadding;
+
+            DocumentPaneUnselectedTabBorderBrush = LayoutManager.DocumentPaneGroupStyle.UnselectedTabStyle.BorderBrush;
+            DocumentPaneUnselectedTabBorderThickness = LayoutManager.DocumentPaneGroupStyle.UnselectedTabStyle.BorderThickness;
+            DocumentPaneUnselectedTabBackgroundBrush = LayoutManager.DocumentPaneGroupStyle.UnselectedTabStyle.Background;
+            DocumentPaneUnselectedTabForegroundBrush = LayoutManager.DocumentPaneGroupStyle.UnselectedTabStyle.Foreground;
+            DocumentPaneUnselectedTabTitlePadding = LayoutManager.DocumentPaneGroupStyle.UnselectedTabStyle.TitlePadding;
+
             NotifyPropertyChanged(null);
         }
-
-        public ToolPaneGroupStyle _toolPaneGroupStyle;
-        public ToolPaneGroupStyle ToolPaneGroupStyle
-        {
-            get
-            {
-                return _toolPaneGroupStyle;
-            }
-            set
-            {
-                _toolPaneGroupStyle = value;
-                NotifyPropertyChanged("ToolPaneGroupStyle");
-            }
-        }
-
-
-        private bool Parse(string text, out CornerRadius cornerRadius, string fieldName)
-        {
-            cornerRadius = new CornerRadius();
-
-            Match match = Regex.Match(text, @"(\d),(\d),(\d),(\d)");
-            if (!match.Success)
-            {
-                System.Windows.Forms.MessageBox.Show("Please enter a valid " + fieldName);
-                return false;
-            }
-
-            cornerRadius = new System.Windows.CornerRadius(
-                System.Convert.ToDouble(match.Groups[1].Value),
-                    System.Convert.ToDouble(match.Groups[2].Value),
-                    System.Convert.ToDouble(match.Groups[3].Value),
-                    System.Convert.ToDouble(match.Groups[4].Value)
-                    );
-
-            return true;
-        }
-
-        private bool Parse(string text, out Thickness thickness, string fieldName)
-        {
-            thickness = new Thickness();
-
-            Match match = Regex.Match(text, @"(\d),(\d),(\d),(\d)");
-            if (!match.Success)
-            {
-                System.Windows.Forms.MessageBox.Show("Please enter a valid " + fieldName);
-                return false;
-            }
-
-            thickness = new System.Windows.Thickness(
-                System.Convert.ToDouble(match.Groups[1].Value),
-                    System.Convert.ToDouble(match.Groups[2].Value),
-                    System.Convert.ToDouble(match.Groups[3].Value),
-                    System.Convert.ToDouble(match.Groups[4].Value)
-                    );
-
-            return true;
-        }
-
+        
         public void Apply()
         {
             ToolPaneGroupStyle toolPaneGroupStyle = new ToolPaneGroupStyle();
@@ -116,10 +101,10 @@ namespace WpfOpenControls.DockManager
             toolPaneGroupStyle.BorderBrush = ToolPaneBorderBrush;
             toolPaneGroupStyle.BorderThickness = ToolPaneBorderThickness;
             toolPaneGroupStyle.FontSize = (int)ToolPaneFontSize;
+            toolPaneGroupStyle.FontFamily = ToolPaneFontFamily;
             toolPaneGroupStyle.Background = ToolPaneBackgroundBrush;
             toolPaneGroupStyle.GapBrush = ToolPaneGapBrush;
-            // Warning warning
-            //toolPaneGroupStyle.GapHeight = thickness;
+            toolPaneGroupStyle.GapHeight = ToolPaneGapHeight;
             toolPaneGroupStyle.ButtonForeground = ToolPaneButtonForegroundBrush;
 
 
@@ -131,8 +116,8 @@ namespace WpfOpenControls.DockManager
 
 
             toolPaneGroupStyle.TabCornerRadius = ToolPaneTabCornerRadius;
-            toolPaneGroupStyle.ActiveScrollIndicatorBrush = ActiveScrollIndicatorBrush;
-            toolPaneGroupStyle.InactiveScrollIndicatorBrush = InactiveScrollIndicatorBrush;
+            toolPaneGroupStyle.ActiveScrollIndicatorBrush = ToolPaneActiveScrollIndicatorBrush;
+            toolPaneGroupStyle.InactiveScrollIndicatorBrush = ToolPaneInactiveScrollIndicatorBrush;
 
             toolPaneGroupStyle.SelectedTabStyle.BorderBrush = ToolPaneSelectedTabBorderBrush;
             toolPaneGroupStyle.SelectedTabStyle.BorderThickness = ToolPaneSelectedTabBorderThickness;
@@ -146,18 +131,39 @@ namespace WpfOpenControls.DockManager
             toolPaneGroupStyle.UnselectedTabStyle.Foreground = ToolPaneUnselectedTabForegroundBrush;
             toolPaneGroupStyle.UnselectedTabStyle.TitlePadding = ToolPaneUnselectedTabTitlePadding;
 
-
             LayoutManager.ToolPaneGroupStyle = toolPaneGroupStyle;
-        }
 
-        public string Serialize()
-        {
-            return Newtonsoft.Json.JsonConvert.SerializeObject(LayoutManager.ToolPaneGroupStyle, Newtonsoft.Json.Formatting.Indented);
-        }
 
-        public void Deserialize(string data)
-        {
-            LayoutManager.ToolPaneGroupStyle = Newtonsoft.Json.JsonConvert.DeserializeObject(data) as ToolPaneGroupStyle;
+
+            DocumentPaneGroupStyle documentPaneGroupStyle = new DocumentPaneGroupStyle();
+            documentPaneGroupStyle.CornerRadius = DocumentPaneCornerRadius;
+            documentPaneGroupStyle.BorderBrush = DocumentPaneBorderBrush;
+            documentPaneGroupStyle.BorderThickness = DocumentPaneBorderThickness;
+            documentPaneGroupStyle.FontSize = (int)DocumentPaneFontSize;
+            documentPaneGroupStyle.FontFamily = DocumentPaneFontFamily;
+            documentPaneGroupStyle.Background = DocumentPaneBackgroundBrush;
+            documentPaneGroupStyle.GapBrush = DocumentPaneGapBrush;
+            documentPaneGroupStyle.GapHeight = DocumentPaneGapHeight;
+            documentPaneGroupStyle.ButtonForeground = DocumentPaneButtonForegroundBrush;
+
+            documentPaneGroupStyle.TabCornerRadius = DocumentPaneTabCornerRadius;
+            documentPaneGroupStyle.ActiveScrollIndicatorBrush = DocumentPaneActiveScrollIndicatorBrush;
+            documentPaneGroupStyle.InactiveScrollIndicatorBrush = DocumentPaneInactiveScrollIndicatorBrush;
+
+            documentPaneGroupStyle.SelectedTabStyle.BorderBrush = DocumentPaneSelectedTabBorderBrush;
+            documentPaneGroupStyle.SelectedTabStyle.BorderThickness = DocumentPaneSelectedTabBorderThickness;
+            documentPaneGroupStyle.SelectedTabStyle.Background = DocumentPaneSelectedTabBackgroundBrush;
+            documentPaneGroupStyle.SelectedTabStyle.Foreground = DocumentPaneSelectedTabForegroundBrush;
+            documentPaneGroupStyle.SelectedTabStyle.TitlePadding = DocumentPaneSelectedTabTitlePadding;
+
+            documentPaneGroupStyle.UnselectedTabStyle.BorderBrush = DocumentPaneUnselectedTabBorderBrush;
+            documentPaneGroupStyle.UnselectedTabStyle.BorderThickness = DocumentPaneUnselectedTabBorderThickness;
+            documentPaneGroupStyle.UnselectedTabStyle.Background = DocumentPaneUnselectedTabBackgroundBrush;
+            documentPaneGroupStyle.UnselectedTabStyle.Foreground = DocumentPaneUnselectedTabForegroundBrush;
+            documentPaneGroupStyle.UnselectedTabStyle.TitlePadding = DocumentPaneUnselectedTabTitlePadding;
+
+
+            LayoutManager.DocumentPaneGroupStyle = documentPaneGroupStyle;
         }
 
         public readonly DockManager.LayoutManager LayoutManager;
@@ -166,6 +172,8 @@ namespace WpfOpenControls.DockManager
         {
             NotifyPropertyChanged(null);
         }
+
+        // Tool pane group
 
         public CornerRadius _toolPaneCornerRadius;
         public CornerRadius ToolPaneCornerRadius
@@ -237,6 +245,20 @@ namespace WpfOpenControls.DockManager
             }
         }
 
+        private FontFamily _toolPaneFontFamily;
+        public FontFamily ToolPaneFontFamily 
+        {
+            get
+            {
+                return _toolPaneFontFamily;
+            }
+            set
+            {
+                _toolPaneFontFamily = value;
+                NotifyPropertyChanged("ToolPaneFontFamily");
+            }
+        }
+
         public Brush _toolPaneBackgroundBrush;
         public Brush ToolPaneBackgroundBrush
         {
@@ -265,8 +287,22 @@ namespace WpfOpenControls.DockManager
             }
         }
 
-        public int _toolPaneGapHeight;
-        public int ToolPaneGapHeight
+        private System.Collections.ObjectModel.ObservableCollection<double> _availableGapHeights;
+        public System.Collections.ObjectModel.ObservableCollection<double> AvailableGapHeights
+        {
+            get
+            {
+                return _availableGapHeights;
+            }
+            set
+            {
+                _availableGapHeights = value;
+                NotifyPropertyChanged("AvailableGapHeights");
+            }
+        }
+
+        public double _toolPaneGapHeight;
+        public double ToolPaneGapHeight
         {
             get
             {
@@ -377,31 +413,31 @@ namespace WpfOpenControls.DockManager
             }
         }
 
-        public Brush _activeScrollIndicatorBrush;
-        public Brush ActiveScrollIndicatorBrush
+        public Brush _toolPaneActiveScrollIndicatorBrush;
+        public Brush ToolPaneActiveScrollIndicatorBrush
         {
             get
             {
-                return _activeScrollIndicatorBrush;
+                return _toolPaneActiveScrollIndicatorBrush;
             }
             set
             {
-                _activeScrollIndicatorBrush = value;
-                NotifyPropertyChanged("ActiveScrollIndicatorBrush");
+                _toolPaneActiveScrollIndicatorBrush = value;
+                NotifyPropertyChanged("ToolPaneActiveScrollIndicatorBrush");
             }
         }
 
-        public Brush _inactiveScrollIndicatorBrush;
-        public Brush InactiveScrollIndicatorBrush
+        public Brush __toolPaneInactiveScrollIndicatorBrush;
+        public Brush ToolPaneInactiveScrollIndicatorBrush
         {
             get
             {
-                return _inactiveScrollIndicatorBrush;
+                return __toolPaneInactiveScrollIndicatorBrush;
             }
             set
             {
-                _inactiveScrollIndicatorBrush = value;
-                NotifyPropertyChanged("InactiveScrollIndicatorBrush");
+                __toolPaneInactiveScrollIndicatorBrush = value;
+                NotifyPropertyChanged("ToolPaneInactiveScrollIndicatorBrush");
             }
         }
 
@@ -545,6 +581,315 @@ namespace WpfOpenControls.DockManager
             }
         }
 
+        // Document pane group 
+
+        public CornerRadius _documentPaneCornerRadius;
+        public CornerRadius DocumentPaneCornerRadius
+        {
+            get
+            {
+                return _documentPaneCornerRadius;
+            }
+            set
+            {
+                _documentPaneCornerRadius = value;
+                NotifyPropertyChanged("DocumentPaneCornerRadius");
+            }
+        }
+
+        public Brush _documentPaneBorderBrush;
+        public Brush DocumentPaneBorderBrush
+        {
+            get
+            {
+                return _documentPaneBorderBrush;
+            }
+            set
+            {
+                _documentPaneBorderBrush = value;
+                NotifyPropertyChanged("DocumentPaneBorderBrush");
+            }
+        }
+
+        public Thickness _documentPaneBorderThickness;
+        public Thickness DocumentPaneBorderThickness
+        {
+            get
+            {
+                return _documentPaneBorderThickness;
+            }
+            set
+            {
+                _documentPaneBorderThickness = value;
+                NotifyPropertyChanged("DocumentPaneBorderThickness");
+            }
+        }
+
+        public int _documentPaneFontSize;
+        public int DocumentPaneFontSize
+        {
+            get
+            {
+                return _documentPaneFontSize;
+            }
+            set
+            {
+                _documentPaneFontSize = value;
+                NotifyPropertyChanged("DocumentPaneFontSize");
+            }
+        }
+
+        private FontFamily _documentPaneFontFamily;
+        public FontFamily DocumentPaneFontFamily
+        {
+            get
+            {
+                return _documentPaneFontFamily;
+            }
+            set
+            {
+                _documentPaneFontFamily = value;
+                NotifyPropertyChanged("DocumentPaneFontFamily");
+            }
+        }
+
+        public Brush _documentPaneBackgroundBrush;
+        public Brush DocumentPaneBackgroundBrush
+        {
+            get
+            {
+                return _documentPaneBackgroundBrush;
+            }
+            set
+            {
+                _documentPaneBackgroundBrush = value;
+                NotifyPropertyChanged("DocumentPaneBackgroundBrush");
+            }
+        }
+
+        public Brush _documentPaneGapBrush;
+        public Brush DocumentPaneGapBrush
+        {
+            get
+            {
+                return _documentPaneGapBrush;
+            }
+            set
+            {
+                _documentPaneGapBrush = value;
+                NotifyPropertyChanged("DocumentPaneGapBrush");
+            }
+        }
+
+        public double _documentPaneGapHeight;
+        public double DocumentPaneGapHeight
+        {
+            get
+            {
+                return _documentPaneGapHeight;
+            }
+            set
+            {
+                _documentPaneGapHeight = value;
+                NotifyPropertyChanged("DocumentPaneGapHeight");
+            }
+        }
+
+        public Brush _documentPaneButtonForegroundBrush;
+        public Brush DocumentPaneButtonForegroundBrush
+        {
+            get
+            {
+                return _documentPaneButtonForegroundBrush;
+            }
+            set
+            {
+                _documentPaneButtonForegroundBrush = value;
+                NotifyPropertyChanged("DocumentPaneButtonForegroundBrush");
+            }
+        }
+
+        public CornerRadius _documentPaneTabCornerRadius;
+        public CornerRadius DocumentPaneTabCornerRadius
+        {
+            get
+            {
+                return _documentPaneTabCornerRadius;
+            }
+            set
+            {
+                _documentPaneTabCornerRadius = value;
+                NotifyPropertyChanged("DocumentPaneTabCornerRadius");
+            }
+        }
+
+        public Brush _documentPaneActiveScrollIndicatorBrush;
+        public Brush DocumentPaneActiveScrollIndicatorBrush
+        {
+            get
+            {
+                return _documentPaneActiveScrollIndicatorBrush;
+            }
+            set
+            {
+                _documentPaneActiveScrollIndicatorBrush = value;
+                NotifyPropertyChanged("DocumentPaneActiveScrollIndicatorBrush");
+            }
+        }
+
+        public Brush _documentPaneInactiveScrollIndicatorBrush;
+        public Brush DocumentPaneInactiveScrollIndicatorBrush
+        {
+            get
+            {
+                return _documentPaneInactiveScrollIndicatorBrush;
+            }
+            set
+            {
+                _documentPaneInactiveScrollIndicatorBrush = value;
+                NotifyPropertyChanged("DocumentPaneInactiveScrollIndicatorBrush");
+            }
+        }
+
+        public Brush _documentPaneSelectedTabBorderBrush;
+        public Brush DocumentPaneSelectedTabBorderBrush
+        {
+            get
+            {
+                return _documentPaneSelectedTabBorderBrush;
+            }
+            set
+            {
+                _documentPaneSelectedTabBorderBrush = value;
+                NotifyPropertyChanged("DocumentPaneSelectedTabBorderBrush");
+            }
+        }
+
+        public Thickness _documentPaneSelectedTabBorderThickness;
+        public Thickness DocumentPaneSelectedTabBorderThickness
+        {
+            get
+            {
+                return _documentPaneSelectedTabBorderThickness;
+            }
+            set
+            {
+                _documentPaneSelectedTabBorderThickness = value;
+                NotifyPropertyChanged("DocumentPaneSelectedTabBorderThickness");
+            }
+        }
+
+        public Brush _documentPaneSelectedTabBackgroundBrush;
+        public Brush DocumentPaneSelectedTabBackgroundBrush
+        {
+            get
+            {
+                return _documentPaneSelectedTabBackgroundBrush;
+            }
+            set
+            {
+                _documentPaneSelectedTabBackgroundBrush = value;
+                NotifyPropertyChanged("DocumentPaneSelectedTabBackgroundBrush");
+            }
+        }
+
+        public Brush _documentPaneSelectedTabForegroundBrush;
+        public Brush DocumentPaneSelectedTabForegroundBrush
+        {
+            get
+            {
+                return _documentPaneSelectedTabForegroundBrush;
+            }
+            set
+            {
+                _documentPaneSelectedTabForegroundBrush = value;
+                NotifyPropertyChanged("DocumentPaneSelectedTabForegroundBrush");
+            }
+        }
+
+        public Thickness _documentPaneSelectedTabTitlePadding;
+        public Thickness DocumentPaneSelectedTabTitlePadding
+        {
+            get
+            {
+                return _documentPaneSelectedTabTitlePadding;
+            }
+            set
+            {
+                _documentPaneSelectedTabTitlePadding = value;
+                NotifyPropertyChanged("DocumentPaneSelectedTabTitlePadding");
+            }
+        }
+
+        public Brush _documentPaneUnselectedTabBorderBrush;
+        public Brush DocumentPaneUnselectedTabBorderBrush
+        {
+            get
+            {
+                return _documentPaneUnselectedTabBorderBrush;
+            }
+            set
+            {
+                _documentPaneUnselectedTabBorderBrush = value;
+                NotifyPropertyChanged("DocumentPaneUnselectedTabBorderBrush");
+            }
+        }
+
+        public Thickness _documentPaneUnselectedTabBorderThickness;
+        public Thickness DocumentPaneUnselectedTabBorderThickness
+        {
+            get
+            {
+                return _documentPaneUnselectedTabBorderThickness;
+            }
+            set
+            {
+                _documentPaneUnselectedTabBorderThickness = value;
+                NotifyPropertyChanged("DocumentPaneUnselectedTabBorderThickness");
+            }
+        }
+
+        public Brush _documentPaneUnselectedTabBackgroundBrush;
+        public Brush DocumentPaneUnselectedTabBackgroundBrush
+        {
+            get
+            {
+                return _documentPaneUnselectedTabBackgroundBrush;
+            }
+            set
+            {
+                _documentPaneUnselectedTabBackgroundBrush = value;
+                NotifyPropertyChanged("DocumentPaneUnselectedTabBackgroundBrush");
+            }
+        }
+
+        public Brush _documentPaneUnselectedTabForegroundBrush;
+        public Brush DocumentPaneUnselectedTabForegroundBrush
+        {
+            get
+            {
+                return _documentPaneUnselectedTabForegroundBrush;
+            }
+            set
+            {
+                _documentPaneUnselectedTabForegroundBrush = value;
+                NotifyPropertyChanged("DocumentPaneUnselectedTabForegroundBrush");
+            }
+        }
+
+        public Thickness _documentPaneUnselectedTabTitlePadding;
+        public Thickness DocumentPaneUnselectedTabTitlePadding
+        {
+            get
+            {
+                return _documentPaneUnselectedTabTitlePadding;
+            }
+            set
+            {
+                _documentPaneUnselectedTabTitlePadding = value;
+                NotifyPropertyChanged("DocumentPaneUnselectedTabTitlePadding");
+            }
+        }
         #region INotifyPropertyChanged
 
         public event System.ComponentModel.PropertyChangedEventHandler PropertyChanged;

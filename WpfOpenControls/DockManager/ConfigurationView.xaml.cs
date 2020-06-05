@@ -38,11 +38,6 @@ namespace WpfOpenControls.DockManager
             DialogResult = false;
         }
 
-        private System.Drawing.Color Convert(System.Windows.Media.Color color)
-        {
-            return System.Drawing.Color.FromArgb(color.A, color.R, color.G, color.B);
-        }
-
         private void TabControl_SelectionChanged(object sender, SelectionChangedEventArgs e)
         {
             System.Diagnostics.Trace.Assert(DataContext is ConfigurationViewModel);
@@ -50,16 +45,37 @@ namespace WpfOpenControls.DockManager
             (DataContext as ConfigurationViewModel).UpdateView();
         }
 
-
-
-        //public void Deserialize(string data)
-        //{
-        //    _layoutManager.ToolPaneGroupStyle = Newtonsoft.Json.JsonConvert.DeserializeObject(data) as ToolPaneGroupStyle;
-        //}
-
         private void _buttonLoad_Click(object sender, RoutedEventArgs e)
         {
+            System.Diagnostics.Trace.Assert(DataContext is ConfigurationViewModel);
+            LayoutManager layoutManager = (DataContext as ConfigurationViewModel).LayoutManager;
 
+            System.Windows.Forms.OpenFileDialog dialog = new System.Windows.Forms.OpenFileDialog();
+            if (dialog == null)
+            {
+                return;
+            }
+
+            dialog.Filter = "Theme Files (*.thm)|*.thm";
+            dialog.CheckFileExists = true;
+            if (dialog.ShowDialog() != System.Windows.Forms.DialogResult.OK)
+            {
+                return;
+            }
+
+            try
+            {
+                string text = System.IO.File.ReadAllText(dialog.FileName);
+
+                LayoutManagerStyle layoutManagerStyle = Newtonsoft.Json.JsonConvert.DeserializeObject< LayoutManagerStyle>(text);
+                layoutManager.ToolPaneGroupStyle = layoutManagerStyle.ToolPaneGroupStyle;
+                layoutManager.DocumentPaneGroupStyle = layoutManagerStyle.DocumentPaneGroupStyle;
+
+            }
+            catch (Exception exception)
+            {
+                System.Windows.Forms.MessageBox.Show("Unable to load theme: " + exception.Message);
+            }
         }
 
         class LayoutManagerStyle
@@ -79,7 +95,27 @@ namespace WpfOpenControls.DockManager
 
             string text = Newtonsoft.Json.JsonConvert.SerializeObject(layoutManagerStyle, Newtonsoft.Json.Formatting.Indented);
 
-            System.IO.File.WriteAllText("c:\\Temp\\test.txt", text);
+            System.Windows.Forms.OpenFileDialog dialog = new System.Windows.Forms.OpenFileDialog();
+            if (dialog == null)
+            {
+                return;
+            }
+
+            dialog.Filter = "Theme Files (*.thm)|*.thm";
+            dialog.CheckFileExists = false;
+            if (dialog.ShowDialog() != System.Windows.Forms.DialogResult.OK)
+            {
+                return;
+            }
+
+            try
+            {
+                System.IO.File.WriteAllText(dialog.FileName, text);
+            }
+            catch (Exception exception)
+            {
+                System.Windows.Forms.MessageBox.Show("Unable to save theme: " + exception.Message);
+            }
         }
     }
 }

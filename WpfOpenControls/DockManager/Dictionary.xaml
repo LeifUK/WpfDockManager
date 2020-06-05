@@ -8,6 +8,29 @@
     <converters:ThicknessToStringConverter x:Key="ThicknessToStringConverter" />
     <converters:CornerRadiusToStringConverter x:Key="CornerRadiusToStringConverter" />
 
+    <!-- Styles for view controls -->
+    <Style x:Key="StyleLabel" TargetType="Label">
+        <Setter Property="Padding" Value="0"/>
+        <Setter Property="VerticalAlignment" Value="Center"/>
+    </Style>
+    <Style x:Key="StyleCheckBox" TargetType="CheckBox">
+        <Setter Property="Padding" Value="0"/>
+        <Setter Property="VerticalAlignment" Value="Center"/>
+        <Setter Property="VerticalContentAlignment" Value="Center"/>
+    </Style>
+    <Style x:Key="StyleRadioButton" TargetType="RadioButton">
+        <Setter Property="Padding" Value="0"/>
+        <Setter Property="VerticalAlignment" Value="Center"/>
+        <Setter Property="VerticalContentAlignment" Value="Center"/>
+    </Style>
+    <Style x:Key="StyleButton" TargetType="Button">
+        <Setter Property="Margin" Value="0"/>
+        <Setter Property="Padding" Value="10,2,10,2"/>
+    </Style>
+    <Style x:Key="StyleComboBox" TargetType="ComboBox">
+        <Setter Property="Padding" Value="4,3,4,3"/>
+        <Setter Property="VerticalAlignment" Value="Center"/>
+    </Style>
     <Style x:Key="StyleTitleBarButton" TargetType="Button">
         <Setter Property="Background" Value="Transparent"/>
         <Setter Property="BorderThickness" Value="0"/>
@@ -278,27 +301,18 @@
             </Setter.Value>
         </Setter>
     </Style>
-
-    <!--Minimize-->
     <Style x:Key="MinimizeButtonStyle" TargetType="Button" BasedOn="{StaticResource CaptionButtonStyle}">
         <Setter Property="Content" Value="&#xE949;"/>
     </Style>
-
-    <!--Maximize-->
     <Style x:Key="MaximizeButtonStyle" TargetType="Button" BasedOn="{StaticResource CaptionButtonStyle}">
         <Setter Property="Content" Value="&#xE739;"/>
     </Style>
-
-    <!--Restore-->
     <Style x:Key="RestoreButtonStyle" TargetType="Button" BasedOn="{StaticResource CaptionButtonStyle}">
         <Setter Property="Content" Value="&#xE923;"/>
     </Style>
-
-    <!--Close-->
     <Style x:Key="CloseButtonStyle" TargetType="Button" BasedOn="{StaticResource CaptionButtonStyle}">
         <Setter Property="Content" Value="&#xE106;"/>
     </Style>
-
     <Style x:Key="MenuButtonStyle" TargetType="Button" BasedOn="{StaticResource StyleViewListButton}">
         <Setter Property="Background" Value="Gainsboro"/>
     </Style>

@@ -4,14 +4,16 @@
         xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
         xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
         xmlns:local="clr-namespace:WpfOpenControls.DockManager"
-        xmlns:xceedobsolete="clr-namespace:Xceed.Wpf.Toolkit.Obselete;assembly=Xceed.Wpf.Toolkit"
+        xmlns:System="clr-namespace:System;assembly=mscorlib"
+        xmlns:WpfToolkit="clr-namespace:Xceed.Wpf.Toolkit.Obselete;assembly=Xceed.Wpf.Toolkit"
         xmlns:xceed="http://schemas.xceed.com/wpf/xaml/toolkit" 
         mc:Ignorable="d"
-        SizeToContent="WidthAndHeight"
-        Title="ConfigurationView" Height="1000" Width="800">
+        ResizeMode="NoResize"
+        Title="ConfigurationView" Height="700" Width="800">
     <Window.Resources>
         <ResourceDictionary>
-        <Style x:Key="StyleBrushRectangle" TargetType="Rectangle">
+            <System:Double x:Key="TabItemWidth">110</System:Double>
+            <Style x:Key="StyleBrushRectangle" TargetType="Rectangle">
             <Setter Property="Width" Value="40"/>
             <Setter Property="Height" Value="20"/>
         </Style>
@@ -24,7 +26,7 @@
         <Grid.RowDefinitions>
             <RowDefinition Height="10"/>
             <RowDefinition Height="Auto"/>
-            <RowDefinition Height="30"/>
+            <RowDefinition Height="*"/>
             <RowDefinition Height="Auto"/>
             <RowDefinition Height="10"/>
         </Grid.RowDefinitions>
@@ -32,195 +34,363 @@
             <ColumnDefinition Width="10"/>
             <ColumnDefinition Width="Auto"/>
             <ColumnDefinition Width="10"/>
+            <ColumnDefinition Width="Auto"/>
+            <ColumnDefinition Width="10"/>
         </Grid.ColumnDefinitions>
-        <TabControl Grid.Row="1" Grid.Column="1" SelectionChanged="TabControl_SelectionChanged">
-            <TabItem Header="General">
-                <Grid>
-                    <Grid.RowDefinitions>
-                        <RowDefinition Height="10"/>
-                        <RowDefinition Height="Auto"/>
-                        <RowDefinition Height="10"/>
-                        <RowDefinition Height="Auto"/>
-                        <RowDefinition Height="10"/>
-                        <RowDefinition Height="Auto"/>
-                        <RowDefinition Height="10"/>
-                        <RowDefinition Height="Auto"/>
-                        <RowDefinition Height="10"/>
-                        <RowDefinition Height="Auto"/>
-                        <RowDefinition Height="10"/>
-                        <RowDefinition Height="Auto"/>
-                        <RowDefinition Height="10"/>
-                        <RowDefinition Height="Auto"/>
-                        <RowDefinition Height="10"/>
-                        <RowDefinition Height="Auto"/>
-                        <RowDefinition Height="10"/>
-                        <RowDefinition Height="Auto"/>
-                        <RowDefinition Height="10"/>
-                    </Grid.RowDefinitions>
-                    <Grid.ColumnDefinitions>
-                        <ColumnDefinition Width="10"/>
-                        <ColumnDefinition Width="Auto"/>
-                        <ColumnDefinition Width="10"/>
-                        <ColumnDefinition Width="Auto"/>
-                        <ColumnDefinition Width="10"/>
-                    </Grid.ColumnDefinitions>
-                    <Label Grid.Row="1" Grid.Column="1" Content="Corner Radius"/>
-                    <xceedobsolete:MaskedTextBox Grid.Row="1" Grid.Column="3" Mask="9\,9\,9\,9" Text="{Binding ToolPaneCornerRadius, Converter={StaticResource CornerRadiusToStringConverter}}" HorizontalAlignment="Left"/>
-                    <Label Grid.Row="3" Grid.Column="1" Content="Border Brush"/>
-                    <xceed:ColorPicker Grid.Row="3" Grid.Column="3" SelectedColor="{Binding ToolPaneBorderBrush, Converter={StaticResource BrushToColourConverter}}"/>
-                    <Label Grid.Row="5" Grid.Column="1" Content="Border Thickness"/>
-                    <xceedobsolete:MaskedTextBox Grid.Row="5" Grid.Column="3" Mask="9\,9\,9\,9" Text="{Binding ToolPaneBorderThickness, Converter={StaticResource ThicknessToStringConverter}}" HorizontalAlignment="Left"/>
-                    <Label Grid.Row="7" Grid.Column="1" Content="Font Size"/>
-                    <ComboBox Grid.Row="7" Grid.Column="3" SelectedValue="{Binding ToolPaneFontSize}" ItemsSource="{Binding AvailableFontSizes}"/>
-                    <Label Grid.Row="9" Grid.Column="1" Content="Background"/>
-                    <xceed:ColorPicker Grid.Row="9" Grid.Column="3" SelectedColor="{Binding ToolPaneBackgroundBrush, Converter={StaticResource BrushToColourConverter}}"/>
-                    <Label Grid.Row="11" Grid.Column="1" Content="Gap Brush"/>
-                    <xceed:ColorPicker Grid.Row="11" Grid.Column="3" SelectedColor="{Binding ToolPaneGapBrush, Converter={StaticResource BrushToColourConverter}}"/>
-                    <Label Grid.Row="13" Grid.Column="1" Content="Gap Height"/>
-                    <xceedobsolete:MaskedTextBox x:Name="_textBoxToolPaneGapHeight" Grid.Row="13" Grid.Column="3" Mask="9" Text="{Binding ToolPaneGapHeight}" HorizontalAlignment="Left"/>
-                    <Label Grid.Row="15" Grid.Column="1" Content="Button Foreground"/>
-                    <xceed:ColorPicker Grid.Row="15" Grid.Column="3" SelectedColor="{Binding ToolPaneButtonForegroundBrush, Converter={StaticResource BrushToColourConverter}}"/>
-                </Grid>
-            </TabItem>
-            <TabItem Header="Header">
-                <Grid>
-                    <Grid.RowDefinitions>
-                        <RowDefinition Height="10"/>
-                        <RowDefinition Height="Auto"/>
-                        <RowDefinition Height="10"/>
-                        <RowDefinition Height="Auto"/>
-                        <RowDefinition Height="10"/>
-                        <RowDefinition Height="Auto"/>
-                        <RowDefinition Height="10"/>
-                        <RowDefinition Height="Auto"/>
-                        <RowDefinition Height="10"/>
-                        <RowDefinition Height="Auto"/>
-                        <RowDefinition Height="10"/>
-                    </Grid.RowDefinitions>
-                    <Grid.ColumnDefinitions>
-                        <ColumnDefinition Width="10"/>
-                        <ColumnDefinition Width="Auto"/>
-                        <ColumnDefinition Width="10"/>
-                        <ColumnDefinition Width="Auto"/>
-                        <ColumnDefinition Width="10"/>
-                    </Grid.ColumnDefinitions>
-                    <Label Grid.Row="1" Grid.Column="1" Content="Corner Radius"/>
-                    <xceedobsolete:MaskedTextBox Grid.Row="1" Grid.Column="3" Mask="9\,9\,9\,9" Text="{Binding ToolPaneHeaderCornerRadius, Converter={StaticResource CornerRadiusToStringConverter}}" HorizontalAlignment="Left"/>
-                    <Label Grid.Row="3" Grid.Column="1" Content="Border Brush"/>
-                    <xceed:ColorPicker Grid.Row="3" Grid.Column="3" SelectedColor="{Binding ToolPaneHeaderBorderBrush, Converter={StaticResource BrushToColourConverter}}"/>
-                    <Label Grid.Row="5" Grid.Column="1" Content="Border Thickness"/>
-                    <xceedobsolete:MaskedTextBox Grid.Row="5" Grid.Column="3" Mask="9\,9\,9\,9" Text="{Binding ToolPaneHeaderBorderThickness, Converter={StaticResource ThicknessToStringConverter}}" HorizontalAlignment="Left"/>
-                    <Label Grid.Row="7" Grid.Column="1" Content="Background"/>
-                    <xceed:ColorPicker Grid.Row="7" Grid.Column="3" SelectedColor="{Binding ToolPaneHeaderBackgroundBrush, Converter={StaticResource BrushToColourConverter}}"/>
-                    <Label Grid.Row="9" Grid.Column="1" Content="Title Padding"/>
-                    <xceedobsolete:MaskedTextBox Grid.Row="9" Grid.Column="3" Mask="9\,9\,9\,9" Text="{Binding ToolPaneHeaderTitlePadding}" HorizontalAlignment="Left"/>
-                </Grid>
-            </TabItem>
-            <TabItem Header="Tab Control">
-                <Grid>
-                    <Grid.RowDefinitions>
-                        <RowDefinition Height="10"/>
-                        <RowDefinition Height="Auto"/>
-                        <RowDefinition Height="10"/>
-                        <RowDefinition Height="Auto"/>
-                        <RowDefinition Height="10"/>
-                        <RowDefinition Height="Auto"/>
-                        <RowDefinition Height="10"/>
-                        <RowDefinition Height="Auto"/>
-                        <RowDefinition Height="10"/>
-                        <RowDefinition Height="Auto"/>
-                        <RowDefinition Height="10"/>
-                        <RowDefinition Height="Auto"/>
-                        <RowDefinition Height="10"/>
-                    </Grid.RowDefinitions>
-                    <Grid.ColumnDefinitions>
-                        <ColumnDefinition Width="10"/>
-                        <ColumnDefinition Width="20"/>
-                        <ColumnDefinition Width="152"/>
-                        <ColumnDefinition Width="10"/>
-                        <ColumnDefinition Width="Auto"/>
-                        <ColumnDefinition Width="10"/>
-                    </Grid.ColumnDefinitions>
-                    <Label Grid.Row="1" Grid.Column="1" Content=" Tab Corner Radius" Grid.ColumnSpan="2"/>
-                    <xceedobsolete:MaskedTextBox x:Name="_textBoxToolPaneTabCornerRadius" Grid.Row="1" Grid.Column="4" Mask="9\,9\,9\,9" Text="{Binding ToolPaneTabCornerRadius, Converter={StaticResource CornerRadiusToStringConverter}}" HorizontalAlignment="Left"/>
-                    <Label Grid.Row="3" Grid.Column="1" Content="Active Scroll Indicator Colour" Grid.ColumnSpan="2"/>
-                    <xceed:ColorPicker Grid.Row="3" Grid.Column="4" SelectedColor="{Binding ActiveScrollIndicatorBrush, Converter={StaticResource BrushToColourConverter}}"/>
-                    <Label Grid.Row="5" Grid.Column="1" Content="Inactive Scroll Indicator Colour" Grid.ColumnSpan="2"/>
-                    <xceed:ColorPicker Grid.Row="5" Grid.Column="4" SelectedColor="{Binding InactiveScrollIndicatorBrush, Converter={StaticResource BrushToColourConverter}}"/>
+        <GroupBox Grid.Row="1" Grid.Column="1" Header="Tool Pane Group" Padding="10">
+            <TabControl Grid.Row="1" Grid.Column="1" SelectionChanged="TabControl_SelectionChanged" Height="550">
+                <TabItem Header="General" Width="{StaticResource TabItemWidth}">
+                    <Grid>
+                        <Grid.RowDefinitions>
+                            <RowDefinition Height="10"/>
+                            <RowDefinition Height="Auto"/>
+                            <RowDefinition Height="10"/>
+                            <RowDefinition Height="Auto"/>
+                            <RowDefinition Height="10"/>
+                            <RowDefinition Height="Auto"/>
+                            <RowDefinition Height="10"/>
+                            <RowDefinition Height="Auto"/>
+                            <RowDefinition Height="10"/>
+                            <RowDefinition Height="Auto"/>
+                            <RowDefinition Height="10"/>
+                            <RowDefinition Height="Auto"/>
+                            <RowDefinition Height="10"/>
+                            <RowDefinition Height="Auto"/>
+                            <RowDefinition Height="10"/>
+                            <RowDefinition Height="Auto"/>
+                            <RowDefinition Height="10"/>
+                            <RowDefinition Height="Auto"/>
+                            <RowDefinition Height="10"/>
+                            <RowDefinition Height="Auto"/>
+                            <RowDefinition Height="10"/>
+                        </Grid.RowDefinitions>
+                        <Grid.ColumnDefinitions>
+                            <ColumnDefinition Width="10"/>
+                            <ColumnDefinition Width="Auto"/>
+                            <ColumnDefinition Width="10"/>
+                            <ColumnDefinition Width="Auto"/>
+                            <ColumnDefinition Width="10"/>
+                        </Grid.ColumnDefinitions>
+                        <Label Grid.Row="1" Grid.Column="1" Content="Corner Radius" Style="{StaticResource StyleLabel}"/>
+                        <WpfToolkit:MaskedTextBox Grid.Row="1" Grid.Column="3" Mask="9\,9\,9\,9" Text="{Binding ToolPaneCornerRadius, Converter={StaticResource CornerRadiusToStringConverter}}" HorizontalAlignment="Left"/>
+                        <Label Grid.Row="3" Grid.Column="1" Content="Border Brush" Style="{StaticResource StyleLabel}"/>
+                        <xceed:ColorPicker Grid.Row="3" Grid.Column="3" SelectedColor="{Binding ToolPaneBorderBrush, Converter={StaticResource BrushToColourConverter}}"/>
+                        <Label Grid.Row="5" Grid.Column="1" Content="Border Thickness" Style="{StaticResource StyleLabel}"/>
+                        <WpfToolkit:MaskedTextBox Grid.Row="5" Grid.Column="3" Mask="9\,9\,9\,9" Text="{Binding ToolPaneBorderThickness, Converter={StaticResource ThicknessToStringConverter}}" HorizontalAlignment="Left"/>
+                        <Label Grid.Row="7" Grid.Column="1" Content="Font Size" Style="{StaticResource StyleLabel}"/>
+                        <ComboBox Grid.Row="7" Grid.Column="3" SelectedValue="{Binding ToolPaneFontSize}" ItemsSource="{Binding AvailableFontSizes}" Style="{StaticResource StyleComboBox}"/>
+                        <Label Grid.Row="9" Grid.Column="1" Content="Font Family" Style="{StaticResource StyleLabel}"/>
+                        <ComboBox Grid.Row="9" Grid.Column="3" SelectedValue="{Binding ToolPaneFontFamily}" ItemsSource="{x:Static Fonts.SystemFontFamilies}" Style="{StaticResource StyleComboBox}"/>
+                        <Label Grid.Row="11" Grid.Column="1" Content="Background" Style="{StaticResource StyleLabel}"/>
+                        <xceed:ColorPicker Grid.Row="11" Grid.Column="3" SelectedColor="{Binding ToolPaneBackgroundBrush, Converter={StaticResource BrushToColourConverter}}"/>
+                        <Label Grid.Row="13" Grid.Column="1" Content="Gap Brush" Style="{StaticResource StyleLabel}"/>
+                        <xceed:ColorPicker Grid.Row="13" Grid.Column="3" SelectedColor="{Binding ToolPaneGapBrush, Converter={StaticResource BrushToColourConverter}}"/>
+                        <Label Grid.Row="15" Grid.Column="1" Content="Gap Height" Style="{StaticResource StyleLabel}"/>
+                        <ComboBox Grid.Row="15" Grid.Column="3" SelectedValue="{Binding ToolPaneGapHeight}" ItemsSource="{Binding AvailableGapHeights}" HorizontalAlignment="Left" Style="{StaticResource StyleComboBox}"/>
+                        <Label Grid.Row="17" Grid.Column="1" Content="Button Foreground" Style="{StaticResource StyleLabel}"/>
+                        <xceed:ColorPicker Grid.Row="17" Grid.Column="3" SelectedColor="{Binding ToolPaneButtonForegroundBrush, Converter={StaticResource BrushToColourConverter}}"/>
+                    </Grid>
+                </TabItem>
+                <TabItem Header="Header" Width="{StaticResource TabItemWidth}">
+                    <Grid>
+                        <Grid.RowDefinitions>
+                            <RowDefinition Height="10"/>
+                            <RowDefinition Height="Auto"/>
+                            <RowDefinition Height="10"/>
+                            <RowDefinition Height="Auto"/>
+                            <RowDefinition Height="10"/>
+                            <RowDefinition Height="Auto"/>
+                            <RowDefinition Height="10"/>
+                            <RowDefinition Height="Auto"/>
+                            <RowDefinition Height="10"/>
+                            <RowDefinition Height="Auto"/>
+                            <RowDefinition Height="10"/>
+                        </Grid.RowDefinitions>
+                        <Grid.ColumnDefinitions>
+                            <ColumnDefinition Width="10"/>
+                            <ColumnDefinition Width="Auto"/>
+                            <ColumnDefinition Width="10"/>
+                            <ColumnDefinition Width="Auto"/>
+                            <ColumnDefinition Width="10"/>
+                        </Grid.ColumnDefinitions>
+                        <Label Grid.Row="1" Grid.Column="1" Content="Corner Radius" Style="{StaticResource StyleLabel}"/>
+                        <WpfToolkit:MaskedTextBox Grid.Row="1" Grid.Column="3" Mask="9\,9\,9\,9" Text="{Binding ToolPaneHeaderCornerRadius, Converter={StaticResource CornerRadiusToStringConverter}}" HorizontalAlignment="Left"/>
+                        <Label Grid.Row="3" Grid.Column="1" Content="Border Brush" Style="{StaticResource StyleLabel}"/>
+                        <xceed:ColorPicker Grid.Row="3" Grid.Column="3" SelectedColor="{Binding ToolPaneHeaderBorderBrush, Converter={StaticResource BrushToColourConverter}}"/>
+                        <Label Grid.Row="5" Grid.Column="1" Content="Border Thickness" Style="{StaticResource StyleLabel}"/>
+                        <WpfToolkit:MaskedTextBox Grid.Row="5" Grid.Column="3" Mask="9\,9\,9\,9" Text="{Binding ToolPaneHeaderBorderThickness, Converter={StaticResource ThicknessToStringConverter}}" HorizontalAlignment="Left"/>
+                        <Label Grid.Row="7" Grid.Column="1" Content="Background" Style="{StaticResource StyleLabel}"/>
+                        <xceed:ColorPicker Grid.Row="7" Grid.Column="3" SelectedColor="{Binding ToolPaneHeaderBackgroundBrush, Converter={StaticResource BrushToColourConverter}}"/>
+                        <Label Grid.Row="9" Grid.Column="1" Content="Title Padding" Style="{StaticResource StyleLabel}"/>
+                        <WpfToolkit:MaskedTextBox Grid.Row="9" Grid.Column="3" Mask="9\,9\,9\,9" Text="{Binding ToolPaneHeaderTitlePadding}" HorizontalAlignment="Left"/>
+                    </Grid>
+                </TabItem>
+                <TabItem Header="Tab Control" Width="{StaticResource TabItemWidth}">
+                    <Grid>
+                        <Grid.RowDefinitions>
+                            <RowDefinition Height="10"/>
+                            <RowDefinition Height="Auto"/>
+                            <RowDefinition Height="10"/>
+                            <RowDefinition Height="Auto"/>
+                            <RowDefinition Height="10"/>
+                            <RowDefinition Height="Auto"/>
+                            <RowDefinition Height="10"/>
+                            <RowDefinition Height="Auto"/>
+                            <RowDefinition Height="10"/>
+                            <RowDefinition Height="Auto"/>
+                            <RowDefinition Height="10"/>
+                            <RowDefinition Height="Auto"/>
+                            <RowDefinition Height="10"/>
+                        </Grid.RowDefinitions>
+                        <Grid.ColumnDefinitions>
+                            <ColumnDefinition Width="10"/>
+                            <ColumnDefinition Width="20"/>
+                            <ColumnDefinition Width="152"/>
+                            <ColumnDefinition Width="10"/>
+                            <ColumnDefinition Width="Auto"/>
+                            <ColumnDefinition Width="10"/>
+                        </Grid.ColumnDefinitions>
+                        <Label Grid.Row="1" Grid.Column="1" Content=" Tab Corner Radius" Grid.ColumnSpan="2" Style="{StaticResource StyleLabel}"/>
+                        <WpfToolkit:MaskedTextBox x:Name="_textBoxToolPaneTabCornerRadius" Grid.Row="1" Grid.Column="4" Mask="9\,9\,9\,9" Text="{Binding ToolPaneTabCornerRadius, Converter={StaticResource CornerRadiusToStringConverter}}" HorizontalAlignment="Left"/>
+                        <Label Grid.Row="3" Grid.Column="1" Content="Active Scroll Indicator Colour" Grid.ColumnSpan="2" Style="{StaticResource StyleLabel}"/>
+                        <xceed:ColorPicker Grid.Row="3" Grid.Column="4" SelectedColor="{Binding ToolPaneActiveScrollIndicatorBrush, Converter={StaticResource BrushToColourConverter}}"/>
+                        <Label Grid.Row="5" Grid.Column="1" Content="Inactive Scroll Indicator Colour" Grid.ColumnSpan="2" Style="{StaticResource StyleLabel}"/>
+                        <xceed:ColorPicker Grid.Row="5" Grid.Column="4" SelectedColor="{Binding ToolPaneInactiveScrollIndicatorBrush, Converter={StaticResource BrushToColourConverter}}"/>
 
-                    <GroupBox Grid.Row="7" Grid.Column="1" Grid.ColumnSpan="4" Header="Selected Tab">
-                        <Grid>
-                            <Grid.RowDefinitions>
-                                <RowDefinition Height="10"/>
-                                <RowDefinition Height="Auto"/>
-                                <RowDefinition Height="10"/>
-                                <RowDefinition Height="Auto"/>
-                                <RowDefinition Height="10"/>
-                                <RowDefinition Height="Auto"/>
-                                <RowDefinition Height="10"/>
-                                <RowDefinition Height="Auto"/>
-                                <RowDefinition Height="10"/>
-                                <RowDefinition Height="Auto"/>
-                                <RowDefinition Height="10"/>
-                            </Grid.RowDefinitions>
-                            <Grid.ColumnDefinitions>
-                                <ColumnDefinition Width="10"/>
-                                <ColumnDefinition Width="Auto"/>
-                                <ColumnDefinition Width="10"/>
-                                <ColumnDefinition Width="Auto"/>
-                                <ColumnDefinition Width="10"/>
-                            </Grid.ColumnDefinitions>
-                            <Label Grid.Row="1" Grid.Column="1" Content="Border Brush"/>
-                            <xceed:ColorPicker Grid.Row="1" Grid.Column="3" SelectedColor="{Binding ToolPaneSelectedTabBorderBrush, Converter={StaticResource BrushToColourConverter}}"/>
-                            <Label Grid.Row="3" Grid.Column="1" Content="Border Thickness"/>
-                            <xceedobsolete:MaskedTextBox x:Name="_textBoxToolPaneSelectedTabBorderThickness" Grid.Row="3" Grid.Column="3" Mask="9\,9\,9\,9" Text="{Binding ToolPaneSelectedTabBorderThickness}" HorizontalAlignment="Left"/>
-                            <Label Grid.Row="5" Grid.Column="1" Content="Background"/>
-                            <xceed:ColorPicker Grid.Row="5" Grid.Column="3" SelectedColor="{Binding ToolPaneSelectedTabBackgroundBrush, Converter={StaticResource BrushToColourConverter}}"/>
-                            <Label Grid.Row="7" Grid.Column="1" Content="Foreground"/>
-                            <xceed:ColorPicker Grid.Row="7" Grid.Column="3" SelectedColor="{Binding ToolPaneSelectedTabForegroundBrush, Converter={StaticResource BrushToColourConverter}}"/>
-                            <Label Grid.Row="9" Grid.Column="1" Content="Title Padding"/>
-                            <xceedobsolete:MaskedTextBox x:Name="_textBoxToolPaneSelectedTabTitlePadding" Grid.Row="9" Grid.Column="3" Mask="9\,9\,9\,9" Text="{Binding ToolPaneSelectedTabTitlePadding}" HorizontalAlignment="Left"/>
-                        </Grid>
-                   </GroupBox>
+                        <GroupBox Grid.Row="7" Grid.Column="1" Grid.ColumnSpan="4" Header="Selected Tab">
+                            <Grid>
+                                <Grid.RowDefinitions>
+                                    <RowDefinition Height="10"/>
+                                    <RowDefinition Height="Auto"/>
+                                    <RowDefinition Height="10"/>
+                                    <RowDefinition Height="Auto"/>
+                                    <RowDefinition Height="10"/>
+                                    <RowDefinition Height="Auto"/>
+                                    <RowDefinition Height="10"/>
+                                    <RowDefinition Height="Auto"/>
+                                    <RowDefinition Height="10"/>
+                                    <RowDefinition Height="Auto"/>
+                                    <RowDefinition Height="10"/>
+                                </Grid.RowDefinitions>
+                                <Grid.ColumnDefinitions>
+                                    <ColumnDefinition Width="10"/>
+                                    <ColumnDefinition Width="Auto"/>
+                                    <ColumnDefinition Width="10"/>
+                                    <ColumnDefinition Width="Auto"/>
+                                    <ColumnDefinition Width="10"/>
+                                </Grid.ColumnDefinitions>
+                                <Label Grid.Row="1" Grid.Column="1" Content="Border Brush" Style="{StaticResource StyleLabel}"/>
+                                <xceed:ColorPicker Grid.Row="1" Grid.Column="3" SelectedColor="{Binding ToolPaneSelectedTabBorderBrush, Converter={StaticResource BrushToColourConverter}}"/>
+                                <Label Grid.Row="3" Grid.Column="1" Content="Border Thickness" Style="{StaticResource StyleLabel}"/>
+                                <WpfToolkit:MaskedTextBox x:Name="_textBoxToolPaneSelectedTabBorderThickness" Grid.Row="3" Grid.Column="3" Mask="9\,9\,9\,9" Text="{Binding ToolPaneSelectedTabBorderThickness}" HorizontalAlignment="Left"/>
+                                <Label Grid.Row="5" Grid.Column="1" Content="Background" Style="{StaticResource StyleLabel}"/>
+                                <xceed:ColorPicker Grid.Row="5" Grid.Column="3" SelectedColor="{Binding ToolPaneSelectedTabBackgroundBrush, Converter={StaticResource BrushToColourConverter}}"/>
+                                <Label Grid.Row="7" Grid.Column="1" Content="Foreground" Style="{StaticResource StyleLabel}"/>
+                                <xceed:ColorPicker Grid.Row="7" Grid.Column="3" SelectedColor="{Binding ToolPaneSelectedTabForegroundBrush, Converter={StaticResource BrushToColourConverter}}"/>
+                                <Label Grid.Row="9" Grid.Column="1" Content="Title Padding" Style="{StaticResource StyleLabel}"/>
+                                <WpfToolkit:MaskedTextBox x:Name="_textBoxToolPaneSelectedTabTitlePadding" Grid.Row="9" Grid.Column="3" Mask="9\,9\,9\,9" Text="{Binding ToolPaneSelectedTabTitlePadding}" HorizontalAlignment="Left"/>
+                            </Grid>
+                        </GroupBox>
 
-                    <GroupBox Grid.Row="9" Grid.Column="1" Grid.ColumnSpan="4" Header="Unselected Tab">
-                        <Grid>
-                            <Grid.RowDefinitions>
-                                <RowDefinition Height="10"/>
-                                <RowDefinition Height="Auto"/>
-                                <RowDefinition Height="10"/>
-                                <RowDefinition Height="Auto"/>
-                                <RowDefinition Height="10"/>
-                                <RowDefinition Height="Auto"/>
-                                <RowDefinition Height="10"/>
-                                <RowDefinition Height="Auto"/>
-                                <RowDefinition Height="10"/>
-                                <RowDefinition Height="Auto"/>
-                                <RowDefinition Height="10"/>
-                            </Grid.RowDefinitions>
-                            <Grid.ColumnDefinitions>
-                                <ColumnDefinition Width="10"/>
-                                <ColumnDefinition Width="Auto"/>
-                                <ColumnDefinition Width="10"/>
-                                <ColumnDefinition Width="Auto"/>
-                                <ColumnDefinition Width="10"/>
-                            </Grid.ColumnDefinitions>
-                            <Label Grid.Row="1" Grid.Column="1" Content="Border Brush"/>
-                            <xceed:ColorPicker Grid.Row="1" Grid.Column="3" SelectedColor="{Binding ToolPaneUnselectedTabBorderBrush, Converter={StaticResource BrushToColourConverter}}"/>
-                            <Label Grid.Row="3" Grid.Column="1" Content="Border Thickness"/>
-                            <xceedobsolete:MaskedTextBox Grid.Row="3" Grid.Column="3" Mask="9\,9\,9\,9" Text="{Binding ToolPaneUnselectedTabBorderThickness}" HorizontalAlignment="Left"/>
-                            <Label Grid.Row="5" Grid.Column="1" Content="Background"/>
-                            <xceed:ColorPicker Grid.Row="5" Grid.Column="3" SelectedColor="{Binding ToolPaneUnselectedTabBackgroundBrush, Converter={StaticResource BrushToColourConverter}}"/>
-                            <Label Grid.Row="7" Grid.Column="1" Content="Foreground"/>
-                            <xceed:ColorPicker Grid.Row="7" Grid.Column="3" SelectedColor="{Binding ToolPaneUnselectedTabForegroundBrush, Converter={StaticResource BrushToColourConverter}}"/>
-                            <Label Grid.Row="9" Grid.Column="1" Content="Title Padding"/>
-                            <xceedobsolete:MaskedTextBox Grid.Row="9" Grid.Column="3" Mask="9\,9\,9\,9" Text="{Binding ToolPaneUnselectedTabTitlePadding}" HorizontalAlignment="Left"/>
-                        </Grid>
-                    </GroupBox>
-                </Grid>
-            </TabItem>
-        </TabControl>
-        <Grid Grid.Row="3" Grid.Column="1" >
+                        <GroupBox Grid.Row="9" Grid.Column="1" Grid.ColumnSpan="4" Header="Unselected Tab">
+                            <Grid>
+                                <Grid.RowDefinitions>
+                                    <RowDefinition Height="10"/>
+                                    <RowDefinition Height="Auto"/>
+                                    <RowDefinition Height="10"/>
+                                    <RowDefinition Height="Auto"/>
+                                    <RowDefinition Height="10"/>
+                                    <RowDefinition Height="Auto"/>
+                                    <RowDefinition Height="10"/>
+                                    <RowDefinition Height="Auto"/>
+                                    <RowDefinition Height="10"/>
+                                    <RowDefinition Height="Auto"/>
+                                    <RowDefinition Height="10"/>
+                                </Grid.RowDefinitions>
+                                <Grid.ColumnDefinitions>
+                                    <ColumnDefinition Width="10"/>
+                                    <ColumnDefinition Width="Auto"/>
+                                    <ColumnDefinition Width="10"/>
+                                    <ColumnDefinition Width="Auto"/>
+                                    <ColumnDefinition Width="10"/>
+                                </Grid.ColumnDefinitions>
+                                <Label Grid.Row="1" Grid.Column="1" Content="Border Brush" Style="{StaticResource StyleLabel}"/>
+                                <xceed:ColorPicker Grid.Row="1" Grid.Column="3" SelectedColor="{Binding ToolPaneUnselectedTabBorderBrush, Converter={StaticResource BrushToColourConverter}}"/>
+                                <Label Grid.Row="3" Grid.Column="1" Content="Border Thickness" Style="{StaticResource StyleLabel}"/>
+                                <WpfToolkit:MaskedTextBox Grid.Row="3" Grid.Column="3" Mask="9\,9\,9\,9" Text="{Binding ToolPaneUnselectedTabBorderThickness}" HorizontalAlignment="Left"/>
+                                <Label Grid.Row="5" Grid.Column="1" Content="Background" Style="{StaticResource StyleLabel}"/>
+                                <xceed:ColorPicker Grid.Row="5" Grid.Column="3" SelectedColor="{Binding ToolPaneUnselectedTabBackgroundBrush, Converter={StaticResource BrushToColourConverter}}"/>
+                                <Label Grid.Row="7" Grid.Column="1" Content="Foreground" Style="{StaticResource StyleLabel}"/>
+                                <xceed:ColorPicker Grid.Row="7" Grid.Column="3" SelectedColor="{Binding ToolPaneUnselectedTabForegroundBrush, Converter={StaticResource BrushToColourConverter}}"/>
+                                <Label Grid.Row="9" Grid.Column="1" Content="Title Padding" Style="{StaticResource StyleLabel}"/>
+                                <WpfToolkit:MaskedTextBox Grid.Row="9" Grid.Column="3" Mask="9\,9\,9\,9" Text="{Binding ToolPaneUnselectedTabTitlePadding}" HorizontalAlignment="Left"/>
+                            </Grid>
+                        </GroupBox>
+                    </Grid>
+                </TabItem>
+            </TabControl>
+        </GroupBox>
+
+        <GroupBox Grid.Row="1" Grid.Column="3" Header="Document Pane Group" Padding="10">
+            <TabControl Grid.Row="1" Grid.Column="1" SelectionChanged="TabControl_SelectionChanged" Height="550">
+                <TabItem Header="General" Width="{StaticResource TabItemWidth}">
+                    <Grid>
+                        <Grid.RowDefinitions>
+                            <RowDefinition Height="10"/>
+                            <RowDefinition Height="Auto"/>
+                            <RowDefinition Height="10"/>
+                            <RowDefinition Height="Auto"/>
+                            <RowDefinition Height="10"/>
+                            <RowDefinition Height="Auto"/>
+                            <RowDefinition Height="10"/>
+                            <RowDefinition Height="Auto"/>
+                            <RowDefinition Height="10"/>
+                            <RowDefinition Height="Auto"/>
+                            <RowDefinition Height="10"/>
+                            <RowDefinition Height="Auto"/>
+                            <RowDefinition Height="10"/>
+                            <RowDefinition Height="Auto"/>
+                            <RowDefinition Height="10"/>
+                            <RowDefinition Height="Auto"/>
+                            <RowDefinition Height="10"/>
+                            <RowDefinition Height="Auto"/>
+                            <RowDefinition Height="10"/>
+                            <RowDefinition Height="Auto"/>
+                            <RowDefinition Height="10"/>
+                        </Grid.RowDefinitions>
+                        <Grid.ColumnDefinitions>
+                            <ColumnDefinition Width="10"/>
+                            <ColumnDefinition Width="Auto"/>
+                            <ColumnDefinition Width="10"/>
+                            <ColumnDefinition Width="Auto"/>
+                            <ColumnDefinition Width="10"/>
+                        </Grid.ColumnDefinitions>
+                        <Label Grid.Row="1" Grid.Column="1" Content="Corner Radius" Style="{StaticResource StyleLabel}"/>
+                        <WpfToolkit:MaskedTextBox Grid.Row="1" Grid.Column="3" Mask="9\,9\,9\,9" Text="{Binding DocumentPaneCornerRadius, Converter={StaticResource CornerRadiusToStringConverter}}" HorizontalAlignment="Left"/>
+                        <Label Grid.Row="3" Grid.Column="1" Content="Border Brush" Style="{StaticResource StyleLabel}"/>
+                        <xceed:ColorPicker Grid.Row="3" Grid.Column="3" SelectedColor="{Binding DocumentPaneBorderBrush, Converter={StaticResource BrushToColourConverter}}"/>
+                        <Label Grid.Row="5" Grid.Column="1" Content="Border Thickness" Style="{StaticResource StyleLabel}"/>
+                        <WpfToolkit:MaskedTextBox Grid.Row="5" Grid.Column="3" Mask="9\,9\,9\,9" Text="{Binding DocumentPaneBorderThickness, Converter={StaticResource ThicknessToStringConverter}}" HorizontalAlignment="Left"/>
+                        <Label Grid.Row="7" Grid.Column="1" Content="Font Size" Style="{StaticResource StyleLabel}"/>
+                        <ComboBox Grid.Row="7" Grid.Column="3" SelectedValue="{Binding DocumentPaneFontSize}" ItemsSource="{Binding AvailableFontSizes}" Style="{StaticResource StyleComboBox}"/>
+                        <Label Grid.Row="9" Grid.Column="1" Content="Font Family" Style="{StaticResource StyleLabel}"/>
+                        <ComboBox Grid.Row="9" Grid.Column="3" SelectedValue="{Binding DocumentPaneFontFamily}" ItemsSource="{x:Static Fonts.SystemFontFamilies}" Style="{StaticResource StyleComboBox}"/>
+                        <Label Grid.Row="11" Grid.Column="1" Content="Background" Style="{StaticResource StyleLabel}"/>
+                        <xceed:ColorPicker Grid.Row="11" Grid.Column="3" SelectedColor="{Binding DocumentPaneBackgroundBrush, Converter={StaticResource BrushToColourConverter}}"/>
+                        <Label Grid.Row="13" Grid.Column="1" Content="Gap Brush" Style="{StaticResource StyleLabel}"/>
+                        <xceed:ColorPicker Grid.Row="13" Grid.Column="3" SelectedColor="{Binding DocumentPaneGapBrush, Converter={StaticResource BrushToColourConverter}}"/>
+                        <Label Grid.Row="15" Grid.Column="1" Content="Gap Height" Style="{StaticResource StyleLabel}"/>
+                        <ComboBox Grid.Row="15" Grid.Column="3" SelectedValue="{Binding DocumentPaneGapHeight}" ItemsSource="{Binding AvailableGapHeights}" HorizontalAlignment="Left" Style="{StaticResource StyleComboBox}"/>
+                        <Label Grid.Row="17" Grid.Column="1" Content="Button Foreground" Style="{StaticResource StyleLabel}"/>
+                        <xceed:ColorPicker Grid.Row="17" Grid.Column="3" SelectedColor="{Binding DocumentPaneButtonForegroundBrush, Converter={StaticResource BrushToColourConverter}}"/>
+                    </Grid>
+                </TabItem>
+                <TabItem Header="Tab Control" Width="{StaticResource TabItemWidth}">
+                    <Grid>
+                        <Grid.RowDefinitions>
+                            <RowDefinition Height="10"/>
+                            <RowDefinition Height="Auto"/>
+                            <RowDefinition Height="10"/>
+                            <RowDefinition Height="Auto"/>
+                            <RowDefinition Height="10"/>
+                            <RowDefinition Height="Auto"/>
+                            <RowDefinition Height="10"/>
+                            <RowDefinition Height="Auto"/>
+                            <RowDefinition Height="10"/>
+                            <RowDefinition Height="Auto"/>
+                            <RowDefinition Height="10"/>
+                            <RowDefinition Height="Auto"/>
+                            <RowDefinition Height="10"/>
+                        </Grid.RowDefinitions>
+                        <Grid.ColumnDefinitions>
+                            <ColumnDefinition Width="10"/>
+                            <ColumnDefinition Width="20"/>
+                            <ColumnDefinition Width="152"/>
+                            <ColumnDefinition Width="10"/>
+                            <ColumnDefinition Width="Auto"/>
+                            <ColumnDefinition Width="10"/>
+                        </Grid.ColumnDefinitions>
+                        <Label Grid.Row="1" Grid.Column="1" Content=" Tab Corner Radius" Grid.ColumnSpan="2" Style="{StaticResource StyleLabel}"/>
+                        <WpfToolkit:MaskedTextBox Grid.Row="1" Grid.Column="4" Mask="9\,9\,9\,9" Text="{Binding DocumentPaneTabCornerRadius, Converter={StaticResource CornerRadiusToStringConverter}}" HorizontalAlignment="Left"/>
+                        <Label Grid.Row="3" Grid.Column="1" Content="Active Scroll Indicator Colour" Grid.ColumnSpan="2" Style="{StaticResource StyleLabel}"/>
+                        <xceed:ColorPicker Grid.Row="3" Grid.Column="4" SelectedColor="{Binding DocumentPaneActiveScrollIndicatorBrush, Converter={StaticResource BrushToColourConverter}}"/>
+                        <Label Grid.Row="5" Grid.Column="1" Content="Inactive Scroll Indicator Colour" Grid.ColumnSpan="2" Style="{StaticResource StyleLabel}"/>
+                        <xceed:ColorPicker Grid.Row="5" Grid.Column="4" SelectedColor="{Binding DocumentPaneInactiveScrollIndicatorBrush, Converter={StaticResource BrushToColourConverter}}"/>
+
+                        <GroupBox Grid.Row="7" Grid.Column="1" Grid.ColumnSpan="4" Header="Selected Tab">
+                            <Grid>
+                                <Grid.RowDefinitions>
+                                    <RowDefinition Height="10"/>
+                                    <RowDefinition Height="Auto"/>
+                                    <RowDefinition Height="10"/>
+                                    <RowDefinition Height="Auto"/>
+                                    <RowDefinition Height="10"/>
+                                    <RowDefinition Height="Auto"/>
+                                    <RowDefinition Height="10"/>
+                                    <RowDefinition Height="Auto"/>
+                                    <RowDefinition Height="10"/>
+                                    <RowDefinition Height="Auto"/>
+                                    <RowDefinition Height="10"/>
+                                </Grid.RowDefinitions>
+                                <Grid.ColumnDefinitions>
+                                    <ColumnDefinition Width="10"/>
+                                    <ColumnDefinition Width="Auto"/>
+                                    <ColumnDefinition Width="10"/>
+                                    <ColumnDefinition Width="Auto"/>
+                                    <ColumnDefinition Width="10"/>
+                                </Grid.ColumnDefinitions>
+                                <Label Grid.Row="1" Grid.Column="1" Content="Border Brush" Style="{StaticResource StyleLabel}"/>
+                                <xceed:ColorPicker Grid.Row="1" Grid.Column="3" SelectedColor="{Binding DocumentPaneSelectedTabBorderBrush, Converter={StaticResource BrushToColourConverter}}"/>
+                                <Label Grid.Row="3" Grid.Column="1" Content="Border Thickness" Style="{StaticResource StyleLabel}"/>
+                                <WpfToolkit:MaskedTextBox Grid.Row="3" Grid.Column="3" Mask="9\,9\,9\,9" Text="{Binding DocumentPaneSelectedTabBorderThickness}" HorizontalAlignment="Left"/>
+                                <Label Grid.Row="5" Grid.Column="1" Content="Background" Style="{StaticResource StyleLabel}"/>
+                                <xceed:ColorPicker Grid.Row="5" Grid.Column="3" SelectedColor="{Binding DocumentPaneSelectedTabBackgroundBrush, Converter={StaticResource BrushToColourConverter}}"/>
+                                <Label Grid.Row="7" Grid.Column="1" Content="Foreground" Style="{StaticResource StyleLabel}"/>
+                                <xceed:ColorPicker Grid.Row="7" Grid.Column="3" SelectedColor="{Binding DocumentPaneSelectedTabForegroundBrush, Converter={StaticResource BrushToColourConverter}}"/>
+                                <Label Grid.Row="9" Grid.Column="1" Content="Title Padding" Style="{StaticResource StyleLabel}"/>
+                                <WpfToolkit:MaskedTextBox Grid.Row="9" Grid.Column="3" Mask="9\,9\,9\,9" Text="{Binding DocumentPaneSelectedTabTitlePadding}" HorizontalAlignment="Left"/>
+                            </Grid>
+                        </GroupBox>
+
+                        <GroupBox Grid.Row="9" Grid.Column="1" Grid.ColumnSpan="4" Header="Unselected Tab">
+                            <Grid>
+                                <Grid.RowDefinitions>
+                                    <RowDefinition Height="10"/>
+                                    <RowDefinition Height="Auto"/>
+                                    <RowDefinition Height="10"/>
+                                    <RowDefinition Height="Auto"/>
+                                    <RowDefinition Height="10"/>
+                                    <RowDefinition Height="Auto"/>
+                                    <RowDefinition Height="10"/>
+                                    <RowDefinition Height="Auto"/>
+                                    <RowDefinition Height="10"/>
+                                    <RowDefinition Height="Auto"/>
+                                    <RowDefinition Height="10"/>
+                                </Grid.RowDefinitions>
+                                <Grid.ColumnDefinitions>
+                                    <ColumnDefinition Width="10"/>
+                                    <ColumnDefinition Width="Auto"/>
+                                    <ColumnDefinition Width="10"/>
+                                    <ColumnDefinition Width="Auto"/>
+                                    <ColumnDefinition Width="10"/>
+                                </Grid.ColumnDefinitions>
+                                <Label Grid.Row="1" Grid.Column="1" Content="Border Brush" Style="{StaticResource StyleLabel}"/>
+                                <xceed:ColorPicker Grid.Row="1" Grid.Column="3" SelectedColor="{Binding DocumentPaneUnselectedTabBorderBrush, Converter={StaticResource BrushToColourConverter}}"/>
+                                <Label Grid.Row="3" Grid.Column="1" Content="Border Thickness" Style="{StaticResource StyleLabel}"/>
+                                <WpfToolkit:MaskedTextBox Grid.Row="3" Grid.Column="3" Mask="9\,9\,9\,9" Text="{Binding DocumentPaneUnselectedTabBorderThickness}" HorizontalAlignment="Left"/>
+                                <Label Grid.Row="5" Grid.Column="1" Content="Background" Style="{StaticResource StyleLabel}"/>
+                                <xceed:ColorPicker Grid.Row="5" Grid.Column="3" SelectedColor="{Binding DocumentPaneUnselectedTabBackgroundBrush, Converter={StaticResource BrushToColourConverter}}"/>
+                                <Label Grid.Row="7" Grid.Column="1" Content="Foreground" Style="{StaticResource StyleLabel}"/>
+                                <xceed:ColorPicker Grid.Row="7" Grid.Column="3" SelectedColor="{Binding DocumentPaneUnselectedTabForegroundBrush, Converter={StaticResource BrushToColourConverter}}"/>
+                                <Label Grid.Row="9" Grid.Column="1" Content="Title Padding" Style="{StaticResource StyleLabel}"/>
+                                <WpfToolkit:MaskedTextBox Grid.Row="9" Grid.Column="3" Mask="9\,9\,9\,9" Text="{Binding DocumentPaneUnselectedTabTitlePadding}" HorizontalAlignment="Left"/>
+                            </Grid>
+                        </GroupBox>
+                    </Grid>
+                </TabItem>
+            </TabControl>
+        </GroupBox>
+        <Grid Grid.Row="3" Grid.Column="1" Grid.ColumnSpan="3" >
             <Grid.RowDefinitions>
                 <RowDefinition Height="Auto"/>
             </Grid.RowDefinitions>
@@ -235,10 +405,10 @@
                 <ColumnDefinition Width="Auto"/>
                 <ColumnDefinition Width="10"/>
             </Grid.ColumnDefinitions>
-            <Button Grid.Row="0" Grid.Column="1" x:Name="_buttonLoad" Content="Load" Click="_buttonLoad_Click"/>
-            <Button Grid.Row="0" Grid.Column="3" x:Name="_buttonSave" Content="Save" Click="_buttonSave_Click"/>
-            <Button Grid.Row="0" Grid.Column="5" x:Name="_buttonApply" Content="Apply" Click="_buttonApply_Click"/>
-            <Button Grid.Row="0" Grid.Column="7" x:Name="_buttonClose" Content="Close" Click="_buttonClose_Click"/>
+            <Button Grid.Row="0" Grid.Column="1" x:Name="_buttonLoad" Content="Load" Click="_buttonLoad_Click" Style="{StaticResource StyleButton}"/>
+            <Button Grid.Row="0" Grid.Column="3" x:Name="_buttonSave" Content="Save" Click="_buttonSave_Click" Style="{StaticResource StyleButton}"/>
+            <Button Grid.Row="0" Grid.Column="5" x:Name="_buttonApply" Content="Apply" Click="_buttonApply_Click" Style="{StaticResource StyleButton}"/>
+            <Button Grid.Row="0" Grid.Column="7" x:Name="_buttonClose" Content="Close" Click="_buttonClose_Click" Style="{StaticResource StyleButton}"/>
         </Grid>
     </Grid>
 </Window>
