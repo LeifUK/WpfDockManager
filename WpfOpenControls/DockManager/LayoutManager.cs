@@ -41,6 +41,11 @@ namespace WpfOpenControls.DockManager
 
         private void LayoutManager_PreviewMouseDown(object sender, MouseButtonEventArgs e)
         {
+            if (_root == null)
+            {
+                return;
+            }
+
             Point cursorPoint = Utilities.GetCursorPosition();
             Point topLeftPoint = _root.PointToScreen(new Point(0, 0));
             if (
@@ -367,7 +372,7 @@ namespace WpfOpenControls.DockManager
         private void UpdateProperties(DocumentPaneGroup documentPaneGroup)
         {
             documentPaneGroup.Border.BorderThickness = DocumentPaneGroupStyle.BorderThickness;
-            documentPaneGroup.Border.BorderBrush = DocumentPaneGroupStyle.BorderBrush;
+            //documentPaneGroup.Border.BorderBrush = DocumentPaneGroupStyle.BorderBrush;
             documentPaneGroup.Border.CornerRadius = DocumentPaneGroupStyle.CornerRadius;
             documentPaneGroup.Background = DocumentPaneGroupStyle.Background;
             documentPaneGroup.HighlightBrush = SelectedPaneBrush;
@@ -395,7 +400,8 @@ namespace WpfOpenControls.DockManager
         private void UpdateProperties(ToolPaneGroup toolPaneGroup)
         {
             toolPaneGroup.Border.BorderThickness = ToolPaneGroupStyle.BorderThickness;
-            toolPaneGroup.Border.BorderBrush = ToolPaneGroupStyle.BorderBrush;
+            // Warning warning
+            //toolPaneGroup.Border.BorderBrush = ToolPaneGroupStyle.BorderBrush;
             toolPaneGroup.Border.CornerRadius = ToolPaneGroupStyle.CornerRadius;
             toolPaneGroup.HeaderBackground = ToolPaneGroupStyle.HeaderStyle.Background;
             toolPaneGroup.HeaderBorder.BorderBrush = ToolPaneGroupStyle.HeaderStyle.BorderBrush;

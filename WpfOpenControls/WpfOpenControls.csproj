@@ -76,6 +76,10 @@
       <Generator>MSBuild:Compile</Generator>
       <SubType>Designer</SubType>
     </Page>
+    <Page Include="DockManager\NewThemeView.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
     <Page Include="DockManager\SideLocationPane.xaml">
       <Generator>MSBuild:Compile</Generator>
       <SubType>Designer</SubType>
@@ -134,6 +138,10 @@
     <Compile Include="DockManager\IViewContainer.cs" />
     <Compile Include="DockManager\IViewModel.cs" />
     <Compile Include="DockManager\LayoutManager.cs" />
+    <Compile Include="DockManager\NewThemeView.xaml.cs">
+      <DependentUpon>NewThemeView.xaml</DependentUpon>
+    </Compile>
+    <Compile Include="DockManager\NewThemeViewModel.cs" />
     <Compile Include="DockManager\SelectablePane.cs" />
     <Compile Include="DockManager\Serialisation\LayoutReader.cs" />
     <Compile Include="DockManager\Serialisation\LayoutWriter.cs" />
@@ -163,6 +171,7 @@
     </Compile>
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="DockManager\LayoutManagerStyle.cs" />
     <Compile Include="Properties\AssemblyInfo.cs">
       <SubType>Code</SubType>
     </Compile>

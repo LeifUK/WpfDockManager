@@ -48,40 +48,7 @@ namespace WpfOpenControls.DockManager
         private void _buttonLoad_Click(object sender, RoutedEventArgs e)
         {
             System.Diagnostics.Trace.Assert(DataContext is ConfigurationViewModel);
-            LayoutManager layoutManager = (DataContext as ConfigurationViewModel).LayoutManager;
-
-            System.Windows.Forms.OpenFileDialog dialog = new System.Windows.Forms.OpenFileDialog();
-            if (dialog == null)
-            {
-                return;
-            }
-
-            dialog.Filter = "Theme Files (*.thm)|*.thm";
-            dialog.CheckFileExists = true;
-            if (dialog.ShowDialog() != System.Windows.Forms.DialogResult.OK)
-            {
-                return;
-            }
-
-            try
-            {
-                string text = System.IO.File.ReadAllText(dialog.FileName);
-
-                LayoutManagerStyle layoutManagerStyle = Newtonsoft.Json.JsonConvert.DeserializeObject< LayoutManagerStyle>(text);
-                layoutManager.ToolPaneGroupStyle = layoutManagerStyle.ToolPaneGroupStyle;
-                layoutManager.DocumentPaneGroupStyle = layoutManagerStyle.DocumentPaneGroupStyle;
-
-            }
-            catch (Exception exception)
-            {
-                System.Windows.Forms.MessageBox.Show("Unable to load theme: " + exception.Message);
-            }
-        }
-
-        class LayoutManagerStyle
-        {
-            public ToolPaneGroupStyle ToolPaneGroupStyle;
-            public DocumentPaneGroupStyle DocumentPaneGroupStyle;
+            (DataContext as ConfigurationViewModel).LoadSelectedTheme();
         }
 
         private void _buttonSave_Click(object sender, RoutedEventArgs e)
@@ -116,6 +83,27 @@ namespace WpfOpenControls.DockManager
             {
                 System.Windows.Forms.MessageBox.Show("Unable to save theme: " + exception.Message);
             }
+        }
+
+        private void _buttonNew_Click(object sender, RoutedEventArgs e)
+        {
+            System.Diagnostics.Trace.Assert(DataContext is ConfigurationViewModel);
+            ConfigurationViewModel configurationViewModel = DataContext as ConfigurationViewModel;
+
+            NewThemeView newThemeView = new NewThemeView();
+            newThemeView.Owner = this;
+            newThemeView.WindowStartupLocation = WindowStartupLocation.CenterOwner;
+            NewThemeViewModel newThemeViewModel = new NewThemeViewModel();
+            newThemeView.DataContext = newThemeViewModel;
+            if (newThemeView.ShowDialog() == true)
+            {
+                configurationViewModel.SaveTheme(newThemeViewModel.Text);
+            }
+        }
+
+        private void _buttonDelete_Click(object sender, RoutedEventArgs e)
+        {
+
         }
     }
 }

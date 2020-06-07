@@ -1,5 +1,5 @@
-﻿using System.Windows.Media;
-using System.Text.RegularExpressions;
+﻿using System;
+using System.Windows.Media;
 using System.Windows;
 
 namespace WpfOpenControls.DockManager
@@ -8,8 +8,40 @@ namespace WpfOpenControls.DockManager
     {
         public ConfigurationViewModel(DockManager.LayoutManager layoutManager)
         {
-            LayoutManager = layoutManager;
+            _appDataFolder = WpfOpenControls.Controls.Utilities.GetAppDataFolder();
 
+            LayoutManager = layoutManager;
+            
+            AvailableFontSizes = new System.Collections.ObjectModel.ObservableCollection<int>();
+            for (int index = 4; index < 42; ++index)
+            {
+                AvailableFontSizes.Add(index);
+            }
+
+            AvailableGapHeights = new System.Collections.ObjectModel.ObservableCollection<double>();
+            for (double index = 0; index < 13; ++index)
+            {
+                AvailableGapHeights.Add(index);
+            }
+
+            Load();
+            PopulateThemes();
+        }
+
+        private void PopulateThemes()
+        {
+            string[] files = System.IO.Directory.GetFiles(_appDataFolder, "*.thm");
+            Themes = new System.Collections.ObjectModel.ObservableCollection<string>();
+            foreach (var file in files)
+            {
+                Themes.Add(System.IO.Path.GetFileNameWithoutExtension(file));
+            }
+        }
+
+        private readonly string _appDataFolder;
+
+        public void Load()
+        {
             /*
              * Document pane group
              */
@@ -17,20 +49,10 @@ namespace WpfOpenControls.DockManager
             ToolPaneCornerRadius = LayoutManager.ToolPaneGroupStyle.CornerRadius;
             ToolPaneBorderBrush = LayoutManager.ToolPaneGroupStyle.BorderBrush;
             ToolPaneBorderThickness = LayoutManager.ToolPaneGroupStyle.BorderThickness;
-            AvailableFontSizes = new System.Collections.ObjectModel.ObservableCollection<int>();
-            for (int index = 4; index < 42; ++index)
-            {
-                AvailableFontSizes.Add(index);
-            }
             ToolPaneFontSize = (int)LayoutManager.ToolPaneGroupStyle.FontSize;
             ToolPaneFontFamily = LayoutManager.ToolPaneGroupStyle.FontFamily;
             ToolPaneBackgroundBrush = LayoutManager.ToolPaneGroupStyle.Background;
             ToolPaneGapBrush = LayoutManager.ToolPaneGroupStyle.GapBrush;
-            AvailableGapHeights = new System.Collections.ObjectModel.ObservableCollection<double>();
-            for (double index = 0; index < 12; ++index)
-            {
-                AvailableGapHeights.Add(index);
-            }
             ToolPaneGapHeight = LayoutManager.ToolPaneGroupStyle.GapHeight;
             ToolPaneButtonForegroundBrush = LayoutManager.ToolPaneGroupStyle.ButtonForeground;
 
@@ -93,12 +115,21 @@ namespace WpfOpenControls.DockManager
 
             NotifyPropertyChanged(null);
         }
-        
-        public void Apply()
+
+        private void GetStyle(ToolPaneGroupStyle toolPaneGroupStyle, DocumentPaneGroupStyle documentPaneGroupStyle)
         {
-            ToolPaneGroupStyle toolPaneGroupStyle = new ToolPaneGroupStyle();
+            /*
+             * Tool pane group
+             */
+
             toolPaneGroupStyle.CornerRadius = ToolPaneCornerRadius;
-            toolPaneGroupStyle.BorderBrush = ToolPaneBorderBrush;
+            // Warning warning 
+            //System.Windows.ResourceDictionary resourceDictionary = WpfOpenControls.Controls.Utilities.GetResourceDictionary();
+            //resourceDictionary.Remove("DockPaneBorderBrush");
+            //resourceDictionary.Add("DockPaneBorderBrush", ToolPaneBorderBrush);
+            //resourceDictionary["DockPaneBorderBrush"] = ToolPaneBorderBrush;
+            //toolPaneGroupStyle.BorderBrush = ToolPaneBorderBrush;
+            Application.Current.Resources["DockPaneBorderBrush"] = ToolPaneBorderBrush;
             toolPaneGroupStyle.BorderThickness = ToolPaneBorderThickness;
             toolPaneGroupStyle.FontSize = (int)ToolPaneFontSize;
             toolPaneGroupStyle.FontFamily = ToolPaneFontFamily;
@@ -107,13 +138,11 @@ namespace WpfOpenControls.DockManager
             toolPaneGroupStyle.GapHeight = ToolPaneGapHeight;
             toolPaneGroupStyle.ButtonForeground = ToolPaneButtonForegroundBrush;
 
-
             toolPaneGroupStyle.HeaderStyle.CornerRadius = ToolPaneHeaderCornerRadius;
             toolPaneGroupStyle.HeaderStyle.BorderBrush = ToolPaneHeaderBorderBrush;
             toolPaneGroupStyle.HeaderStyle.BorderThickness = ToolPaneHeaderBorderThickness;
             toolPaneGroupStyle.HeaderStyle.Background = ToolPaneHeaderBackgroundBrush;
             toolPaneGroupStyle.HeaderStyle.TitlePadding = ToolPaneHeaderTitlePadding;
-
 
             toolPaneGroupStyle.TabCornerRadius = ToolPaneTabCornerRadius;
             toolPaneGroupStyle.ActiveScrollIndicatorBrush = ToolPaneActiveScrollIndicatorBrush;
@@ -131,11 +160,10 @@ namespace WpfOpenControls.DockManager
             toolPaneGroupStyle.UnselectedTabStyle.Foreground = ToolPaneUnselectedTabForegroundBrush;
             toolPaneGroupStyle.UnselectedTabStyle.TitlePadding = ToolPaneUnselectedTabTitlePadding;
 
-            LayoutManager.ToolPaneGroupStyle = toolPaneGroupStyle;
+            /*
+             * Document pane group
+             */
 
-
-
-            DocumentPaneGroupStyle documentPaneGroupStyle = new DocumentPaneGroupStyle();
             documentPaneGroupStyle.CornerRadius = DocumentPaneCornerRadius;
             documentPaneGroupStyle.BorderBrush = DocumentPaneBorderBrush;
             documentPaneGroupStyle.BorderThickness = DocumentPaneBorderThickness;
@@ -161,9 +189,101 @@ namespace WpfOpenControls.DockManager
             documentPaneGroupStyle.UnselectedTabStyle.Background = DocumentPaneUnselectedTabBackgroundBrush;
             documentPaneGroupStyle.UnselectedTabStyle.Foreground = DocumentPaneUnselectedTabForegroundBrush;
             documentPaneGroupStyle.UnselectedTabStyle.TitlePadding = DocumentPaneUnselectedTabTitlePadding;
+        }
 
+        public void Apply()
+        {
+            LayoutManagerStyle layoutManagerStyle = SaveTheme(SelectedTheme);
+            LayoutManager.ToolPaneGroupStyle = layoutManagerStyle.ToolPaneGroupStyle;
+            LayoutManager.DocumentPaneGroupStyle = layoutManagerStyle.DocumentPaneGroupStyle;
+        }
 
-            LayoutManager.DocumentPaneGroupStyle = documentPaneGroupStyle;
+        public void LoadSelectedTheme()
+        {
+            try
+            {
+                string filepath = System.IO.Path.Combine(WpfOpenControls.Controls.Utilities.GetAppDataFolder(), SelectedTheme + ".thm");
+                string text = System.IO.File.ReadAllText(filepath);
+
+                LayoutManagerStyle layoutManagerStyle = Newtonsoft.Json.JsonConvert.DeserializeObject<LayoutManagerStyle>(text);
+
+                LayoutManager.ToolPaneGroupStyle = layoutManagerStyle.ToolPaneGroupStyle;
+                LayoutManager.DocumentPaneGroupStyle = layoutManagerStyle.DocumentPaneGroupStyle;
+
+                CurrentTheme = SelectedTheme;
+            }
+            catch (Exception exception)
+            {
+                System.Windows.Forms.MessageBox.Show("Unable to load theme: " + exception.Message);
+            }
+        }
+
+        internal LayoutManagerStyle SaveTheme(string name)
+        {
+            LayoutManagerStyle layoutManagerStyle = new LayoutManagerStyle();
+            layoutManagerStyle.ToolPaneGroupStyle = new ToolPaneGroupStyle();
+            layoutManagerStyle.DocumentPaneGroupStyle = new DocumentPaneGroupStyle();
+            GetStyle(layoutManagerStyle.ToolPaneGroupStyle, layoutManagerStyle.DocumentPaneGroupStyle);
+
+            string text = Newtonsoft.Json.JsonConvert.SerializeObject(layoutManagerStyle, Newtonsoft.Json.Formatting.Indented);
+
+            try
+            {
+                string filepath = System.IO.Path.Combine(WpfOpenControls.Controls.Utilities.GetAppDataFolder(), name + ".thm");
+                System.IO.File.WriteAllText(filepath, text);
+                PopulateThemes();
+                SelectedTheme = name;
+                CurrentTheme = name;
+            }
+            catch (System.Exception exception)
+            {
+                // Warning warning
+                System.Windows.Forms.MessageBox.Show("Unable to save theme: " + exception.Message);
+            }
+
+            return layoutManagerStyle;
+        }
+
+        private System.Collections.ObjectModel.ObservableCollection<string> _themes;
+        public System.Collections.ObjectModel.ObservableCollection<string> Themes
+        {
+            get
+            {
+                return _themes;
+            }
+            set
+            {
+                _themes = value;
+                NotifyPropertyChanged("Themes");
+            }
+        }
+
+        public string _currentTheme;
+        public string CurrentTheme
+        {
+            get
+            {
+                return _currentTheme;
+            }
+            set
+            {
+                _currentTheme = value;
+                NotifyPropertyChanged("CurrentTheme");
+            }
+        }
+
+        public string _selectedTheme;
+        public string SelectedTheme
+        {
+            get
+            {
+                return _selectedTheme;
+            }
+            set
+            {
+                _selectedTheme = value;
+                NotifyPropertyChanged("SelectedTheme");
+            }
         }
 
         public readonly DockManager.LayoutManager LayoutManager;
@@ -890,6 +1010,7 @@ namespace WpfOpenControls.DockManager
                 NotifyPropertyChanged("DocumentPaneUnselectedTabTitlePadding");
             }
         }
+
         #region INotifyPropertyChanged
 
         public event System.ComponentModel.PropertyChangedEventHandler PropertyChanged;

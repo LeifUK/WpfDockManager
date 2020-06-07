@@ -8,8 +8,9 @@
         xmlns:WpfToolkit="clr-namespace:Xceed.Wpf.Toolkit.Obselete;assembly=Xceed.Wpf.Toolkit"
         xmlns:xceed="http://schemas.xceed.com/wpf/xaml/toolkit" 
         mc:Ignorable="d"
+        SizeToContent="WidthAndHeight"
         ResizeMode="NoResize"
-        Title="ConfigurationView" Height="700" Width="800">
+        Title="Theme Editor" Height="1000" Width="1000">
     <Window.Resources>
         <ResourceDictionary>
             <System:Double x:Key="TabItemWidth">110</System:Double>
@@ -26,7 +27,11 @@
         <Grid.RowDefinitions>
             <RowDefinition Height="10"/>
             <RowDefinition Height="Auto"/>
-            <RowDefinition Height="*"/>
+            <RowDefinition Height="10"/>
+            <RowDefinition Height="Auto"/>
+            <RowDefinition Height="10"/>
+            <RowDefinition Height="Auto"/>
+            <RowDefinition Height="20"/>
             <RowDefinition Height="Auto"/>
             <RowDefinition Height="10"/>
         </Grid.RowDefinitions>
@@ -37,7 +42,54 @@
             <ColumnDefinition Width="Auto"/>
             <ColumnDefinition Width="10"/>
         </Grid.ColumnDefinitions>
-        <GroupBox Grid.Row="1" Grid.Column="1" Header="Tool Pane Group" Padding="10">
+
+
+        <Grid Grid.Row="1" Grid.Column="0" Grid.ColumnSpan="3" >
+            <Grid.RowDefinitions>
+                <RowDefinition Height="Auto"/>
+            </Grid.RowDefinitions>
+            <Grid.ColumnDefinitions>
+                <ColumnDefinition Width="Auto"/>
+                <ColumnDefinition Width="10"/>
+                <ColumnDefinition Width="Auto"/>
+            </Grid.ColumnDefinitions>
+            <Label Grid.Row="0" Grid.Column="0" Content="Current Theme:" Style="{StaticResource StyleLabel}"/>
+            <Label Grid.Row="0" Grid.Column="2" Content="{Binding CurrentTheme}" Style="{StaticResource StyleLabel}"/>
+        </Grid>
+
+
+        <GroupBox Grid.Row="3" Grid.Column="1" Grid.ColumnSpan="3" Header="Themes" Padding="10">
+            <Grid >
+                <Grid.RowDefinitions>
+                    <RowDefinition Height="Auto"/>
+                    <RowDefinition Height="10"/>
+                    <RowDefinition Height="Auto"/>
+                </Grid.RowDefinitions>
+                <Grid.ColumnDefinitions>
+                    <ColumnDefinition Width="Auto"/>
+                </Grid.ColumnDefinitions>
+                <Grid Grid.Row="2" Grid.Column="0">
+                    <Grid.RowDefinitions>
+                        <RowDefinition Height="Auto"/>
+                    </Grid.RowDefinitions>
+                    <Grid.ColumnDefinitions>
+                        <ColumnDefinition Width="Auto"/>
+                        <ColumnDefinition Width="10"/>
+                        <ColumnDefinition Width="Auto"/>
+                        <ColumnDefinition Width="10"/>
+                        <ColumnDefinition Width="Auto"/>
+                        <ColumnDefinition Width="10"/>
+                        <ColumnDefinition Width="Auto"/>
+                    </Grid.ColumnDefinitions>
+                    <ComboBox Grid.Row="0" Grid.Column="0" ItemsSource="{Binding Themes}" SelectedItem="{Binding SelectedTheme, Mode=TwoWay}" MinWidth="100"/>
+                    <Button Grid.Row="0" Grid.Column="2" Content="Load" Click="_buttonLoad_Click" Style="{StaticResource StyleButton}"/>
+                    <Button Grid.Row="0" Grid.Column="4" Content="New" Click="_buttonNew_Click" Style="{StaticResource StyleButton}"/>
+                    <Button Grid.Row="0" Grid.Column="6" Content="Delete" Click="_buttonDelete_Click" Style="{StaticResource StyleButton}"/>
+                </Grid>
+            </Grid>
+        </GroupBox>
+
+        <GroupBox Grid.Row="5" Grid.Column="1" Header="Tool Pane Group" Padding="10">
             <TabControl Grid.Row="1" Grid.Column="1" SelectionChanged="TabControl_SelectionChanged" Height="550">
                 <TabItem Header="General" Width="{StaticResource TabItemWidth}">
                     <Grid>
@@ -231,7 +283,7 @@
             </TabControl>
         </GroupBox>
 
-        <GroupBox Grid.Row="1" Grid.Column="3" Header="Document Pane Group" Padding="10">
+        <GroupBox Grid.Row="5" Grid.Column="3" Header="Document Pane Group" Padding="10">
             <TabControl Grid.Row="1" Grid.Column="1" SelectionChanged="TabControl_SelectionChanged" Height="550">
                 <TabItem Header="General" Width="{StaticResource TabItemWidth}">
                     <Grid>
@@ -390,7 +442,8 @@
                 </TabItem>
             </TabControl>
         </GroupBox>
-        <Grid Grid.Row="3" Grid.Column="1" Grid.ColumnSpan="3" >
+        
+        <Grid Grid.Row="7" Grid.Column="1" Grid.ColumnSpan="3" >
             <Grid.RowDefinitions>
                 <RowDefinition Height="Auto"/>
             </Grid.RowDefinitions>
@@ -405,8 +458,6 @@
                 <ColumnDefinition Width="Auto"/>
                 <ColumnDefinition Width="10"/>
             </Grid.ColumnDefinitions>
-            <Button Grid.Row="0" Grid.Column="1" x:Name="_buttonLoad" Content="Load" Click="_buttonLoad_Click" Style="{StaticResource StyleButton}"/>
-            <Button Grid.Row="0" Grid.Column="3" x:Name="_buttonSave" Content="Save" Click="_buttonSave_Click" Style="{StaticResource StyleButton}"/>
             <Button Grid.Row="0" Grid.Column="5" x:Name="_buttonApply" Content="Apply" Click="_buttonApply_Click" Style="{StaticResource StyleButton}"/>
             <Button Grid.Row="0" Grid.Column="7" x:Name="_buttonClose" Content="Close" Click="_buttonClose_Click" Style="{StaticResource StyleButton}"/>
         </Grid>
