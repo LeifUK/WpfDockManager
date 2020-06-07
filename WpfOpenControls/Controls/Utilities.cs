@@ -88,5 +88,17 @@ namespace WpfOpenControls.Controls
 
             return true;
         }
+
+        public static string GetAppDataFolder()
+        {
+            string path = Environment.GetFolderPath(Environment.SpecialFolder.ApplicationData);
+            path = System.IO.Path.Combine(path, System.AppDomain.CurrentDomain.FriendlyName);
+            if (!System.IO.Directory.Exists(path))
+            {
+                System.IO.Directory.CreateDirectory(path);
+            }
+
+            return path;
+        }
     }
 }
