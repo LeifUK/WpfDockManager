@@ -7,7 +7,7 @@ namespace WpfOpenControls.DockManager
 {
     internal class SplitterPane : Grid
     {
-        public SplitterPane(bool isHorizontal, double splitterWidth, Brush splitterBrush)
+        public SplitterPane(bool isHorizontal)
         {
             Tag = Guid.NewGuid();
             IsHorizontal = isHorizontal;
@@ -17,7 +17,7 @@ namespace WpfOpenControls.DockManager
             Margin = new Thickness(0);
 
             _gridSplitter = new GridSplitter();
-            _gridSplitter.Background = splitterBrush;
+            _gridSplitter.SetResourceReference(BackgroundProperty, "SplitterBrush");
             _gridSplitter.BorderThickness = new Thickness(0);
             Children.Add(_gridSplitter);
 
@@ -26,7 +26,6 @@ namespace WpfOpenControls.DockManager
 
             if (IsHorizontal)
             {
-
                 RowDefinition rowDefinition = new RowDefinition();
                 RowDefinitions.Add(rowDefinition);
                 rowDefinition.Height = new GridLength(1, GridUnitType.Auto);
@@ -37,7 +36,7 @@ namespace WpfOpenControls.DockManager
 
                 _gridSplitter.VerticalAlignment = VerticalAlignment.Center;
                 _gridSplitter.HorizontalAlignment = HorizontalAlignment.Stretch;
-                _gridSplitter.Height = splitterWidth;
+                _gridSplitter.SetResourceReference(HeightProperty, "SplitterWidth");
                 Grid.SetRow(_gridSplitter, 1);
                 Grid.SetColumn(_gridSplitter, 0);
             }
@@ -53,7 +52,7 @@ namespace WpfOpenControls.DockManager
 
                 _gridSplitter.VerticalAlignment = VerticalAlignment.Stretch;
                 _gridSplitter.HorizontalAlignment = HorizontalAlignment.Center;
-                _gridSplitter.Width = splitterWidth;
+                _gridSplitter.SetResourceReference(WidthProperty, "SplitterWidth");
                 Grid.SetRow(_gridSplitter, 0);
                 Grid.SetColumn(_gridSplitter, 1);
             }

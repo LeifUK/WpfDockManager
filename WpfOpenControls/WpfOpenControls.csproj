@@ -72,10 +72,6 @@
       <Generator>MSBuild:Compile</Generator>
       <SubType>Designer</SubType>
     </Page>
-    <Page Include="DockManager\NewThemeView.xaml">
-      <SubType>Designer</SubType>
-      <Generator>MSBuild:Compile</Generator>
-    </Page>
     <Page Include="DockManager\SideLocationPane.xaml">
       <Generator>MSBuild:Compile</Generator>
       <SubType>Designer</SubType>
@@ -104,7 +100,6 @@
     <Compile Include="DockManager\DockPaneTreeManager.cs" />
     <Compile Include="DockManager\DocumentContainer.cs" />
     <Compile Include="DockManager\DocumentPaneGroup.cs" />
-    <Compile Include="DockManager\DocumentPaneGroupStyle.cs" />
     <Compile Include="DockManager\DocumentPanel.cs" />
     <Compile Include="DockManager\Events\FloatEventArgs.cs" />
     <Compile Include="DockManager\Events\FloatEventHandler.cs" />
@@ -130,22 +125,16 @@
     <Compile Include="DockManager\IViewContainer.cs" />
     <Compile Include="DockManager\IViewModel.cs" />
     <Compile Include="DockManager\LayoutManager.cs" />
-    <Compile Include="DockManager\NewThemeView.xaml.cs">
-      <DependentUpon>NewThemeView.xaml</DependentUpon>
-    </Compile>
-    <Compile Include="DockManager\NewThemeViewModel.cs" />
     <Compile Include="DockManager\SelectablePane.cs" />
     <Compile Include="DockManager\Serialisation\LayoutReader.cs" />
     <Compile Include="DockManager\Serialisation\LayoutWriter.cs" />
     <Compile Include="DockManager\SideLocationPane.xaml.cs">
       <DependentUpon>SideLocationPane.xaml</DependentUpon>
     </Compile>
-    <Compile Include="DockManager\SideToolStyle.cs" />
     <Compile Include="DockManager\SplitterPane.cs" />
     <Compile Include="DockManager\TabStyle.cs" />
     <Compile Include="DockManager\Converters\ThicknessToStringConverter.cs" />
     <Compile Include="DockManager\ToolContainer.cs" />
-    <Compile Include="DockManager\ToolHeaderStyle.cs" />
     <Compile Include="DockManager\ToolListBoxItem.cs" />
     <Compile Include="DockManager\ToolPaneGroup.cs" />
     <Compile Include="DockManager\UnpinnedToolData.cs" />

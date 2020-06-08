@@ -9,8 +9,6 @@ using System.Windows.Media;
 using System.Collections.ObjectModel;
 using WpfOpenControls.Controls;
 using WpfOpenControls.DockManager.Controls;
-using System.Reflection;
-using System.IO;
 
 namespace WpfOpenControls.DockManager
 {
@@ -374,11 +372,6 @@ namespace WpfOpenControls.DockManager
 
         private void UpdateProperties(Controls.ToolListBox toolListBox)
         {
-            toolListBox.FontSize = SideToolStyle.FontSize;
-            toolListBox.FontFamily = SideToolStyle.FontFamily;
-            toolListBox.BarBrush = SideToolStyle.BarBrush;
-            toolListBox.BarBrushMouseOver = SideToolStyle.MouseOverBarBrush;
-            toolListBox.Foreground = SideToolStyle.Foreground;
             if (SideToolItemContainerStyle != null)
             {
                 toolListBox.ItemContainerStyle = SideToolItemContainerStyle;
@@ -398,12 +391,6 @@ namespace WpfOpenControls.DockManager
             if (grid == null)
             {
                 return;
-            }
-
-            if (grid is SplitterPane)
-            {
-                (grid as SplitterPane).SplitterWidth = SplitterWidth;
-                (grid as SplitterPane).SplitterBrush = SplitterBrush;
             }
 
             foreach (var child in grid.Children)
@@ -432,80 +419,6 @@ namespace WpfOpenControls.DockManager
         {
             UpdateProperties(_root);
         }
-
-        #region SplitterWidth dependency property
-
-        [Bindable(true)]
-        [DesignerSerializationVisibility(DesignerSerializationVisibility.Hidden)]
-        public static readonly DependencyProperty SplitterWidthProperty = DependencyProperty.Register("SplitterWidth", typeof(double), typeof(TabHeaderControl), new FrameworkPropertyMetadata(4.0, new PropertyChangedCallback(OnSplitterWidthChanged)));
-
-        public double SplitterWidth
-        {
-            get
-            {
-                return (double)GetValue(SplitterWidthProperty);
-            }
-            set
-            {
-                if (value != SplitterWidth)
-                {
-                    SetValue(SplitterWidthProperty, value);
-                    UpdateProperties();
-                }
-            }
-        }
-
-        private static void OnSplitterWidthChanged(DependencyObject d, DependencyPropertyChangedEventArgs e)
-        {
-            ((LayoutManager)d).OnSplitterWidthChanged(e);
-        }
-
-        protected virtual void OnSplitterWidthChanged(DependencyPropertyChangedEventArgs e)
-        {
-            if ((double)e.NewValue != SplitterWidth)
-            {
-                UpdateProperties();
-            }
-        }
-
-        #endregion
-
-        #region SplitterBrush dependency property
-
-        [Bindable(true)]
-        [DesignerSerializationVisibility(DesignerSerializationVisibility.Hidden)]
-        public static readonly DependencyProperty SplitterBrushProperty = DependencyProperty.Register("SplitterBrush", typeof(Brush), typeof(TabHeaderControl), new FrameworkPropertyMetadata(Brushes.Gainsboro, new PropertyChangedCallback(OnSplitterBrushChanged)));
-
-        public Brush SplitterBrush
-        {
-            get
-            {
-                return (Brush)GetValue(SplitterBrushProperty);
-            }
-            set
-            {
-                if (value != SplitterBrush)
-                {
-                    SetValue(SplitterBrushProperty, value);
-                    UpdateProperties();
-                }
-            }
-        }
-
-        private static void OnSplitterBrushChanged(DependencyObject d, DependencyPropertyChangedEventArgs e)
-        {
-            ((LayoutManager)d).OnSplitterBrushChanged(e);
-        }
-
-        protected virtual void OnSplitterBrushChanged(DependencyPropertyChangedEventArgs e)
-        {
-            if ((Brush)e.NewValue != SplitterBrush)
-            {
-                UpdateProperties();
-            }
-        }
-
-        #endregion
 
         #region SelectedPaneBrush dependency property
 
@@ -581,43 +494,6 @@ namespace WpfOpenControls.DockManager
 
         #endregion
 
-        #region FloatingToolTitleBarBackground dependency property
-
-        [Bindable(true)]
-        [DesignerSerializationVisibility(DesignerSerializationVisibility.Hidden)]
-        public static readonly DependencyProperty FloatingToolTitleBarBackgroundProperty = DependencyProperty.Register("FloatingToolTitleBarBackground", typeof(Brush), typeof(TabHeaderControl), new FrameworkPropertyMetadata(Brushes.Gainsboro, new PropertyChangedCallback(OnFloatingToolTitleBarBackgroundChanged)));
-
-        public Brush FloatingToolTitleBarBackground
-        {
-            get
-            {
-                return (Brush)GetValue(FloatingToolTitleBarBackgroundProperty);
-            }
-            set
-            {
-                if (value != FloatingToolTitleBarBackground)
-                {
-                    SetValue(FloatingToolTitleBarBackgroundProperty, value);
-                    UpdateProperties();
-                }
-            }
-        }
-
-        private static void OnFloatingToolTitleBarBackgroundChanged(DependencyObject d, DependencyPropertyChangedEventArgs e)
-        {
-            ((LayoutManager)d).OnFloatingToolTitleBarBackgroundChanged(e);
-        }
-
-        protected virtual void OnFloatingToolTitleBarBackgroundChanged(DependencyPropertyChangedEventArgs e)
-        {
-            if ((Brush)e.NewValue != FloatingToolTitleBarBackground)
-            {
-                UpdateProperties();
-            }
-        }
-
-        #endregion
-
         #region DocumentTabItemStyle dependency property
 
         [Bindable(true)]
@@ -650,138 +526,6 @@ namespace WpfOpenControls.DockManager
             if ((Style)e.NewValue != DocumentTabItemStyle)
             {
                 UpdateProperties();
-            }
-        }
-
-        #endregion
-
-        #region DocumentPaneGroupStyle dependency property
-
-        [Bindable(true)]
-        [DesignerSerializationVisibility(DesignerSerializationVisibility.Hidden)]
-        public static readonly DependencyProperty DocumentPaneGroupStyleProperty = DependencyProperty.Register("DocumentPaneGroupStyle", typeof(DocumentPaneGroupStyle), typeof(TabHeaderControl), new FrameworkPropertyMetadata(new DocumentPaneGroupStyle(), new PropertyChangedCallback(OnDocumentPaneGroupStyleChanged)));
-
-        public DocumentPaneGroupStyle DocumentPaneGroupStyle
-        {
-            get
-            {
-                return (DocumentPaneGroupStyle)GetValue(DocumentPaneGroupStyleProperty);
-            }
-            set
-            {
-                if (value != DocumentPaneGroupStyle)
-                {
-                    if (value.SelectedTabStyle == null)
-                    {
-                        value.SelectedTabStyle = (new DocumentPaneGroupStyle()).SelectedTabStyle;
-                    }
-                    if (value.UnselectedTabStyle == null)
-                    {
-                        value.UnselectedTabStyle = (new DocumentPaneGroupStyle()).UnselectedTabStyle;
-                    }
-                    SetValue(DocumentPaneGroupStyleProperty, value);
-                    UpdateProperties();
-                }
-            }
-        }
-
-        private static void OnDocumentPaneGroupStyleChanged(DependencyObject d, DependencyPropertyChangedEventArgs e)
-        {
-            ((LayoutManager)d).OnDocumentPaneGroupStyleChanged(e);
-        }
-
-        protected virtual void OnDocumentPaneGroupStyleChanged(DependencyPropertyChangedEventArgs e)
-        {
-            if ((DocumentPaneGroupStyle)e.NewValue != DocumentPaneGroupStyle)
-            {
-                UpdateProperties();
-            }
-        }
-
-        #endregion
-
-        #region FloatingDocumentTitleBarBackground dependency property
-
-        [Bindable(true)]
-        [DesignerSerializationVisibility(DesignerSerializationVisibility.Hidden)]
-        public static readonly DependencyProperty FloatingDocumentTitleBarBackgroundProperty = DependencyProperty.Register("FloatingDocumentTitleBarBackground", typeof(Brush), typeof(TabHeaderControl), new FrameworkPropertyMetadata(Brushes.Gainsboro, new PropertyChangedCallback(OnFloatingDocumentTitleBarBackgroundChanged)));
-
-        public Brush FloatingDocumentTitleBarBackground
-        {
-            get
-            {
-                return (Brush)GetValue(FloatingDocumentTitleBarBackgroundProperty);
-            }
-            set
-            {
-                if (value != FloatingDocumentTitleBarBackground)
-                {
-                    SetValue(FloatingDocumentTitleBarBackgroundProperty, value);
-                }
-            }
-        }
-
-        private static void OnFloatingDocumentTitleBarBackgroundChanged(DependencyObject d, DependencyPropertyChangedEventArgs e)
-        {
-            ((LayoutManager)d).OnFloatingDocumentTitleBarBackgroundChanged(e);
-        }
-
-        protected virtual void OnFloatingDocumentTitleBarBackgroundChanged(DependencyPropertyChangedEventArgs e)
-        {
-            if ((Brush)e.NewValue != FloatingDocumentTitleBarBackground)
-            {
-                UpdateProperties();
-            }
-        }
-
-        #endregion
-
-        #region SideToolStyle dependency property
-
-        private static SideToolStyle DefaultSideToolStyle
-        {
-            get
-            {
-                return new SideToolStyle()
-                {
-                    FontSize = 12,
-                    FontFamily = new FontFamily("Arial"),
-                    Foreground = Brushes.White,
-                    BarBrush = Brushes.Navy,
-                    MouseOverBarBrush = Brushes.AliceBlue };
-            }
-        }
-
-        [Bindable(true)]
-        [DesignerSerializationVisibility(DesignerSerializationVisibility.Hidden)]
-        public static readonly DependencyProperty SideToolStyleProperty = DependencyProperty.Register("SideToolStyle", typeof(SideToolStyle), typeof(TabHeaderControl), new FrameworkPropertyMetadata(DefaultSideToolStyle, new PropertyChangedCallback(OnSideToolStyleChanged)));
-
-        public SideToolStyle SideToolStyle
-        {
-            get
-            {
-                return (SideToolStyle)GetValue(SideToolStyleProperty);
-            }
-            set
-            {
-                if (value != SideToolStyle)
-                {
-                    SetValue(SideToolStyleProperty, value);
-                    UpdateSideToolProperties();
-                }
-            }
-        }
-
-        private static void OnSideToolStyleChanged(DependencyObject d, DependencyPropertyChangedEventArgs e)
-        {
-            ((LayoutManager)d).OnSideToolStyleChanged(e);
-        }
-
-        protected virtual void OnSideToolStyleChanged(DependencyPropertyChangedEventArgs e)
-        {
-            if ((SideToolStyle)e.NewValue != SideToolStyle)
-            {
-                UpdateSideToolProperties();
             }
         }
 
@@ -948,7 +692,7 @@ namespace WpfOpenControls.DockManager
 
         SplitterPane ILayoutFactory.MakeSplitterPane(bool isHorizontal)
         {
-            return new SplitterPane(isHorizontal, SplitterWidth, SplitterBrush);
+            return new SplitterPane(isHorizontal);
         }
 
         private void RegisterDockPane(DockPane dockPane)

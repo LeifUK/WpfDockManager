@@ -32,18 +32,18 @@
                                         </Grid.ColumnDefinitions>
                                         <Rectangle Grid.Row="1" Grid.Column="1" x:Name="_rectangle" Fill="{Binding Path=BarBrush, RelativeSource={RelativeSource AncestorType={x:Type local:ToolListBox}}}" Height="4" HorizontalAlignment="Stretch"/>
                                         <Label Grid.Row="0" Grid.Column="1" x:Name="Label" 
-                                               FontSize="{Binding Path=FontSize, RelativeSource={RelativeSource AncestorType={x:Type local:ToolListBox}}}" 
-                                               FontFamily="{Binding Path=FontFamily, RelativeSource={RelativeSource AncestorType={x:Type local:ToolListBox}}}" 
-                                               FontStyle="{Binding Path=FontStyle, RelativeSource={RelativeSource AncestorType={x:Type local:ToolListBox}}}" 
-                                               Foreground="{Binding Path=Foreground, RelativeSource={RelativeSource AncestorType={x:Type local:ToolListBox}}}" 
-                                               Width="Auto" Padding="2,0,2,0" Margin="0" VerticalAlignment="Center">
+                                               FontSize="{DynamicResource SideToolFontSize}" 
+                                               FontFamily="{DynamicResource SideToolFontFamily}" 
+                                               FontStyle="{DynamicResource SideToolFontStyle}" 
+                                               Foreground="{DynamicResource SideToolForeground}"
+                                               Width="Auto" Padding="2,4,2,0" Margin="0" VerticalAlignment="Center">
                                             <ContentPresenter />
                                         </Label>
                                     </Grid>
                                 </Border>
                                 <ControlTemplate.Triggers>
                                     <Trigger Property="IsMouseOver" Value="true">
-                                        <Setter TargetName="_rectangle" Property="Fill" Value="{Binding Path=BarBrushMouseOver, Mode=TwoWay, RelativeSource={RelativeSource AncestorType={x:Type local:ToolListBox}}}"/>
+                                        <Setter TargetName="_rectangle" Property="Fill" Value="{DynamicResource SideToolMouseOverBarBrush}"/>
                                     </Trigger>
                                 </ControlTemplate.Triggers>
                             </ControlTemplate>

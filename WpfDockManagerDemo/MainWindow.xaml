@@ -28,6 +28,29 @@
                 <Setter Property="VerticalAlignment" Value="Stretch"/>
                 <Setter Property="Width" Value="4"/>
             </Style>
+            <Style x:Key="StyleTitleBarButton" TargetType="Button">
+                <Setter Property="Background" Value="Transparent"/>
+                <Setter Property="BorderThickness" Value="0"/>
+                <Setter Property="Template">
+                    <Setter.Value>
+                        <ControlTemplate TargetType="Button">
+                            <Grid Margin="0,0,0,0">
+                                <Border Name="_border" Background="Transparent" Padding="6,0,6,2" BorderThickness="1" BorderBrush="Transparent" HorizontalAlignment="Center" VerticalAlignment="Center">
+                                    <ContentPresenter/>
+                                </Border>
+                            </Grid>
+
+                            <ControlTemplate.Triggers>
+                                <Trigger Property="IsMouseOver" Value="True">
+                                    <Setter TargetName="_border" Property="Background" Value="Gainsboro" />
+                                    <Setter TargetName="_border" Property="BorderBrush" Value="Gray" />
+                                    <Setter TargetName="_border" Property="BorderThickness" Value="1" />
+                                </Trigger>
+                            </ControlTemplate.Triggers>
+                        </ControlTemplate>
+                    </Setter.Value>
+                </Setter>
+            </Style>
             <ResourceDictionary.MergedDictionaries>
                 <ResourceDictionary Source="pack://application:,,,/WpfOpenControls;component/DockManager/Dictionary.xaml"/>
                 <ResourceDictionary Source="/PresentationFramework.Aero, Version=3.0.0.0,
@@ -70,49 +93,7 @@
                 </StackPanel>
             </Grid>
             <dockManager:LayoutManager x:Name="_layoutManager" Grid.Row="1" Grid.Column="0" DocumentsSource="{Binding Documents}" ToolsSource="{Binding Tools}" VerticalAlignment="Stretch" HorizontalAlignment="Stretch" Background="#5d6b99" >
-                <dockManager:LayoutManager.SplitterBrush>#5d6b99</dockManager:LayoutManager.SplitterBrush>
-                <dockManager:LayoutManager.SplitterWidth>6</dockManager:LayoutManager.SplitterWidth>
                 <dockManager:LayoutManager.SelectedPaneBrush>DarkRed</dockManager:LayoutManager.SelectedPaneBrush>
-
-                <dockManager:LayoutManager.SideToolStyle>
-                    <dockManager:SideToolStyle FontSize="12" FontFamily="Arial" Foreground="White" BarBrush="#3b4f81" MouseOverBarBrush="AliceBlue"/>
-                </dockManager:LayoutManager.SideToolStyle>
-
-                <!--<dockManager:LayoutManager.DocumentPaneGroupStyle>
-                    <dockManager:DocumentPaneGroupStyle>
-                        <dockManager:DocumentPaneGroupStyle.BorderBrush>LightSteelBlue</dockManager:DocumentPaneGroupStyle.BorderBrush>
-                        <dockManager:DocumentPaneGroupStyle.BorderThickness>0</dockManager:DocumentPaneGroupStyle.BorderThickness>
-                        <dockManager:DocumentPaneGroupStyle.CornerRadius>4,4,0,0</dockManager:DocumentPaneGroupStyle.CornerRadius>
-                        <dockManager:DocumentPaneGroupStyle.FontSize>12</dockManager:DocumentPaneGroupStyle.FontSize>
-                        <dockManager:DocumentPaneGroupStyle.FontFamily>Arial</dockManager:DocumentPaneGroupStyle.FontFamily>
-                        <dockManager:DocumentPaneGroupStyle.Background>#5d6b99</dockManager:DocumentPaneGroupStyle.Background>
-                        <dockManager:DocumentPaneGroupStyle.GapBrush>#f5cc84</dockManager:DocumentPaneGroupStyle.GapBrush>
-                        <dockManager:DocumentPaneGroupStyle.ButtonForeground>White</dockManager:DocumentPaneGroupStyle.ButtonForeground>
-                        <dockManager:DocumentPaneGroupStyle.ActiveScrollIndicatorBrush>White</dockManager:DocumentPaneGroupStyle.ActiveScrollIndicatorBrush>
-                        <dockManager:DocumentPaneGroupStyle.InactiveScrollIndicatorBrush>Transparent</dockManager:DocumentPaneGroupStyle.InactiveScrollIndicatorBrush>
-                        <dockManager:DocumentPaneGroupStyle.TabCornerRadius>4,4,0,0</dockManager:DocumentPaneGroupStyle.TabCornerRadius>
-                        <dockManager:DocumentPaneGroupStyle.SelectedTabStyle>
-                            <dockManager:TabStyle>
-                                <dockManager:TabStyle.BorderBrush>Transparent</dockManager:TabStyle.BorderBrush>
-                                <dockManager:TabStyle.BorderThickness>0</dockManager:TabStyle.BorderThickness>
-                                <dockManager:TabStyle.Background>#f5cc84</dockManager:TabStyle.Background>
-                                <dockManager:TabStyle.Foreground>Black</dockManager:TabStyle.Foreground>
-                                <dockManager:TabStyle.TitlePadding>2,0,2,0</dockManager:TabStyle.TitlePadding>
-                            </dockManager:TabStyle>
-                        </dockManager:DocumentPaneGroupStyle.SelectedTabStyle>
-                        <dockManager:DocumentPaneGroupStyle.UnselectedTabStyle>
-                            <dockManager:TabStyle>
-                                <dockManager:TabStyle.BorderBrush>Transparent</dockManager:TabStyle.BorderBrush>
-                                <dockManager:TabStyle.BorderThickness>0</dockManager:TabStyle.BorderThickness>
-                                <dockManager:TabStyle.Background>#3b4f81</dockManager:TabStyle.Background>
-                                <dockManager:TabStyle.Foreground>White</dockManager:TabStyle.Foreground>
-                                <dockManager:TabStyle.TitlePadding>2,0,2,0</dockManager:TabStyle.TitlePadding>
-                            </dockManager:TabStyle>
-                        </dockManager:DocumentPaneGroupStyle.UnselectedTabStyle>
-                    </dockManager:DocumentPaneGroupStyle>
-                </dockManager:LayoutManager.DocumentPaneGroupStyle>-->
-
-                <!--<dockManager:LayoutManager.FloatingDocumentTitleBarBackground>#ccd5f0</dockManager:LayoutManager.FloatingDocumentTitleBarBackground>-->
                 
                 <dockManager:LayoutManager.DocumentTemplates>
                     <DataTemplate DataType="{x:Type viewModel:DocumentOneViewModel}">

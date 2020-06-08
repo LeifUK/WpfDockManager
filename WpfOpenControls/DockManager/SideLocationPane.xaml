@@ -31,9 +31,9 @@
             <ColumnDefinition Width="*"/>
             <ColumnDefinition Width="{StaticResource RowIconHeight}"/>
         </Grid.ColumnDefinitions>
-        <Button Grid.Row="0" Grid.Column="2" Name="_buttonTopEdge" Style="{StaticResource StyleIndicatorTop}"/>
-        <Button Grid.Row="4" Grid.Column="2" Name="_buttonBottomEdge" Style="{StaticResource StyleIndicatorBottom}"/>
-        <Button Grid.Row="2" Grid.Column="0" Name="_buttonLeftEdge" Style="{StaticResource StyleIndicatorLeft}"/>
-        <Button Grid.Row="2" Grid.Column="4" Name="_buttonRightEdge" Style="{StaticResource StyleIndicatorRight}"/>
+        <Button Grid.Row="0" Grid.Column="2" Name="_buttonTopEdge" Style="{DynamicResource WindowLocationTopStyle}"/>
+        <Button Grid.Row="4" Grid.Column="2" Name="_buttonBottomEdge" Style="{DynamicResource WindowLocationBottomStyle}"/>
+        <Button Grid.Row="2" Grid.Column="0" Name="_buttonLeftEdge" Style="{DynamicResource WindowLocationLeftStyle}"/>
+        <Button Grid.Row="2" Grid.Column="4" Name="_buttonRightEdge" Style="{DynamicResource WindowLocationRightStyle}"/>
     </Grid>
 </Window>
