@@ -24,7 +24,8 @@ namespace WpfOpenControls.DockManager
 
             CreateTabControl(2, 0);
             Grid.SetZIndex(TabHeaderControl, 1);
-            
+            TabHeaderControl.ItemContainerStyle = FindResource("ToolPaneTabItem") as Style;
+
             _gap = new Border();
             _gap.SetResourceReference(Border.HeightProperty, "ToolPaneGapHeight");
             _gap.SetResourceReference(Border.BackgroundProperty, "ToolPaneGapBrush");
@@ -52,24 +53,8 @@ namespace WpfOpenControls.DockManager
             _listButton.Click += delegate { Helpers.DisplayItemsMenu(_items, TabHeaderControl, _selectedUserControl); };
             _listButton.SetResourceReference(StyleProperty, "ToolPaneListButtonStyle");
 
-            TabHeaderControl.FontSize = (double)FindResource("ToolPaneFontSize");
-            TabHeaderControl.FontFamily = FindResource("ToolPaneFontFamily") as FontFamily;
-
-            TabHeaderControl.SelectedTabBackground = FindResource("ToolPaneSelectedTabBackground") as Brush;
-            TabHeaderControl.SelectedTabBorderBrush = FindResource("ToolPaneSelectedTabBorderBrush") as Brush;
-            TabHeaderControl.SelectedTabBorderThickness = (Thickness)FindResource("ToolPaneSelectedTabBorderThickness");
-            TabHeaderControl.SelectedTabForeground = FindResource("ToolPaneSelectedTabForeground") as Brush;
-            TabHeaderControl.SelectedTabTitlePadding = (Thickness)FindResource("ToolPaneSelectedTabTitlePadding");
-            
-            TabHeaderControl.UnselectedTabBackground = FindResource("ToolPaneUnselectedTabBackground") as Brush;
-            TabHeaderControl.UnselectedTabBorderBrush = FindResource("ToolPaneUnselectedTabBorderBrush") as Brush;
-            TabHeaderControl.UnselectedTabBorderThickness = (Thickness)FindResource("ToolPaneUnselectedTabBorderThickness");
-            TabHeaderControl.UnselectedTabForeground = FindResource("ToolPaneUnselectedTabForeground") as Brush;
-            TabHeaderControl.UnselectedTabTitlePadding = (Thickness)FindResource("ToolPaneUnselectedTabTitlePadding");
-
             TabHeaderControl.ActiveArrowBrush = FindResource("ToolPaneActiveScrollIndicatorBrush") as Brush;
             TabHeaderControl.InactiveArrowBrush = FindResource("ToolPaneInactiveScrollIndicatorBrush") as Brush;
-            TabHeaderControl.TabCornerRadius = (CornerRadius)FindResource("ToolPaneTabCornerRadius");
         }
 
         private RowDefinition _rowDefinition_UserControl;

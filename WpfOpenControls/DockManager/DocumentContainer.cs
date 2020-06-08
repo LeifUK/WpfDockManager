@@ -22,6 +22,7 @@ namespace WpfOpenControls.DockManager
             ColumnDefinitions.Add(new ColumnDefinition() { Width = new System.Windows.GridLength(2, System.Windows.GridUnitType.Pixel) });
 
             CreateTabControl(1, 0);
+            TabHeaderControl.ItemContainerStyle = FindResource("DocumentPaneTabItem") as Style;
 
             _gap = new Border();
             _gap.SetResourceReference(Border.HeightProperty, "DocumentPaneGapHeight");
@@ -47,24 +48,8 @@ namespace WpfOpenControls.DockManager
             _listButton.Click += delegate { Helpers.DisplayItemsMenu(_items, TabHeaderControl, _selectedUserControl); };
             _listButton.SetResourceReference(StyleProperty, "DocumentPaneListButtonStyle");
 
-            TabHeaderControl.FontSize = (double)FindResource("DocumentPaneFontSize");
-            TabHeaderControl.FontFamily = FindResource("DocumentPaneFontFamily") as FontFamily;
-
-            TabHeaderControl.SelectedTabBackground = FindResource("DocumentPaneSelectedTabBackground") as Brush;
-            TabHeaderControl.SelectedTabBorderBrush = FindResource("DocumentPaneSelectedTabBorderBrush") as Brush;
-            TabHeaderControl.SelectedTabBorderThickness = (Thickness)FindResource("DocumentPaneSelectedTabBorderThickness");
-            TabHeaderControl.SelectedTabForeground = FindResource("DocumentPaneSelectedTabForeground") as Brush;
-            TabHeaderControl.SelectedTabTitlePadding = (Thickness)FindResource("DocumentPaneSelectedTabTitlePadding");
-
-            TabHeaderControl.UnselectedTabBackground = FindResource("DocumentPaneUnselectedTabBackground") as Brush;
-            TabHeaderControl.UnselectedTabBorderBrush = FindResource("DocumentPaneUnselectedTabBorderBrush") as Brush;
-            TabHeaderControl.UnselectedTabBorderThickness = (Thickness)FindResource("DocumentPaneUnselectedTabBorderThickness");
-            TabHeaderControl.UnselectedTabForeground = FindResource("DocumentPaneUnselectedTabForeground") as Brush;
-            TabHeaderControl.UnselectedTabTitlePadding = (Thickness)FindResource("DocumentPaneUnselectedTabTitlePadding");
-
             TabHeaderControl.ActiveArrowBrush = FindResource("DocumentPaneActiveScrollIndicatorBrush") as Brush;
             TabHeaderControl.InactiveArrowBrush = FindResource("DocumentPaneInactiveScrollIndicatorBrush") as Brush;
-            TabHeaderControl.TabCornerRadius = (CornerRadius)FindResource("DocumentPaneTabCornerRadius");
         }
 
         public void HideCommandsButton()

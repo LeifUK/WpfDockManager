@@ -30,7 +30,7 @@
                                             <ColumnDefinition Width="Auto"/>
                                             <ColumnDefinition Width="4"/>
                                         </Grid.ColumnDefinitions>
-                                        <Rectangle Grid.Row="1" Grid.Column="1" x:Name="_rectangle" Fill="{Binding Path=BarBrush, RelativeSource={RelativeSource AncestorType={x:Type local:ToolListBox}}}" Height="4" HorizontalAlignment="Stretch"/>
+                                        <Rectangle Grid.Row="1" Grid.Column="1" x:Name="_rectangle" Fill="{DynamicResource SideToolBarBrush}" Height="4" HorizontalAlignment="Stretch"/>
                                         <Label Grid.Row="0" Grid.Column="1" x:Name="Label" 
                                                FontSize="{DynamicResource SideToolFontSize}" 
                                                FontFamily="{DynamicResource SideToolFontFamily}" 

@@ -4,6 +4,7 @@ using System.Windows;
 using System.Windows.Controls;
 using System.ComponentModel;
 using System.Windows.Media;
+using WpfOpenControls.DockManager;
 
 namespace WpfOpenControls.Controls
 {
@@ -16,6 +17,8 @@ namespace WpfOpenControls.Controls
 
             _listBox.ItemsChanged += _listBox_ItemsChanged;
             _listBox.FloatTabRequest += _listBox_FloatTabRequest;
+
+            CloseTabCommand = new Command((parameter) => _buttonCloseTab_Click(parameter, null), delegate { return true; });
         }
 
         private void _listBox_FloatTabRequest(object sender, EventArgs e)
@@ -732,6 +735,8 @@ namespace WpfOpenControls.Controls
                 }
             }
         }
+
+        public Command CloseTabCommand { get; set; }
 
         #region INotifyPropertyChanged
 
