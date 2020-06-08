@@ -60,10 +60,6 @@
       <Generator>MSBuild:Compile</Generator>
       <SubType>Designer</SubType>
     </Page>
-    <Page Include="DockManager\ConfigurationView.xaml">
-      <SubType>Designer</SubType>
-      <Generator>MSBuild:Compile</Generator>
-    </Page>
     <Page Include="DockManager\Controls\ToolListBox.xaml">
       <Generator>MSBuild:Compile</Generator>
       <SubType>Designer</SubType>
@@ -95,10 +91,6 @@
     <Compile Include="DockManager\Converters\BrushToColourConverter.cs" />
     <Compile Include="DockManager\Converters\CornerRadiusToStringConverter.cs" />
     <Compile Include="DockManager\Command.cs" />
-    <Compile Include="DockManager\ConfigurationView.xaml.cs">
-      <DependentUpon>ConfigurationView.xaml</DependentUpon>
-    </Compile>
-    <Compile Include="DockManager\ConfigurationViewModel.cs" />
     <Compile Include="DockManager\Controls\IToolListBox.cs" />
     <Compile Include="DockManager\Controls\IToolListBoxItem.cs" />
     <Compile Include="Controls\TabHeader.cs" />

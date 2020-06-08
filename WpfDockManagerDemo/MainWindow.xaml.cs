@@ -109,15 +109,6 @@ namespace WpfDockManagerDemo
             }
         }
         
-        private void Configure()
-        {
-            WpfOpenControls.DockManager.ConfigurationView configurationView = new WpfOpenControls.DockManager.ConfigurationView(_layoutManager);
-            configurationView.Owner = this;
-            configurationView.WindowStartupLocation = WindowStartupLocation.CenterOwner;
-            WpfOpenControls.DockManager.ConfigurationViewModel configurationViewModel = configurationView.DataContext as WpfOpenControls.DockManager.ConfigurationViewModel;
-            configurationView.ShowDialog();
-        }
-
         private void _buttonWindow_Click(object sender, RoutedEventArgs e)
         {
             ContextMenu contextMenu = new ContextMenu();
@@ -140,16 +131,6 @@ namespace WpfDockManagerDemo
             menuItem.IsChecked = false;
             menuItem.Command = new WpfOpenControls.DockManager.Command(delegate { SaveLayout(); }, delegate { return true; });
             contextMenu.Items.Add(menuItem);
-
-            ExampleDockManagerViews.ViewModel.MainViewModel mainViewModel = DataContext as ExampleDockManagerViews.ViewModel.MainViewModel;
-            if (mainViewModel.LayoutLoaded)
-            {
-                menuItem = new MenuItem();
-                menuItem.Header = "Style";
-                menuItem.IsChecked = false;
-                menuItem.Command = new WpfOpenControls.DockManager.Command(delegate { Configure(); }, delegate { return true; });
-                contextMenu.Items.Add(menuItem);
-            }
 
             contextMenu.IsOpen = true;
         }

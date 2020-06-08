@@ -9,7 +9,8 @@ using System.Windows.Media;
 using System.Collections.ObjectModel;
 using WpfOpenControls.Controls;
 using WpfOpenControls.DockManager.Controls;
-using System.Xml.Linq;
+using System.Reflection;
+using System.IO;
 
 namespace WpfOpenControls.DockManager
 {
@@ -37,6 +38,11 @@ namespace WpfOpenControls.DockManager
 
             IDockPaneTreeManager = new DockPaneTreeManager(this, this);
             IUnpinnedToolManager = new UnpinnedToolManager(IDockPaneTreeManager, this, this);
+
+            Uri uri = new Uri("/Theme-VisualStudio;component/Dictionary.xaml",UriKind.Relative);
+            ResourceDictionary dictionary = new ResourceDictionary() { Source = uri };
+
+            Application.Current.Resources.MergedDictionaries.Add(dictionary);
         }
 
         private void LayoutManager_PreviewMouseDown(object sender, MouseButtonEventArgs e)
@@ -380,53 +386,11 @@ namespace WpfOpenControls.DockManager
             UpdateDocumentProperties(documentPaneGroup.IViewContainer);
         }
 
-        private void UpdateToolProperties(IViewContainer iViewContainer)
-        {
-            iViewContainer.FontSize = ToolPaneGroupStyle.FontSize;
-            iViewContainer.FontFamily = ToolPaneGroupStyle.FontFamily;
-            iViewContainer.TabCornerRadius = ToolPaneGroupStyle.TabCornerRadius;
-            iViewContainer.ButtonForeground = ToolPaneGroupStyle.ButtonForeground;
-            iViewContainer.Background = ToolPaneGroupStyle.Background;
-            iViewContainer.GapBrush = ToolPaneGroupStyle.GapBrush;
-            iViewContainer.GapHeight = ToolPaneGroupStyle.GapHeight;
-            iViewContainer.SelectedTabStyle = ToolPaneGroupStyle.SelectedTabStyle;
-            iViewContainer.UnselectedTabStyle = ToolPaneGroupStyle.UnselectedTabStyle;
-            iViewContainer.ActiveScrollIndicatorBrush = ToolPaneGroupStyle.ActiveScrollIndicatorBrush;
-            iViewContainer.InactiveScrollIndicatorBrush = ToolPaneGroupStyle.InactiveScrollIndicatorBrush;
-            iViewContainer.TabItemStyle = ToolTabItemStyle;
-            iViewContainer.ListButtonStyle = ToolPaneGroupStyle.ToolListButtonStyle;
-        }
-
         private void UpdateProperties(ToolPaneGroup toolPaneGroup)
         {
-            toolPaneGroup.Border.BorderThickness = ToolPaneGroupStyle.BorderThickness;
             // Warning warning
-            //toolPaneGroup.Border.BorderBrush = ToolPaneGroupStyle.BorderBrush;
-            toolPaneGroup.Border.CornerRadius = ToolPaneGroupStyle.CornerRadius;
-            toolPaneGroup.HeaderBackground = ToolPaneGroupStyle.HeaderStyle.Background;
-            toolPaneGroup.HeaderBorder.BorderBrush = ToolPaneGroupStyle.HeaderStyle.BorderBrush;
-            toolPaneGroup.HeaderBorder.BorderThickness = ToolPaneGroupStyle.HeaderStyle.BorderThickness;
-            toolPaneGroup.HeaderBorder.Background = ToolPaneGroupStyle.HeaderStyle.Background;
-            toolPaneGroup.HeaderBorder.CornerRadius = ToolPaneGroupStyle.HeaderStyle.CornerRadius;
-            toolPaneGroup.HeaderTitlePadding = ToolPaneGroupStyle.HeaderStyle.TitlePadding;
-            toolPaneGroup.FontSize = ToolPaneGroupStyle.FontSize;
-            toolPaneGroup.FontFamily = ToolPaneGroupStyle.FontFamily;
-            toolPaneGroup.HighlightBrush = SelectedPaneBrush;
-            toolPaneGroup.ButtonForeground = ToolPaneGroupStyle.ButtonForeground;
-            toolPaneGroup.CloseButtonStyle = ToolPaneGroupStyle.CloseButtonStyle;
-            toolPaneGroup.PinButtonStyle = ToolPaneGroupStyle.PinButtonStyle;
-            toolPaneGroup.CommandsButtonStyle = ToolPaneGroupStyle.CommandsButtonStyle;
             toolPaneGroup.ApplyLayout();
-            UpdateToolProperties(toolPaneGroup.IViewContainer as ToolContainer);
-        }
-
-        private void UpdateProperties(FloatingToolPaneGroup floatingToolPaneGroup)
-        {
-            floatingToolPaneGroup.FontSize = ToolPaneGroupStyle.FontSize;
-            floatingToolPaneGroup.FontFamily = ToolPaneGroupStyle.FontFamily;
-            floatingToolPaneGroup.Background = ToolPaneGroupStyle.Background;
-            floatingToolPaneGroup.TitleBarBackground = FloatingToolTitleBarBackground;
-            UpdateToolProperties(floatingToolPaneGroup.IViewContainer);
+            toolPaneGroup.IViewContainer.TabItemStyle = ToolTabItemStyle;
         }
 
         private void UpdateProperties(FloatingDocumentPaneGroup floatingDocumentPaneGroup)
@@ -456,14 +420,6 @@ namespace WpfOpenControls.DockManager
             foreach (var keyValuePair in _dictToolListBoxes)
             {
                 UpdateProperties(keyValuePair.Value);
-            }
-        }
-
-        private void UpdateFloatingToolPaneGroupProperties()
-        {
-            foreach (var floatingToolPaneGroup in FloatingToolPaneGroups)
-            {
-                UpdateProperties(floatingToolPaneGroup as FloatingToolPaneGroup);
             }
         }
 
@@ -502,10 +458,6 @@ namespace WpfOpenControls.DockManager
                 {
                     UpdateProperties(child as DocumentPaneGroup);
                 }
-                else if (child is FloatingToolPaneGroup)
-                {
-                    UpdateProperties((child as FloatingToolPaneGroup));
-                }
                 else if (child is FloatingDocumentPaneGroup)
                 {
                     UpdateProperties(child as FloatingDocumentPaneGroup);
@@ -521,7 +473,6 @@ namespace WpfOpenControls.DockManager
         private void UpdateProperties()
         {
             UpdateProperties(_root);
-            UpdateFloatingToolPaneGroupProperties();
             UpdateFloatingDocumentPaneGroupProperties();
         }
 
@@ -666,51 +617,6 @@ namespace WpfOpenControls.DockManager
         protected virtual void OnToolTabItemStyleChanged(DependencyPropertyChangedEventArgs e)
         {
             if ((Style)e.NewValue != ToolTabItemStyle)
-            {
-                UpdateProperties();
-            }
-        }
-
-        #endregion
-
-        #region ToolPaneGroupStyle dependency property
-
-        [Bindable(true)]
-        [DesignerSerializationVisibility(DesignerSerializationVisibility.Hidden)]
-        public static readonly DependencyProperty ToolPaneGroupStyleProperty = DependencyProperty.Register("ToolPaneGroupStyle", typeof(ToolPaneGroupStyle), typeof(TabHeaderControl), new FrameworkPropertyMetadata(new ToolPaneGroupStyle(), new PropertyChangedCallback(OnToolPaneGroupStyleChanged)));
-
-        public ToolPaneGroupStyle ToolPaneGroupStyle
-        {
-            get
-            {
-                return (ToolPaneGroupStyle)GetValue(ToolPaneGroupStyleProperty);
-            }
-            set
-            {
-                if (value != ToolPaneGroupStyle)
-                {
-                    if (value.SelectedTabStyle == null)
-                    {
-                        value.SelectedTabStyle = (new ToolPaneGroupStyle()).SelectedTabStyle;
-                    }
-                    if (value.UnselectedTabStyle == null)
-                    {
-                        value.UnselectedTabStyle = (new ToolPaneGroupStyle()).UnselectedTabStyle;
-                    }
-                    SetValue(ToolPaneGroupStyleProperty, value);
-                    UpdateProperties();
-                }
-            }
-        }
-
-        private static void OnToolPaneGroupStyleChanged(DependencyObject d, DependencyPropertyChangedEventArgs e)
-        {
-            ((LayoutManager)d).OnToolPaneGroupStyleChanged(e);
-        }
-
-        protected virtual void OnToolPaneGroupStyleChanged(DependencyPropertyChangedEventArgs e)
-        {
-            if ((ToolPaneGroupStyle)e.NewValue != ToolPaneGroupStyle)
             {
                 UpdateProperties();
             }
@@ -1143,7 +1049,6 @@ namespace WpfOpenControls.DockManager
         FloatingToolPaneGroup ILayoutFactory.MakeFloatingToolPaneGroup()
         {
             FloatingToolPaneGroup floatingToolPaneGroup = new FloatingToolPaneGroup();
-            UpdateProperties(floatingToolPaneGroup);
             RegisterFloatingPane(floatingToolPaneGroup);
             FloatingToolPaneGroups.Add(floatingToolPaneGroup);
             return floatingToolPaneGroup;

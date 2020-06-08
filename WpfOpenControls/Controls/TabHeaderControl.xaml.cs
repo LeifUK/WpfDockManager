@@ -706,7 +706,7 @@ namespace WpfOpenControls.Controls
             SelectionChanged?.Invoke(sender, null);
         }
 
-        private void Button_Click(object sender, RoutedEventArgs e)
+        private void _buttonCloseTab_Click(object sender, RoutedEventArgs e)
         {
             Button button = sender as Button;
             if ((button == null) || (button.Parent == null))

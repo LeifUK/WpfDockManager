@@ -23,10 +23,11 @@ namespace WpfOpenControls.DockManager
             ColumnDefinitions.Add(new ColumnDefinition() { Width = new System.Windows.GridLength(4, System.Windows.GridUnitType.Pixel) });
 
             CreateTabControl(2, 0);
-            Grid.SetZIndex(_tabHeaderControl, 1);
+            Grid.SetZIndex(TabHeaderControl, 1);
             
             _gap = new Border();
-            _gap.Height = 2;
+            _gap.SetResourceReference(Border.HeightProperty, "ToolPaneGapHeight");
+            _gap.SetResourceReference(Border.BackgroundProperty, "ToolPaneGapBrush");
             Children.Add(_gap);
             Grid.SetRow(_gap, 1);
             Grid.SetColumn(_gap, 0);
@@ -48,9 +49,27 @@ namespace WpfOpenControls.DockManager
             Children.Add(_listButton);
             Grid.SetRow(_listButton, 2);
             Grid.SetColumn(_listButton, 2);
-            _listButton.Click += delegate { Helpers.DisplayItemsMenu(_items, _tabHeaderControl, _selectedUserControl); };
-            System.Windows.ResourceDictionary res = (System.Windows.ResourceDictionary)Application.LoadComponent(new System.Uri("/WpfOpenControls;component/DockManager/Dictionary.xaml", System.UriKind.Relative));
-            _listButton.Style = WpfOpenControls.Controls.Utilities.GetResourceDictionary()["StyleViewListButton"] as Style;
+            _listButton.Click += delegate { Helpers.DisplayItemsMenu(_items, TabHeaderControl, _selectedUserControl); };
+            _listButton.SetResourceReference(StyleProperty, "ToolPaneListButtonStyle");
+
+            TabHeaderControl.FontSize = (double)FindResource("ToolPaneFontSize");
+            TabHeaderControl.FontFamily = FindResource("ToolPaneFontFamily") as FontFamily;
+
+            TabHeaderControl.SelectedTabBackground = FindResource("ToolPaneSelectedTabBackground") as Brush;
+            TabHeaderControl.SelectedTabBorderBrush = FindResource("ToolPaneSelectedTabBorderBrush") as Brush;
+            TabHeaderControl.SelectedTabBorderThickness = (Thickness)FindResource("ToolPaneSelectedTabBorderThickness");
+            TabHeaderControl.SelectedTabForeground = FindResource("ToolPaneSelectedTabForeground") as Brush;
+            TabHeaderControl.SelectedTabTitlePadding = (Thickness)FindResource("ToolPaneSelectedTabTitlePadding");
+            
+            TabHeaderControl.UnselectedTabBackground = FindResource("ToolPaneUnselectedTabBackground") as Brush;
+            TabHeaderControl.UnselectedTabBorderBrush = FindResource("ToolPaneUnselectedTabBorderBrush") as Brush;
+            TabHeaderControl.UnselectedTabBorderThickness = (Thickness)FindResource("ToolPaneUnselectedTabBorderThickness");
+            TabHeaderControl.UnselectedTabForeground = FindResource("ToolPaneUnselectedTabForeground") as Brush;
+            TabHeaderControl.UnselectedTabTitlePadding = (Thickness)FindResource("ToolPaneUnselectedTabTitlePadding");
+
+            TabHeaderControl.ActiveArrowBrush = FindResource("ToolPaneActiveScrollIndicatorBrush") as Brush;
+            TabHeaderControl.InactiveArrowBrush = FindResource("ToolPaneInactiveScrollIndicatorBrush") as Brush;
+            TabHeaderControl.TabCornerRadius = (CornerRadius)FindResource("ToolPaneTabCornerRadius");
         }
 
         private RowDefinition _rowDefinition_UserControl;

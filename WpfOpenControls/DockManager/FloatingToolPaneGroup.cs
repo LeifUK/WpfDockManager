@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Windows;
+using System.Windows.Media;
 
 namespace WpfOpenControls.DockManager
 {
@@ -7,7 +8,13 @@ namespace WpfOpenControls.DockManager
     {
         internal FloatingToolPaneGroup() : base(new ToolContainer())
         {
-            IViewContainer.SelectionChanged += IViewContainer_SelectionChanged; ;
+            SetResourceReference(Window.FontSizeProperty, "ToolPaneFontSize");
+            SetResourceReference(Window.FontFamilyProperty, "ToolPaneFontFamily");
+            SetResourceReference(Window.BackgroundProperty, "ToolPaneBackground");
+
+            TitleBarBackground = FindResource("FloatingToolTitleBarBackground") as Brush;
+
+            IViewContainer.SelectionChanged += IViewContainer_SelectionChanged;
         }
 
         private void IViewContainer_SelectionChanged(object sender, EventArgs e)

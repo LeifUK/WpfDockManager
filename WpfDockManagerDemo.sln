@@ -11,6 +11,8 @@ Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "ExampleDockManagerViews", "
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "WpfDockManagerDemo_2", "WpfDockManagerDemo_2\WpfDockManagerDemo_2.csproj", "{EC695FC3-A093-4F99-A13C-8885E529C5B7}"
 EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Theme-VisualStudio", "Theme-VisualStudio\Theme-VisualStudio.csproj", "{968C6AFE-1E13-4F9D-B8FC-28B2A2168C9D}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -33,6 +35,10 @@ Global
 		{EC695FC3-A093-4F99-A13C-8885E529C5B7}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{EC695FC3-A093-4F99-A13C-8885E529C5B7}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{EC695FC3-A093-4F99-A13C-8885E529C5B7}.Release|Any CPU.Build.0 = Release|Any CPU
+		{968C6AFE-1E13-4F9D-B8FC-28B2A2168C9D}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{968C6AFE-1E13-4F9D-B8FC-28B2A2168C9D}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{968C6AFE-1E13-4F9D-B8FC-28B2A2168C9D}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{968C6AFE-1E13-4F9D-B8FC-28B2A2168C9D}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE

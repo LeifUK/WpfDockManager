@@ -8,7 +8,7 @@ namespace WpfOpenControls.DockManager
     internal abstract class ViewContainer : Grid, IViewContainer
     {
         protected System.Collections.ObjectModel.ObservableCollection<System.Collections.Generic.KeyValuePair<UserControl, IViewModel>> _items;
-        public WpfOpenControls.Controls.TabHeaderControl _tabHeaderControl;
+        public WpfOpenControls.Controls.TabHeaderControl TabHeaderControl;
         protected UserControl _selectedUserControl;
         protected Border _gap;
         protected Button _listButton;
@@ -17,16 +17,16 @@ namespace WpfOpenControls.DockManager
         {
             _items = new System.Collections.ObjectModel.ObservableCollection<System.Collections.Generic.KeyValuePair<UserControl, IViewModel>>();
 
-            _tabHeaderControl = new WpfOpenControls.Controls.TabHeaderControl();
-            _tabHeaderControl.SelectionChanged += _tabHeaderControl_SelectionChanged;
-            _tabHeaderControl.CloseTabRequest += _tabHeaderControl_CloseTabRequest;
-            _tabHeaderControl.FloatTabRequest += _tabHeaderControl_FloatTabRequest;
-            _tabHeaderControl.ItemsChanged += _tabHeaderControl_ItemsChanged;
-            _tabHeaderControl.ItemsSource = _items;
-            _tabHeaderControl.DisplayMemberPath = "Value.Title";
-            Children.Add(_tabHeaderControl);
-            Grid.SetRow(_tabHeaderControl, row);
-            Grid.SetColumn(_tabHeaderControl, column);
+            TabHeaderControl = new WpfOpenControls.Controls.TabHeaderControl();
+            TabHeaderControl.SelectionChanged += _tabHeaderControl_SelectionChanged;
+            TabHeaderControl.CloseTabRequest += _tabHeaderControl_CloseTabRequest;
+            TabHeaderControl.FloatTabRequest += _tabHeaderControl_FloatTabRequest;
+            TabHeaderControl.ItemsChanged += _tabHeaderControl_ItemsChanged;
+            TabHeaderControl.ItemsSource = _items;
+            TabHeaderControl.DisplayMemberPath = "Value.Title";
+            Children.Add(TabHeaderControl);
+            Grid.SetRow(TabHeaderControl, row);
+            Grid.SetColumn(TabHeaderControl, column);
         }
 
         protected abstract void SetSelectedUserControlGridPosition();
@@ -39,9 +39,9 @@ namespace WpfOpenControls.DockManager
             }
             _selectedUserControl = null;
 
-            if ((_tabHeaderControl.SelectedIndex > -1) && (_tabHeaderControl.SelectedIndex < _items.Count))
+            if ((TabHeaderControl.SelectedIndex > -1) && (TabHeaderControl.SelectedIndex < _items.Count))
             {
-                _selectedUserControl = _items[_tabHeaderControl.SelectedIndex].Key;
+                _selectedUserControl = _items[TabHeaderControl.SelectedIndex].Key;
                 Children.Add(_selectedUserControl);
                 SetSelectedUserControlGridPosition();
             }
@@ -54,14 +54,14 @@ namespace WpfOpenControls.DockManager
         {
             var items = new System.Collections.ObjectModel.ObservableCollection<System.Collections.Generic.KeyValuePair<UserControl, IViewModel>>();
 
-            foreach (var item in _tabHeaderControl.Items)
+            foreach (var item in TabHeaderControl.Items)
             {
                 items.Add((System.Collections.Generic.KeyValuePair<UserControl, IViewModel>)item);
             }
-            int selectedIndex = (_tabHeaderControl.SelectedIndex == -1) ? 0 : _tabHeaderControl.SelectedIndex;
+            int selectedIndex = (TabHeaderControl.SelectedIndex == -1) ? 0 : TabHeaderControl.SelectedIndex;
 
             _items = items;
-            _tabHeaderControl.SelectedIndex = selectedIndex;
+            TabHeaderControl.SelectedIndex = selectedIndex;
 
             _tabHeaderControl_SelectionChanged(this, null);
         }
@@ -94,7 +94,7 @@ namespace WpfOpenControls.DockManager
                 int index = _items.IndexOf(item);
 
                 _items.RemoveAt(index);
-                _tabHeaderControl.ItemsSource = _items;
+                TabHeaderControl.ItemsSource = _items;
 
                 if (item.Key == _selectedUserControl)
                 {
@@ -129,7 +129,7 @@ namespace WpfOpenControls.DockManager
         {
             set
             {
-                _tabHeaderControl.FontSize = value;
+                TabHeaderControl.FontSize = value;
             }
         }
 
@@ -137,7 +137,7 @@ namespace WpfOpenControls.DockManager
         {
             set
             {
-                _tabHeaderControl.FontFamily = value;
+                TabHeaderControl.FontFamily = value;
             }
         }
 
@@ -145,7 +145,7 @@ namespace WpfOpenControls.DockManager
         {
             set
             {
-                _tabHeaderControl.TabCornerRadius = value;
+                TabHeaderControl.TabCornerRadius = value;
             }
         }
 
@@ -171,11 +171,11 @@ namespace WpfOpenControls.DockManager
         {
             set
             {
-                _tabHeaderControl.SelectedTabBorderThickness = value.BorderThickness;
-                _tabHeaderControl.SelectedTabBorderBrush = value.BorderBrush;
-                _tabHeaderControl.SelectedTabBackground = value.Background;
-                _tabHeaderControl.SelectedTabForeground = value.Foreground;
-                _tabHeaderControl.SelectedTabTitlePadding = value.TitlePadding;
+                TabHeaderControl.SelectedTabBorderThickness = value.BorderThickness;
+                TabHeaderControl.SelectedTabBorderBrush = value.BorderBrush;
+                TabHeaderControl.SelectedTabBackground = value.Background;
+                TabHeaderControl.SelectedTabForeground = value.Foreground;
+                TabHeaderControl.SelectedTabTitlePadding = value.TitlePadding;
             }
         }
 
@@ -183,11 +183,11 @@ namespace WpfOpenControls.DockManager
         {
             set
             {
-                _tabHeaderControl.UnselectedTabBorderThickness = value.BorderThickness;
-                _tabHeaderControl.UnselectedTabBorderBrush = value.BorderBrush;
-                _tabHeaderControl.UnselectedTabBackground = value.Background;
-                _tabHeaderControl.UnselectedTabForeground = value.Foreground;
-                _tabHeaderControl.UnselectedTabTitlePadding = value.TitlePadding;
+                TabHeaderControl.UnselectedTabBorderThickness = value.BorderThickness;
+                TabHeaderControl.UnselectedTabBorderBrush = value.BorderBrush;
+                TabHeaderControl.UnselectedTabBackground = value.Background;
+                TabHeaderControl.UnselectedTabForeground = value.Foreground;
+                TabHeaderControl.UnselectedTabTitlePadding = value.TitlePadding;
             }
         }
 
@@ -195,7 +195,7 @@ namespace WpfOpenControls.DockManager
         {
             set
             {
-                _tabHeaderControl.ActiveArrowBrush = value;
+                TabHeaderControl.ActiveArrowBrush = value;
             }
         }
 
@@ -203,7 +203,7 @@ namespace WpfOpenControls.DockManager
         {
             set
             {
-                _tabHeaderControl.InactiveArrowBrush = value;
+                TabHeaderControl.InactiveArrowBrush = value;
             }
         }
 
@@ -211,7 +211,7 @@ namespace WpfOpenControls.DockManager
         { 
             set
             {
-                _tabHeaderControl.ItemContainerStyle = value;
+                TabHeaderControl.ItemContainerStyle = value;
             }
         }
         
@@ -234,12 +234,12 @@ namespace WpfOpenControls.DockManager
         {
             get
             {
-                if ((_items.Count == 0) || (_tabHeaderControl.SelectedIndex == -1))
+                if ((_items.Count == 0) || (TabHeaderControl.SelectedIndex == -1))
                 {
                     return null;
                 }
 
-                return _items[_tabHeaderControl.SelectedIndex].Value.Title;
+                return _items[TabHeaderControl.SelectedIndex].Value.Title;
             }
         }
 
@@ -247,12 +247,12 @@ namespace WpfOpenControls.DockManager
         {
             get
             {
-                if ((_items.Count == 0) || (_tabHeaderControl.SelectedIndex == -1))
+                if ((_items.Count == 0) || (TabHeaderControl.SelectedIndex == -1))
                 {
                     return null;
                 }
 
-                return _items[_tabHeaderControl.SelectedIndex].Value.URL;
+                return _items[TabHeaderControl.SelectedIndex].Value.URL;
             }
         }
 
@@ -264,7 +264,7 @@ namespace WpfOpenControls.DockManager
             System.Diagnostics.Trace.Assert(userControl.DataContext is IViewModel);
 
             _items.Add(new System.Collections.Generic.KeyValuePair<UserControl, IViewModel>(userControl, userControl.DataContext as IViewModel));
-            _tabHeaderControl.SelectedItem = _items[_items.Count - 1];
+            TabHeaderControl.SelectedItem = _items[_items.Count - 1];
         }
 
         public void InsertUserControl(int index, UserControl userControl)
@@ -287,7 +287,7 @@ namespace WpfOpenControls.DockManager
 
             UserControl userControl = _items[index].Key;
             _items.RemoveAt(index);
-            _tabHeaderControl.ItemsSource = _items;
+            TabHeaderControl.ItemsSource = _items;
             if (Children.Contains(userControl))
             {
                 Children.Remove(userControl);
@@ -304,7 +304,7 @@ namespace WpfOpenControls.DockManager
 
         public int GetCurrentTabIndex()
         {
-            return _tabHeaderControl.SelectedIndex;
+            return TabHeaderControl.SelectedIndex;
         }
 
         public UserControl GetUserControl(int index)

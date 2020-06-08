@@ -87,11 +87,9 @@ namespace WpfOpenControls.DockManager
             Grid.SetColumn(_titleLabel, 1);
             Children.Add(_titleLabel);
 
-            System.Windows.ResourceDictionary res = WpfOpenControls.Controls.Utilities.GetResourceDictionary();
-
             _commandsButton = new Button();
             _commandsButton.VerticalAlignment = VerticalAlignment.Center;
-            _commandsButton.Style = res["StyleViewListButton"] as Style;
+            _commandsButton.SetResourceReference(StyleProperty, "ToolPaneCommandsButtonStyle");
             _commandsButton.Click += delegate { DisplayGeneralMenu(); };
             Grid.SetRow(_commandsButton, 1);
             Grid.SetColumn(_commandsButton, 4);
@@ -100,7 +98,7 @@ namespace WpfOpenControls.DockManager
             _pinButton = new Button();
             _pinButton.VerticalAlignment = VerticalAlignment.Center;
             _pinButton.LayoutTransform = new System.Windows.Media.RotateTransform();
-            _pinButton.Style = res["StylePinButton"] as Style;
+            _pinButton.SetResourceReference(StyleProperty, "ToolPanePinButtonStyle");
             _pinButton.Click += PinButton_Click;
             Grid.SetRow(_pinButton, 1);
             Grid.SetColumn(_pinButton, 6);
@@ -108,7 +106,7 @@ namespace WpfOpenControls.DockManager
 
             _closeButton = new Button();
             _closeButton.VerticalAlignment = VerticalAlignment.Center;
-            _closeButton.Style = res["StyleCloseButton"] as Style;
+            _closeButton.SetResourceReference(StyleProperty, "ToolPaneCloseButtonStyle");
             Grid.SetRow(_closeButton, 1);
             Grid.SetColumn(_closeButton, 8);
             Panel.SetZIndex(_closeButton, 99);
@@ -119,6 +117,44 @@ namespace WpfOpenControls.DockManager
             Grid.SetRow(IViewContainer as System.Windows.UIElement, 2);
             Grid.SetColumn(IViewContainer as System.Windows.UIElement, 1);
             Grid.SetColumnSpan(IViewContainer as System.Windows.UIElement, ColumnDefinitions.Count - 2);
+
+
+            Border.SetResourceReference(Border.CornerRadiusProperty, "ToolPaneCornerRadius");
+            Border.SetResourceReference(Border.BorderBrushProperty, "ToolPaneBorderBrush");
+            Border.SetResourceReference(Border.BorderThicknessProperty, "ToolPaneBorderThickness");
+
+            _titleLabel.SetResourceReference(Label.FontSizeProperty, "ToolPaneFontSize");
+            _titleLabel.SetResourceReference(Label.FontFamilyProperty, "ToolPaneFontFamily");
+            _titleLabel.SetResourceReference(Label.PaddingProperty, "ToolPaneHeaderTitlePadding");
+
+            SetResourceReference(Border.BackgroundProperty, "ToolPaneBackground");
+
+            HeaderBorder.SetResourceReference(Border.CornerRadiusProperty, "ToolPaneHeaderCornerRadius");
+            HeaderBorder.SetResourceReference(Border.BorderBrushProperty, "ToolPaneHeaderBorderBrush");
+            HeaderBorder.SetResourceReference(Border.BorderThicknessProperty, "ToolPaneHeaderBorderThickness");
+            HeaderBorder.SetResourceReference(Border.BackgroundProperty, "ToolPaneHeaderBackground");
+            HighlightBrush = new SolidColorBrush();
+            // Warning warning
+            //HighlightBrush.SetValue(Brush.)
+
+            /*
+        public CornerRadius CornerRadius { get; set; }
+        public Brush BorderBrush { get; set; }
+        public Thickness BorderThickness { get; set; }
+        public double FontSize { get; set; }
+        public FontFamily FontFamily { get; set; }
+        public Brush Background { get; set; }
+        public Brush GapBrush { get; set; }
+        public double GapHeight { get; set; }
+        public Brush ButtonForeground { get; set; }
+        public ToolHeaderStyle HeaderStyle { get; set; }
+        public Brush ActiveScrollIndicatorBrush { get; set; }
+        public Brush InactiveScrollIndicatorBrush { get; set; }
+        public CornerRadius TabCornerRadius { get; set; }
+        public TabStyle SelectedTabStyle { get; set; }
+        public TabStyle UnselectedTabStyle { get; set; }
+             
+             */
         }
 
         public Style CloseButtonStyle

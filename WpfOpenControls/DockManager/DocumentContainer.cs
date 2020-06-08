@@ -43,7 +43,7 @@ namespace WpfOpenControls.DockManager
             Children.Add(_listButton);
             Grid.SetRow(_listButton, 1);
             Grid.SetColumn(_listButton, 4);
-            _listButton.Click += delegate { Helpers.DisplayItemsMenu(_items, _tabHeaderControl, _selectedUserControl); };
+            _listButton.Click += delegate { Helpers.DisplayItemsMenu(_items, TabHeaderControl, _selectedUserControl); };
             _listButton.Style = res["StyleViewListButton"] as Style;
         }
 
