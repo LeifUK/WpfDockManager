@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Windows;
+using System.Windows.Media;
 
 namespace WpfOpenControls.DockManager
 {
@@ -7,6 +8,12 @@ namespace WpfOpenControls.DockManager
     {
         internal FloatingDocumentPaneGroup() : base(new DocumentContainer())
         {
+            SetResourceReference(Window.FontSizeProperty, "DocumentPaneFontSize");
+            SetResourceReference(Window.FontFamilyProperty, "DocumentPaneFontFamily");
+            SetResourceReference(Window.BackgroundProperty, "DocumentPaneBackground");
+
+            TitleBarBackground = FindResource("FloatingDocumentTitleBarBackground") as Brush;
+
             IViewContainer.SelectionChanged += IViewContainer_SelectionChanged;
             (IViewContainer as DocumentContainer).HideCommandsButton();
         }

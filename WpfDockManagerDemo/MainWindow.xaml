@@ -77,50 +77,8 @@
                 <dockManager:LayoutManager.SideToolStyle>
                     <dockManager:SideToolStyle FontSize="12" FontFamily="Arial" Foreground="White" BarBrush="#3b4f81" MouseOverBarBrush="AliceBlue"/>
                 </dockManager:LayoutManager.SideToolStyle>
-                
-                <!--<dockManager:LayoutManager.ToolPaneGroupStyle>
-                    <dockManager:ToolPaneGroupStyle>
-                        <dockManager:ToolPaneGroupStyle.TabCornerRadius>0,0,4,4</dockManager:ToolPaneGroupStyle.TabCornerRadius>
-                        <dockManager:ToolPaneGroupStyle.FontSize>12</dockManager:ToolPaneGroupStyle.FontSize>
-                        <dockManager:ToolPaneGroupStyle.FontFamily>Arial</dockManager:ToolPaneGroupStyle.FontFamily>
-                        <dockManager:ToolPaneGroupStyle.Background>#5d6b99</dockManager:ToolPaneGroupStyle.Background>
-                        <dockManager:ToolPaneGroupStyle.GapBrush>AliceBlue</dockManager:ToolPaneGroupStyle.GapBrush>
-                        <dockManager:ToolPaneGroupStyle.HeaderStyle>
-                            <dockManager:ToolHeaderStyle>
-                                <dockManager:ToolHeaderStyle.Background>#3b4f81</dockManager:ToolHeaderStyle.Background>
-                                <dockManager:ToolHeaderStyle.BorderBrush>Gainsboro</dockManager:ToolHeaderStyle.BorderBrush>
-                                <dockManager:ToolHeaderStyle.BorderThickness>0</dockManager:ToolHeaderStyle.BorderThickness>
-                                <dockManager:ToolHeaderStyle.CornerRadius>4,4,0,0</dockManager:ToolHeaderStyle.CornerRadius>
-                                <dockManager:ToolHeaderStyle.TitlePadding>4,0,0,0</dockManager:ToolHeaderStyle.TitlePadding>
-                            </dockManager:ToolHeaderStyle>
-                        </dockManager:ToolPaneGroupStyle.HeaderStyle>
-                        <dockManager:ToolPaneGroupStyle.ButtonForeground>White</dockManager:ToolPaneGroupStyle.ButtonForeground>
-                        <dockManager:ToolPaneGroupStyle.ActiveScrollIndicatorBrush>White</dockManager:ToolPaneGroupStyle.ActiveScrollIndicatorBrush>
-                        <dockManager:ToolPaneGroupStyle.InactiveScrollIndicatorBrush>Transparent</dockManager:ToolPaneGroupStyle.InactiveScrollIndicatorBrush>
-                        <dockManager:ToolPaneGroupStyle.SelectedTabStyle>
-                            <dockManager:TabStyle>
-                                <dockManager:TabStyle.BorderBrush>Transparent</dockManager:TabStyle.BorderBrush>
-                                <dockManager:TabStyle.BorderThickness>0</dockManager:TabStyle.BorderThickness>
-                                <dockManager:TabStyle.Background>AliceBlue</dockManager:TabStyle.Background>
-                                <dockManager:TabStyle.Foreground>Black</dockManager:TabStyle.Foreground>
-                                <dockManager:TabStyle.TitlePadding>2,0,2,0</dockManager:TabStyle.TitlePadding>
-                            </dockManager:TabStyle>
-                        </dockManager:ToolPaneGroupStyle.SelectedTabStyle>
-                        <dockManager:ToolPaneGroupStyle.UnselectedTabStyle>
-                            <dockManager:TabStyle>
-                                <dockManager:TabStyle.BorderBrush>Transparent</dockManager:TabStyle.BorderBrush>
-                                <dockManager:TabStyle.BorderThickness>0</dockManager:TabStyle.BorderThickness>
-                                <dockManager:TabStyle.Background>#3b4f81</dockManager:TabStyle.Background>
-                                <dockManager:TabStyle.Foreground>White</dockManager:TabStyle.Foreground>
-                                <dockManager:TabStyle.TitlePadding>2,0,2,0</dockManager:TabStyle.TitlePadding>
-                            </dockManager:TabStyle>
-                        </dockManager:ToolPaneGroupStyle.UnselectedTabStyle>
-                    </dockManager:ToolPaneGroupStyle>
-                </dockManager:LayoutManager.ToolPaneGroupStyle>-->
-                
-                <!--<dockManager:LayoutManager.FloatingToolTitleBarBackground>#ccd5f0</dockManager:LayoutManager.FloatingToolTitleBarBackground>-->
 
-                <dockManager:LayoutManager.DocumentPaneGroupStyle>
+                <!--<dockManager:LayoutManager.DocumentPaneGroupStyle>
                     <dockManager:DocumentPaneGroupStyle>
                         <dockManager:DocumentPaneGroupStyle.BorderBrush>LightSteelBlue</dockManager:DocumentPaneGroupStyle.BorderBrush>
                         <dockManager:DocumentPaneGroupStyle.BorderThickness>0</dockManager:DocumentPaneGroupStyle.BorderThickness>
@@ -152,9 +110,9 @@
                             </dockManager:TabStyle>
                         </dockManager:DocumentPaneGroupStyle.UnselectedTabStyle>
                     </dockManager:DocumentPaneGroupStyle>
-                </dockManager:LayoutManager.DocumentPaneGroupStyle>
+                </dockManager:LayoutManager.DocumentPaneGroupStyle>-->
 
-                <dockManager:LayoutManager.FloatingDocumentTitleBarBackground>#ccd5f0</dockManager:LayoutManager.FloatingDocumentTitleBarBackground>
+                <!--<dockManager:LayoutManager.FloatingDocumentTitleBarBackground>#ccd5f0</dockManager:LayoutManager.FloatingDocumentTitleBarBackground>-->
                 
                 <dockManager:LayoutManager.DocumentTemplates>
                     <DataTemplate DataType="{x:Type viewModel:DocumentOneViewModel}">

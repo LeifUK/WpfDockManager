@@ -358,32 +358,11 @@ namespace WpfOpenControls.DockManager
 
         #endregion
 
-        private void UpdateDocumentProperties(IViewContainer iViewContainer)
-        {
-            iViewContainer.FontSize = DocumentPaneGroupStyle.FontSize;
-            iViewContainer.FontFamily = DocumentPaneGroupStyle.FontFamily;
-            iViewContainer.TabCornerRadius = DocumentPaneGroupStyle.TabCornerRadius;
-            iViewContainer.GapBrush = DocumentPaneGroupStyle.GapBrush;
-            iViewContainer.GapHeight = DocumentPaneGroupStyle.GapHeight;
-            iViewContainer.ButtonForeground = DocumentPaneGroupStyle.ButtonForeground;
-            iViewContainer.SelectedTabStyle = DocumentPaneGroupStyle.SelectedTabStyle;
-            iViewContainer.UnselectedTabStyle = DocumentPaneGroupStyle.UnselectedTabStyle;
-            iViewContainer.ActiveScrollIndicatorBrush = DocumentPaneGroupStyle.ActiveScrollIndicatorBrush;
-            iViewContainer.InactiveScrollIndicatorBrush = DocumentPaneGroupStyle.InactiveScrollIndicatorBrush;
-            iViewContainer.TabItemStyle = DocumentTabItemStyle;
-            iViewContainer.ListButtonStyle = DocumentPaneGroupStyle.DocumentListButtonStyle;
-            (iViewContainer as DocumentContainer).CommandsButtonStyle = DocumentPaneGroupStyle.CommandsButtonStyle;
-        }
-
         private void UpdateProperties(DocumentPaneGroup documentPaneGroup)
         {
-            documentPaneGroup.Border.BorderThickness = DocumentPaneGroupStyle.BorderThickness;
-            //documentPaneGroup.Border.BorderBrush = DocumentPaneGroupStyle.BorderBrush;
-            documentPaneGroup.Border.CornerRadius = DocumentPaneGroupStyle.CornerRadius;
-            documentPaneGroup.Background = DocumentPaneGroupStyle.Background;
             documentPaneGroup.HighlightBrush = SelectedPaneBrush;
             documentPaneGroup.ApplyLayout();
-            UpdateDocumentProperties(documentPaneGroup.IViewContainer);
+            documentPaneGroup.IViewContainer.TabItemStyle = DocumentTabItemStyle;
         }
 
         private void UpdateProperties(ToolPaneGroup toolPaneGroup)
@@ -391,15 +370,6 @@ namespace WpfOpenControls.DockManager
             // Warning warning
             toolPaneGroup.ApplyLayout();
             toolPaneGroup.IViewContainer.TabItemStyle = ToolTabItemStyle;
-        }
-
-        private void UpdateProperties(FloatingDocumentPaneGroup floatingDocumentPaneGroup)
-        {
-            floatingDocumentPaneGroup.FontSize = DocumentPaneGroupStyle.FontSize;
-            floatingDocumentPaneGroup.FontFamily = DocumentPaneGroupStyle.FontFamily;
-            floatingDocumentPaneGroup.Background = DocumentPaneGroupStyle.Background;
-            floatingDocumentPaneGroup.TitleBarBackground = FloatingDocumentTitleBarBackground;
-            UpdateDocumentProperties(floatingDocumentPaneGroup.IViewContainer);
         }
 
         private void UpdateProperties(Controls.ToolListBox toolListBox)
@@ -420,14 +390,6 @@ namespace WpfOpenControls.DockManager
             foreach (var keyValuePair in _dictToolListBoxes)
             {
                 UpdateProperties(keyValuePair.Value);
-            }
-        }
-
-        private void UpdateFloatingDocumentPaneGroupProperties()
-        {
-            foreach (var floatingDocumentPaneGroup in FloatingDocumentPaneGroups)
-            {
-                UpdateProperties(floatingDocumentPaneGroup as FloatingDocumentPaneGroup);
             }
         }
 
@@ -458,10 +420,6 @@ namespace WpfOpenControls.DockManager
                 {
                     UpdateProperties(child as DocumentPaneGroup);
                 }
-                else if (child is FloatingDocumentPaneGroup)
-                {
-                    UpdateProperties(child as FloatingDocumentPaneGroup);
-                }
 
                 if (child is Grid)
                 {
@@ -473,7 +431,6 @@ namespace WpfOpenControls.DockManager
         private void UpdateProperties()
         {
             UpdateProperties(_root);
-            UpdateFloatingDocumentPaneGroupProperties();
         }
 
         #region SplitterWidth dependency property
@@ -1040,7 +997,6 @@ namespace WpfOpenControls.DockManager
         FloatingDocumentPaneGroup ILayoutFactory.MakeFloatingDocumentPaneGroup()
         {
             FloatingDocumentPaneGroup floatingDocumentPaneGroup = new FloatingDocumentPaneGroup();
-            UpdateProperties(floatingDocumentPaneGroup);
             RegisterFloatingPane(floatingDocumentPaneGroup);
             FloatingDocumentPaneGroups.Add(floatingDocumentPaneGroup);
             return floatingDocumentPaneGroup;

@@ -55,6 +55,16 @@ namespace WpfOpenControls.DockManager
             Grid.SetColumnSpan(IViewContainer as System.Windows.UIElement, ColumnDefinitions.Count - 2);
 
             IsHighlighted = false;
+
+            Border.SetResourceReference(Border.CornerRadiusProperty, "DocumentPaneCornerRadius");
+            Border.SetResourceReference(Border.BorderBrushProperty, "DocumentPaneBorderBrush");
+            Border.SetResourceReference(Border.BorderThicknessProperty, "DocumentPaneBorderThickness");
+
+            SetResourceReference(Border.BackgroundProperty, "DocumentPaneBackground");
+
+            // Warning warning
+            //HighlightBrush.SetValue(Brush.)
+
         }
 
         private Brush _background;

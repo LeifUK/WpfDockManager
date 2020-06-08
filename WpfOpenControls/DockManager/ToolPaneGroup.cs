@@ -118,7 +118,6 @@ namespace WpfOpenControls.DockManager
             Grid.SetColumn(IViewContainer as System.Windows.UIElement, 1);
             Grid.SetColumnSpan(IViewContainer as System.Windows.UIElement, ColumnDefinitions.Count - 2);
 
-
             Border.SetResourceReference(Border.CornerRadiusProperty, "ToolPaneCornerRadius");
             Border.SetResourceReference(Border.BorderBrushProperty, "ToolPaneBorderBrush");
             Border.SetResourceReference(Border.BorderThicknessProperty, "ToolPaneBorderThickness");
@@ -133,28 +132,8 @@ namespace WpfOpenControls.DockManager
             HeaderBorder.SetResourceReference(Border.BorderBrushProperty, "ToolPaneHeaderBorderBrush");
             HeaderBorder.SetResourceReference(Border.BorderThicknessProperty, "ToolPaneHeaderBorderThickness");
             HeaderBorder.SetResourceReference(Border.BackgroundProperty, "ToolPaneHeaderBackground");
-            HighlightBrush = new SolidColorBrush();
             // Warning warning
             //HighlightBrush.SetValue(Brush.)
-
-            /*
-        public CornerRadius CornerRadius { get; set; }
-        public Brush BorderBrush { get; set; }
-        public Thickness BorderThickness { get; set; }
-        public double FontSize { get; set; }
-        public FontFamily FontFamily { get; set; }
-        public Brush Background { get; set; }
-        public Brush GapBrush { get; set; }
-        public double GapHeight { get; set; }
-        public Brush ButtonForeground { get; set; }
-        public ToolHeaderStyle HeaderStyle { get; set; }
-        public Brush ActiveScrollIndicatorBrush { get; set; }
-        public Brush InactiveScrollIndicatorBrush { get; set; }
-        public CornerRadius TabCornerRadius { get; set; }
-        public TabStyle SelectedTabStyle { get; set; }
-        public TabStyle UnselectedTabStyle { get; set; }
-             
-             */
         }
 
         public Style CloseButtonStyle

@@ -148,7 +148,6 @@
     <Compile Include="DockManager\ToolHeaderStyle.cs" />
     <Compile Include="DockManager\ToolListBoxItem.cs" />
     <Compile Include="DockManager\ToolPaneGroup.cs" />
-    <Compile Include="DockManager\ToolPaneGroupStyle.cs" />
     <Compile Include="DockManager\UnpinnedToolData.cs" />
     <Compile Include="DockManager\UnpinnedToolManager.cs" />
     <Compile Include="DockManager\UnpinnedToolPane.xaml.cs">
@@ -163,7 +162,6 @@
     </Compile>
   </ItemGroup>
   <ItemGroup>
-    <Compile Include="DockManager\LayoutManagerStyle.cs" />
     <Compile Include="Properties\AssemblyInfo.cs">
       <SubType>Code</SubType>
     </Compile>
