@@ -8,7 +8,7 @@ namespace WpfOpenControls.DockManager
     {
         internal static void DisplayItemsMenu(
             System.Collections.ObjectModel.ObservableCollection<System.Collections.Generic.KeyValuePair<UserControl, IViewModel>> items,
-            WpfOpenControls.Controls.TabHeaderControl tabHeaderControl,
+            WpfOpenControls.DockManager.Controls.TabHeaderControl tabHeaderControl,
             UserControl selectedUserControl)
         {
             ContextMenu contextMenu = new ContextMenu();

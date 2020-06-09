@@ -7,7 +7,6 @@ using System.Xml;
 using System.Windows.Input;
 using System.Windows.Media;
 using System.Collections.ObjectModel;
-using WpfOpenControls.Controls;
 using WpfOpenControls.DockManager.Controls;
 
 namespace WpfOpenControls.DockManager
@@ -929,7 +928,7 @@ namespace WpfOpenControls.DockManager
             System.Diagnostics.Trace.Assert(sender is Window);
 
             Window floatingWindow = sender as Window;
-            Point cursorPositionOnScreen = WpfOpenControls.Controls.Utilities.GetCursorPosition();
+            Point cursorPositionOnScreen = WpfOpenControls.DockManager.Controls.Utilities.GetCursorPosition();
 
             bool foundSelectedPane = false;
             Point cursorPositionInMainWindow = PointFromScreen(cursorPositionOnScreen);

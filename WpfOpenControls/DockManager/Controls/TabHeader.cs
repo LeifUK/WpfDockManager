@@ -3,7 +3,7 @@ using System.Windows;
 using System.Windows.Input;
 using System.Windows.Controls;
 
-namespace WpfOpenControls.Controls
+namespace WpfOpenControls.DockManager.Controls
 {
     public class TabHeader : ListBox
     {
@@ -19,7 +19,7 @@ namespace WpfOpenControls.Controls
             _mouseLeftButtonDown = true;
 
             // SelectedIndex is yet to be set so we must find it outselves ... 
-            Point cursorScreenPosition = WpfOpenControls.Controls.Utilities.GetCursorPosition();
+            Point cursorScreenPosition = WpfOpenControls.DockManager.Controls.Utilities.GetCursorPosition();
             _dragIndex = GetListBoxItemIndex(cursorScreenPosition);
         }
 
@@ -85,7 +85,7 @@ namespace WpfOpenControls.Controls
                 return;
             }
 
-            Point cursorScreenPosition = WpfOpenControls.Controls.Utilities.GetCursorPosition();
+            Point cursorScreenPosition = WpfOpenControls.DockManager.Controls.Utilities.GetCursorPosition();
             int selectedIndex = GetListBoxItemIndex(cursorScreenPosition);
 
             if ((selectedIndex < 0) || (selectedIndex >= Items.Count) || (selectedIndex == _dragIndex))

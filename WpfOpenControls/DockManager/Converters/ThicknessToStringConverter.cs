@@ -18,7 +18,7 @@ namespace WpfOpenControls.DockManager.Converters
                 throw new InvalidOperationException("The target must be a Thickness");
             }
 
-            WpfOpenControls.Controls.Utilities.Parse(value as string, out Thickness thickness);
+            WpfOpenControls.DockManager.Controls.Utilities.Parse(value as string, out Thickness thickness);
 
             return thickness;
         }

@@ -32,7 +32,7 @@ namespace WpfOpenControls.DockManager
             Grid.SetColumn(_gap, 0);
             Grid.SetColumnSpan(_gap, 6);
 
-            System.Windows.ResourceDictionary res = WpfOpenControls.Controls.Utilities.GetResourceDictionary();
+            System.Windows.ResourceDictionary res = WpfOpenControls.DockManager.Controls.Utilities.GetResourceDictionary();
 
             _commandsButton = new Button();
             Children.Add(_commandsButton);

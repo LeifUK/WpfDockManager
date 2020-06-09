@@ -8,7 +8,7 @@ namespace WpfOpenControls.DockManager
     internal abstract class ViewContainer : Grid, IViewContainer
     {
         protected System.Collections.ObjectModel.ObservableCollection<System.Collections.Generic.KeyValuePair<UserControl, IViewModel>> _items;
-        public WpfOpenControls.Controls.TabHeaderControl TabHeaderControl;
+        public WpfOpenControls.DockManager.Controls.TabHeaderControl TabHeaderControl;
         protected UserControl _selectedUserControl;
         protected Border _gap;
         protected Button _listButton;
@@ -17,7 +17,7 @@ namespace WpfOpenControls.DockManager
         {
             _items = new System.Collections.ObjectModel.ObservableCollection<System.Collections.Generic.KeyValuePair<UserControl, IViewModel>>();
 
-            TabHeaderControl = new WpfOpenControls.Controls.TabHeaderControl();
+            TabHeaderControl = new WpfOpenControls.DockManager.Controls.TabHeaderControl();
             TabHeaderControl.SelectionChanged += _tabHeaderControl_SelectionChanged;
             TabHeaderControl.CloseTabRequest += _tabHeaderControl_CloseTabRequest;
             TabHeaderControl.FloatTabRequest += _tabHeaderControl_FloatTabRequest;

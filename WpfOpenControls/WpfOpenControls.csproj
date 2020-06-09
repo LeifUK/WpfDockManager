@@ -56,7 +56,7 @@
     </Reference>
   </ItemGroup>
   <ItemGroup>
-    <Page Include="Controls\TabHeaderControl.xaml">
+    <Page Include="DockManager\Controls\TabHeaderControl.xaml">
       <Generator>MSBuild:Compile</Generator>
       <SubType>Designer</SubType>
     </Page>
@@ -84,15 +84,15 @@
       <Generator>MSBuild:Compile</Generator>
       <SubType>Designer</SubType>
     </Page>
+    <Compile Include="DockManager\Controls\TabHeader.cs" />
+    <Compile Include="DockManager\Controls\TabHeaderControl.xaml.cs">
+      <DependentUpon>TabHeaderControl.xaml</DependentUpon>
+    </Compile>
     <Compile Include="DockManager\Converters\BrushToColourConverter.cs" />
     <Compile Include="DockManager\Converters\CornerRadiusToStringConverter.cs" />
     <Compile Include="DockManager\Command.cs" />
     <Compile Include="DockManager\Controls\IToolListBox.cs" />
     <Compile Include="DockManager\Controls\IToolListBoxItem.cs" />
-    <Compile Include="Controls\TabHeader.cs" />
-    <Compile Include="Controls\TabHeaderControl.xaml.cs">
-      <DependentUpon>TabHeaderControl.xaml</DependentUpon>
-    </Compile>
     <Compile Include="DockManager\Controls\ToolListBox.xaml.cs">
       <DependentUpon>ToolListBox.xaml</DependentUpon>
     </Compile>
@@ -141,8 +141,8 @@
     <Compile Include="DockManager\UnpinnedToolPane.xaml.cs">
       <DependentUpon>UnpinnedToolPane.xaml</DependentUpon>
     </Compile>
-    <Compile Include="Controls\User32.cs" />
-    <Compile Include="Controls\Utilities.cs" />
+    <Compile Include="DockManager\User32.cs" />
+    <Compile Include="DockManager\Utilities.cs" />
     <Compile Include="DockManager\ViewContainer.cs" />
     <Compile Include="DockManager\WindowLocation.cs" />
     <Compile Include="DockManager\WindowLocationPane.xaml.cs">
@@ -173,6 +173,8 @@
       <LastGenOutput>Settings.Designer.cs</LastGenOutput>
     </None>
   </ItemGroup>
-  <ItemGroup />
+  <ItemGroup>
+    <Folder Include="Controls\" />
+  </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
 </Project>

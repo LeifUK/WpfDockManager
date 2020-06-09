@@ -6,7 +6,7 @@ using System.ComponentModel;
 using System.Windows.Media;
 using WpfOpenControls.DockManager;
 
-namespace WpfOpenControls.Controls
+namespace WpfOpenControls.DockManager.Controls
 {
     public partial class TabHeaderControl : UserControl, INotifyPropertyChanged
     {

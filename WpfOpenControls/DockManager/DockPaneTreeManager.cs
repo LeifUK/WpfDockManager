@@ -264,14 +264,14 @@ namespace WpfOpenControls.DockManager
             if (drag)
             {
                 IntPtr hWnd = new System.Windows.Interop.WindowInteropHelper(Application.Current.MainWindow).EnsureHandle();
-                WpfOpenControls.Controls.Utilities.SendLeftMouseButtonUp(hWnd);
+                WpfOpenControls.DockManager.Controls.Utilities.SendLeftMouseButtonUp(hWnd);
 
                 // Ensure the floated window can be dragged by the user
                 hWnd = new System.Windows.Interop.WindowInteropHelper(floatingPane).EnsureHandle();
-                WpfOpenControls.Controls.Utilities.SendLeftMouseButtonDown(hWnd);
+                WpfOpenControls.DockManager.Controls.Utilities.SendLeftMouseButtonDown(hWnd);
             }
 
-            Point cursorPositionOnScreen = WpfOpenControls.Controls.Utilities.GetCursorPosition();
+            Point cursorPositionOnScreen = WpfOpenControls.DockManager.Controls.Utilities.GetCursorPosition();
             floatingPane.Left = cursorPositionOnScreen.X - 30;
             floatingPane.Top = cursorPositionOnScreen.Y - 30;
             floatingPane.Width = dockPane.ActualWidth;

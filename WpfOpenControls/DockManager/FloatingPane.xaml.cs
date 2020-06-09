@@ -128,7 +128,7 @@ namespace WpfOpenControls.DockManager
                 // Use a task to detect when the drag ends
                 _dragTask = new Task(delegate
                 {
-                    while (WpfOpenControls.Controls.Utilities.IsLeftMouseButtonDown())
+                    while (WpfOpenControls.DockManager.Controls.Utilities.IsLeftMouseButtonDown())
                     {
                         System.Threading.Thread.Sleep(10);
                     }
