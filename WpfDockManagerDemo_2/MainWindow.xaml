@@ -15,7 +15,7 @@
     </WindowChrome.WindowChrome>
     <Window.Resources>
         <ResourceDictionary>
-            <Style x:Key="NewCommandsButtonStyle" TargetType="Button">
+            <!--<Style x:Key="NewCommandsButtonStyle" TargetType="Button">
                 <Setter Property="Width" Value="20"/>
                 <Setter Property="Height" Value="20"/>
                 <Setter Property="VerticalAlignment" Value="Center"/>
@@ -156,7 +156,31 @@
                         </ControlTemplate>
                     </Setter.Value>
                 </Setter>
+            </Style>-->
+            <Style x:Key="StyleTitleBarButton" TargetType="Button">
+                <Setter Property="Background" Value="Transparent"/>
+                <Setter Property="BorderThickness" Value="0"/>
+                <Setter Property="Template">
+                    <Setter.Value>
+                        <ControlTemplate TargetType="Button">
+                            <Grid Margin="0,0,0,0">
+                                <Border Name="_border" Background="Transparent" Padding="6,0,6,2" BorderThickness="1" BorderBrush="Transparent" HorizontalAlignment="Center" VerticalAlignment="Center">
+                                    <ContentPresenter/>
+                                </Border>
+                            </Grid>
+
+                            <ControlTemplate.Triggers>
+                                <Trigger Property="IsMouseOver" Value="True">
+                                    <Setter TargetName="_border" Property="Background" Value="Gainsboro" />
+                                    <Setter TargetName="_border" Property="BorderBrush" Value="Gray" />
+                                    <Setter TargetName="_border" Property="BorderThickness" Value="1" />
+                                </Trigger>
+                            </ControlTemplate.Triggers>
+                        </ControlTemplate>
+                    </Setter.Value>
+                </Setter>
             </Style>
+
             <ResourceDictionary.MergedDictionaries>
                 <ResourceDictionary Source="pack://application:,,,/WpfOpenControls;component/DockManager/Dictionary.xaml"/>
             </ResourceDictionary.MergedDictionaries>
@@ -196,11 +220,8 @@
                 </StackPanel>
             </Grid>
             <dockManager:LayoutManager x:Name="_layoutManager" Grid.Row="1" Grid.Column="0" DocumentsSource="{Binding Documents}" ToolsSource="{Binding Tools}" VerticalAlignment="Stretch" HorizontalAlignment="Stretch" Background="Gray" >
-                <dockManager:LayoutManager.SplitterBrush>Transparent</dockManager:LayoutManager.SplitterBrush>
-                <dockManager:LayoutManager.SplitterWidth>3</dockManager:LayoutManager.SplitterWidth>
-                <dockManager:LayoutManager.SelectedPaneBrush>DarkRed</dockManager:LayoutManager.SelectedPaneBrush>
 
-                <dockManager:LayoutManager.ToolTabItemStyle>
+                <!--<dockManager:LayoutManager.ToolTabItemStyle>
                     <Style TargetType="ListBoxItem">
                         <Setter Property="FrameworkElement.Margin" Value="0"/>
                         <Setter Property="FocusVisualStyle" Value="{x:Null}" />
@@ -243,21 +264,9 @@
                 
                 <dockManager:LayoutManager.ToolPaneGroupStyle>
                     <dockManager:ToolPaneGroupStyle>
-                        <dockManager:ToolPaneGroupStyle.BorderBrush>Gainsboro</dockManager:ToolPaneGroupStyle.BorderBrush>
-                        <dockManager:ToolPaneGroupStyle.BorderThickness>3</dockManager:ToolPaneGroupStyle.BorderThickness>
-                        <dockManager:ToolPaneGroupStyle.CornerRadius>4</dockManager:ToolPaneGroupStyle.CornerRadius>
                         <dockManager:ToolPaneGroupStyle.TabCornerRadius>0,0,4,8</dockManager:ToolPaneGroupStyle.TabCornerRadius>
                         <dockManager:ToolPaneGroupStyle.FontSize>12</dockManager:ToolPaneGroupStyle.FontSize>
                         <dockManager:ToolPaneGroupStyle.FontFamily>Arial</dockManager:ToolPaneGroupStyle.FontFamily>
-                        <dockManager:ToolPaneGroupStyle.Background>Gray</dockManager:ToolPaneGroupStyle.Background>
-                        <dockManager:ToolPaneGroupStyle.GapBrush>Gainsboro</dockManager:ToolPaneGroupStyle.GapBrush>
-                        <dockManager:ToolPaneGroupStyle.GapHeight>2</dockManager:ToolPaneGroupStyle.GapHeight>
-                        <dockManager:ToolPaneGroupStyle.HeaderStyle>
-                            <dockManager:ToolHeaderStyle Background="#505050" BorderBrush="Gainsboro" BorderThickness="0" CornerRadius="4,4,0,0"/>
-                        </dockManager:ToolPaneGroupStyle.HeaderStyle>
-                        <dockManager:ToolPaneGroupStyle.ButtonForeground>White</dockManager:ToolPaneGroupStyle.ButtonForeground>
-                        <dockManager:ToolPaneGroupStyle.ActiveScrollIndicatorBrush>White</dockManager:ToolPaneGroupStyle.ActiveScrollIndicatorBrush>
-                        <dockManager:ToolPaneGroupStyle.InactiveScrollIndicatorBrush>Transparent</dockManager:ToolPaneGroupStyle.InactiveScrollIndicatorBrush>
                         <dockManager:ToolPaneGroupStyle.SelectedTabStyle>
                             <dockManager:TabStyle BorderBrush="Transparent" BorderThickness="0" Background="AliceBlue" Foreground="Black"/>
                         </dockManager:ToolPaneGroupStyle.SelectedTabStyle>
@@ -308,37 +317,6 @@
                     </dockManager:DocumentPaneGroupStyle>
                 </dockManager:LayoutManager.DocumentPaneGroupStyle>
 
-                <dockManager:LayoutManager.SideToolItemContainerStyle>
-                    <Style TargetType="ListBoxItem">
-                        <Setter Property="FrameworkElement.Margin" Value="0"/>
-                        <Setter Property="FocusVisualStyle" Value="{x:Null}" />
-                        <Setter Property="Padding" Value="10" />
-                        <Setter Property="Margin" Value="0" />
-
-                        <Setter Property="Template">
-                            <Setter.Value>
-                                <ControlTemplate TargetType="ListBoxItem">
-                                    <Border Name="Border" Padding="2" SnapsToDevicePixels="true" BorderThickness="0" 
-                                        Background="Transparent">
-                                        <Label Grid.Row="0" Grid.Column="1" x:Name="Label" 
-                                               FontSize="14" FontFamily="Arial" Foreground="Gainsboro" 
-                                               Width="Auto" Padding="2,0,2,0" Margin="2" VerticalAlignment="Center">
-                                            <ContentPresenter />
-                                        </Label>
-                                    </Border>
-                                    <ControlTemplate.Triggers>
-                                        <Trigger Property="IsMouseOver" Value="true">
-                                            <Setter TargetName="Label" Property="Foreground" Value="Black"/>
-                                            <Setter TargetName="Border" Property="Background" Value="AliceBlue"/>
-                                        </Trigger>
-                                    </ControlTemplate.Triggers>
-                                </ControlTemplate>
-                            </Setter.Value>
-                        </Setter>
-                    </Style>
-
-                </dockManager:LayoutManager.SideToolItemContainerStyle>
-
                 <dockManager:LayoutManager.FloatingToolTitleBarBackground>Gainsboro</dockManager:LayoutManager.FloatingToolTitleBarBackground>
 
                 <dockManager:LayoutManager.DocumentTabItemStyle>
@@ -383,7 +361,7 @@
                     </Style>
                 </dockManager:LayoutManager.DocumentTabItemStyle>
 
-                <dockManager:LayoutManager.FloatingDocumentTitleBarBackground>Gainsboro</dockManager:LayoutManager.FloatingDocumentTitleBarBackground>
+                <dockManager:LayoutManager.FloatingDocumentTitleBarBackground>Gainsboro</dockManager:LayoutManager.FloatingDocumentTitleBarBackground>-->
 
                 <dockManager:LayoutManager.DocumentTemplates>
                     <DataTemplate DataType="{x:Type viewModel:DocumentOneViewModel}">

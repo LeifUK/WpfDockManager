@@ -15,7 +15,7 @@ namespace WpfOpenControls.DockManager
     {
         public LayoutManager()
         {
-            Uri uri = new Uri("/Theme-VisualStudio;component/Dictionary.xaml", UriKind.Relative);
+            Uri uri = new Uri("/OpenControls.Wpf.DockManager.Themes.Modern;component/Dictionary.xaml", UriKind.Relative);
             ResourceDictionary dictionary = new ResourceDictionary() { Source = uri };
 
             Application.Current.Resources.MergedDictionaries.Add(dictionary);

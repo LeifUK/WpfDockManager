@@ -103,13 +103,13 @@
       <Project>{f83c1ba1-abcc-40be-a01f-b3055ceec229}</Project>
       <Name>ExampleDockManagerViews</Name>
     </ProjectReference>
-    <ProjectReference Include="..\Theme-VisualStudio\Theme-VisualStudio.csproj">
+    <ProjectReference Include="..\Theme-VisualStudio\OpenControls.Wpf.DockManager.Themes.VS2019.csproj">
       <Project>{968c6afe-1e13-4f9d-b8fc-28b2a2168c9d}</Project>
-      <Name>Theme-VisualStudio</Name>
+      <Name>OpenControls.Wpf.DockManager.Themes.VS2019</Name>
     </ProjectReference>
-    <ProjectReference Include="..\WpfOpenControls\WpfOpenControls.csproj">
+    <ProjectReference Include="..\WpfOpenControls\OpenControls.Wpf.DockManager.csproj">
       <Project>{c4d43e50-84b0-47ff-888e-7c8351368bd6}</Project>
-      <Name>WpfOpenControls</Name>
+      <Name>OpenControls.Wpf.DockManager</Name>
     </ProjectReference>
   </ItemGroup>
   <ItemGroup>
