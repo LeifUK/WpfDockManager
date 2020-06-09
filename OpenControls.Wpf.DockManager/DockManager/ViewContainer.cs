@@ -125,22 +125,6 @@ namespace OpenControls.Wpf.DockManager
 
         #region IViewContainer
 
-        public double FontSize
-        {
-            set
-            {
-                TabHeaderControl.FontSize = value;
-            }
-        }
-
-        public FontFamily FontFamily
-        {
-            set
-            {
-                TabHeaderControl.FontFamily = value;
-            }
-        }
-
         public event EventHandler SelectionChanged;
         public event Events.TabClosedEventHandler TabClosed;
         public event EventHandler FloatTabRequest;

@@ -20,8 +20,5 @@ namespace OpenControls.Wpf.DockManager
         event EventHandler SelectionChanged;
         event Events.TabClosedEventHandler TabClosed;
         event EventHandler FloatTabRequest;
-
-        double FontSize { set; }
-        FontFamily FontFamily { set; }
     }
 }

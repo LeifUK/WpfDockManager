@@ -9,6 +9,11 @@ namespace OpenControls.Wpf.DockManager
     {
         public DocumentPaneGroup() : base(new DocumentContainer())
         {
+            Border.SetResourceReference(Border.CornerRadiusProperty, "DocumentPaneCornerRadius");
+            Border.SetResourceReference(Border.BorderBrushProperty, "DocumentPaneBorderBrush");
+            Border.SetResourceReference(Border.BorderThicknessProperty, "DocumentPaneBorderThickness");
+            SetResourceReference(Grid.BackgroundProperty, "DocumentPaneBackground");
+
             (IViewContainer as DocumentContainer).DisplayGeneralMenu = DisplayGeneralMenu;
 
             VerticalAlignment = System.Windows.VerticalAlignment.Stretch;
@@ -55,16 +60,6 @@ namespace OpenControls.Wpf.DockManager
             Grid.SetColumnSpan(IViewContainer as System.Windows.UIElement, ColumnDefinitions.Count - 2);
 
             IsHighlighted = false;
-
-            Border.SetResourceReference(Border.CornerRadiusProperty, "DocumentPaneCornerRadius");
-            Border.SetResourceReference(Border.BorderBrushProperty, "DocumentPaneBorderBrush");
-            Border.SetResourceReference(Border.BorderThicknessProperty, "DocumentPaneBorderThickness");
-
-            SetResourceReference(Border.BackgroundProperty, "DocumentPaneBackground");
-
-            // Warning warning
-            //HighlightBrush.SetValue(Brush.)
-
         }
 
         private Brush _background;

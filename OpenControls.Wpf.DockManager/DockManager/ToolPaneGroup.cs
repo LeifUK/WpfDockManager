@@ -10,6 +10,11 @@ namespace OpenControls.Wpf.DockManager
     {
         public ToolPaneGroup() : base(new ToolContainer())
         {
+            Border.SetResourceReference(Border.CornerRadiusProperty, "ToolPaneCornerRadius");
+            Border.SetResourceReference(Border.BorderBrushProperty, "ToolPaneBorderBrush");
+            Border.SetResourceReference(Border.BorderThicknessProperty, "ToolPaneBorderThickness");
+            SetResourceReference(Grid.BackgroundProperty, "ToolPaneBackground");
+
             VerticalAlignment = System.Windows.VerticalAlignment.Stretch;
             HorizontalAlignment = HorizontalAlignment.Stretch;
 
@@ -69,9 +74,12 @@ namespace OpenControls.Wpf.DockManager
             HeaderBorder = new Border();
             HeaderBorder.VerticalAlignment = VerticalAlignment.Stretch;
             HeaderBorder.HorizontalAlignment = HorizontalAlignment.Stretch;
-            HeaderBorder.BorderBrush = System.Windows.Media.Brushes.Black;
-            HeaderBackground = System.Windows.Media.Brushes.MidnightBlue;
-            HeaderBorder.BorderThickness = new Thickness(0);
+            HeaderBorder.SetResourceReference(Border.CornerRadiusProperty, "ToolPaneHeaderCornerRadius");
+            HeaderBorder.SetResourceReference(Border.BorderBrushProperty, "ToolPaneHeaderBorderBrush");
+            HeaderBorder.SetResourceReference(Border.BorderThicknessProperty, "ToolPaneHeaderBorderThickness");
+            HeaderBorder.SetResourceReference(Border.BackgroundProperty, "ToolPaneHeaderBackground");
+            HeaderBackground = HeaderBorder.Background;
+
             Grid.SetRow(HeaderBorder, 1);
             Grid.SetColumn(HeaderBorder, 1);
             Grid.SetColumnSpan(HeaderBorder, ColumnDefinitions.Count);
@@ -118,55 +126,9 @@ namespace OpenControls.Wpf.DockManager
             Grid.SetColumn(IViewContainer as System.Windows.UIElement, 1);
             Grid.SetColumnSpan(IViewContainer as System.Windows.UIElement, ColumnDefinitions.Count - 2);
 
-            Border.SetResourceReference(Border.CornerRadiusProperty, "ToolPaneCornerRadius");
-            Border.SetResourceReference(Border.BorderBrushProperty, "ToolPaneBorderBrush");
-            Border.SetResourceReference(Border.BorderThicknessProperty, "ToolPaneBorderThickness");
-
             _titleLabel.SetResourceReference(Label.FontSizeProperty, "ToolPaneFontSize");
             _titleLabel.SetResourceReference(Label.FontFamilyProperty, "ToolPaneFontFamily");
             _titleLabel.SetResourceReference(Label.PaddingProperty, "ToolPaneHeaderTitlePadding");
-
-            SetResourceReference(Border.BackgroundProperty, "ToolPaneBackground");
-
-            HeaderBorder.SetResourceReference(Border.CornerRadiusProperty, "ToolPaneHeaderCornerRadius");
-            HeaderBorder.SetResourceReference(Border.BorderBrushProperty, "ToolPaneHeaderBorderBrush");
-            HeaderBorder.SetResourceReference(Border.BorderThicknessProperty, "ToolPaneHeaderBorderThickness");
-            HeaderBorder.SetResourceReference(Border.BackgroundProperty, "ToolPaneHeaderBackground");
-            // Warning warning
-            //HighlightBrush.SetValue(Brush.)
-        }
-
-        public Style CloseButtonStyle
-        {
-            set
-            {
-                if (value != null)
-                {
-                    _closeButton.Style = value;
-                }
-            }
-        }
-
-        public Style PinButtonStyle
-        {
-            set
-            {
-                if (value != null)
-                {
-                    _pinButton.Style = value;
-                }
-            }
-        }
-
-        public Style CommandsButtonStyle
-        {
-            set
-            {
-                if (value != null)
-                {
-                    _commandsButton.Style = value;
-                }
-            }
         }
 
         public void HideCommandsButton()
@@ -175,14 +137,6 @@ namespace OpenControls.Wpf.DockManager
         }
 
         public Border HeaderBorder;
-
-        public Thickness HeaderTitlePadding
-        {
-            set
-            {
-                _titleLabel.Padding = value;
-            }
-        }
 
         protected Brush _headerBackground;
         public Brush HeaderBackground
@@ -210,38 +164,6 @@ namespace OpenControls.Wpf.DockManager
                 if (HeaderBorder != null)
                 {
                     HeaderBorder.Background = IsHighlighted ? HighlightBrush : _headerBackground;
-                }
-            }
-        }
-
-        public Brush ButtonForeground
-        {
-            set
-            {
-                _pinButton.Foreground = value;
-                _closeButton.Foreground = value;
-                _commandsButton.Foreground = value;
-            }
-        }
-
-        public double FontSize
-        {
-            set
-            {
-                if (_titleLabel != null)
-                {
-                    _titleLabel.FontSize = value;
-                }
-            }
-        }
-
-        public FontFamily FontFamily
-        {
-            set
-            {
-                if (_titleLabel != null)
-                {
-                    _titleLabel.FontFamily = value;
                 }
             }
         }

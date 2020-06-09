@@ -527,7 +527,7 @@
                     <Border Name="Border" Padding="2" SnapsToDevicePixels="true" BorderThickness="0" 
                                         Background="Transparent">
                         <Label Grid.Row="0" Grid.Column="1" x:Name="Label" 
-                                               FontSize="14" FontFamily="Arial" Foreground="Gainsboro" 
+                                               FontSize="14" FontFamily="Arial" Foreground="White" 
                                                Width="Auto" Padding="2,0,2,0" Margin="2" VerticalAlignment="Center">
                             <ContentPresenter />
                         </Label>
@@ -535,7 +535,7 @@
                     <ControlTemplate.Triggers>
                         <Trigger Property="IsMouseOver" Value="true">
                             <Setter TargetName="Label" Property="Foreground" Value="Black"/>
-                            <Setter TargetName="Border" Property="Background" Value="AliceBlue"/>
+                            <Setter TargetName="Border" Property="Background" Value="#eeeeee"/>
                         </Trigger>
                     </ControlTemplate.Triggers>
                 </ControlTemplate>

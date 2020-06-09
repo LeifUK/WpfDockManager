@@ -15,8 +15,6 @@ namespace OpenControls.Wpf.DockManager
             Children.Add(iViewContainer as UIElement);
             Border = new Border();
             Border.Background = Brushes.Transparent;
-            Border.CornerRadius = new CornerRadius(2);
-            Border.BorderThickness = new Thickness(1);
             Border.IsHitTestVisible = false;
             Grid.SetRow(Border, 0);
             Grid.SetRowSpan(Border, 99);
