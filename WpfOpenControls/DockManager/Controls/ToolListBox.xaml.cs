@@ -1,9 +1,6 @@
-﻿using System;
-using System.Windows;
+﻿using System.Windows;
 using System.Windows.Controls;
 using System.ComponentModel;
-using System.Collections;
-using System.Windows.Media;
 
 namespace WpfOpenControls.DockManager.Controls
 {
@@ -221,65 +218,6 @@ namespace WpfOpenControls.DockManager.Controls
         }
 
         #endregion
-
-        //#region BarBrush dependency property
-
-        //[Bindable(true)]
-        //[DesignerSerializationVisibility(DesignerSerializationVisibility.Hidden)]
-        //public static readonly DependencyProperty BarBrushProperty = DependencyProperty.Register("BarBrush", typeof(Brush), typeof(ToolListBox), new FrameworkPropertyMetadata(Brushes.DarkSlateBlue, new PropertyChangedCallback(OnBarBrushChanged)));
-
-        //public Brush BarBrush
-        //{
-        //    get
-        //    {
-        //        return (Brush)GetValue(BarBrushProperty);
-        //    }
-        //    set
-        //    {
-        //        if (value != BarBrush)
-        //        {
-        //            SetValue(BarBrushProperty, value);
-        //        }
-        //    }
-        //}
-
-        //private static void OnBarBrushChanged(DependencyObject d, DependencyPropertyChangedEventArgs e)
-        //{
-        //    ((ToolListBox)d).OnBarBrushChanged(e);
-        //}
-
-        //protected virtual void OnBarBrushChanged(DependencyPropertyChangedEventArgs e)
-        //{
-        //    if ((Brush)e.NewValue != BarBrush)
-        //    {
-        //        BarBrush = (Brush)e.NewValue;
-        //    }
-        //}
-
-        //#endregion BarBrush dependency property
-
-        //#region BarBrushMouseOver dependency property
-
-        //[Bindable(true)]
-        //[DesignerSerializationVisibility(DesignerSerializationVisibility.Hidden)]
-        //public static readonly DependencyProperty BarBrushMouseOverProperty = DependencyProperty.Register("BarBrushMouseOver", typeof(Brush), typeof(ToolListBox), new FrameworkPropertyMetadata(Brushes.LightSteelBlue, null));
-
-        //public Brush BarBrushMouseOver
-        //{
-        //    get
-        //    {
-        //        return (Brush)GetValue(BarBrushMouseOverProperty);
-        //    }
-        //    set
-        //    {
-        //        if (value != BarBrushMouseOver)
-        //        {
-        //            SetValue(BarBrushMouseOverProperty, value);
-        //        }
-        //    }
-        //}
-
-        //#endregion BarBrushMouseOver dependency property
 
         #endregion Dependency properties
 

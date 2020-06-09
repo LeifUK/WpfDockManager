@@ -63,14 +63,6 @@ namespace WpfOpenControls.DockManager
         private RowDefinition _rowDefinition_Spacer;
         private Border _border;
 
-        public override Brush ButtonForeground
-        {
-            set
-            {
-                _listButton.Foreground = value;
-            }
-        }
-
         protected override void SetSelectedUserControlGridPosition()
         {
             Grid.SetRow(_selectedUserControl, 0);

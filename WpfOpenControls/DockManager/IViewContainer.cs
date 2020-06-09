@@ -23,16 +23,5 @@ namespace WpfOpenControls.DockManager
 
         double FontSize { set; }
         FontFamily FontFamily { set; }
-        CornerRadius TabCornerRadius { set; }
-        Brush Background { set; }
-        Brush GapBrush { set; }
-        double GapHeight { set; }
-        Brush ButtonForeground { set; }
-        TabStyle SelectedTabStyle { set; }
-        TabStyle UnselectedTabStyle { set; }
-        Brush ActiveScrollIndicatorBrush { set; }
-        Brush InactiveScrollIndicatorBrush { set; }
-        Style TabItemStyle { set; }
-        Style ListButtonStyle { set; }
     }
 }

@@ -72,15 +72,6 @@ namespace WpfOpenControls.DockManager
 
         public Action DisplayGeneralMenu;
 
-        public override Brush ButtonForeground 
-        {
-            set
-            {
-                _listButton.Foreground = value;
-                _commandsButton.Foreground = value;
-            } 
-        }
-
         protected override void SetSelectedUserControlGridPosition()
         {
             Grid.SetRow(_selectedUserControl, 3);

@@ -8,49 +8,6 @@
              d:DesignHeight="450" d:DesignWidth="800">
     <Grid>
         <ListBox x:Name="_listBox" ScrollViewer.HorizontalScrollBarVisibility="Hidden" Background="Transparent" Padding="0,-2,0,-2" BorderThickness="0" PreviewMouseLeftButtonDown="_listBox_PreviewMouseLeftButtonDown">
-            <ListBox.ItemContainerStyle>
-                <Style TargetType="ListBoxItem">
-                    <Setter Property="FrameworkElement.Margin" Value="0"/>
-                    <Setter Property="FocusVisualStyle" Value="{x:Null}" />
-                    <Setter Property="Padding" Value="10" />
-                    <Setter Property="Margin" Value="0" />
-
-                    <Setter Property="Template">
-                        <Setter.Value>
-                            <ControlTemplate TargetType="ListBoxItem">
-                                <Border Name="Border" Padding="2" SnapsToDevicePixels="true" BorderThickness="0" 
-                                        Background="{Binding Path=Background, RelativeSource={RelativeSource AncestorType={x:Type local:ToolListBox}}}">
-                                    <Grid>
-                                        <Grid.RowDefinitions>
-                                            <RowDefinition Height="Auto"/>
-                                            <RowDefinition Height="4"/>
-                                        </Grid.RowDefinitions>
-                                        <Grid.ColumnDefinitions>
-                                            <ColumnDefinition Width="4"/>
-                                            <ColumnDefinition Width="Auto"/>
-                                            <ColumnDefinition Width="4"/>
-                                        </Grid.ColumnDefinitions>
-                                        <Rectangle Grid.Row="1" Grid.Column="1" x:Name="_rectangle" Fill="{DynamicResource SideToolBarBrush}" Height="4" HorizontalAlignment="Stretch"/>
-                                        <Label Grid.Row="0" Grid.Column="1" x:Name="Label" 
-                                               FontSize="{DynamicResource SideToolFontSize}" 
-                                               FontFamily="{DynamicResource SideToolFontFamily}" 
-                                               FontStyle="{DynamicResource SideToolFontStyle}" 
-                                               Foreground="{DynamicResource SideToolForeground}"
-                                               Width="Auto" Padding="2,4,2,0" Margin="0" VerticalAlignment="Center">
-                                            <ContentPresenter />
-                                        </Label>
-                                    </Grid>
-                                </Border>
-                                <ControlTemplate.Triggers>
-                                    <Trigger Property="IsMouseOver" Value="true">
-                                        <Setter TargetName="_rectangle" Property="Fill" Value="{DynamicResource SideToolMouseOverBarBrush}"/>
-                                    </Trigger>
-                                </ControlTemplate.Triggers>
-                            </ControlTemplate>
-                        </Setter.Value>
-                    </Setter>
-                </Style>
-            </ListBox.ItemContainerStyle>
             <ListBox.ItemsPanel>
                 <ItemsPanelTemplate>
                     <WrapPanel Orientation="Horizontal" Margin="0"/>

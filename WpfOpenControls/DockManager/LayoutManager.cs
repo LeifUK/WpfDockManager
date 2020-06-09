@@ -16,6 +16,11 @@ namespace WpfOpenControls.DockManager
     {
         public LayoutManager()
         {
+            Uri uri = new Uri("/Theme-VisualStudio;component/Dictionary.xaml", UriKind.Relative);
+            ResourceDictionary dictionary = new ResourceDictionary() { Source = uri };
+
+            Application.Current.Resources.MergedDictionaries.Add(dictionary);
+
             Tag = new Guid("3c81a424-ef66-4de7-a361-9968cd88071c");
 
             FloatingToolPaneGroups = new List<IFloatingPane>();
@@ -36,11 +41,6 @@ namespace WpfOpenControls.DockManager
 
             IDockPaneTreeManager = new DockPaneTreeManager(this, this);
             IUnpinnedToolManager = new UnpinnedToolManager(IDockPaneTreeManager, this, this);
-
-            Uri uri = new Uri("/Theme-VisualStudio;component/Dictionary.xaml",UriKind.Relative);
-            ResourceDictionary dictionary = new ResourceDictionary() { Source = uri };
-
-            Application.Current.Resources.MergedDictionaries.Add(dictionary);
         }
 
         private void LayoutManager_PreviewMouseDown(object sender, MouseButtonEventArgs e)
@@ -356,218 +356,6 @@ namespace WpfOpenControls.DockManager
 
         #endregion
 
-        private void UpdateProperties(DocumentPaneGroup documentPaneGroup)
-        {
-            documentPaneGroup.HighlightBrush = SelectedPaneBrush;
-            documentPaneGroup.ApplyLayout();
-            documentPaneGroup.IViewContainer.TabItemStyle = DocumentTabItemStyle;
-        }
-
-        private void UpdateProperties(ToolPaneGroup toolPaneGroup)
-        {
-            // Warning warning
-            toolPaneGroup.ApplyLayout();
-            toolPaneGroup.IViewContainer.TabItemStyle = ToolTabItemStyle;
-        }
-
-        private void UpdateProperties(Controls.ToolListBox toolListBox)
-        {
-            if (SideToolItemContainerStyle != null)
-            {
-                toolListBox.ItemContainerStyle = SideToolItemContainerStyle;
-            }
-        }
-
-        private void UpdateSideToolProperties()
-        {
-            foreach (var keyValuePair in _dictToolListBoxes)
-            {
-                UpdateProperties(keyValuePair.Value);
-            }
-        }
-
-        private void UpdateProperties(Grid grid)
-        {
-            if (grid == null)
-            {
-                return;
-            }
-
-            foreach (var child in grid.Children)
-            {
-                if (child is DocumentPanel)
-                {
-                    (child as DocumentPanel).HighlightBrush = SelectedPaneBrush;
-                }
-                else if (child is ToolPaneGroup)
-                {
-                    UpdateProperties(child as ToolPaneGroup);
-                }
-                else if (child is DocumentPaneGroup)
-                {
-                    UpdateProperties(child as DocumentPaneGroup);
-                }
-
-                if (child is Grid)
-                {
-                    UpdateProperties(child as Grid);
-                }
-            }
-        }
-
-        private void UpdateProperties()
-        {
-            UpdateProperties(_root);
-        }
-
-        #region SelectedPaneBrush dependency property
-
-        [Bindable(true)]
-        [DesignerSerializationVisibility(DesignerSerializationVisibility.Hidden)]
-        public static readonly DependencyProperty SelectedPaneBrushProperty = DependencyProperty.Register("SelectedPaneBrush", typeof(Brush), typeof(TabHeaderControl), new FrameworkPropertyMetadata(Brushes.Crimson, new PropertyChangedCallback(OnSelectedPaneBrushChanged)));
-
-        public Brush SelectedPaneBrush
-        {
-            get
-            {
-                return (Brush)GetValue(SelectedPaneBrushProperty);
-            }
-            set
-            {
-                if (value != SelectedPaneBrush)
-                {
-                    SetValue(SelectedPaneBrushProperty, value);
-                    UpdateProperties();
-                }
-            }
-        }
-
-        private static void OnSelectedPaneBrushChanged(DependencyObject d, DependencyPropertyChangedEventArgs e)
-        {
-            ((LayoutManager)d).OnSelectedPaneBrushChanged(e);
-        }
-
-        protected virtual void OnSelectedPaneBrushChanged(DependencyPropertyChangedEventArgs e)
-        {
-            if ((Brush)e.NewValue != SelectedPaneBrush)
-            {
-                UpdateProperties();
-            }
-        }
-
-        #endregion
-
-        #region ToolTabItemStyle dependency property
-
-        [Bindable(true)]
-        [DesignerSerializationVisibility(DesignerSerializationVisibility.Hidden)]
-        public static readonly DependencyProperty ToolTabItemStyleProperty = DependencyProperty.Register("ToolTabItemStyle", typeof(Style), typeof(TabHeaderControl), new FrameworkPropertyMetadata(null, new PropertyChangedCallback(OnToolTabItemStyleChanged)));
-
-        public Style ToolTabItemStyle
-        {
-            get
-            {
-                return (Style)GetValue(ToolTabItemStyleProperty);
-            }
-            set
-            {
-                if (value != ToolTabItemStyle)
-                {
-                    SetValue(ToolTabItemStyleProperty, value);
-                    UpdateSideToolProperties();
-                }
-            }
-        }
-
-        private static void OnToolTabItemStyleChanged(DependencyObject d, DependencyPropertyChangedEventArgs e)
-        {
-            ((LayoutManager)d).OnToolTabItemStyleChanged(e);
-        }
-
-        protected virtual void OnToolTabItemStyleChanged(DependencyPropertyChangedEventArgs e)
-        {
-            if ((Style)e.NewValue != ToolTabItemStyle)
-            {
-                UpdateProperties();
-            }
-        }
-
-        #endregion
-
-        #region DocumentTabItemStyle dependency property
-
-        [Bindable(true)]
-        [DesignerSerializationVisibility(DesignerSerializationVisibility.Hidden)]
-        public static readonly DependencyProperty DocumentTabItemStyleProperty = DependencyProperty.Register("DocumentTabItemStyle", typeof(Style), typeof(TabHeaderControl), new FrameworkPropertyMetadata(null, new PropertyChangedCallback(OnDocumentTabItemStyleChanged)));
-
-        public Style DocumentTabItemStyle
-        {
-            get
-            {
-                return (Style)GetValue(DocumentTabItemStyleProperty);
-            }
-            set
-            {
-                if (value != DocumentTabItemStyle)
-                {
-                    SetValue(DocumentTabItemStyleProperty, value);
-                    UpdateSideToolProperties();
-                }
-            }
-        }
-
-        private static void OnDocumentTabItemStyleChanged(DependencyObject d, DependencyPropertyChangedEventArgs e)
-        {
-            ((LayoutManager)d).OnDocumentTabItemStyleChanged(e);
-        }
-
-        protected virtual void OnDocumentTabItemStyleChanged(DependencyPropertyChangedEventArgs e)
-        {
-            if ((Style)e.NewValue != DocumentTabItemStyle)
-            {
-                UpdateProperties();
-            }
-        }
-
-        #endregion
-
-        #region SideToolItemContainerStyle dependency property
-
-        [Bindable(true)]
-        [DesignerSerializationVisibility(DesignerSerializationVisibility.Hidden)]
-        public static readonly DependencyProperty SideToolItemContainerStyleProperty = DependencyProperty.Register("SideToolItemContainerStyle", typeof(Style), typeof(TabHeaderControl), new FrameworkPropertyMetadata(null, new PropertyChangedCallback(OnSideToolItemContainerStyleChanged)));
-
-        public Style SideToolItemContainerStyle
-        {
-            get
-            {
-                return (Style)GetValue(SideToolItemContainerStyleProperty);
-            }
-            set
-            {
-                if (value != SideToolItemContainerStyle)
-                {
-                    SetValue(SideToolItemContainerStyleProperty, value);
-                    UpdateSideToolProperties();
-                }
-            }
-        }
-
-        private static void OnSideToolItemContainerStyleChanged(DependencyObject d, DependencyPropertyChangedEventArgs e)
-        {
-            ((LayoutManager)d).OnSideToolItemContainerStyleChanged(e);
-        }
-
-        protected virtual void OnSideToolItemContainerStyleChanged(DependencyPropertyChangedEventArgs e)
-        {
-            if ((Style)e.NewValue != SideToolItemContainerStyle)
-            {
-                UpdateSideToolProperties();
-            }
-        }
-
-        #endregion
-
         #endregion
 
         private void MainWindow_LocationChanged(object sender, EventArgs e)
@@ -585,11 +373,7 @@ namespace WpfOpenControls.DockManager
             System.Diagnostics.Trace.Assert(sender is ToolListBoxItem);
             System.Diagnostics.Trace.Assert((e != null) && (e.ToolListBox != null));
 
-            ToolPaneGroup toolPaneGroup = IUnpinnedToolManager.ShowUnpinnedToolPane(sender as ToolListBoxItem, e.ToolListBox);
-            if (toolPaneGroup != null)
-            {
-                UpdateProperties(toolPaneGroup);
-            }
+            IUnpinnedToolManager.ShowUnpinnedToolPane(sender as ToolListBoxItem, e.ToolListBox);
         }
 
         private void ToolPane_UnPinClick(object sender, EventArgs e)
@@ -604,11 +388,10 @@ namespace WpfOpenControls.DockManager
             ObservableCollection<Controls.IToolListBoxItem> items = new ObservableCollection<Controls.IToolListBoxItem>();
             Controls.ToolListBox toolListBox = new Controls.ToolListBox();
             toolListBox.WindowLocation = windowLocation;
-            UpdateProperties(toolListBox);
-            toolListBox.Background = System.Windows.Media.Brushes.Transparent;
             toolListBox.ItemsSource = items;
             toolListBox.IsHorizontal = isHorizontal;
             toolListBox.DisplayMemberPath = "Title";
+            toolListBox.ItemContainerStyle = FindResource("SideToolItemStyle") as Style;
             toolListBox.ItemClick += ToolListBox_ItemClick;
             Children.Add(toolListBox);
             Grid.SetRow(toolListBox, row);
@@ -685,9 +468,7 @@ namespace WpfOpenControls.DockManager
 
         DocumentPanel ILayoutFactory.MakeDocumentPanel()
         {
-            DocumentPanel documentPanel = new DocumentPanel();
-            documentPanel.HighlightBrush = SelectedPaneBrush;
-            return documentPanel;
+            return new DocumentPanel();
         }
 
         SplitterPane ILayoutFactory.MakeSplitterPane(bool isHorizontal)
@@ -710,7 +491,6 @@ namespace WpfOpenControls.DockManager
         DocumentPaneGroup ILayoutFactory.MakeDocumentPaneGroup()
         {
             DocumentPaneGroup documentPaneGroup = new DocumentPaneGroup();
-            UpdateProperties(documentPaneGroup);
             RegisterDockPane(documentPaneGroup);
             return documentPaneGroup;
         }
@@ -718,7 +498,6 @@ namespace WpfOpenControls.DockManager
         ToolPaneGroup ILayoutFactory.MakeToolPaneGroup()
         {
             ToolPaneGroup toolPaneGroup = new ToolPaneGroup();
-            UpdateProperties(toolPaneGroup);
             RegisterDockPane(toolPaneGroup);
             toolPaneGroup.UnPinClick += ToolPane_UnPinClick;
             return toolPaneGroup;
