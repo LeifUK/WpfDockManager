@@ -105,7 +105,7 @@
       <Project>{e2fcbc58-6ca9-4ea6-852e-ebb43e596f19}</Project>
       <Name>OpenControls.Wpf.DockManager.Themes.Modern</Name>
     </ProjectReference>
-    <ProjectReference Include="..\WpfOpenControls\OpenControls.Wpf.DockManager.csproj">
+    <ProjectReference Include="..\OpenControls.Wpf.DockManager\OpenControls.Wpf.DockManager.csproj">
       <Project>{c4d43e50-84b0-47ff-888e-7c8351368bd6}</Project>
       <Name>OpenControls.Wpf.DockManager</Name>
     </ProjectReference>

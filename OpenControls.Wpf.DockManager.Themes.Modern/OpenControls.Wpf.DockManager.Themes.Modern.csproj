@@ -18,7 +18,7 @@
     <DebugSymbols>true</DebugSymbols>
     <DebugType>full</DebugType>
     <Optimize>false</Optimize>
-    <OutputPath>..\WpfOpenControls\bin\Debug\</OutputPath>
+    <OutputPath>..\OpenControls.Wpf.DockManager\bin\Debug\</OutputPath>
     <DefineConstants>DEBUG;TRACE</DefineConstants>
     <ErrorReport>prompt</ErrorReport>
     <WarningLevel>4</WarningLevel>
@@ -26,7 +26,7 @@
   <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Release|AnyCPU' ">
     <DebugType>pdbonly</DebugType>
     <Optimize>true</Optimize>
-    <OutputPath>..\WpfOpenControls\bin\Release\</OutputPath>
+    <OutputPath>..\OpenControls.Wpf.DockManager\bin\Release\</OutputPath>
     <DefineConstants>TRACE</DefineConstants>
     <ErrorReport>prompt</ErrorReport>
     <WarningLevel>4</WarningLevel>
@@ -55,6 +55,7 @@
     </Page>
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="ModernTheme.cs" />
     <Compile Include="Properties\AssemblyInfo.cs">
       <SubType>Code</SubType>
     </Compile>
@@ -78,7 +79,7 @@
     </None>
   </ItemGroup>
   <ItemGroup>
-    <ProjectReference Include="..\WpfOpenControls\OpenControls.Wpf.DockManager.csproj">
+    <ProjectReference Include="..\OpenControls.Wpf.DockManager\OpenControls.Wpf.DockManager.csproj">
       <Project>{c4d43e50-84b0-47ff-888e-7c8351368bd6}</Project>
       <Name>OpenControls.Wpf.DockManager</Name>
     </ProjectReference>

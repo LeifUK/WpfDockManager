@@ -39,7 +39,7 @@ using System.Windows.Markup;
                                       // app, or any theme specific resource dictionaries)
 )]
 
-[assembly: XmlnsDefinition("http://schemas.opencontrols.com/wpf/xaml/dockmanager.Themes.Modern", "OpenControls.Wpf.DockManager.Themes.Modern")]
+[assembly: XmlnsDefinition("http://schemas.opencontrols.com/wpf/xaml/OpenControls.Wpf.DockManager.Themes.Modern", "OpenControls.Wpf.DockManager.Themes.Modern")]
 
 // Version information for an assembly consists of the following four values:
 //

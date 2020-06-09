@@ -2,7 +2,7 @@
 using System.ComponentModel;
 using System.Collections.ObjectModel;
 using System.Linq;
-using WpfOpenControls.DockManager;
+using OpenControls.Wpf.DockManager;
 using ExampleDockManagerViews.ViewModel;
 
 namespace ExampleDockManagerViews.ViewModel

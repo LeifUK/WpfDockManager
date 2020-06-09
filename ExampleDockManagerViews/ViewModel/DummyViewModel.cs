@@ -1,6 +1,6 @@
 ﻿namespace ExampleDockManagerViews.ViewModel
 {
-    public class DummyViewModel : WpfOpenControls.DockManager.IViewModel
+    public class DummyViewModel : OpenControls.Wpf.DockManager.IViewModel
     {
         public string URL { get; set; }
         public string Title { get; set; }

@@ -5,7 +5,8 @@
         xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
         xmlns:view="clr-namespace:ExampleDockManagerViews.View;assembly=ExampleDockManagerViews"
         xmlns:viewModel="clr-namespace:ExampleDockManagerViews.ViewModel;assembly=ExampleDockManagerViews"
-        xmlns:dockManager="clr-namespace:WpfOpenControls.DockManager;assembly=WpfOpenControls"
+        xmlns:dockManager="clr-namespace:OpenControls.Wpf.DockManager;assembly=OpenControls.Wpf.DockManager"
+        xmlns:themes="clr-namespace:OpenControls.Wpf.DockManager.Themes;assembly=OpenControls.Wpf.DockManager.Themes.Modern"
         mc:Ignorable="d"
         Loaded="Window_Loaded"
         Unloaded="Window_Unloaded"
@@ -15,149 +16,7 @@
     </WindowChrome.WindowChrome>
     <Window.Resources>
         <ResourceDictionary>
-            <!--<Style x:Key="NewCommandsButtonStyle" TargetType="Button">
-                <Setter Property="Width" Value="20"/>
-                <Setter Property="Height" Value="20"/>
-                <Setter Property="VerticalAlignment" Value="Center"/>
-                <Setter Property="Background" Value="Transparent"/>
-                <Setter Property="Foreground" Value="White"/>
-                <Setter Property="BorderThickness" Value="0"/>
-                <Setter Property="Margin" Value="1,2,0,2"/>
-                <Setter Property="Template">
-                    <Setter.Value>
-                        <ControlTemplate TargetType="Button">
-                            <Grid >
-                                <Ellipse Name="_ellipse" Fill="Transparent" Width="18" Height="18" Stroke="White" StrokeThickness="1"/>
-                                <Polygon Name="_triangle" Points="0,1 8,1 4,5" Fill="{TemplateBinding Foreground}" HorizontalAlignment="Center" VerticalAlignment="Center"/>
-                            </Grid>
-
-                            <ControlTemplate.Triggers>
-                                <Trigger Property="IsMouseOver" Value="True">
-                                    <Setter TargetName="_ellipse" Property="Fill" Value="Gainsboro" />
-                                    <Setter TargetName="_ellipse" Property="StrokeThickness" Value="1" />
-                                    <Setter TargetName="_triangle" Property="Fill" Value="Black" />
-                                </Trigger>
-                            </ControlTemplate.Triggers>
-                        </ControlTemplate>
-                    </Setter.Value>
-                </Setter>
-            </Style>
-            <Style x:Key="NewCloseButtonStyle" TargetType="Button">
-                <Setter Property="Width" Value="20"/>
-                <Setter Property="Height" Value="20"/>
-                <Setter Property="VerticalAlignment" Value="Center"/>
-                <Setter Property="Background" Value="Transparent"/>
-                <Setter Property="BorderThickness" Value="0"/>
-                <Setter Property="Margin" Value="1,2,0,2"/>
-                <Setter Property="Template">
-                    <Setter.Value>
-                        <ControlTemplate TargetType="Button">
-                            <Grid Margin="0">
-                                <Ellipse Name="_ellipse" Fill="Transparent" Width="18" Height="18" Stroke="White" StrokeThickness="1"/>
-                                <Line Name="_line_1" X1="6" X2="14" Y1="6" Y2="14" Stroke="White" StrokeThickness="1"/>
-                                <Line Name="_line_2" X1="14" X2="6" Y1="6" Y2="14" Stroke="White" StrokeThickness="1"/>
-                            </Grid>
-
-                            <ControlTemplate.Triggers>
-                                <Trigger Property="IsMouseOver" Value="True">
-                                    <Setter TargetName="_ellipse" Property="Fill" Value="Gainsboro" />
-                                    <Setter TargetName="_line_1" Property="Stroke" Value="Black" />
-                                    <Setter TargetName="_line_2" Property="Stroke" Value="Black" />
-                                </Trigger>
-                            </ControlTemplate.Triggers>
-                        </ControlTemplate>
-                    </Setter.Value>
-                </Setter>
-            </Style>
-            <Style x:Key="NewCloseTabButtonStyle" TargetType="Button">
-                <Setter Property="Width" Value="20"/>
-                <Setter Property="Height" Value="20"/>
-                <Setter Property="VerticalAlignment" Value="Center"/>
-                <Setter Property="BorderThickness" Value="0"/>
-                <Setter Property="Margin" Value="1,2,0,2"/>
-                <Setter Property="Template">
-                    <Setter.Value>
-                        <ControlTemplate TargetType="Button">
-                            <Grid Margin="0">
-                                <Ellipse Name="_ellipse" Fill="Transparent" Width="18" Height="18" Stroke="{TemplateBinding Foreground}" StrokeThickness="1"/>
-                                <Line Name="_line_1" X1="6" X2="14" Y1="6" Y2="14" Stroke="{TemplateBinding Foreground}" StrokeThickness="1"/>
-                                <Line Name="_line_2" X1="14" X2="6" Y1="6" Y2="14" Stroke="{TemplateBinding Foreground}" StrokeThickness="1"/>
-                            </Grid>
-
-                            <ControlTemplate.Triggers>
-                                <Trigger Property="IsMouseOver" Value="True">
-                                    <Setter TargetName="_ellipse" Property="Fill" Value="{Binding RelativeSource={RelativeSource TemplatedParent}, Path=Foreground}" />
-                                    <Setter TargetName="_ellipse" Property="Stroke" Value="{Binding RelativeSource={RelativeSource TemplatedParent}, Path=Background}" />
-                                    <Setter TargetName="_line_1" Property="Stroke" Value="{Binding RelativeSource={RelativeSource TemplatedParent}, Path=Background}" />
-                                    <Setter TargetName="_line_2" Property="Stroke" Value="{Binding RelativeSource={RelativeSource TemplatedParent}, Path=Background}" />
-                                </Trigger>
-                            </ControlTemplate.Triggers>
-                        </ControlTemplate>
-                    </Setter.Value>
-                </Setter>
-            </Style>
-            <Style x:Key="NewListButtonStyle" TargetType="Button">
-                <Setter Property="Width" Value="20"/>
-                <Setter Property="Height" Value="20"/>
-                <Setter Property="VerticalAlignment" Value="Center"/>
-                <Setter Property="Background" Value="Transparent"/>
-                <Setter Property="BorderThickness" Value="0"/>
-                <Setter Property="Margin" Value="1,2,0,2"/>
-                <Setter Property="Template">
-                    <Setter.Value>
-                        <ControlTemplate TargetType="Button">
-                            <Grid Margin="0">
-                                <Ellipse Name="_ellipse" Fill="Transparent" Width="18" Height="18" Stroke="White" StrokeThickness="1"/>
-                                <Line Name="_line_1" X1="6" Y1="6" X2="14" Y2="6" Stroke="White" StrokeThickness="1"/>
-                                <Line Name="_line_2" X1="6" Y1="10" X2="14" Y2="10" Stroke="White" StrokeThickness="1"/>
-                                <Line Name="_line_3" X1="6" Y1="14" X2="14" Y2="14" Stroke="White" StrokeThickness="1"/>
-                            </Grid>
-
-                            <ControlTemplate.Triggers>
-                                <Trigger Property="IsMouseOver" Value="True">
-                                    <Setter TargetName="_ellipse" Property="Fill" Value="Gainsboro" />
-                                    <Setter TargetName="_line_1" Property="Stroke" Value="Black" />
-                                    <Setter TargetName="_line_2" Property="Stroke" Value="Black" />
-                                    <Setter TargetName="_line_3" Property="Stroke" Value="Black" />
-                                </Trigger>
-                            </ControlTemplate.Triggers>
-                        </ControlTemplate>
-                    </Setter.Value>
-                </Setter>
-            </Style>
-            <Style x:Key="NewPinButtonStyle" TargetType="Button">
-                <Setter Property="Width" Value="20"/>
-                <Setter Property="Height" Value="20"/>
-                <Setter Property="VerticalAlignment" Value="Center"/>
-                <Setter Property="Background" Value="Transparent"/>
-                <Setter Property="BorderThickness" Value="0"/>
-                <Setter Property="Margin" Value="1,2,0,2"/>
-                <Setter Property="Template">
-                    <Setter.Value>
-                        <ControlTemplate TargetType="Button">
-                            <Grid Margin="0">
-                                <Ellipse Name="_ellipse" Fill="Transparent" Width="18" Height="18" Stroke="White" StrokeThickness="1"/>
-                                <Grid Margin="2,1,0,0">
-                                    <Line Name="_pin1" X1="8" Y1="-2" X2="8" Y2="4" Stroke="{TemplateBinding Foreground}" StrokeThickness="5" VerticalAlignment="Center"/>
-                                    <Line Name="_pin2" X1="4" Y1="4" X2="12" Y2="4" Stroke="{TemplateBinding Foreground}" StrokeThickness="1" VerticalAlignment="Center"/>
-                                    <Line Name="_pin3" X1="8" Y1="6" X2="8" Y2="10" Stroke="{TemplateBinding Foreground}" StrokeThickness="1" VerticalAlignment="Center"/>
-                                </Grid>
-                            </Grid>
-
-                            <ControlTemplate.Triggers>
-                                <Trigger Property="IsMouseOver" Value="True">
-                                    <Setter TargetName="_ellipse" Property="Fill" Value="Gainsboro" />
-                                    <Setter TargetName="_ellipse" Property="StrokeThickness" Value="1" />
-                                    <Setter TargetName="_pin1" Property="Stroke" Value="Black" />
-                                    <Setter TargetName="_pin2" Property="Stroke" Value="Black" />
-                                    <Setter TargetName="_pin3" Property="Stroke" Value="Black" />
-                                </Trigger>
-                            </ControlTemplate.Triggers>
-                        </ControlTemplate>
-                    </Setter.Value>
-                </Setter>
-            </Style>-->
-            <Style x:Key="StyleTitleBarButton" TargetType="Button">
+             <Style x:Key="StyleTitleBarButton" TargetType="Button">
                 <Setter Property="Background" Value="Transparent"/>
                 <Setter Property="BorderThickness" Value="0"/>
                 <Setter Property="Template">
@@ -182,7 +41,7 @@
             </Style>
 
             <ResourceDictionary.MergedDictionaries>
-                <ResourceDictionary Source="pack://application:,,,/WpfOpenControls;component/DockManager/Dictionary.xaml"/>
+                <ResourceDictionary Source="pack://application:,,,/OpenControls.Wpf.DockManager;component/DockManager/Dictionary.xaml"/>
             </ResourceDictionary.MergedDictionaries>
         </ResourceDictionary>
     </Window.Resources>
@@ -220,149 +79,9 @@
                 </StackPanel>
             </Grid>
             <dockManager:LayoutManager x:Name="_layoutManager" Grid.Row="1" Grid.Column="0" DocumentsSource="{Binding Documents}" ToolsSource="{Binding Tools}" VerticalAlignment="Stretch" HorizontalAlignment="Stretch" Background="Gray" >
-
-                <!--<dockManager:LayoutManager.ToolTabItemStyle>
-                    <Style TargetType="ListBoxItem">
-                        <Setter Property="FrameworkElement.Margin" Value="0"/>
-                        <Setter Property="FocusVisualStyle" Value="{x:Null}" />
-                        <Setter Property="Padding" Value="0" />
-                        <Setter Property="Margin" Value="0" />
-
-                        <Setter Property="Template">
-                            <Setter.Value>
-                                <ControlTemplate TargetType="ListBoxItem">
-                                    <Border Name="Border" Padding="0" SnapsToDevicePixels="true" BorderThickness="0" Margin="1,0,1,0" CornerRadius="0,0,4,4" Background="#505050">
-                                        <Grid>
-                                            <Grid.ColumnDefinitions>
-                                                <ColumnDefinition Width="Auto"/>
-                                                <ColumnDefinition Width="10"/>
-                                                <ColumnDefinition Width="Auto"/>
-                                            </Grid.ColumnDefinitions>
-                                        <Label Grid.Row="0" Grid.Column="0" x:Name="Label" 
-                                               FontSize="14" FontFamily="Arial" Foreground="Gainsboro" 
-                                               Width="Auto" Padding="2,0,2,0" Margin="0" VerticalAlignment="Center">
-                                            <ContentPresenter />
-                                        </Label>
-                                            <Button Grid.Row="0" Grid.Column="2" x:Name="_buttonCloseTool" Content="X" Click="_buttonCloseTool_Click" Style="{StaticResource NewCloseTabButtonStyle}"/>
-                                        </Grid>
-                                    </Border>
-                                    <ControlTemplate.Triggers>
-                                        <Trigger Property="IsSelected" Value="true">
-                                            <Setter TargetName="Label" Property="Foreground" Value="Black"/>
-                                            <Setter TargetName="Border" Property="Background" Value="Gainsboro"/>
-                                            <Setter TargetName="_buttonCloseTool" Property="Foreground" Value="Black"/>
-                                        </Trigger>
-                                        <Trigger Property="IsSelected" Value="false">
-                                            <Setter TargetName="_buttonCloseTool" Property="Foreground" Value="White"/>
-                                        </Trigger>
-                                    </ControlTemplate.Triggers>
-                                </ControlTemplate>
-                            </Setter.Value>
-                        </Setter>
-                    </Style>
-                </dockManager:LayoutManager.ToolTabItemStyle>
-                
-                <dockManager:LayoutManager.ToolPaneGroupStyle>
-                    <dockManager:ToolPaneGroupStyle>
-                        <dockManager:ToolPaneGroupStyle.TabCornerRadius>0,0,4,8</dockManager:ToolPaneGroupStyle.TabCornerRadius>
-                        <dockManager:ToolPaneGroupStyle.FontSize>12</dockManager:ToolPaneGroupStyle.FontSize>
-                        <dockManager:ToolPaneGroupStyle.FontFamily>Arial</dockManager:ToolPaneGroupStyle.FontFamily>
-                        <dockManager:ToolPaneGroupStyle.SelectedTabStyle>
-                            <dockManager:TabStyle BorderBrush="Transparent" BorderThickness="0" Background="AliceBlue" Foreground="Black"/>
-                        </dockManager:ToolPaneGroupStyle.SelectedTabStyle>
-                        <dockManager:ToolPaneGroupStyle.UnselectedTabStyle>
-                            <dockManager:TabStyle BorderBrush="Transparent" BorderThickness="0" Background="#3b4f81" Foreground="White"/>
-                        </dockManager:ToolPaneGroupStyle.UnselectedTabStyle>
-                        <dockManager:ToolPaneGroupStyle.ToolListButtonStyle>
-                            <Style BasedOn="{StaticResource NewListButtonStyle}" TargetType="Button"/>
-                        </dockManager:ToolPaneGroupStyle.ToolListButtonStyle>
-                        <dockManager:ToolPaneGroupStyle.CloseButtonStyle>
-                            <Style BasedOn="{StaticResource NewCloseButtonStyle}" TargetType="Button"/>
-                        </dockManager:ToolPaneGroupStyle.CloseButtonStyle>
-                        <dockManager:ToolPaneGroupStyle.PinButtonStyle>
-                            <Style BasedOn="{StaticResource NewPinButtonStyle}" TargetType="Button"/>
-                        </dockManager:ToolPaneGroupStyle.PinButtonStyle>
-                        <dockManager:ToolPaneGroupStyle.CommandsButtonStyle>
-                            <Style BasedOn="{StaticResource NewCommandsButtonStyle}" TargetType="Button"/>
-                        </dockManager:ToolPaneGroupStyle.CommandsButtonStyle>
-                    </dockManager:ToolPaneGroupStyle>
-                </dockManager:LayoutManager.ToolPaneGroupStyle>
-                
-                <dockManager:LayoutManager.DocumentPaneGroupStyle>
-                    <dockManager:DocumentPaneGroupStyle>
-                        <dockManager:DocumentPaneGroupStyle.BorderBrush>Gainsboro</dockManager:DocumentPaneGroupStyle.BorderBrush>
-                        <dockManager:DocumentPaneGroupStyle.BorderThickness>3</dockManager:DocumentPaneGroupStyle.BorderThickness>
-                        <dockManager:DocumentPaneGroupStyle.CornerRadius>4</dockManager:DocumentPaneGroupStyle.CornerRadius>
-                        <dockManager:DocumentPaneGroupStyle.TabCornerRadius>8,4,0,0</dockManager:DocumentPaneGroupStyle.TabCornerRadius>
-                        <dockManager:DocumentPaneGroupStyle.FontSize>12</dockManager:DocumentPaneGroupStyle.FontSize>
-                        <dockManager:DocumentPaneGroupStyle.FontFamily>Arial</dockManager:DocumentPaneGroupStyle.FontFamily>
-                        <dockManager:DocumentPaneGroupStyle.Background>Gray</dockManager:DocumentPaneGroupStyle.Background>
-                        <dockManager:DocumentPaneGroupStyle.GapBrush>Gainsboro</dockManager:DocumentPaneGroupStyle.GapBrush>
-                        <dockManager:DocumentPaneGroupStyle.GapHeight>2</dockManager:DocumentPaneGroupStyle.GapHeight>
-                        <dockManager:DocumentPaneGroupStyle.ButtonForeground>White</dockManager:DocumentPaneGroupStyle.ButtonForeground>
-                        <dockManager:DocumentPaneGroupStyle.ActiveScrollIndicatorBrush>White</dockManager:DocumentPaneGroupStyle.ActiveScrollIndicatorBrush>
-                        <dockManager:DocumentPaneGroupStyle.InactiveScrollIndicatorBrush>Transparent</dockManager:DocumentPaneGroupStyle.InactiveScrollIndicatorBrush>
-                        <dockManager:DocumentPaneGroupStyle.SelectedTabStyle>
-                            <dockManager:TabStyle BorderBrush="Transparent" BorderThickness="0" Background="Gainsboro" Foreground="Black"/>
-                        </dockManager:DocumentPaneGroupStyle.SelectedTabStyle>
-                        <dockManager:DocumentPaneGroupStyle.UnselectedTabStyle>
-                            <dockManager:TabStyle BorderBrush="Transparent" BorderThickness="0" Background="#3b4f81" Foreground="White"/>
-                        </dockManager:DocumentPaneGroupStyle.UnselectedTabStyle>
-                        <dockManager:DocumentPaneGroupStyle.DocumentListButtonStyle>
-                            <Style BasedOn="{StaticResource NewListButtonStyle}" TargetType="Button"/>
-                        </dockManager:DocumentPaneGroupStyle.DocumentListButtonStyle>
-                        <dockManager:DocumentPaneGroupStyle.CommandsButtonStyle>
-                            <Style BasedOn="{StaticResource NewCommandsButtonStyle}" TargetType="Button"/>
-                        </dockManager:DocumentPaneGroupStyle.CommandsButtonStyle>
-                    </dockManager:DocumentPaneGroupStyle>
-                </dockManager:LayoutManager.DocumentPaneGroupStyle>
-
-                <dockManager:LayoutManager.FloatingToolTitleBarBackground>Gainsboro</dockManager:LayoutManager.FloatingToolTitleBarBackground>
-
-                <dockManager:LayoutManager.DocumentTabItemStyle>
-                    <Style TargetType="ListBoxItem">
-                        <Setter Property="FrameworkElement.Margin" Value="0"/>
-                        <Setter Property="FocusVisualStyle" Value="{x:Null}" />
-                        <Setter Property="Padding" Value="0" />
-                        <Setter Property="Margin" Value="0" />
-
-                        <Setter Property="Template">
-                            <Setter.Value>
-                                <ControlTemplate TargetType="ListBoxItem">
-                                    <Border Name="Border" Padding="0" SnapsToDevicePixels="true" BorderThickness="0" Margin="1,0,1,0" CornerRadius="4,4,0,0"
-                                        Background="#505050">
-                                        <Grid>
-                                            <Grid.ColumnDefinitions>
-                                                <ColumnDefinition Width="Auto"/>
-                                                <ColumnDefinition Width="10"/>
-                                                <ColumnDefinition Width="Auto"/>
-                                            </Grid.ColumnDefinitions>
-                                            <Label Grid.Row="0" Grid.Column="0" x:Name="Label" 
-                                               FontSize="14" FontFamily="Arial" Foreground="Gainsboro" 
-                                               Width="Auto" Padding="2,0,2,0" Margin="0" VerticalAlignment="Center">
-                                                <ContentPresenter />
-                                            </Label>
-                                            <Button Grid.Row="0" Grid.Column="2" x:Name="_buttonCloseDocument" Content="X" Click="_buttonCloseDocument_Click" Style="{StaticResource NewCloseTabButtonStyle}"/>
-                                        </Grid>
-                                    </Border>
-                                    <ControlTemplate.Triggers>
-                                        <Trigger Property="IsSelected" Value="true">
-                                            <Setter TargetName="Label" Property="Foreground" Value="Black"/>
-                                            <Setter TargetName="Border" Property="Background" Value="Gainsboro"/>
-                                            <Setter TargetName="_buttonCloseDocument" Property="Foreground" Value="Black"/>
-                                        </Trigger>
-                                        <Trigger Property="IsSelected" Value="false">
-                                            <Setter TargetName="_buttonCloseDocument" Property="Foreground" Value="White"/>
-                                        </Trigger>
-                                    </ControlTemplate.Triggers>
-                                </ControlTemplate>
-                            </Setter.Value>
-                        </Setter>
-                    </Style>
-                </dockManager:LayoutManager.DocumentTabItemStyle>
-
-                <dockManager:LayoutManager.FloatingDocumentTitleBarBackground>Gainsboro</dockManager:LayoutManager.FloatingDocumentTitleBarBackground>-->
-
+                <dockManager:LayoutManager.Theme>
+                    <themes:ModernTheme/>
+                </dockManager:LayoutManager.Theme>
                 <dockManager:LayoutManager.DocumentTemplates>
                     <DataTemplate DataType="{x:Type viewModel:DocumentOneViewModel}">
                         <view:DocumentOneView x:Name="_documentOneView"/>

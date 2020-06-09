@@ -40,7 +40,7 @@ using System.Windows.Markup;
 )]
 
 
-[assembly: XmlnsDefinition("http://schemas.opencontrols.com/wpf/xaml/dockmanager.Themes.VS2019", "OpenControls.Wpf.DockManager.Themes.VS2019")]
+[assembly: XmlnsDefinition("http://schemas.opencontrols.com/wpf/xaml/OpenControls.Wpf.DockManager.Themes.VS2019", "OpenControls.Wpf.DockManager.Themes.VS2019")]
 
 // Version information for an assembly consists of the following four values:
 //

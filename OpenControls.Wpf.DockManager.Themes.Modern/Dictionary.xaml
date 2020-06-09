@@ -2,7 +2,7 @@
                     xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
                     xmlns:System="clr-namespace:System;assembly=mscorlib"
                     xmlns:SystemWindows="clr-namespace:System.Windows;assembly=PresentationFramework"
-                    xmlns:woc="clr-namespace:WpfOpenControls.DockManager.Controls;assembly=WpfOpenControls">
+                    xmlns:woc="clr-namespace:OpenControls.Wpf.DockManager.Controls;assembly=OpenControls.Wpf.DockManager">
     
     <!-- Common styles -->
 

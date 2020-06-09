@@ -12,6 +12,6 @@ namespace ExampleDockManagerViews.View
             InitializeComponent();
         }
 
-        public WpfOpenControls.DockManager.IViewModel IViewModel { get; set; }
+        public OpenControls.Wpf.DockManager.IViewModel IViewModel { get; set; }
     }
 }

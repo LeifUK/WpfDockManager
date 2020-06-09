@@ -5,7 +5,8 @@
         xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
         xmlns:view="clr-namespace:ExampleDockManagerViews.View;assembly=ExampleDockManagerViews"
         xmlns:viewModel="clr-namespace:ExampleDockManagerViews.ViewModel;assembly=ExampleDockManagerViews"
-        xmlns:dockManager="clr-namespace:WpfOpenControls.DockManager;assembly=WpfOpenControls"
+        xmlns:dockManager="clr-namespace:OpenControls.Wpf.DockManager;assembly=OpenControls.Wpf.DockManager"
+        xmlns:themes="clr-namespace:OpenControls.Wpf.DockManager.Themes;assembly=OpenControls.Wpf.DockManager.Themes.VS2019"
         mc:Ignorable="d"
         Background="LightSteelBlue"
         Loaded="Window_Loaded"
@@ -52,10 +53,7 @@
                 </Setter>
             </Style>
             <ResourceDictionary.MergedDictionaries>
-                <ResourceDictionary Source="pack://application:,,,/WpfOpenControls;component/DockManager/Dictionary.xaml"/>
-                <ResourceDictionary Source="/PresentationFramework.Aero, Version=3.0.0.0,
-           Culture=neutral, PublicKeyToken=31bf3856ad364e35,
-           ProcessorArchitecture=MSIL;component/themes/aero.normalcolor.xaml" />
+                <ResourceDictionary Source="pack://application:,,,/OpenControls.Wpf.DockManager;component/DockManager/Dictionary.xaml"/>
             </ResourceDictionary.MergedDictionaries>
         </ResourceDictionary>
     </Window.Resources>
@@ -93,6 +91,9 @@
                 </StackPanel>
             </Grid>
             <dockManager:LayoutManager x:Name="_layoutManager" Grid.Row="1" Grid.Column="0" DocumentsSource="{Binding Documents}" ToolsSource="{Binding Tools}" VerticalAlignment="Stretch" HorizontalAlignment="Stretch" Background="#5d6b99" >
+                <dockManager:LayoutManager.Theme>
+                    <themes:VS2019Theme/>
+                </dockManager:LayoutManager.Theme>
                 <dockManager:LayoutManager.DocumentTemplates>
                     <DataTemplate DataType="{x:Type viewModel:DocumentOneViewModel}">
                         <view:DocumentOneView x:Name="_documentOneView"/>
