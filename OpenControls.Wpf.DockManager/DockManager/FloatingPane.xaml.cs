@@ -20,13 +20,32 @@ namespace OpenControls.Wpf.DockManager
             _parentContainer.Children.Add(iViewContainer as UIElement);
             Grid.SetRow(iViewContainer as UIElement, 1);
             IViewContainer = iViewContainer;
-        }
 
-        public Brush TitleBarBackground
-        {
-            set
+            _gridHeader.SetResourceReference(Grid.BackgroundProperty, "FloatingPaneTitleBarBackground");
+            _textBlockTitle.SetResourceReference(TextBlock.StyleProperty, "FloatingPaneTitleStyle");
+            SetResourceReference(Window.BackgroundProperty, "FloatingPaneBackground");
+
+            (IViewContainer as ViewContainer).Margin = (Thickness)FindResource("FloatingPanePadding");
+
+            Style style = TryFindResource("FloatingPaneCloseButtonStyle") as Style;
+            if (style != null)
             {
-                _gridHeader.Background = value;
+                _buttonClose.Style = style;
+            }
+            style = TryFindResource("FloatingPaneMaximiseButtonStyle") as Style;
+            if (style != null)
+            {
+                _buttonMaximize.Style = style;
+            }
+            style = TryFindResource("FloatingPaneMinimizeButtonStyle") as Style;
+            if (style != null)
+            {
+                _buttonMinimize.Style = style;
+            }
+            style = TryFindResource("FloatingPaneRestoreButtonStyle") as Style;
+            if (style != null)
+            {
+                _buttonRestore.Style = style;
             }
         }
 
@@ -66,14 +85,14 @@ namespace OpenControls.Wpf.DockManager
             if (WindowState == WindowState.Maximized)
             {
                 MainWindowBorder.BorderThickness = new Thickness(8);
-                RestoreButton.Visibility = Visibility.Visible;
-                MaximizeButton.Visibility = Visibility.Collapsed;
+                _buttonRestore.Visibility = Visibility.Visible;
+                _buttonMaximize.Visibility = Visibility.Collapsed;
             }
             else
             {
                 MainWindowBorder.BorderThickness = new Thickness(0);
-                RestoreButton.Visibility = Visibility.Collapsed;
-                MaximizeButton.Visibility = Visibility.Visible;
+                _buttonRestore.Visibility = Visibility.Collapsed;
+                _buttonMaximize.Visibility = Visibility.Visible;
             }
         }
 

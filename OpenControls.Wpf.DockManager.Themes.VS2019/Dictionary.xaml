@@ -253,8 +253,6 @@
     <Style x:Key="ToolPanePinButtonStyle" TargetType="Button" BasedOn="{StaticResource PinButtonStyle}"/>
     <Style x:Key="ToolPaneCloseButtonStyle" TargetType="Button" BasedOn="{StaticResource CloseButtonStyle}"/>
 
-    <Brush x:Key="FloatingToolTitleBarBackground">#ccd5f0</Brush>
-
     <Style x:Key="ToolPaneTabItem" TargetType="ListBoxItem">
         <Setter Property="FocusVisualStyle" Value="{x:Null}" />
         <Setter Property="Template">
@@ -318,8 +316,6 @@
     <Style x:Key="DocumentPaneCommandsButtonStyle" TargetType="Button" BasedOn="{StaticResource SettingsButtonStyle}"/>
     <Style x:Key="DocumentPaneListButtonStyle" TargetType="Button" BasedOn="{StaticResource ViewListButtonStyle}"/>
 
-    <Brush x:Key="FloatingDocumentTitleBarBackground">#ccd5f0</Brush>
-
     <Style x:Key="DocumentPaneTabItem" TargetType="ListBoxItem">
         <Setter Property="FocusVisualStyle" Value="{x:Null}" />
         <Setter Property="Template">
@@ -364,6 +360,26 @@
             </Setter.Value>
         </Setter>
     </Style>
+
+    <!-- Floating pane specific styles -->
+
+    <Style x:Key="FloatingPaneTitleStyle" TargetType="TextBlock">
+        <Setter Property="Foreground" Value="Black"/>
+        <Setter Property="FontSize" Value="12"/>
+        <Setter Property="FontFamily" Value="Arial"/>
+    </Style>
+    <Brush x:Key="FloatingPaneTitleBarBackground">#ccd5f0</Brush>
+    <Brush x:Key="FloatingPaneBackground">#5d6b99</Brush>
+    <Thickness x:Key="FloatingPanePadding">4,4,4,4</Thickness>
+
+    <!-- Optional floating pane styles: the values below were used for testing only -->
+
+    <!--
+    <Style x:Key="FloatingPaneCloseButtonStyle" TargetType="Button" BasedOn="{StaticResource CloseButtonStyle}"/>
+    <Style x:Key="FloatingPaneMaximiseButtonStyle" TargetType="Button" BasedOn="{StaticResource ViewListButtonStyle}"/>
+    <Style x:Key="FloatingPaneMinimizeButtonStyle" TargetType="Button" BasedOn="{StaticResource PinButtonStyle}"/>
+    <Style x:Key="FloatingPaneRestoreButtonStyle" TargetType="Button" BasedOn="{StaticResource SettingsButtonStyle}"/>
+    -->
 
     <!-- Side tool styles -->
 

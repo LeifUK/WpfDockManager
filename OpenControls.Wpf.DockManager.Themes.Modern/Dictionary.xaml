@@ -401,8 +401,6 @@
     <Style x:Key="ToolPanePinButtonStyle" TargetType="Button" BasedOn="{StaticResource PinButtonStyle}"/>
     <Style x:Key="ToolPaneCloseButtonStyle" TargetType="Button" BasedOn="{StaticResource CloseButtonStyle}"/>
 
-    <Brush x:Key="FloatingToolTitleBarBackground">#ccd5f0</Brush>
-
     <Style x:Key="ToolPaneTabItem" TargetType="ListBoxItem">
         <Setter Property="FocusVisualStyle" Value="{x:Null}" />
         <Setter Property="Template">
@@ -466,8 +464,6 @@
     <Style x:Key="DocumentPaneCommandsButtonStyle" TargetType="Button" BasedOn="{StaticResource CommandsButtonStyle}"/>
     <Style x:Key="DocumentPaneListButtonStyle" TargetType="Button" BasedOn="{StaticResource ViewListButtonStyle}"/>
 
-    <Brush x:Key="FloatingDocumentTitleBarBackground">#ccd5f0</Brush>
-
     <Style x:Key="DocumentPaneTabItem" TargetType="ListBoxItem">
         <Setter Property="FocusVisualStyle" Value="{x:Null}" />
         <Setter Property="Template">
@@ -512,6 +508,17 @@
             </Setter.Value>
         </Setter>
     </Style>
+
+    <!-- Floating pane specific styles -->
+
+    <Style x:Key="FloatingPaneTitleStyle" TargetType="TextBlock">
+        <Setter Property="Foreground" Value="Black"/>
+        <Setter Property="FontSize" Value="12"/>
+        <Setter Property="FontFamily" Value="Arial"/>
+    </Style>
+    <Brush x:Key="FloatingPaneTitleBarBackground">Gainsboro</Brush>
+    <Brush x:Key="FloatingPaneBackground">Gray</Brush>
+    <Thickness x:Key="FloatingPanePadding">4,4,4,4</Thickness>
 
     <!-- Side tool styles -->
 

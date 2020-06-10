@@ -8,12 +8,6 @@ namespace OpenControls.Wpf.DockManager
     {
         internal FloatingToolPaneGroup() : base(new ToolContainer())
         {
-            SetResourceReference(Window.FontSizeProperty, "ToolPaneFontSize");
-            SetResourceReference(Window.FontFamilyProperty, "ToolPaneFontFamily");
-            SetResourceReference(Window.BackgroundProperty, "ToolPaneBackground");
-
-            TitleBarBackground = FindResource("FloatingToolTitleBarBackground") as Brush;
-
             IViewContainer.SelectionChanged += IViewContainer_SelectionChanged;
         }
 
