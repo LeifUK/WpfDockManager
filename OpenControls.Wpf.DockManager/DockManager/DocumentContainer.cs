@@ -9,7 +9,8 @@ namespace OpenControls.Wpf.DockManager
     {
         public DocumentContainer()
         {
-            RowDefinitions.Add(new RowDefinition() { Height = new System.Windows.GridLength(4, System.Windows.GridUnitType.Pixel) });
+            double tabOffset = (double)FindResource("DocumentPaneTabOffset");
+            RowDefinitions.Add(new RowDefinition() { Height = new System.Windows.GridLength(tabOffset, System.Windows.GridUnitType.Pixel) });
             RowDefinitions.Add(new RowDefinition() { Height = new System.Windows.GridLength(1, System.Windows.GridUnitType.Auto) });
             RowDefinitions.Add(new RowDefinition() { Height = new System.Windows.GridLength(1, System.Windows.GridUnitType.Auto) });
             RowDefinitions.Add(new RowDefinition() { Height = new System.Windows.GridLength(1, System.Windows.GridUnitType.Star) });

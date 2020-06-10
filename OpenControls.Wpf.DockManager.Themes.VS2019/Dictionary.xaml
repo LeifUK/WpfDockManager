@@ -234,6 +234,7 @@
     <System:Double x:Key="ToolPaneFontSize">12</System:Double>
     <FontFamily x:Key="ToolPaneFontFamily">Arial</FontFamily>
     <Brush x:Key="ToolPaneBackground">#5d6b99</Brush>
+    <System:Double x:Key="ToolPaneTabOffset">0</System:Double>
 
     <CornerRadius x:Key="ToolPaneHeaderCornerRadius">0</CornerRadius>
     <Brush x:Key="ToolPaneHeaderBorderBrush">Gainsboro</Brush>
@@ -307,7 +308,7 @@
     <System:Double x:Key="DocumentPaneFontSize">12</System:Double>
     <FontFamily x:Key="DocumentPaneFontFamily">Arial</FontFamily>
     <Brush x:Key="DocumentPaneBackground">#5d6b99</Brush>
-
+    <System:Double x:Key="DocumentPaneTabOffset">0</System:Double>
     <Brush x:Key="DocumentPaneGapBrush">#f5cc84</Brush>
     <System:Double x:Key="DocumentPaneGapHeight">2</System:Double>
 

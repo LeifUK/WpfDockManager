@@ -11,7 +11,7 @@ namespace OpenControls.Wpf.DockManager
             _rowDefinition_UserControl = new RowDefinition() { Height = new System.Windows.GridLength(1, System.Windows.GridUnitType.Star) };
             _rowDefinition_Gap = new RowDefinition() { Height = new System.Windows.GridLength(1, System.Windows.GridUnitType.Auto) };
             _rowDefinition_TabHeader = new RowDefinition() { Height = new System.Windows.GridLength(1, System.Windows.GridUnitType.Auto) };
-            _rowDefinition_Spacer = new RowDefinition() { Height = new System.Windows.GridLength(4, System.Windows.GridUnitType.Pixel) };
+            _rowDefinition_Spacer = new RowDefinition() { Height = new System.Windows.GridLength(0, System.Windows.GridUnitType.Pixel) };
             RowDefinitions.Add(_rowDefinition_UserControl);
             RowDefinitions.Add(_rowDefinition_Gap);
             RowDefinitions.Add(_rowDefinition_TabHeader);
@@ -82,7 +82,8 @@ namespace OpenControls.Wpf.DockManager
             {
                 _rowDefinition_Gap.Height = new System.Windows.GridLength(1, System.Windows.GridUnitType.Auto);
                 _rowDefinition_TabHeader.Height = new System.Windows.GridLength(1, System.Windows.GridUnitType.Auto);
-                _rowDefinition_Spacer.Height = new System.Windows.GridLength(4, System.Windows.GridUnitType.Pixel);
+                double tabOffset = (double)FindResource("ToolPaneTabOffset");
+                _rowDefinition_Spacer.Height = new System.Windows.GridLength(tabOffset, System.Windows.GridUnitType.Pixel);
             }
         }
     }

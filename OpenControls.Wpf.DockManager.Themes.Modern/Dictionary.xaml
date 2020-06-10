@@ -382,6 +382,7 @@
     <System:Double x:Key="ToolPaneFontSize">12</System:Double>
     <FontFamily x:Key="ToolPaneFontFamily">Arial</FontFamily>
     <Brush x:Key="ToolPaneBackground">Gray</Brush>
+    <System:Double x:Key="ToolPaneTabOffset">2</System:Double>
 
     <CornerRadius x:Key="ToolPaneHeaderCornerRadius">4,4,0,0</CornerRadius>
     <Brush x:Key="ToolPaneHeaderBorderBrush">Gainsboro</Brush>
@@ -455,7 +456,7 @@
     <System:Double x:Key="DocumentPaneFontSize">12</System:Double>
     <FontFamily x:Key="DocumentPaneFontFamily">Arial</FontFamily>
     <Brush x:Key="DocumentPaneBackground">Gray</Brush>
-
+    <System:Double x:Key="DocumentPaneTabOffset">2</System:Double>
     <Brush x:Key="DocumentPaneGapBrush">Gainsboro</Brush>
     <System:Double x:Key="DocumentPaneGapHeight">2</System:Double>
 
@@ -519,14 +520,12 @@
         <Setter Property="FocusVisualStyle" Value="{x:Null}" />
         <Setter Property="Padding" Value="10" />
         <Setter Property="Margin" Value="0" />
-
         <Setter Property="Template">
             <Setter.Value>
                 <ControlTemplate TargetType="ListBoxItem">
                     <Border Name="Border" Padding="2" SnapsToDevicePixels="true" BorderThickness="0" 
                                         Background="Transparent">
-                        <Label Grid.Row="0" Grid.Column="1" x:Name="Label" 
-                                               FontSize="14" FontFamily="Arial" Foreground="White" 
+                        <Label Grid.Row="0" Grid.Column="1" x:Name="Label" FontSize="12" FontFamily="Arial" Foreground="White" 
                                                Width="Auto" Padding="2,0,2,0" Margin="2" VerticalAlignment="Center">
                             <ContentPresenter />
                         </Label>
