@@ -77,7 +77,6 @@
                         <Line Name="_line_1" X1="6" X2="14" Y1="6" Y2="14" Stroke="{TemplateBinding Foreground}" StrokeThickness="1"/>
                         <Line Name="_line_2" X1="14" X2="6" Y1="6" Y2="14" Stroke="{TemplateBinding Foreground}" StrokeThickness="1"/>
                     </Grid>
-
                     <ControlTemplate.Triggers>
                         <Trigger Property="IsMouseOver" Value="True">
                             <Setter TargetName="_ellipse" Property="Fill" Value="{Binding RelativeSource={RelativeSource TemplatedParent}, Path=Foreground}" />
@@ -439,7 +438,7 @@
                             <Setter TargetName="_border" Property="BorderThickness" Value="0"/>
                             <Setter TargetName="_border" Property="BorderBrush" Value="Transparent"/>
                             <Setter TargetName="_label" Property="Padding" Value="2,0,2,0"/>
-                            <Setter TargetName="_buttonCloseTab" Property="Background" Value="Gainsboro"/>
+                            <Setter TargetName="_buttonCloseTab" Property="Background" Value="#505050"/>
                             <Setter TargetName="_buttonCloseTab" Property="Foreground" Value="White"/>
                         </Trigger>
                     </ControlTemplate.Triggers>
@@ -504,7 +503,7 @@
                             <Setter TargetName="_border" Property="BorderThickness" Value="0"/>
                             <Setter TargetName="_border" Property="BorderBrush" Value="Transparent"/>
                             <Setter TargetName="_label" Property="Padding" Value="2,0,2,0"/>
-                            <Setter TargetName="_buttonCloseTab" Property="Background" Value="Gainsboro"/>
+                            <Setter TargetName="_buttonCloseTab" Property="Background" Value="#505050"/>
                             <Setter TargetName="_buttonCloseTab" Property="Foreground" Value="White"/>
                         </Trigger>
                     </ControlTemplate.Triggers>

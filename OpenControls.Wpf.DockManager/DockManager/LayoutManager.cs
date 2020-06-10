@@ -24,9 +24,7 @@ namespace OpenControls.Wpf.DockManager
         {
             System.Diagnostics.Trace.Assert(Theme != null);
 
-            Uri uri = Theme.Uri;
-            //Uri uri = new Uri("/OpenControls.Wpf.DockManager.Themes.Modern;component/Dictionary.xaml", UriKind.Relative);
-            ResourceDictionary dictionary = new ResourceDictionary() { Source = uri };
+            ResourceDictionary dictionary = new ResourceDictionary() { Source = Theme.Uri };
             Application.Current.Resources.MergedDictionaries.Add(dictionary);
 
             FloatingToolPaneGroups = new List<IFloatingPane>();
