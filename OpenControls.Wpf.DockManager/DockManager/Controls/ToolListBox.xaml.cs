@@ -219,6 +219,29 @@ namespace OpenControls.Wpf.DockManager.Controls
 
         #endregion
 
+        #region TextAngle dependency property
+
+        [Bindable(true)]
+        [DesignerSerializationVisibility(DesignerSerializationVisibility.Hidden)]
+        public static readonly DependencyProperty TextAngleProperty = DependencyProperty.Register("TextAngle", typeof(double), typeof(ToolListBox), new FrameworkPropertyMetadata(0.0, null));
+
+        public double TextAngle
+        {
+            get
+            {
+                return (double)GetValue(TextAngleProperty);
+            }
+            set
+            {
+                if (value != TextAngle)
+                {
+                    SetValue(TextAngleProperty, value);
+                }
+            }
+        }
+
+        #endregion
+
         #endregion Dependency properties
 
         private void _listBox_PreviewMouseLeftButtonDown(object sender, System.Windows.Input.MouseButtonEventArgs e)

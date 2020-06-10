@@ -393,6 +393,7 @@ namespace OpenControls.Wpf.DockManager
         {
             ObservableCollection<Controls.IToolListBoxItem> items = new ObservableCollection<Controls.IToolListBoxItem>();
             Controls.ToolListBox toolListBox = new Controls.ToolListBox();
+            toolListBox.TextAngle = ((windowLocation == WindowLocation.TopSide) || (windowLocation == WindowLocation.RightSide)) ? 180.0 : 0.0;
             toolListBox.WindowLocation = windowLocation;
             toolListBox.ItemsSource = items;
             toolListBox.IsHorizontal = isHorizontal;

@@ -189,19 +189,25 @@ namespace OpenControls.Wpf.DockManager.Serialisation
                     {
                         DocumentPanel documentPanel = iLayoutFactory.MakeDocumentPanel();
 
-                        System.Windows.Markup.IAddChild parentElement = (System.Windows.Markup.IAddChild)parentFrameworkElement;
-                        parentElement.AddChild(documentPanel);
+                        if (parentFrameworkElement == rootFrameworkElement)
+                        {
+                            iLayoutFactory.SetRootPane(documentPanel, out row, out column);
+                        }
+                        else
+                        {
+                            System.Windows.Markup.IAddChild parentElement = (System.Windows.Markup.IAddChild)parentFrameworkElement;
+                            parentElement.AddChild(documentPanel);
+                            Grid.SetRow(documentPanel, row);
+                            Grid.SetColumn(documentPanel, column);
+                        }
 
                         XmlElement xmlDocumentPanel = xmlChildNode as XmlElement;
-
                         SetWidthOrHeight(xmlDocumentPanel, parentFrameworkElement, isParentHorizontal, row, column);
 
-                        LoadNode(iLayoutFactory, viewsMap, rootFrameworkElement, documentPanel, xmlDocumentPanel, true);
-
-                        Grid.SetRow(documentPanel, row);
-                        Grid.SetColumn(documentPanel, column);
                         row += rowIncrement;
                         column += columnIncrement;
+
+                        LoadNode(iLayoutFactory, viewsMap, rootFrameworkElement, documentPanel, xmlDocumentPanel, true);
                     }
                     else if ((xmlChildNode as XmlElement).Name == "DocumentPaneGroup")
                     {

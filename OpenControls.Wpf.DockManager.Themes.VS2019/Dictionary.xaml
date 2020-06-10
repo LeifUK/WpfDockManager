@@ -378,19 +378,27 @@
                     <Border Name="Border" Padding="2" SnapsToDevicePixels="true" BorderThickness="0" Background="Transparent">
                         <Grid>
                             <Grid.RowDefinitions>
-                                <RowDefinition Height="Auto"/>
                                 <RowDefinition Height="4"/>
+                                <RowDefinition Height="Auto"/>
+                                <RowDefinition Height="2"/>
+                                <RowDefinition Height="Auto"/>
                             </Grid.RowDefinitions>
                             <Grid.ColumnDefinitions>
                                 <ColumnDefinition Width="4"/>
                                 <ColumnDefinition Width="Auto"/>
                                 <ColumnDefinition Width="4"/>
                             </Grid.ColumnDefinitions>
-                            <Rectangle Grid.Row="1" Grid.Column="1" x:Name="_rectangle" Fill="#3b4f81" Height="4" HorizontalAlignment="Stretch"/>
-                            <Label Grid.Row="0" Grid.Column="1" FontSize="12" FontFamily="Arial" Foreground="White" Width="Auto" Padding="2,4,2,0" Margin="0" VerticalAlignment="Center">
+                            <Label Grid.Row="1" Grid.Column="1" FontSize="12" FontFamily="Arial" Foreground="White" Width="Auto" Padding="2,0,2,0" Margin="0" VerticalAlignment="Center">
                                 <ContentPresenter />
+                                <Label.LayoutTransform>
+                                    <RotateTransform Angle="{Binding TextAngle, RelativeSource={RelativeSource Mode=FindAncestor, AncestorType=woc:ToolListBox}}" CenterX="0.5" CenterY="0.5"/>
+                                </Label.LayoutTransform>
                             </Label>
+                            <Rectangle Grid.Row="3" Grid.Column="1" x:Name="_rectangle" Fill="#3b4f81" Height="6" HorizontalAlignment="Stretch"/>
                         </Grid>
+                        <Border.LayoutTransform>
+                            <RotateTransform Angle="{Binding TextAngle, RelativeSource={RelativeSource Mode=FindAncestor, AncestorType=woc:ToolListBox}}" CenterX="0.5" CenterY="0.5"/>
+                        </Border.LayoutTransform>
                     </Border>
                     <ControlTemplate.Triggers>
                         <Trigger Property="IsMouseOver" Value="true">
