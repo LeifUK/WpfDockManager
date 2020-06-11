@@ -453,7 +453,7 @@
     <Thickness x:Key="DocumentPaneBorderThickness">3</Thickness>
     <System:Double x:Key="DocumentPaneFontSize">12</System:Double>
     <FontFamily x:Key="DocumentPaneFontFamily">Arial</FontFamily>
-    <Brush x:Key="DocumentPaneBackground">Gray</Brush>
+    <Brush x:Key="DocumentPaneBackground">Red</Brush>
     <System:Double x:Key="DocumentPaneTabOffset">2</System:Double>
     <Brush x:Key="DocumentPaneGapBrush">Gainsboro</Brush>
     <System:Double x:Key="DocumentPaneGapHeight">2</System:Double>

@@ -12,7 +12,7 @@ namespace OpenControls.Wpf.DockManager
             Border.SetResourceReference(Border.CornerRadiusProperty, "DocumentPaneCornerRadius");
             Border.SetResourceReference(Border.BorderBrushProperty, "DocumentPaneBorderBrush");
             Border.SetResourceReference(Border.BorderThicknessProperty, "DocumentPaneBorderThickness");
-            SetResourceReference(Grid.BackgroundProperty, "DocumentPaneBackground");
+            Border.SetResourceReference(Border.BackgroundProperty, "DocumentPaneBackground");
 
             (IViewContainer as DocumentContainer).DisplayGeneralMenu = DisplayGeneralMenu;
 

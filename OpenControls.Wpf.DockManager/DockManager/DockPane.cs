@@ -20,7 +20,7 @@ namespace OpenControls.Wpf.DockManager
             Grid.SetRowSpan(Border, 99);
             Grid.SetColumn(Border, 0);
             Grid.SetColumnSpan(Border, 99);
-            Grid.SetZIndex(Border, 1);
+            Grid.SetZIndex(Border, -1);
             Children.Add(Border);
         }
 

@@ -9,7 +9,7 @@
         xmlns:themes="clr-namespace:OpenControls.Wpf.DockManager.Themes;assembly=OpenControls.Wpf.DockManager.Themes.Modern"
         mc:Ignorable="d"
         Loaded="Window_Loaded"
-        Unloaded="Window_Unloaded"
+        Closing="Window_Closing"
         Title="WPF Dock Manager Demo" Height="450" Width="800">
     <WindowChrome.WindowChrome>
         <WindowChrome CaptionHeight="34" />
