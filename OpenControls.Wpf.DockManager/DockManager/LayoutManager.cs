@@ -24,6 +24,8 @@ namespace OpenControls.Wpf.DockManager
         {
             System.Diagnostics.Trace.Assert(Theme != null);
 
+            UseLayoutRounding = true;
+
             ResourceDictionary dictionary = new ResourceDictionary() { Source = Theme.Uri };
             Application.Current.Resources.MergedDictionaries.Add(dictionary);
 
