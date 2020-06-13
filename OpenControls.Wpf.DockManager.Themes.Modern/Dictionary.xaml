@@ -268,8 +268,6 @@
     <CornerRadius x:Key="ToolPaneCornerRadius">4</CornerRadius>
     <Brush x:Key="ToolPaneBorderBrush">Gainsboro</Brush>
     <Thickness x:Key="ToolPaneBorderThickness">3</Thickness>
-    <System:Double x:Key="ToolPaneFontSize">12</System:Double>
-    <FontFamily x:Key="ToolPaneFontFamily">Arial</FontFamily>
     <Brush x:Key="ToolPaneBackground">Gray</Brush>
     <System:Double x:Key="ToolPaneTabOffset">2</System:Double>
 
@@ -278,6 +276,8 @@
     <Thickness x:Key="ToolPaneHeaderBorderThickness">0</Thickness>
     <Brush x:Key="ToolPaneHeaderBackground">#505050</Brush>
     <Thickness x:Key="ToolPaneHeaderTitlePadding">8,4,0,2</Thickness>
+    <System:Double x:Key="ToolPaneHeaderFontSize">12</System:Double>
+    <FontFamily x:Key="ToolPaneHeaderFontFamily">Arial</FontFamily>
 
     <Brush x:Key="ToolPaneGapBrush">Gainsboro</Brush>
     <System:Double x:Key="ToolPaneGapHeight">2</System:Double>
@@ -295,7 +295,7 @@
         <Setter Property="Template">
             <Setter.Value>
                 <ControlTemplate TargetType="ListBoxItem">
-                    <Border Name="_border" SnapsToDevicePixels="true" BorderThickness="0" CornerRadius="0,0,4,4">
+                    <Border Name="_border" SnapsToDevicePixels="true" BorderThickness="1,0,1,0" BorderBrush="Transparent" CornerRadius="0,0,4,4">
                         <Grid>
                             <Grid.ColumnDefinitions>
                                 <ColumnDefinition Width="4"/>
@@ -314,8 +314,6 @@
                         <Trigger Property="IsSelected" Value="true">
                             <Setter TargetName="_label" Property="Foreground" Value="Black"/>
                             <Setter TargetName="_border" Property="Background" Value="Gainsboro"/>
-                            <Setter TargetName="_border" Property="BorderThickness" Value="0"/>
-                            <Setter TargetName="_border" Property="BorderBrush" Value="Transparent"/>
                             <Setter TargetName="_label" Property="Padding" Value="2,0,2,0"/>
                             <Setter TargetName="_buttonCloseTab" Property="Background" Value="Gainsboro"/>
                             <Setter TargetName="_buttonCloseTab" Property="Foreground" Value="Black"/>
@@ -323,8 +321,6 @@
                         <Trigger Property="IsSelected" Value="false">
                             <Setter TargetName="_label" Property="Foreground" Value="White"/>
                             <Setter TargetName="_border" Property="Background" Value="#505050"/>
-                            <Setter TargetName="_border" Property="BorderThickness" Value="0"/>
-                            <Setter TargetName="_border" Property="BorderBrush" Value="Transparent"/>
                             <Setter TargetName="_label" Property="Padding" Value="2,0,2,0"/>
                             <Setter TargetName="_buttonCloseTab" Property="Background" Value="#505050"/>
                             <Setter TargetName="_buttonCloseTab" Property="Foreground" Value="White"/>
@@ -340,8 +336,6 @@
     <CornerRadius x:Key="DocumentPaneCornerRadius">4</CornerRadius>
     <Brush x:Key="DocumentPaneBorderBrush">Gainsboro</Brush>
     <Thickness x:Key="DocumentPaneBorderThickness">3</Thickness>
-    <System:Double x:Key="DocumentPaneFontSize">12</System:Double>
-    <FontFamily x:Key="DocumentPaneFontFamily">Arial</FontFamily>
     <Brush x:Key="DocumentPaneBackground">Gray</Brush>
     <System:Double x:Key="DocumentPaneTabOffset">2</System:Double>
     <Brush x:Key="DocumentPaneGapBrush">Gainsboro</Brush>
@@ -358,7 +352,7 @@
         <Setter Property="Template">
             <Setter.Value>
                 <ControlTemplate TargetType="ListBoxItem">
-                    <Border Name="_border" SnapsToDevicePixels="true" BorderThickness="0" CornerRadius="4,4,0,0">
+                    <Border Name="_border" SnapsToDevicePixels="true" BorderThickness="1,0,1,0" BorderBrush="Transparent" CornerRadius="4,4,0,0">
                         <Grid>
                             <Grid.ColumnDefinitions>
                                 <ColumnDefinition Width="4"/>
@@ -377,8 +371,6 @@
                         <Trigger Property="IsSelected" Value="true">
                             <Setter TargetName="_label" Property="Foreground" Value="Black"/>
                             <Setter TargetName="_border" Property="Background" Value="Gainsboro"/>
-                            <Setter TargetName="_border" Property="BorderThickness" Value="0"/>
-                            <Setter TargetName="_border" Property="BorderBrush" Value="Transparent"/>
                             <Setter TargetName="_label" Property="Padding" Value="2,0,2,0"/>
                             <Setter TargetName="_buttonCloseTab" Property="Background" Value="Gainsboro"/>
                             <Setter TargetName="_buttonCloseTab" Property="Foreground" Value="Black"/>
@@ -386,8 +378,6 @@
                         <Trigger Property="IsSelected" Value="false">
                             <Setter TargetName="_label" Property="Foreground" Value="White"/>
                             <Setter TargetName="_border" Property="Background" Value="#505050"/>
-                            <Setter TargetName="_border" Property="BorderThickness" Value="0"/>
-                            <Setter TargetName="_border" Property="BorderBrush" Value="Transparent"/>
                             <Setter TargetName="_label" Property="Padding" Value="2,0,2,0"/>
                             <Setter TargetName="_buttonCloseTab" Property="Background" Value="#505050"/>
                             <Setter TargetName="_buttonCloseTab" Property="Foreground" Value="White"/>
@@ -407,7 +397,7 @@
     </Style>
     <Brush x:Key="FloatingPaneTitleBarBackground">Gainsboro</Brush>
     <Brush x:Key="FloatingPaneBackground">Gray</Brush>
-    <Thickness x:Key="FloatingPanePadding">4,4,4,4</Thickness>
+    <Thickness x:Key="FloatingPanePadding">1</Thickness>
 
     <!-- Side tool styles -->
 

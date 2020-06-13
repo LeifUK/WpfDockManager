@@ -9,10 +9,10 @@ namespace OpenControls.Wpf.DockManager
     {
         public DocumentPaneGroup() : base(new DocumentContainer())
         {
+            IsHighlighted = false;
             Border.SetResourceReference(Border.CornerRadiusProperty, "DocumentPaneCornerRadius");
             Border.SetResourceReference(Border.BorderBrushProperty, "DocumentPaneBorderBrush");
             Border.SetResourceReference(Border.BorderThicknessProperty, "DocumentPaneBorderThickness");
-            Border.SetResourceReference(Border.BackgroundProperty, "DocumentPaneBackground");
 
             (IViewContainer as DocumentContainer).DisplayGeneralMenu = DisplayGeneralMenu;
 
@@ -62,8 +62,6 @@ namespace OpenControls.Wpf.DockManager
             IsHighlighted = false;
         }
 
-        private Brush _background;
-
         private bool _isHighlighted;
         public override bool IsHighlighted
         {
@@ -73,12 +71,15 @@ namespace OpenControls.Wpf.DockManager
             }
             set
             {
-                if (value && !IsHighlighted)
-                {
-                    _background = Background;
-                }
                 _isHighlighted = value;
-                base.Background = IsHighlighted ? HighlightBrush : _background;
+                if (value)
+                {
+                    Border.SetResourceReference(Border.BackgroundProperty, "SelectedPaneBrush");
+                }
+                else
+                {
+                    Border.SetResourceReference(Border.BackgroundProperty, "DocumentPaneBackground");
+                }
             }
         }
 

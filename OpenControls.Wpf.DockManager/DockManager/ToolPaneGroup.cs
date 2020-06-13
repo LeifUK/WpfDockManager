@@ -10,10 +10,10 @@ namespace OpenControls.Wpf.DockManager
     {
         public ToolPaneGroup() : base(new ToolContainer())
         {
+            Border.SetResourceReference(Border.BackgroundProperty, "ToolPaneBackground");
             Border.SetResourceReference(Border.CornerRadiusProperty, "ToolPaneCornerRadius");
             Border.SetResourceReference(Border.BorderBrushProperty, "ToolPaneBorderBrush");
             Border.SetResourceReference(Border.BorderThicknessProperty, "ToolPaneBorderThickness");
-            SetResourceReference(Grid.BackgroundProperty, "ToolPaneBackground");
 
             VerticalAlignment = System.Windows.VerticalAlignment.Stretch;
             HorizontalAlignment = HorizontalAlignment.Stretch;
@@ -77,8 +77,7 @@ namespace OpenControls.Wpf.DockManager
             HeaderBorder.SetResourceReference(Border.CornerRadiusProperty, "ToolPaneHeaderCornerRadius");
             HeaderBorder.SetResourceReference(Border.BorderBrushProperty, "ToolPaneHeaderBorderBrush");
             HeaderBorder.SetResourceReference(Border.BorderThicknessProperty, "ToolPaneHeaderBorderThickness");
-            HeaderBorder.SetResourceReference(Border.BackgroundProperty, "ToolPaneHeaderBackground");
-            HeaderBackground = HeaderBorder.Background;
+            IsHighlighted = false;
 
             Grid.SetRow(HeaderBorder, 1);
             Grid.SetColumn(HeaderBorder, 1);
@@ -126,8 +125,8 @@ namespace OpenControls.Wpf.DockManager
             Grid.SetColumn(IViewContainer as System.Windows.UIElement, 1);
             Grid.SetColumnSpan(IViewContainer as System.Windows.UIElement, ColumnDefinitions.Count - 2);
 
-            _titleLabel.SetResourceReference(Label.FontSizeProperty, "ToolPaneFontSize");
-            _titleLabel.SetResourceReference(Label.FontFamilyProperty, "ToolPaneFontFamily");
+            _titleLabel.SetResourceReference(Label.FontSizeProperty, "ToolPaneHeaderFontSize");
+            _titleLabel.SetResourceReference(Label.FontFamilyProperty, "ToolPaneHeaderFontFamily");
             _titleLabel.SetResourceReference(Label.PaddingProperty, "ToolPaneHeaderTitlePadding");
         }
 
@@ -137,19 +136,6 @@ namespace OpenControls.Wpf.DockManager
         }
 
         public Border HeaderBorder;
-
-        protected Brush _headerBackground;
-        public Brush HeaderBackground
-        {
-            set
-            {
-                _headerBackground = value;
-                if (HeaderBorder != null)
-                {
-                    HeaderBorder.Background = value;
-                }
-            }
-        }
 
         private bool _isHighlighted;
         public override bool IsHighlighted
@@ -161,9 +147,13 @@ namespace OpenControls.Wpf.DockManager
             set
             {
                 _isHighlighted = value;
-                if (HeaderBorder != null)
+                if (value)
                 {
-                    HeaderBorder.Background = IsHighlighted ? HighlightBrush : _headerBackground;
+                    HeaderBorder.SetResourceReference(Border.BackgroundProperty, "SelectedPaneBrush");
+                }
+                else
+                {
+                    HeaderBorder.SetResourceReference(Border.BackgroundProperty, "ToolPaneHeaderBackground");
                 }
             }
         }
