@@ -82,7 +82,7 @@ namespace OpenControls.Wpf.DockManager
 
             Grid.SetRow(HeaderBorder, 1);
             Grid.SetColumn(HeaderBorder, 1);
-            Grid.SetColumnSpan(HeaderBorder, ColumnDefinitions.Count);
+            Grid.SetColumnSpan(HeaderBorder, ColumnDefinitions.Count - 2);
             Children.Add(HeaderBorder);
 
             _titleLabel = new Label();
