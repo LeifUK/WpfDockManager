@@ -17,6 +17,7 @@ namespace OpenControls.Wpf.DockManager.Controls
 
             _listBox.ItemsChanged += _listBox_ItemsChanged;
             _listBox.FloatTabRequest += _listBox_FloatTabRequest;
+            _listBox.Padding = new Thickness(-1);
 
             CloseTabCommand = new Command((parameter) => _buttonCloseTab_Click(parameter, null), delegate { return true; });
         }

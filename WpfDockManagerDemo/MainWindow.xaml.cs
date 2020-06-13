@@ -5,6 +5,7 @@ using System.Text;
 using System.Threading.Tasks;
 using System.Windows;
 using System.Windows.Controls;
+using Microsoft.Win32;
 
 namespace WpfDockManagerDemo
 {
@@ -20,13 +21,55 @@ namespace WpfDockManagerDemo
             DataContext = new ExampleDockManagerViews.ViewModel.MainViewModel();
         }
 
+        private string _keyPath = System.Environment.Is64BitOperatingSystem ? @"SOFTWARE\Wow6432Node\OpenControls\WpfDockManagerDemo" : @"SOFTWARE\OpenControls\WpfDockManagerDemo";
+
         private void Window_Loaded(object sender, RoutedEventArgs e)
         {
+            RegistryKey key = Registry.CurrentUser.OpenSubKey(_keyPath);
+            if (key == null)
+            {
+                key = Registry.CurrentUser.CreateSubKey(_keyPath);
+            }
+            else
+            {
+                Object obj = key.GetValue("Height");
+                if (obj != null)
+                {
+                    Height = Convert.ToDouble(obj);
+                }
+                obj = key.GetValue("Width");
+                if (obj != null)
+                {
+                    Width = Convert.ToDouble(obj);
+                }
+                obj = key.GetValue("Top");
+                if (obj != null)
+                {
+                    Top = Convert.ToDouble(obj);
+                }
+                obj = key.GetValue("Left");
+                if (obj != null)
+                {
+                    Left = Convert.ToDouble(obj);
+                }
+            }
+
             _layoutManager.Initialise();
         }
 
-        private void Window_Unloaded(object sender, RoutedEventArgs e)
+        private void Window_Closing(object sender, System.ComponentModel.CancelEventArgs e)
         {
+            RegistryKey key = Registry.CurrentUser.OpenSubKey(_keyPath, true);
+            if (key == null)
+            {
+                key = Registry.CurrentUser.CreateSubKey(_keyPath, true);
+            }
+
+            key.SetValue("Height", ActualHeight);
+            key.SetValue("Width", ActualWidth);
+            key.SetValue("Top", Top);
+            key.SetValue("Left", Left);
+
             if (_layoutManager != null)
             {
                 _layoutManager.Shutdown();

@@ -10,7 +10,7 @@
         mc:Ignorable="d"
         Background="LightSteelBlue"
         Loaded="Window_Loaded"
-        Unloaded="Window_Unloaded"
+        Closing="Window_Closing"
         Title="WPF Dock Manager Demo" Height="450" Width="800">
     <WindowChrome.WindowChrome>
         <WindowChrome CaptionHeight="34" />

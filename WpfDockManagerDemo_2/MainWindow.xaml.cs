@@ -18,7 +18,7 @@ namespace WpfDockManagerDemo_2
             DataContext = new ExampleDockManagerViews.ViewModel.MainViewModel();
         }
         
-        private string _keyPath = System.Environment.Is64BitOperatingSystem ? @"SOFTWARE\Wow6432Node\OpenControls\DemoApp" : @"SOFTWARE\OpenControls\DemoApp";
+        private string _keyPath = System.Environment.Is64BitOperatingSystem ? @"SOFTWARE\Wow6432Node\OpenControls\WpfDockManagerDemo_2" : @"SOFTWARE\OpenControls\WpfDockManagerDemo_2";
 
         private void Window_Loaded(object sender, RoutedEventArgs e)
         {

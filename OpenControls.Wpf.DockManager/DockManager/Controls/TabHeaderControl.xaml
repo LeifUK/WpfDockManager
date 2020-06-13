@@ -5,6 +5,8 @@
              xmlns:d="http://schemas.microsoft.com/expression/blend/2008" 
              xmlns:local="clr-namespace:OpenControls.Wpf.DockManager.Controls"
              mc:Ignorable="d" 
+             Margin="0"
+             Padding="0"
              d:DesignHeight="450" d:DesignWidth="800">
     <UserControl.Resources>
         <BooleanToVisibilityConverter x:Key="BooleanToVisibilityConverter" />
@@ -84,7 +86,7 @@
             </Setter>
         </Style>
     </UserControl.Resources>
-    <Grid Name="Grid" Background="Transparent">
+    <Grid Name="Grid" Background="Transparent" Margin="0">
         <Grid.RowDefinitions>
             <RowDefinition Height="Auto"/>
         </Grid.RowDefinitions>
@@ -99,7 +101,7 @@
                 <RotateTransform Angle="180" CenterX="0.5" CenterY="0.5"/>
             </Button.LayoutTransform>
        </Button>
-        <local:TabHeader Grid.Row="0" Grid.Column="1" x:Name="_listBox" ScrollViewer.HorizontalScrollBarVisibility="Hidden" SelectionChanged="_listBox_SelectionChanged" Padding="0,-1,0,-1" BorderThickness="0" Background="Transparent">
+        <local:TabHeader Grid.Row="0" Grid.Column="1" x:Name="_listBox" ScrollViewer.HorizontalScrollBarVisibility="Hidden" SelectionChanged="_listBox_SelectionChanged" Padding="0" Margin="0" BorderThickness="0" Background="Transparent">
             <ListBox.ItemsPanel>
                 <ItemsPanelTemplate>
                     <WrapPanel Orientation="Horizontal" Margin="0"/>
