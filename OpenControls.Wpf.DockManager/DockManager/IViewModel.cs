@@ -5,6 +5,8 @@
         // A user friendly title
         string Title { get; }
 
+        string Tooltip { get; }
+
         /*
          * Not used by tools.
          * Uniquely identifies a document instance.

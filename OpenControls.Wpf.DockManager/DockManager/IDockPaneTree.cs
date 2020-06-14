@@ -10,7 +10,7 @@ namespace OpenControls.Wpf.DockManager
         void Clear();
         void FrameworkElementRemoved(FrameworkElement frameworkElement);
         Grid RootPane { get; set; }
-        Grid ParentGrid { get; }
+        Grid RootGrid { get; }
         UIElementCollection Children { get; }
         List<UserControl> LoadToolViews(ObservableCollection<IViewModel> viewModels);
         List<UserControl> LoadDocumentViews(ObservableCollection<IViewModel> viewModels);

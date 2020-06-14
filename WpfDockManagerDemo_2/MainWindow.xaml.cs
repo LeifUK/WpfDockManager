@@ -49,6 +49,14 @@ namespace WpfDockManagerDemo_2
                 {
                     Left = Convert.ToDouble(obj);
                 }
+                obj = key.GetValue("WindowState");
+                if (obj != null)
+                {
+                    if (Enum.TryParse((string)obj, out WindowState windowState))
+                    {
+                        WindowState = windowState;
+                    }
+                }
             }
 
             _layoutManager.Initialise();
@@ -66,7 +74,8 @@ namespace WpfDockManagerDemo_2
             key.SetValue("Width", ActualWidth);
             key.SetValue("Top", Top);
             key.SetValue("Left", Left);
-            
+            key.SetValue("WindowState", WindowState.ToString());
+
             if (_layoutManager != null)
             {
                 _layoutManager.Shutdown();

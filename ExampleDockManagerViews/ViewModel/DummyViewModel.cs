@@ -4,6 +4,13 @@
     {
         public string URL { get; set; }
         public string Title { get; set; }
+        public string Tooltip 
+        { 
+            get
+            {
+                return URL;
+            }
+        }
 
         public bool CanClose
         {

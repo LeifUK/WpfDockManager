@@ -361,10 +361,14 @@
                                 <ColumnDefinition Width="Auto"/>
                                 <ColumnDefinition Width="1"/>
                             </Grid.ColumnDefinitions>
-                            <Label Grid.Column="1" x:Name="_label" FontSize="12" FontFamily="Arial" Foreground="Black" Width="Auto" Padding="2,0,2,0" Margin="0" VerticalAlignment="Center">
+                            <Label Grid.Column="1" x:Name="_label" ToolTip="{Binding Path=DataContext.Value.Tooltip,RelativeSource={RelativeSource Self}}" FontSize="12" FontFamily="Arial" Foreground="Black" Width="Auto" Padding="2,0,2,0" Margin="0" VerticalAlignment="Center" VerticalContentAlignment="Center" >
                                 <ContentPresenter />
                             </Label>
-                            <Button Grid.Column="3" x:Name="_buttonCloseTab" Command="{Binding CloseTabCommand, RelativeSource={RelativeSource Mode=FindAncestor, AncestorType=woc:TabHeaderControl}}" CommandParameter="{Binding RelativeSource={RelativeSource Self}}" Style="{StaticResource CloseTabButtonStyle}" />
+                            <Button Grid.Column="3" x:Name="_buttonCloseTab" Command="{Binding CloseTabCommand, RelativeSource={RelativeSource Mode=FindAncestor, AncestorType=woc:TabHeaderControl}}" CommandParameter="{Binding RelativeSource={RelativeSource Self}}" Style="{StaticResource CloseTabButtonStyle}" VerticalAlignment="Center">
+                                <Button.LayoutTransform>
+                                    <ScaleTransform ScaleX="0.9" ScaleY="0.9"/>
+                                </Button.LayoutTransform>
+                            </Button>
                         </Grid>
                     </Border>
                     <ControlTemplate.Triggers>

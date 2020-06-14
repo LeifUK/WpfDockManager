@@ -425,13 +425,13 @@ namespace OpenControls.Wpf.DockManager
         public void PinToolPane(UnpinnedToolData unpinnedToolData, WindowLocation defaultWindowLocation)
         {
             Grid sibling = null;
-            if (unpinnedToolData.SiblingGuid == (Guid)IDockPaneTree.ParentGrid.Tag)
+            if (unpinnedToolData.SiblingGuid == (Guid)IDockPaneTree.RootGrid.Tag)
             {
-                sibling = IDockPaneTree.ParentGrid;
+                sibling = IDockPaneTree.RootGrid;
             }
             else
             {
-                sibling = FindElement(unpinnedToolData.SiblingGuid, IDockPaneTree.ParentGrid);
+                sibling = FindElement(unpinnedToolData.SiblingGuid, IDockPaneTree.RootGrid);
             }
 
             // This can happen when loading a layout
