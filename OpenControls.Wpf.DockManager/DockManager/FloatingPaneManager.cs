@@ -9,13 +9,11 @@ namespace OpenControls.Wpf.DockManager
     {
         public FloatingPaneManager(
             IDockPaneHost iDockPaneHost,
-            IDockPaneManager iDockPaneManager,
             IFloatingPaneHost iFloatingPaneManagerOwner, 
             ILayoutFactory iLayoutFactory)
         {
             IDockPaneHost = iDockPaneHost;
             IFloatingPaneHost = iFloatingPaneManagerOwner;
-            IDockPaneManager = iDockPaneManager;
             ILayoutFactory = iLayoutFactory;
             FloatingToolPaneGroups = new List<IFloatingPane>();
             FloatingDocumentPaneGroups = new List<IFloatingPane>();
@@ -29,7 +27,6 @@ namespace OpenControls.Wpf.DockManager
 
         private IDockPaneHost IDockPaneHost;
         private IFloatingPaneHost IFloatingPaneHost;
-        private IDockPaneManager IDockPaneManager;
         private ILayoutFactory ILayoutFactory;
 
         public void Shutdown()
@@ -160,7 +157,7 @@ namespace OpenControls.Wpf.DockManager
                 )
             {
                 Type paneType = (sender is FloatingDocumentPaneGroup) ? typeof(DocumentPaneGroup) : typeof(ToolPaneGroup);
-                var pane = IDockPaneManager.FindSelectablePane(IFloatingPaneHost.RootGrid, cursorPositionOnScreen);
+                var pane = IFloatingPaneHost.FindSelectablePane(IFloatingPaneHost.RootGrid, cursorPositionOnScreen);
                 foundSelectedPane = pane != null;
                 if ((pane != null) && (SelectedPane != pane))
                 {
@@ -303,7 +300,7 @@ namespace OpenControls.Wpf.DockManager
                 WindowLocation windowLocation = _insertionIndicatorManager.WindowLocation;
                 CancelSelection();
 
-                IDockPaneManager.Unfloat(floatingPane, selectedPane, windowLocation);
+                IFloatingPaneHost.Unfloat(floatingPane, selectedPane, windowLocation);
 
                 Application.Current.MainWindow.Activate();
             });

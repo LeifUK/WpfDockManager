@@ -18,7 +18,7 @@ namespace OpenControls.Wpf.DockManager
 
             IDockPaneManager = new DockPaneManager(this, this);
             IUnpinnedToolManager = new UnpinnedToolManager(IDockPaneManager, this, this);
-            IFloatingPaneManager = new FloatingPaneManager(this, IDockPaneManager, this, this);
+            IFloatingPaneManager = new FloatingPaneManager(this, this, this);
         }
 
         public void Initialise()
@@ -430,6 +430,16 @@ namespace OpenControls.Wpf.DockManager
                 ToolsSource.Remove(iViewModel);
             }
         }
+        
+        SelectablePane IFloatingPaneHost.FindSelectablePane(Grid grid, Point pointOnScreen)
+        {
+            return IDockPaneManager.FindSelectablePane(grid, pointOnScreen);
+        }
+        
+        void IFloatingPaneHost.Unfloat(FloatingPane floatingPane, SelectablePane selectedPane, WindowLocation windowLocation)
+        {
+            IDockPaneManager.Unfloat(floatingPane, selectedPane, windowLocation);
+        }
 
         #endregion IFloatingPaneHost
 
@@ -737,7 +747,7 @@ namespace OpenControls.Wpf.DockManager
             }
         }
 
-        #region IUnpinnedToolParent
+        #region IUnpinnedToolHost
 
         void IUnpinnedToolHost.ViewModelRemoved(IViewModel iViewModel)
         {
