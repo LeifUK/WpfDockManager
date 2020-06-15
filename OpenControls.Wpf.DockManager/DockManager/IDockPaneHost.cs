@@ -5,7 +5,7 @@ using System.Collections.ObjectModel;
 
 namespace OpenControls.Wpf.DockManager
 {
-    internal interface IDockPaneTree
+    internal interface IDockPaneHost
     {
         void Clear();
         void FrameworkElementRemoved(FrameworkElement frameworkElement);

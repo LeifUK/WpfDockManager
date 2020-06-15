@@ -10,15 +10,15 @@ using OpenControls.Wpf.DockManager.Controls;
 
 namespace OpenControls.Wpf.DockManager
 {
-    public class LayoutManager : System.Windows.Controls.Grid, ILayoutFactory, IDockPaneTree, IUnpinnedToolParent, ILayoutManager
+    public class LayoutManager : System.Windows.Controls.Grid, ILayoutFactory, IDockPaneHost, IUnpinnedToolHost, IFloatingPaneHost
     {
         public LayoutManager() 
         {
             Tag = new Guid("3c81a424-ef66-4de7-a361-9968cd88071c");
 
-            IDockPaneTreeManager = new DockPaneTreeManager(this, this);
-            IUnpinnedToolManager = new UnpinnedToolManager(IDockPaneTreeManager, this, this);
-            IFloatingPaneManager = new FloatingPaneManager(this, this, IDockPaneTreeManager, this);
+            IDockPaneManager = new DockPaneManager(this, this);
+            IUnpinnedToolManager = new UnpinnedToolManager(IDockPaneManager, this, this);
+            IFloatingPaneManager = new FloatingPaneManager(this, IDockPaneManager, this, this);
         }
 
         public void Initialise()
@@ -79,14 +79,14 @@ namespace OpenControls.Wpf.DockManager
                 return this;
             }
         }
-        private IDockPaneTree IDockPaneTree
+        private IDockPaneHost IDockPaneHost
         {
             get
             {
                 return this;
             }
         }
-        private readonly IDockPaneTreeManager IDockPaneTreeManager;
+        private readonly IDockPaneManager IDockPaneManager;
         private readonly IUnpinnedToolManager IUnpinnedToolManager;
         private readonly IFloatingPaneManager IFloatingPaneManager;
 
@@ -130,14 +130,14 @@ namespace OpenControls.Wpf.DockManager
 
             IUnpinnedToolManager.Validate(viewModelUrlDictionary);
             IFloatingPaneManager.ValidateFloatingToolPanes(viewModelUrlDictionary);
-            IDockPaneTreeManager.ValidateDockPanes(_root, viewModelUrlDictionary, typeof(ToolPaneGroup));
+            IDockPaneManager.ValidateDockPanes(_root, viewModelUrlDictionary, typeof(ToolPaneGroup));
         }
 
         private void ValidateDocumentPanes()
         {
             Dictionary<IViewModel, List<string>> viewModelUrlDictionary = CreateViewModelUrlDictionary(DocumentsSource);
             IFloatingPaneManager.ValidateFloatingDocumentPanes(viewModelUrlDictionary);
-            IDockPaneTreeManager.ValidateDockPanes(_root, viewModelUrlDictionary, typeof(DocumentPaneGroup));
+            IDockPaneManager.ValidateDockPanes(_root, viewModelUrlDictionary, typeof(DocumentPaneGroup));
         }
 
         #region dependency properties 
@@ -409,9 +409,9 @@ namespace OpenControls.Wpf.DockManager
             return views;
         }
 
-        #region ILayoutManager
+        #region IFloatingPaneHost
 
-        Grid ILayoutManager.RootGrid
+        Grid IFloatingPaneHost.RootGrid
         {
             get
             {
@@ -419,7 +419,7 @@ namespace OpenControls.Wpf.DockManager
             }
         }
 
-        void ILayoutManager.RemoveViewModel(IViewModel iViewModel)
+        void IFloatingPaneHost.RemoveViewModel(IViewModel iViewModel)
         {
             if (DocumentsSource.Contains(iViewModel))
             {
@@ -431,7 +431,7 @@ namespace OpenControls.Wpf.DockManager
             }
         }
 
-        #endregion ILayoutManager
+        #endregion IFloatingPaneHost
 
         #region ILayoutFactory
 
@@ -498,21 +498,21 @@ namespace OpenControls.Wpf.DockManager
 
         void ILayoutFactory.SetRootPane(Grid grid, out int row, out int column)
         {
-            IDockPaneTree.RootPane = grid;
+            IDockPaneHost.RootPane = grid;
             row = Grid.GetRow(grid);
             column = Grid.GetColumn(grid);
         }
 
         #endregion ILayoutFactory
 
-        #region IDockPaneTree
+        #region IDockPaneHost
 
-        void IDockPaneTree.FrameworkElementRemoved(FrameworkElement frameworkElement)
+        void IDockPaneHost.FrameworkElementRemoved(FrameworkElement frameworkElement)
         {
             IUnpinnedToolManager.FrameworkElementRemoved(frameworkElement);
         }
 
-        Grid IDockPaneTree.RootPane
+        Grid IDockPaneHost.RootPane
         {
             get
             {
@@ -532,7 +532,7 @@ namespace OpenControls.Wpf.DockManager
             }
         }
 
-        Grid IDockPaneTree.RootGrid
+        Grid IDockPaneHost.RootGrid
         {
             get
             {
@@ -540,12 +540,12 @@ namespace OpenControls.Wpf.DockManager
             }
         }
 
-        List<UserControl> IDockPaneTree.LoadToolViews(ObservableCollection<IViewModel> viewModels)
+        List<UserControl> IDockPaneHost.LoadToolViews(ObservableCollection<IViewModel> viewModels)
         {
             return LoadViewsFromTemplates(ToolTemplates, viewModels);
         }
 
-        List<UserControl> IDockPaneTree.LoadDocumentViews(ObservableCollection<IViewModel> viewModels)
+        List<UserControl> IDockPaneHost.LoadDocumentViews(ObservableCollection<IViewModel> viewModels)
         {
             return LoadViewsFromTemplates(DocumentTemplates, viewModels);
         }
@@ -578,7 +578,7 @@ namespace OpenControls.Wpf.DockManager
             List<UserControl> documentViews = LoadViewsFromTemplates(DocumentTemplates, DocumentsSource);
             List<UserControl> toolViews = LoadViewsFromTemplates(ToolTemplates, ToolsSource);
 
-            IDockPaneTreeManager.CreateDefaultLayout(documentViews, toolViews);
+            IDockPaneManager.CreateDefaultLayout(documentViews, toolViews);
             UpdateLayout();
             IFloatingPaneManager.CancelSelection();
         }
@@ -653,7 +653,7 @@ namespace OpenControls.Wpf.DockManager
             var parentGrid = dockPane.Parent as Grid;
 
             double paneWidth = dockPane.ActualWidth / dockPane.IViewContainer.GetUserControlCount();
-            while (IDockPaneTreeManager.UngroupDockPane(dockPane, 1, paneWidth))
+            while (IDockPaneManager.UngroupDockPane(dockPane, 1, paneWidth))
             {
                 // Nothing here
             }
@@ -669,7 +669,7 @@ namespace OpenControls.Wpf.DockManager
             int index = dockPane.IViewContainer.GetCurrentTabIndex();
             if (index > -1)
             {
-                IDockPaneTreeManager.UngroupDockPane(dockPane, index, paneWidth);
+                IDockPaneManager.UngroupDockPane(dockPane, index, paneWidth);
             }
         }
 
@@ -677,14 +677,14 @@ namespace OpenControls.Wpf.DockManager
         {
             System.Diagnostics.Trace.Assert(sender is DockPane);
 
-            IDockPaneTreeManager.Float(sender as DockPane, e.Drag, false);
+            IDockPaneManager.Float(sender as DockPane, e.Drag, false);
         }
 
         private void DockPane_FloatTabRequest(object sender, EventArgs e)
         {
             System.Diagnostics.Trace.Assert(sender is DockPane);
 
-            IDockPaneTreeManager.Float(sender as DockPane, true, true);
+            IDockPaneManager.Float(sender as DockPane, true, true);
         }
 
         private void DockPane_TabClosed(object sender, Events.TabClosedEventArgs e)
@@ -711,7 +711,7 @@ namespace OpenControls.Wpf.DockManager
                 return;
             }
 
-            IDockPaneTreeManager.ExtractDockPane(dockPane, out FrameworkElement frameworkElement);
+            IDockPaneManager.ExtractDockPane(dockPane, out FrameworkElement frameworkElement);
 
             IViewContainer iViewContainer = dockPane.IViewContainer;
             while (true)
@@ -739,14 +739,14 @@ namespace OpenControls.Wpf.DockManager
 
         #region IUnpinnedToolParent
 
-        void IUnpinnedToolParent.ViewModelRemoved(IViewModel iViewModel)
+        void IUnpinnedToolHost.ViewModelRemoved(IViewModel iViewModel)
         {
             System.Diagnostics.Trace.Assert(ToolsSource.Contains(iViewModel));
             
             ToolsSource.Remove(iViewModel);
         }
 
-        IToolListBox IUnpinnedToolParent.GetToolListBox(WindowLocation windowLocation)
+        IToolListBox IUnpinnedToolHost.GetToolListBox(WindowLocation windowLocation)
         {
             System.Diagnostics.Trace.Assert(_dictToolListBoxes.ContainsKey(windowLocation));
 

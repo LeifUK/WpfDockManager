@@ -8,7 +8,7 @@ namespace OpenControls.Wpf.DockManager
 {
     internal delegate DockPane DelegateCreateDockPane();
 
-    internal interface IDockPaneTreeManager
+    internal interface IDockPaneManager
     {
         SelectablePane FindElementOfType(Type type, Grid parentGrid);
 

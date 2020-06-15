@@ -7,11 +7,15 @@ namespace OpenControls.Wpf.DockManager
 {
     internal class FloatingPaneManager : IFloatingPaneManager
     {
-        public FloatingPaneManager(IDockPaneTree iDockPaneTree, ILayoutManager iLayoutManager, IDockPaneTreeManager iDockPaneTreeManager, ILayoutFactory iLayoutFactory)
+        public FloatingPaneManager(
+            IDockPaneHost iDockPaneHost,
+            IDockPaneManager iDockPaneManager,
+            IFloatingPaneHost iFloatingPaneManagerOwner, 
+            ILayoutFactory iLayoutFactory)
         {
-            IDockPaneTree = iDockPaneTree;
-            ILayoutManager = iLayoutManager;
-            IDockPaneTreeManager = iDockPaneTreeManager;
+            IDockPaneHost = iDockPaneHost;
+            IFloatingPaneHost = iFloatingPaneManagerOwner;
+            IDockPaneManager = iDockPaneManager;
             ILayoutFactory = iLayoutFactory;
             FloatingToolPaneGroups = new List<IFloatingPane>();
             FloatingDocumentPaneGroups = new List<IFloatingPane>();
@@ -23,9 +27,9 @@ namespace OpenControls.Wpf.DockManager
 
         private SelectablePane SelectedPane;
 
-        private IDockPaneTree IDockPaneTree;
-        private ILayoutManager ILayoutManager;
-        private IDockPaneTreeManager IDockPaneTreeManager;
+        private IDockPaneHost IDockPaneHost;
+        private IFloatingPaneHost IFloatingPaneHost;
+        private IDockPaneManager IDockPaneManager;
         private ILayoutFactory ILayoutFactory;
 
         public void Shutdown()
@@ -59,7 +63,7 @@ namespace OpenControls.Wpf.DockManager
             for (int index = count - 1; index > -1; --index)
             {
                 UserControl userControl = floatingPane.IViewContainer.GetUserControl(index);
-                ILayoutManager.RemoveViewModel(userControl.DataContext as IViewModel);
+                IFloatingPaneHost.RemoveViewModel(userControl.DataContext as IViewModel);
             }
 
             if ((sender is FloatingToolPaneGroup) && (FloatingToolPaneGroups.Contains(sender as FloatingToolPaneGroup)))
@@ -147,16 +151,16 @@ namespace OpenControls.Wpf.DockManager
             Point cursorPositionOnScreen = OpenControls.Wpf.DockManager.Controls.Utilities.GetCursorPosition();
 
             bool foundSelectedPane = false;
-            Point cursorPositionInMainWindow = ILayoutManager.RootGrid.PointFromScreen(cursorPositionOnScreen);
+            Point cursorPositionInMainWindow = IFloatingPaneHost.RootGrid.PointFromScreen(cursorPositionOnScreen);
             if (
                     (cursorPositionInMainWindow.X >= 0) &&
-                    (cursorPositionInMainWindow.X <= ILayoutManager.RootGrid.ActualWidth) &&
+                    (cursorPositionInMainWindow.X <= IFloatingPaneHost.RootGrid.ActualWidth) &&
                     (cursorPositionInMainWindow.Y >= 0) &&
-                    (cursorPositionInMainWindow.Y <= ILayoutManager.RootGrid.ActualHeight)
+                    (cursorPositionInMainWindow.Y <= IFloatingPaneHost.RootGrid.ActualHeight)
                 )
             {
                 Type paneType = (sender is FloatingDocumentPaneGroup) ? typeof(DocumentPaneGroup) : typeof(ToolPaneGroup);
-                var pane = IDockPaneTreeManager.FindSelectablePane(ILayoutManager.RootGrid, cursorPositionOnScreen);
+                var pane = IDockPaneManager.FindSelectablePane(IFloatingPaneHost.RootGrid, cursorPositionOnScreen);
                 foundSelectedPane = pane != null;
                 if ((pane != null) && (SelectedPane != pane))
                 {
@@ -198,11 +202,11 @@ namespace OpenControls.Wpf.DockManager
                         _sideLocationPane.AllowsTransparency = true;
                     }
 
-                    Point topLeftRootPoint = IDockPaneTree.RootPane.PointToScreen(new Point(0, 0));
+                    Point topLeftRootPoint = IDockPaneHost.RootPane.PointToScreen(new Point(0, 0));
                     _sideLocationPane.Left = topLeftRootPoint.X;
                     _sideLocationPane.Top = topLeftRootPoint.Y;
-                    _sideLocationPane.Width = IDockPaneTree.RootPane.ActualWidth;
-                    _sideLocationPane.Height = IDockPaneTree.RootPane.ActualHeight;
+                    _sideLocationPane.Width = IDockPaneHost.RootPane.ActualWidth;
+                    _sideLocationPane.Height = IDockPaneHost.RootPane.ActualHeight;
                     _sideLocationPane.Show();
                 }
             }
@@ -247,14 +251,14 @@ namespace OpenControls.Wpf.DockManager
                     case WindowLocation.RightSide:
                     case WindowLocation.TopSide:
                     case WindowLocation.BottomSide:
-                        if ((_insertionIndicatorManager != null) && (_insertionIndicatorManager.ParentGrid != ILayoutManager))
+                        if ((_insertionIndicatorManager != null) && (_insertionIndicatorManager.ParentGrid != IFloatingPaneHost))
                         {
                             _insertionIndicatorManager.HideInsertionIndicator();
                             _insertionIndicatorManager = null;
                         }
                         if (_insertionIndicatorManager == null)
                         {
-                            _insertionIndicatorManager = new InsertionIndicatorManager(ILayoutManager.RootGrid);
+                            _insertionIndicatorManager = new InsertionIndicatorManager(IFloatingPaneHost.RootGrid);
                         }
                         _insertionIndicatorManager.ShowInsertionIndicator(windowLocation);
                         return;
@@ -287,7 +291,7 @@ namespace OpenControls.Wpf.DockManager
 
                 if (
                         (floatingPane == null) ||
-                        ((SelectedPane != null) && !(SelectedPane.Parent is SplitterPane) && !(SelectedPane.Parent is DocumentPanel) && (SelectedPane.Parent != ILayoutManager.RootGrid)) ||
+                        ((SelectedPane != null) && !(SelectedPane.Parent is SplitterPane) && !(SelectedPane.Parent is DocumentPanel) && (SelectedPane.Parent != IFloatingPaneHost.RootGrid)) ||
                         (_insertionIndicatorManager == null) ||
                         (_insertionIndicatorManager.WindowLocation == WindowLocation.None)
                    )
@@ -299,7 +303,7 @@ namespace OpenControls.Wpf.DockManager
                 WindowLocation windowLocation = _insertionIndicatorManager.WindowLocation;
                 CancelSelection();
 
-                IDockPaneTreeManager.Unfloat(floatingPane, selectedPane, windowLocation);
+                IDockPaneManager.Unfloat(floatingPane, selectedPane, windowLocation);
 
                 Application.Current.MainWindow.Activate();
             });
