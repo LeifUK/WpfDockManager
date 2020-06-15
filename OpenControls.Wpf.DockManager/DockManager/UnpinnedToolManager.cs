@@ -8,11 +8,9 @@ namespace OpenControls.Wpf.DockManager
 {
     internal class UnpinnedToolManager : IUnpinnedToolManager
     {
-        public UnpinnedToolManager(IDockPaneManager iDockPaneManager, IDockPaneHost iDockPaneHost, IUnpinnedToolHost iUnpinnedToolPaneOwner)
+        public UnpinnedToolManager(IUnpinnedToolHost iUnpinnedToolPaneOwner)
         {
-            IDockPaneManager = iDockPaneManager;
-            IDockPaneHost = iDockPaneHost;
-            IUnpinnedToolParent = iUnpinnedToolPaneOwner;
+            IUnpinnedToolHost = iUnpinnedToolPaneOwner;
 
             _dictUnpinnedToolData = new Dictionary<WindowLocation, List<UnpinnedToolData>>();
             _dictUnpinnedToolData.Add(WindowLocation.LeftSide, new List<UnpinnedToolData>());
@@ -21,9 +19,7 @@ namespace OpenControls.Wpf.DockManager
             _dictUnpinnedToolData.Add(WindowLocation.BottomSide, new List<UnpinnedToolData>());
         }
 
-        private readonly IDockPaneHost IDockPaneHost;
-        private readonly IDockPaneManager IDockPaneManager;
-        private readonly IUnpinnedToolHost IUnpinnedToolParent;
+        private readonly IUnpinnedToolHost IUnpinnedToolHost;
         private ToolListBoxItem _activeToolListBoxItem;
         private UnpinnedToolPane _activeUnpinnedToolPane;
         private UnpinnedToolData _activeUnpinnedToolData;
@@ -37,35 +33,35 @@ namespace OpenControls.Wpf.DockManager
             UserControl userControl = toolListBoxItem.IViewContainer.ExtractUserControl(toolListBoxItem.Index);
             unpinnedToolPane.ToolPane.IViewContainer.AddUserControl(userControl);
             unpinnedToolPane.ToolPane.HideCommandsButton();
-            Point topLeftPoint = IDockPaneHost.RootPane.PointToScreen(new Point(0, 0));
+            Point topLeftPoint = IUnpinnedToolHost.RootPane.PointToScreen(new Point(0, 0));
             unpinnedToolPane.Left = topLeftPoint.X;
             unpinnedToolPane.Top = topLeftPoint.Y;
             if ((windowLocation == WindowLocation.TopSide) || (windowLocation == WindowLocation.BottomSide))
             {
-                unpinnedToolPane.Width = IDockPaneHost.RootPane.ActualWidth;
+                unpinnedToolPane.Width = IUnpinnedToolHost.RootPane.ActualWidth;
                 double height = toolListBoxItem.Height;
                 if (height == 0.0)
                 {
-                    height = IDockPaneHost.RootPane.ActualHeight / 3;
+                    height = IUnpinnedToolHost.RootPane.ActualHeight / 3;
                 }
                 unpinnedToolPane.Height = height;
                 if (windowLocation == WindowLocation.BottomSide)
                 {
-                    unpinnedToolPane.Top += IDockPaneHost.RootPane.ActualHeight - height;
+                    unpinnedToolPane.Top += IUnpinnedToolHost.RootPane.ActualHeight - height;
                 }
             }
             else
             {
-                unpinnedToolPane.Height = IDockPaneHost.RootPane.ActualHeight;
+                unpinnedToolPane.Height = IUnpinnedToolHost.RootPane.ActualHeight;
                 double width = toolListBoxItem.Width;
                 if (width == 0.0)
                 {
-                    width = IDockPaneHost.RootPane.ActualWidth / 3;
+                    width = IUnpinnedToolHost.RootPane.ActualWidth / 3;
                 }
                 unpinnedToolPane.Width = width;
                 if (windowLocation == WindowLocation.RightSide)
                 {
-                    unpinnedToolPane.Left += IDockPaneHost.RootPane.ActualWidth - width;
+                    unpinnedToolPane.Left += IUnpinnedToolHost.RootPane.ActualWidth - width;
                 }
             }
             unpinnedToolPane.CloseRequest += UnpinnedToolPane_CloseRequest;
@@ -95,7 +91,7 @@ namespace OpenControls.Wpf.DockManager
              * Restore the pane in the view tree
              */
 
-            IDockPaneManager.PinToolPane(_activeUnpinnedToolData, _activeToolListBox.WindowLocation);
+            IUnpinnedToolHost.PinToolPane(_activeUnpinnedToolData, _activeToolListBox.WindowLocation);
 
             /*
              * Remove the tool list items from the side bar
@@ -138,7 +134,7 @@ namespace OpenControls.Wpf.DockManager
             _activeToolListBox = null;
             _activeUnpinnedToolData = null;
 
-            IUnpinnedToolParent.ViewModelRemoved(iViewModel);
+            IUnpinnedToolHost.ViewModelRemoved(iViewModel);
         }
 
         private void UnpinnedToolPane_Closed(object sender, EventArgs e)
@@ -215,7 +211,7 @@ namespace OpenControls.Wpf.DockManager
 
         public void MakeUnpinnedToolPaneGroup(WindowLocation windowLocation, ToolPaneGroup toolPaneGroup, string siblingGuid, bool isHorizontal, bool isFirst)
         {
-            Controls.IToolListBox iToolListBox = IUnpinnedToolParent.GetToolListBox(windowLocation);
+            Controls.IToolListBox iToolListBox = IUnpinnedToolHost.GetToolListBox(windowLocation);
 
             System.Diagnostics.Trace.Assert(iToolListBox != null);
             System.Diagnostics.Trace.Assert(toolPaneGroup != null);
@@ -233,33 +229,33 @@ namespace OpenControls.Wpf.DockManager
         {
             System.Diagnostics.Trace.Assert(toolPaneGroup != null);
 
-            IDockPaneManager.UnpinToolPane(toolPaneGroup, out UnpinnedToolData unpinnedToolData, out WindowLocation toolListBoxLocation);
+            IUnpinnedToolHost.UnpinToolPane(toolPaneGroup, out UnpinnedToolData unpinnedToolData, out WindowLocation toolListBoxLocation);
 
-            AddUnpinnedToolData(unpinnedToolData, toolListBoxLocation, IUnpinnedToolParent.GetToolListBox(toolListBoxLocation));
+            AddUnpinnedToolData(unpinnedToolData, toolListBoxLocation, IUnpinnedToolHost.GetToolListBox(toolListBoxLocation));
         }
 
         public void ProcessMoveResize()
         {
             if (_activeUnpinnedToolPane != null)
             {
-                Point topLeftPoint = IDockPaneHost.RootPane.PointToScreen(new Point(0, 0));
+                Point topLeftPoint = IUnpinnedToolHost.RootPane.PointToScreen(new Point(0, 0));
                 double left = topLeftPoint.X;
                 double top = topLeftPoint.Y;
                 switch (_activeToolListBox.WindowLocation)
                 {
                     case WindowLocation.TopSide:
-                        _activeUnpinnedToolPane.Width = IDockPaneHost.RootPane.ActualWidth;
+                        _activeUnpinnedToolPane.Width = IUnpinnedToolHost.RootPane.ActualWidth;
                         break;
                     case WindowLocation.BottomSide:
-                        top += IDockPaneHost.RootPane.ActualHeight - _activeUnpinnedToolPane.ActualHeight;
-                        _activeUnpinnedToolPane.Width = IDockPaneHost.RootPane.ActualWidth;
+                        top += IUnpinnedToolHost.RootPane.ActualHeight - _activeUnpinnedToolPane.ActualHeight;
+                        _activeUnpinnedToolPane.Width = IUnpinnedToolHost.RootPane.ActualWidth;
                         break;
                     case WindowLocation.LeftSide:
-                        _activeUnpinnedToolPane.Height = IDockPaneHost.RootPane.ActualHeight;
+                        _activeUnpinnedToolPane.Height = IUnpinnedToolHost.RootPane.ActualHeight;
                         break;
                     case WindowLocation.RightSide:
-                        left += IDockPaneHost.RootPane.ActualWidth - _activeUnpinnedToolPane.ActualWidth;
-                        _activeUnpinnedToolPane.Height = IDockPaneHost.RootPane.ActualHeight;
+                        left += IUnpinnedToolHost.RootPane.ActualWidth - _activeUnpinnedToolPane.ActualWidth;
+                        _activeUnpinnedToolPane.Height = IUnpinnedToolHost.RootPane.ActualHeight;
                         break;
                 }
                 _activeUnpinnedToolPane.Left = left;
@@ -278,7 +274,7 @@ namespace OpenControls.Wpf.DockManager
 
             foreach (KeyValuePair<WindowLocation,List<UnpinnedToolData>> keyValuePair in _dictUnpinnedToolData)
             {
-                Controls.IToolListBox toolListBox = IUnpinnedToolParent.GetToolListBox(keyValuePair.Key);
+                Controls.IToolListBox toolListBox = IUnpinnedToolHost.GetToolListBox(keyValuePair.Key);
 
                 foreach (UnpinnedToolData unpinnedToolData in keyValuePair.Value)
                 {

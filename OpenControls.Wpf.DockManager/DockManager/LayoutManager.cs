@@ -17,7 +17,7 @@ namespace OpenControls.Wpf.DockManager
             Tag = new Guid("3c81a424-ef66-4de7-a361-9968cd88071c");
 
             IDockPaneManager = new DockPaneManager(this, this);
-            IUnpinnedToolManager = new UnpinnedToolManager(IDockPaneManager, this, this);
+            IUnpinnedToolManager = new UnpinnedToolManager(this);
             IFloatingPaneManager = new FloatingPaneManager(this, this);
         }
 
@@ -439,9 +439,9 @@ namespace OpenControls.Wpf.DockManager
             }
         }
         
-        SelectablePane IFloatingPaneHost.FindSelectablePane(Grid grid, Point pointOnScreen)
+        SelectablePane IFloatingPaneHost.FindSelectablePane(Point pointOnScreen)
         {
-            return IDockPaneManager.FindSelectablePane(grid, pointOnScreen);
+            return IDockPaneManager.FindSelectablePane(this, pointOnScreen);
         }
         
         void IFloatingPaneHost.Unfloat(FloatingPane floatingPane, SelectablePane selectedPane, WindowLocation windowLocation)
@@ -569,6 +569,42 @@ namespace OpenControls.Wpf.DockManager
         }
 
         #endregion IDockPaneTree
+
+        #region IUnpinnedToolHost
+
+        Grid IUnpinnedToolHost.RootPane
+        {
+            get
+            {
+                return _root;
+            }
+        }
+
+        void IUnpinnedToolHost.ViewModelRemoved(IViewModel iViewModel)
+        {
+            System.Diagnostics.Trace.Assert(ToolsSource.Contains(iViewModel));
+
+            ToolsSource.Remove(iViewModel);
+        }
+
+        IToolListBox IUnpinnedToolHost.GetToolListBox(WindowLocation windowLocation)
+        {
+            System.Diagnostics.Trace.Assert(_dictToolListBoxes.ContainsKey(windowLocation));
+
+            return _dictToolListBoxes[windowLocation];
+        }
+
+        void IUnpinnedToolHost.PinToolPane(UnpinnedToolData unpinnedToolData, WindowLocation defaultWindowLocation)
+        {
+            IDockPaneManager.PinToolPane(unpinnedToolData, defaultWindowLocation);
+        }
+
+        void IUnpinnedToolHost.UnpinToolPane(ToolPaneGroup toolPaneGroup, out UnpinnedToolData unpinnedToolData, out WindowLocation toolListBoxLocation)
+        {
+            IDockPaneManager.UnpinToolPane(toolPaneGroup, out unpinnedToolData, out toolListBoxLocation);
+        }
+
+        #endregion IUnpinnedToolPaneOwner
 
         public bool SaveLayoutToFile(string fileNameAndPath)
         {
@@ -754,23 +790,5 @@ namespace OpenControls.Wpf.DockManager
                 }
             }
         }
-
-        #region IUnpinnedToolHost
-
-        void IUnpinnedToolHost.ViewModelRemoved(IViewModel iViewModel)
-        {
-            System.Diagnostics.Trace.Assert(ToolsSource.Contains(iViewModel));
-            
-            ToolsSource.Remove(iViewModel);
-        }
-
-        IToolListBox IUnpinnedToolHost.GetToolListBox(WindowLocation windowLocation)
-        {
-            System.Diagnostics.Trace.Assert(_dictToolListBoxes.ContainsKey(windowLocation));
-
-            return _dictToolListBoxes[windowLocation];
-        }
-
-        #endregion IUnpinnedToolPaneOwner
     }
 }

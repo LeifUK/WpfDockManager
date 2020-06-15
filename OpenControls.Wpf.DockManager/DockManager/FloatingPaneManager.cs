@@ -143,7 +143,7 @@ namespace OpenControls.Wpf.DockManager
 
             Window floatingWindow = sender as Window;
             Point cursorPositionOnScreen = OpenControls.Wpf.DockManager.Controls.Utilities.GetCursorPosition();
-
+            SelectablePane previousPane = SelectedPane;
             bool foundSelectedPane = false;
             Point cursorPositionInMainWindow = IFloatingPaneHost.RootGrid.PointFromScreen(cursorPositionOnScreen);
             if (
@@ -154,7 +154,7 @@ namespace OpenControls.Wpf.DockManager
                 )
             {
                 Type paneType = (sender is FloatingDocumentPaneGroup) ? typeof(DocumentPaneGroup) : typeof(ToolPaneGroup);
-                var pane = IFloatingPaneHost.FindSelectablePane(IFloatingPaneHost.RootGrid, cursorPositionOnScreen);
+                var pane = IFloatingPaneHost.FindSelectablePane(cursorPositionOnScreen);
                 foundSelectedPane = pane != null;
                 if ((pane != null) && (SelectedPane != pane))
                 {
@@ -213,15 +213,9 @@ namespace OpenControls.Wpf.DockManager
                 }
             }
 
-            SelectablePane previousPane = SelectedPane;
-
             if (!foundSelectedPane)
             {
                 SelectedPane = null;
-            }
-
-            if (!foundSelectedPane)
-            {
                 if (_windowLocationPane != null)
                 {
                     _windowLocationPane.Close();
@@ -273,6 +267,11 @@ namespace OpenControls.Wpf.DockManager
                 }
 
                 _insertionIndicatorManager.ShowInsertionIndicator(windowLocation);
+            }
+            else if (_insertionIndicatorManager != null)
+            {
+                _insertionIndicatorManager.HideInsertionIndicator();
+                _insertionIndicatorManager = null;
             }
         }
 
