@@ -5,6 +5,7 @@ namespace OpenControls.Wpf.DockManager
 {
     internal interface IFloatingPaneHost
     {
+        Grid RootPane { get; }
         Grid RootGrid { get; }
         void RemoveViewModel(IViewModel iViewModel);
         SelectablePane FindSelectablePane(Grid grid, Point pointOnScreen);

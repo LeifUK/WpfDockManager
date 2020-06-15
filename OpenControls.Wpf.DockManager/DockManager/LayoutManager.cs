@@ -18,7 +18,7 @@ namespace OpenControls.Wpf.DockManager
 
             IDockPaneManager = new DockPaneManager(this, this);
             IUnpinnedToolManager = new UnpinnedToolManager(IDockPaneManager, this, this);
-            IFloatingPaneManager = new FloatingPaneManager(this, this, this);
+            IFloatingPaneManager = new FloatingPaneManager(this, this);
         }
 
         public void Initialise()
@@ -410,6 +410,14 @@ namespace OpenControls.Wpf.DockManager
         }
 
         #region IFloatingPaneHost
+
+        Grid IFloatingPaneHost.RootPane 
+        { 
+            get
+            {
+                return IDockPaneHost.RootPane;
+            }
+        }
 
         Grid IFloatingPaneHost.RootGrid
         {

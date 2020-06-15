@@ -8,11 +8,9 @@ namespace OpenControls.Wpf.DockManager
     internal class FloatingPaneManager : IFloatingPaneManager
     {
         public FloatingPaneManager(
-            IDockPaneHost iDockPaneHost,
             IFloatingPaneHost iFloatingPaneManagerOwner, 
             ILayoutFactory iLayoutFactory)
         {
-            IDockPaneHost = iDockPaneHost;
             IFloatingPaneHost = iFloatingPaneManagerOwner;
             ILayoutFactory = iLayoutFactory;
             FloatingToolPaneGroups = new List<IFloatingPane>();
@@ -25,9 +23,8 @@ namespace OpenControls.Wpf.DockManager
 
         private SelectablePane SelectedPane;
 
-        private IDockPaneHost IDockPaneHost;
-        private IFloatingPaneHost IFloatingPaneHost;
-        private ILayoutFactory ILayoutFactory;
+        private readonly IFloatingPaneHost IFloatingPaneHost;
+        private readonly ILayoutFactory ILayoutFactory;
 
         public void Shutdown()
         {
@@ -199,11 +196,11 @@ namespace OpenControls.Wpf.DockManager
                         _sideLocationPane.AllowsTransparency = true;
                     }
 
-                    Point topLeftRootPoint = IDockPaneHost.RootPane.PointToScreen(new Point(0, 0));
+                    Point topLeftRootPoint = IFloatingPaneHost.RootPane.PointToScreen(new Point(0, 0));
                     _sideLocationPane.Left = topLeftRootPoint.X;
                     _sideLocationPane.Top = topLeftRootPoint.Y;
-                    _sideLocationPane.Width = IDockPaneHost.RootPane.ActualWidth;
-                    _sideLocationPane.Height = IDockPaneHost.RootPane.ActualHeight;
+                    _sideLocationPane.Width = IFloatingPaneHost.RootPane.ActualWidth;
+                    _sideLocationPane.Height = IFloatingPaneHost.RootPane.ActualHeight;
                     _sideLocationPane.Show();
                 }
             }
