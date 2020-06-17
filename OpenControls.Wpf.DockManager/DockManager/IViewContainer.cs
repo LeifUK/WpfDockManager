@@ -1,7 +1,5 @@
 ﻿using System;
-using System.Windows;
 using System.Windows.Controls;
-using System.Windows.Media;
 
 namespace OpenControls.Wpf.DockManager
 {
@@ -16,6 +14,7 @@ namespace OpenControls.Wpf.DockManager
         int GetCurrentTabIndex();
         UserControl GetUserControl(int index);
         IViewModel GetIViewModel(int index);
+        void ExtractDocuments(IViewContainer sourceViewContainer);
 
         event EventHandler SelectionChanged;
         event Events.TabClosedEventHandler TabClosed;

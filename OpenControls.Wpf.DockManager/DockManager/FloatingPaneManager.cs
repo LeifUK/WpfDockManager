@@ -21,7 +21,7 @@ namespace OpenControls.Wpf.DockManager
         private SideLocationPane _sideLocationPane;
         private InsertionIndicatorManager _insertionIndicatorManager;
 
-        private SelectablePane SelectedPane;
+        private ISelectablePane SelectedPane;
 
         private readonly IFloatingPaneHost IFloatingPaneHost;
         private readonly ILayoutFactory ILayoutFactory;
@@ -137,79 +137,165 @@ namespace OpenControls.Wpf.DockManager
             }
         }
 
+        IntPtr GetTopmostWindow(List<IntPtr> hWnds)
+        {
+            IntPtr intPtr = new IntPtr(0);
+
+            var numRemaining = hWnds.Count;
+            Controls.User32.EnumWindows((wnd, param) =>
+            {
+                if (hWnds.Contains(wnd))
+                {
+                    intPtr = wnd;
+                    return false;
+                }
+                return true;
+            }, IntPtr.Zero);
+
+            return intPtr;
+        }
+
         private void FloatingWindow_LocationChanged(object sender, EventArgs e)
         {
             System.Diagnostics.Trace.Assert(sender is Window);
 
             Window floatingWindow = sender as Window;
             Point cursorPositionOnScreen = OpenControls.Wpf.DockManager.Controls.Utilities.GetCursorPosition();
-            SelectablePane previousPane = SelectedPane;
+            ISelectablePane previousPane = SelectedPane;
             bool foundSelectedPane = false;
-            Point cursorPositionInMainWindow = IFloatingPaneHost.RootGrid.PointFromScreen(cursorPositionOnScreen);
-            if (
-                    (cursorPositionInMainWindow.X >= 0) &&
-                    (cursorPositionInMainWindow.X <= IFloatingPaneHost.RootGrid.ActualWidth) &&
-                    (cursorPositionInMainWindow.Y >= 0) &&
-                    (cursorPositionInMainWindow.Y <= IFloatingPaneHost.RootGrid.ActualHeight)
-                )
+
+            if ((sender is FloatingToolPaneGroup) || (sender is FloatingDocumentPaneGroup))
             {
-                Type paneType = (sender is FloatingDocumentPaneGroup) ? typeof(DocumentPaneGroup) : typeof(ToolPaneGroup);
-                var pane = IFloatingPaneHost.FindSelectablePane(cursorPositionOnScreen);
-                foundSelectedPane = pane != null;
-                if ((pane != null) && (SelectedPane != pane))
+                int windowCount = 0;
+                List<IntPtr> hWnds = new List<IntPtr>();
+                Dictionary<IntPtr, IFloatingPane> dict = new Dictionary<IntPtr, IFloatingPane>();
+
+                List<IFloatingPane> floatingPanes = (sender is FloatingToolPaneGroup) ? FloatingToolPaneGroups : FloatingDocumentPaneGroups;
+                foreach (IFloatingPane iFloatingPane in floatingPanes)
                 {
-                    if (SelectedPane != null)
+                    if (iFloatingPane != sender)
                     {
-                        SelectedPane.IsHighlighted = false;
-                    }
-
-                    pane.IsHighlighted = true;
-                    SelectedPane = pane;
-                    if (_windowLocationPane != null)
-                    {
-                        _windowLocationPane.Close();
-                        _windowLocationPane = null;
-                    }
-
-                    if ((paneType == pane.GetType()) || ((pane is DocumentPanel) && (sender is FloatingDocumentPaneGroup)))
-                    {
-                        _windowLocationPane = new WindowLocationPane();
-                        _windowLocationPane.AllowsTransparency = true;
-                        if (SelectedPane is DocumentPanel)
+                        Point cursorPositionInFloatingPane = (iFloatingPane as FloatingPane).PointFromScreen(cursorPositionOnScreen);
+                        ViewContainer viewContainer = (iFloatingPane.IViewContainer as ViewContainer);
+                        if (
+                            (cursorPositionInFloatingPane.X >= 0) &&
+                            (cursorPositionInFloatingPane.X <= iFloatingPane.ActualWidth) &&
+                            (cursorPositionInFloatingPane.Y >= 0) &&
+                            (cursorPositionInFloatingPane.Y <= iFloatingPane.ActualHeight)
+                        )
                         {
-                            _windowLocationPane.ShowIcons(WindowLocation.Middle);
+                            var wih = new System.Windows.Interop.WindowInteropHelper((iFloatingPane as FloatingPane));
+                            hWnds.Add(wih.Handle);
+                            dict.Add(wih.Handle, iFloatingPane);
+                            windowCount++;
                         }
-                        Point topLeftPanePoint = pane.PointToScreen(new Point(0, 0));
-                        _windowLocationPane.Left = topLeftPanePoint.X;
-                        _windowLocationPane.Top = topLeftPanePoint.Y;
-                        _windowLocationPane.Width = SelectedPane.ActualWidth;
-                        _windowLocationPane.Height = SelectedPane.ActualHeight;
-                        _windowLocationPane.Show();
                     }
                 }
 
-                if (sender is FloatingToolPaneGroup)
+                if (windowCount > 0)
                 {
-                    if (_sideLocationPane == null)
+                    IntPtr intPtr = GetTopmostWindow(hWnds);
+                    if (dict.ContainsKey(intPtr))
                     {
-                        _sideLocationPane = new SideLocationPane();
-                        _sideLocationPane.AllowsTransparency = true;
-                    }
+                        foundSelectedPane = true;
+                        IFloatingPane iFloatingPane = dict[intPtr];
 
-                    Point topLeftRootPoint = IFloatingPaneHost.RootPane.PointToScreen(new Point(0, 0));
-                    _sideLocationPane.Left = topLeftRootPoint.X;
-                    _sideLocationPane.Top = topLeftRootPoint.Y;
-                    _sideLocationPane.Width = IFloatingPaneHost.RootPane.ActualWidth;
-                    _sideLocationPane.Height = IFloatingPaneHost.RootPane.ActualHeight;
-                    _sideLocationPane.Show();
+                        if (SelectedPane != null)
+                        {
+                            SelectedPane.IsHighlighted = false;
+                        }
+
+                        if (SelectedPane != iFloatingPane)
+                        {
+                            if (_windowLocationPane != null)
+                            {
+                                _windowLocationPane.Close();
+                                _windowLocationPane = null;
+                            }
+
+                            SelectedPane = iFloatingPane;
+                            iFloatingPane.IsHighlighted = true;
+
+                            _windowLocationPane = new WindowLocationPane();
+                            _windowLocationPane.AllowsTransparency = true;
+                            _windowLocationPane.ShowIcons(WindowLocation.Middle);
+                            ViewContainer viewContainer = (iFloatingPane.IViewContainer as ViewContainer);
+                            Point topLeftPanePoint = viewContainer.PointToScreen(new Point(0, 0));
+                            _windowLocationPane.Left = topLeftPanePoint.X;
+                            _windowLocationPane.Top = topLeftPanePoint.Y;
+                            _windowLocationPane.Width = viewContainer.ActualWidth;
+                            _windowLocationPane.Height = viewContainer.ActualHeight;
+                            _windowLocationPane.Show();
+                        }
+                        if (_sideLocationPane != null)
+                        {
+                            _sideLocationPane.Close();
+                            _sideLocationPane = null;
+                        }
+                    }
                 }
             }
-            else
+
+            if (!foundSelectedPane)
             {
-                if (_sideLocationPane != null)
+                Point cursorPositionInMainWindow = IFloatingPaneHost.RootGrid.PointFromScreen(cursorPositionOnScreen);
+                if (
+                        (cursorPositionInMainWindow.X >= 0) &&
+                        (cursorPositionInMainWindow.X <= IFloatingPaneHost.RootGrid.ActualWidth) &&
+                        (cursorPositionInMainWindow.Y >= 0) &&
+                        (cursorPositionInMainWindow.Y <= IFloatingPaneHost.RootGrid.ActualHeight)
+                    )
                 {
-                    _sideLocationPane.Close();
-                    _sideLocationPane = null;
+                    Type paneType = (sender is FloatingDocumentPaneGroup) ? typeof(DocumentPaneGroup) : typeof(ToolPaneGroup);
+                    var pane = IFloatingPaneHost.FindSelectablePane(cursorPositionOnScreen);
+                    foundSelectedPane = pane != null;
+                    if ((pane != null) && (SelectedPane != pane))
+                    {
+                        if (SelectedPane != null)
+                        {
+                            SelectedPane.IsHighlighted = false;
+                        }
+
+                        pane.IsHighlighted = true;
+                        SelectedPane = pane;
+                        if (_windowLocationPane != null)
+                        {
+                            _windowLocationPane.Close();
+                            _windowLocationPane = null;
+                        }
+
+                        if ((paneType == pane.GetType()) || ((pane is DocumentPanel) && (sender is FloatingDocumentPaneGroup)))
+                        {
+                            _windowLocationPane = new WindowLocationPane();
+                            _windowLocationPane.AllowsTransparency = true;
+                            if (SelectedPane is DocumentPanel)
+                            {
+                                _windowLocationPane.ShowIcons(WindowLocation.Middle);
+                            }
+                            Point topLeftPanePoint = pane.PointToScreen(new Point(0, 0));
+                            _windowLocationPane.Left = topLeftPanePoint.X;
+                            _windowLocationPane.Top = topLeftPanePoint.Y;
+                            _windowLocationPane.Width = SelectedPane.ActualWidth;
+                            _windowLocationPane.Height = SelectedPane.ActualHeight;
+                            _windowLocationPane.Show();
+                        }
+                    }
+
+                    if (sender is IFloatingPane)
+                    {
+                        if (_sideLocationPane == null)
+                        {
+                            _sideLocationPane = new SideLocationPane();
+                            _sideLocationPane.AllowsTransparency = true;
+                        }
+
+                        Point topLeftRootPoint = IFloatingPaneHost.RootPane.PointToScreen(new Point(0, 0));
+                        _sideLocationPane.Left = topLeftRootPoint.X;
+                        _sideLocationPane.Top = topLeftRootPoint.Y;
+                        _sideLocationPane.Width = IFloatingPaneHost.RootPane.ActualWidth;
+                        _sideLocationPane.Height = IFloatingPaneHost.RootPane.ActualHeight;
+                        _sideLocationPane.Show();
+                    }
                 }
             }
 
@@ -263,7 +349,14 @@ namespace OpenControls.Wpf.DockManager
                 }
                 if (_insertionIndicatorManager == null)
                 {
-                    _insertionIndicatorManager = new InsertionIndicatorManager(SelectedPane);
+                    if (SelectedPane is IFloatingPane)
+                    {
+                        _insertionIndicatorManager = new InsertionIndicatorManager(((SelectedPane as IFloatingPane).IViewContainer as ViewContainer));
+                    }
+                    else
+                    {
+                        _insertionIndicatorManager = new InsertionIndicatorManager(SelectedPane as Grid);
+                    }
                 }
 
                 _insertionIndicatorManager.ShowInsertionIndicator(windowLocation);
@@ -284,7 +377,7 @@ namespace OpenControls.Wpf.DockManager
 
                 if (
                         (floatingPane == null) ||
-                        ((SelectedPane != null) && !(SelectedPane.Parent is SplitterPane) && !(SelectedPane.Parent is DocumentPanel) && (SelectedPane.Parent != IFloatingPaneHost.RootGrid)) ||
+                        ((SelectedPane != null) && !(SelectedPane is FloatingPane) && !(SelectedPane.Parent is SplitterPane) && !(SelectedPane.Parent is DocumentPanel) && (SelectedPane.Parent != IFloatingPaneHost.RootGrid)) ||
                         (_insertionIndicatorManager == null) ||
                         (_insertionIndicatorManager.WindowLocation == WindowLocation.None)
                    )
@@ -292,11 +385,28 @@ namespace OpenControls.Wpf.DockManager
                     return;
                 }
 
-                SelectablePane selectedPane = SelectedPane;
+                ISelectablePane selectedPane = SelectedPane;
                 WindowLocation windowLocation = _insertionIndicatorManager.WindowLocation;
                 CancelSelection();
 
-                IFloatingPaneHost.Unfloat(floatingPane, selectedPane, windowLocation);
+                if (selectedPane is FloatingPane)
+                {
+                    IFloatingPane selectedFloatingPane = selectedPane as IFloatingPane;
+                    selectedFloatingPane.IViewContainer.ExtractDocuments(floatingPane.IViewContainer);
+                    if (floatingPane is FloatingToolPaneGroup)
+                    {
+                        FloatingToolPaneGroups.Remove(floatingPane);
+                    }
+                    else
+                    {
+                        FloatingDocumentPaneGroups.Remove(floatingPane);
+                    }
+                    floatingPane.Close();
+                }
+                else
+                {
+                    IFloatingPaneHost.Unfloat(floatingPane, selectedPane as SelectablePane, windowLocation);
+                }
 
                 Application.Current.MainWindow.Activate();
             });

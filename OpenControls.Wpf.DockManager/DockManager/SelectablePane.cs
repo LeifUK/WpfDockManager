@@ -3,7 +3,7 @@ using System.Windows.Media;
 
 namespace OpenControls.Wpf.DockManager
 {
-    abstract class SelectablePane : Grid
+    abstract class SelectablePane : Grid, ISelectablePane
     {
         public SelectablePane()
         {

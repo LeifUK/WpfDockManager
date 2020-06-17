@@ -18,7 +18,7 @@ namespace OpenControls.Wpf.DockManager
 
         void Float(DockPane dockPane, bool drag, bool selectedTabOnly);
 
-        SelectablePane FindSelectablePane(Grid grid, Point pointOnScreen);
+        ISelectablePane FindSelectablePane(Grid grid, Point pointOnScreen);
 
         void Unfloat(FloatingPane floatingPane, SelectablePane selectedPane, WindowLocation windowLocation);
 

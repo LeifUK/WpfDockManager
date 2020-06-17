@@ -5,6 +5,12 @@ namespace OpenControls.Wpf.DockManager.Controls
 {
     class User32
     {
+        public delegate bool EnumWindowsProc(IntPtr hWnd, IntPtr lParam);
+
+        [DllImport("user32.dll")]
+        [return: MarshalAs(UnmanagedType.Bool)]
+        public static extern bool EnumWindows(EnumWindowsProc lpEnumFunc, IntPtr lParam);
+
         public struct POINT
         {
             public int X;

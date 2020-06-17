@@ -1,7 +1,5 @@
 ﻿using System;
-using System.Windows;
 using System.Windows.Controls;
-using System.Windows.Media;
 
 namespace OpenControls.Wpf.DockManager
 {
@@ -225,6 +223,22 @@ namespace OpenControls.Wpf.DockManager
             }
 
             return userControl.DataContext as IViewModel;
+        }
+
+        public void ExtractDocuments(IViewContainer sourceViewContainer)
+        {
+            System.Diagnostics.Trace.Assert(sourceViewContainer != null);
+
+            while (true)
+            {
+                UserControl userControl = sourceViewContainer.ExtractUserControl(0);
+                if (userControl == null)
+                {
+                    break;
+                }
+
+                AddUserControl(userControl);
+            }
         }
 
         #endregion IViewContainer

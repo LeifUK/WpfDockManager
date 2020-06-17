@@ -439,7 +439,7 @@ namespace OpenControls.Wpf.DockManager
             }
         }
         
-        SelectablePane IFloatingPaneHost.FindSelectablePane(Point pointOnScreen)
+        ISelectablePane IFloatingPaneHost.FindSelectablePane(Point pointOnScreen)
         {
             return IDockPaneManager.FindSelectablePane(this, pointOnScreen);
         }

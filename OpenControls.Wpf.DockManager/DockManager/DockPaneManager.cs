@@ -43,21 +43,6 @@ namespace OpenControls.Wpf.DockManager
             return grid;
         }
 
-        private static void ExtractDocuments(FloatingPane floatingPane, DockPane dockPane)
-        {
-            while (true)
-            {
-                UserControl userControl = floatingPane.IViewContainer.ExtractUserControl(0);
-                if (userControl == null)
-                {
-                    break;
-                }
-
-                dockPane.IViewContainer.AddUserControl(userControl);
-            }
-            floatingPane.Close();
-        }
-
         private void InsertDockPane(Grid parentSplitterPane, SelectablePane selectablePane, DockPane dockPaneToInsert, bool isHorizontalSplit)
         {
             parentSplitterPane.Children.Remove(selectablePane);
@@ -278,7 +263,7 @@ namespace OpenControls.Wpf.DockManager
             floatingPane.Height = dockPane.ActualHeight;
         }
 
-        public SelectablePane FindSelectablePane(Grid grid, Point pointOnScreen)
+        public ISelectablePane FindSelectablePane(Grid grid, Point pointOnScreen)
         {
             if (grid == null)
             {
@@ -348,7 +333,8 @@ namespace OpenControls.Wpf.DockManager
                         {
                             dockPane = ILayoutFactory.MakeDocumentPaneGroup();
                         }
-                        ExtractDocuments(floatingPane, dockPane);
+                        dockPane.IViewContainer.ExtractDocuments(floatingPane.IViewContainer);
+                        floatingPane.Close();
 
                         parentSplitterPane = ILayoutFactory.MakeSplitterPane((windowLocation == WindowLocation.TopSide) || (windowLocation == WindowLocation.BottomSide));
                         bool isFirst = (windowLocation == WindowLocation.TopSide) || (windowLocation == WindowLocation.LeftSide);
@@ -379,7 +365,8 @@ namespace OpenControls.Wpf.DockManager
                         {
                             dockPane = ILayoutFactory.MakeDocumentPaneGroup();
                         }
-                        ExtractDocuments(floatingPane, dockPane);
+                        dockPane.IViewContainer.ExtractDocuments(floatingPane.IViewContainer);
+                        floatingPane.Close();
 
                         SplitterPane newGrid = ILayoutFactory.MakeSplitterPane((windowLocation == WindowLocation.Top) || (windowLocation == WindowLocation.Bottom));
 
@@ -407,13 +394,15 @@ namespace OpenControls.Wpf.DockManager
 
                         if (selectedPane is DockPane)
                         {
-                            ExtractDocuments(floatingPane, selectedPane as DockPane);
+                            (selectedPane as DockPane).IViewContainer.ExtractDocuments(floatingPane.IViewContainer);
+                            floatingPane.Close();
                         }
                         else if (selectedPane is DocumentPanel)
                         {
                             DocumentPaneGroup documentPaneGroup = ILayoutFactory.MakeDocumentPaneGroup();
                             selectedPane.Children.Add(documentPaneGroup);
-                            ExtractDocuments(floatingPane, documentPaneGroup);
+                            documentPaneGroup.IViewContainer.ExtractDocuments(floatingPane.IViewContainer);
+                            floatingPane.Close();
                         }
                         break;
                 }

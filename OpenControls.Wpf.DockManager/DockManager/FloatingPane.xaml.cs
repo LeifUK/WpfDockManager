@@ -159,5 +159,12 @@ namespace OpenControls.Wpf.DockManager
         }
 
         public IViewContainer IViewContainer { get; private set; }
+
+        #region ISelectablePane
+
+        public bool IsHighlighted { get; set; }
+        public Brush HighlightBrush { get; private set; }
+
+        #endregion ISelectablePane
     }
 }

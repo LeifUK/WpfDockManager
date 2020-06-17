@@ -8,7 +8,7 @@ namespace OpenControls.Wpf.DockManager
         Grid RootPane { get; }
         Grid RootGrid { get; }
         void RemoveViewModel(IViewModel iViewModel);
-        SelectablePane FindSelectablePane(Point pointOnScreen);
+        ISelectablePane FindSelectablePane(Point pointOnScreen);
         void Unfloat(FloatingPane floatingPane, SelectablePane selectedPane, WindowLocation windowLocation);
     }
 }

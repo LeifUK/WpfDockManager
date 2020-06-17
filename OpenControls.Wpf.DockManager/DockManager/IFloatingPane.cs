@@ -2,7 +2,7 @@
 
 namespace OpenControls.Wpf.DockManager
 {
-    internal interface IFloatingPane
+    internal interface IFloatingPane : ISelectablePane
     {
         IViewContainer IViewContainer { get; }
         void Close();
