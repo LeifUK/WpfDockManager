@@ -9,9 +9,8 @@ namespace OpenControls.Wpf.DockManager
     {
         public DocumentContainer()
         {
-            double tabOffset = (double)FindResource("DocumentPaneTabOffset");
-            RowDefinitions.Add(new RowDefinition() { Height = new System.Windows.GridLength(tabOffset, System.Windows.GridUnitType.Pixel) });
-            RowDefinitions.Add(new RowDefinition() { Height = new System.Windows.GridLength(1, System.Windows.GridUnitType.Auto) });
+            double tabHeaderHeight = (double)FindResource("DocumentPaneTabHeaderHeight");
+            RowDefinitions.Add(new RowDefinition() { Height = new System.Windows.GridLength(tabHeaderHeight, System.Windows.GridUnitType.Pixel) });
             RowDefinitions.Add(new RowDefinition() { Height = new System.Windows.GridLength(1, System.Windows.GridUnitType.Auto) });
             RowDefinitions.Add(new RowDefinition() { Height = new System.Windows.GridLength(1, System.Windows.GridUnitType.Star) });
 
@@ -22,31 +21,38 @@ namespace OpenControls.Wpf.DockManager
             ColumnDefinitions.Add(new ColumnDefinition() { Width = new System.Windows.GridLength(1, System.Windows.GridUnitType.Auto) });
             ColumnDefinitions.Add(new ColumnDefinition() { Width = new System.Windows.GridLength(2, System.Windows.GridUnitType.Pixel) });
 
-            CreateTabControl(1, 0);
+            CreateTabControl(0, 0);
             TabHeaderControl.ItemContainerStyle = FindResource("DocumentPaneTabItem") as Style;
+            TabHeaderControl.ListBox.VerticalAlignment = VerticalAlignment.Bottom;
+            TabHeaderControl.VerticalAlignment = VerticalAlignment.Bottom;
 
             _gap = new Border();
-            _gap.SetResourceReference(Border.HeightProperty, "DocumentPaneGapHeight");
-            _gap.SetResourceReference(Border.BackgroundProperty, "DocumentPaneGapBrush");
+            _gap.SetResourceReference(Border.HeightProperty, "DocumentPaneContentBarHeight");
+            _gap.SetResourceReference(Border.BackgroundProperty, "DocumentPaneContentBarBrush");
             Children.Add(_gap);
-            Grid.SetRow(_gap, 2);
+            Grid.SetRow(_gap, 1);
             Grid.SetColumn(_gap, 0);
             Grid.SetColumnSpan(_gap, 6);
 
             _commandsButton = new Button();
             Children.Add(_commandsButton);
-            Grid.SetRow(_commandsButton, 1);
+            Grid.SetRow(_commandsButton, 0);
             Grid.SetColumn(_commandsButton, 2);
             _commandsButton.Click += delegate { if (DisplayGeneralMenu != null) DisplayGeneralMenu(); };
             _commandsButton.SetResourceReference(StyleProperty, "DocumentPaneCommandsButtonStyle");
 
             _listButton = new Button();
             Children.Add(_listButton);
-            Grid.SetRow(_listButton, 1);
+            Grid.SetRow(_listButton, 0);
             Grid.SetColumn(_listButton, 4);
             _listButton.Click += delegate { Helpers.DisplayItemsMenu(_items, TabHeaderControl, _selectedUserControl); };
             _listButton.SetResourceReference(StyleProperty, "DocumentPaneListButtonStyle");
 
+            Style style = TryFindResource("DocumentPaneScrollIndicatorStyle") as Style;
+            if (style != null)
+            {
+                TabHeaderControl.ArrowStyle = style;
+            }
             TabHeaderControl.ActiveArrowBrush = FindResource("DocumentPaneActiveScrollIndicatorBrush") as Brush;
             TabHeaderControl.InactiveArrowBrush = FindResource("DocumentPaneInactiveScrollIndicatorBrush") as Brush;
         }

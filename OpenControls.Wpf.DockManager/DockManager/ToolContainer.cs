@@ -10,12 +10,11 @@ namespace OpenControls.Wpf.DockManager
         {
             _rowDefinition_UserControl = new RowDefinition() { Height = new System.Windows.GridLength(1, System.Windows.GridUnitType.Star) };
             _rowDefinition_Gap = new RowDefinition() { Height = new System.Windows.GridLength(1, System.Windows.GridUnitType.Auto) };
+            double tabHeaderHeight = (double)FindResource("ToolPaneTabHeaderHeight");
             _rowDefinition_TabHeader = new RowDefinition() { Height = new System.Windows.GridLength(1, System.Windows.GridUnitType.Auto) };
-            _rowDefinition_Spacer = new RowDefinition() { Height = new System.Windows.GridLength(0, System.Windows.GridUnitType.Pixel) };
             RowDefinitions.Add(_rowDefinition_UserControl);
             RowDefinitions.Add(_rowDefinition_Gap);
             RowDefinitions.Add(_rowDefinition_TabHeader);
-            RowDefinitions.Add(_rowDefinition_Spacer);
 
             ColumnDefinitions.Add(new ColumnDefinition() { Width = new System.Windows.GridLength(1, System.Windows.GridUnitType.Star) });
             ColumnDefinitions.Add(new ColumnDefinition() { Width = new System.Windows.GridLength(4, System.Windows.GridUnitType.Pixel) });
@@ -25,10 +24,12 @@ namespace OpenControls.Wpf.DockManager
             CreateTabControl(2, 0);
             Grid.SetZIndex(TabHeaderControl, 1);
             TabHeaderControl.ItemContainerStyle = FindResource("ToolPaneTabItem") as Style;
+            TabHeaderControl.ListBox.VerticalAlignment = VerticalAlignment.Top;
+            TabHeaderControl.VerticalAlignment = VerticalAlignment.Top;
 
             _gap = new Border();
-            _gap.SetResourceReference(Border.HeightProperty, "ToolPaneGapHeight");
-            _gap.SetResourceReference(Border.BackgroundProperty, "ToolPaneGapBrush");
+            _gap.SetResourceReference(Border.HeightProperty, "ToolPaneContentBarHeight");
+            _gap.SetResourceReference(Border.BackgroundProperty, "ToolPaneContentBarBrush");
             Children.Add(_gap);
             Grid.SetRow(_gap, 1);
             Grid.SetColumn(_gap, 0);
@@ -37,7 +38,6 @@ namespace OpenControls.Wpf.DockManager
             _border = new Border();
             Children.Add(_border);
             Grid.SetRow(_border, 2);
-            Grid.SetRowSpan(_border, 2);
             Grid.SetColumn(_border, 0);
             Grid.SetColumnSpan(_border, 4);
             Grid.SetZIndex(_border, -1);
@@ -53,6 +53,11 @@ namespace OpenControls.Wpf.DockManager
             _listButton.Click += delegate { Helpers.DisplayItemsMenu(_items, TabHeaderControl, _selectedUserControl); };
             _listButton.SetResourceReference(StyleProperty, "ToolPaneListButtonStyle");
 
+            Style style = TryFindResource("ToolPaneScrollIndicatorStyle") as Style;
+            if (style != null)
+            {
+                TabHeaderControl.ArrowStyle = style;
+            }
             TabHeaderControl.ActiveArrowBrush = FindResource("ToolPaneActiveScrollIndicatorBrush") as Brush;
             TabHeaderControl.InactiveArrowBrush = FindResource("ToolPaneInactiveScrollIndicatorBrush") as Brush;
         }
@@ -60,7 +65,6 @@ namespace OpenControls.Wpf.DockManager
         private RowDefinition _rowDefinition_UserControl;
         private RowDefinition _rowDefinition_Gap;
         private RowDefinition _rowDefinition_TabHeader;
-        private RowDefinition _rowDefinition_Spacer;
         private Border _border;
 
         protected override void SetSelectedUserControlGridPosition()
@@ -76,14 +80,12 @@ namespace OpenControls.Wpf.DockManager
             {
                 _rowDefinition_Gap.Height = new GridLength(0);
                 _rowDefinition_TabHeader.Height = new GridLength(0);
-                _rowDefinition_Spacer.Height = new GridLength(0);
             }
             else
             {
                 _rowDefinition_Gap.Height = new System.Windows.GridLength(1, System.Windows.GridUnitType.Auto);
-                _rowDefinition_TabHeader.Height = new System.Windows.GridLength(1, System.Windows.GridUnitType.Auto);
-                double tabOffset = (double)FindResource("ToolPaneTabOffset");
-                _rowDefinition_Spacer.Height = new System.Windows.GridLength(tabOffset, System.Windows.GridUnitType.Pixel);
+                double tabHeaderHeight = (double)FindResource("ToolPaneTabHeaderHeight");
+                _rowDefinition_TabHeader.Height = new System.Windows.GridLength(tabHeaderHeight, System.Windows.GridUnitType.Pixel);
             }
         }
     }

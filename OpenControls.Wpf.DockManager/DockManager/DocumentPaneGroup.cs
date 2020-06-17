@@ -1,7 +1,6 @@
 ﻿using System;
 using System.Windows;
 using System.Windows.Controls;
-using System.Windows.Media;
 
 namespace OpenControls.Wpf.DockManager
 {
@@ -24,23 +23,7 @@ namespace OpenControls.Wpf.DockManager
             ColumnDefinitions.Add(columnDefinition);
 
             columnDefinition = new ColumnDefinition();
-            columnDefinition.Width = new GridLength(1, GridUnitType.Auto);
-            ColumnDefinitions.Add(columnDefinition);
-
-            columnDefinition = new ColumnDefinition();
             columnDefinition.Width = new GridLength(1, GridUnitType.Star);
-            ColumnDefinitions.Add(columnDefinition);
-
-            columnDefinition = new ColumnDefinition();
-            columnDefinition.Width = new GridLength(1, GridUnitType.Auto);
-            ColumnDefinitions.Add(columnDefinition);
-
-            columnDefinition = new ColumnDefinition();
-            columnDefinition.Width = new GridLength(1, GridUnitType.Auto);
-            ColumnDefinitions.Add(columnDefinition);
-
-            columnDefinition = new ColumnDefinition();
-            columnDefinition.Width = new GridLength(1, GridUnitType.Auto);
             ColumnDefinitions.Add(columnDefinition);
 
             columnDefinition = new ColumnDefinition();

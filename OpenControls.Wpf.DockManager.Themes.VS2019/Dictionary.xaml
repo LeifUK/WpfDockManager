@@ -234,7 +234,7 @@
     <System:Double x:Key="ToolPaneHeaderFontSize">12</System:Double>
     <FontFamily x:Key="ToolPaneHeaderFontFamily">Arial</FontFamily>
     <Brush x:Key="ToolPaneBackground">#5d6b99</Brush>
-    <System:Double x:Key="ToolPaneTabOffset">0</System:Double>
+    <System:Double x:Key="ToolPaneTabHeaderHeight">21</System:Double>
 
     <CornerRadius x:Key="ToolPaneHeaderCornerRadius">0</CornerRadius>
     <Brush x:Key="ToolPaneHeaderBorderBrush">Gainsboro</Brush>
@@ -242,8 +242,8 @@
     <Brush x:Key="ToolPaneHeaderBackground">#3b4f81</Brush>
     <Thickness x:Key="ToolPaneHeaderTitlePadding">4,0,0,0</Thickness>
 
-    <Brush x:Key="ToolPaneGapBrush">AliceBlue</Brush>
-    <System:Double x:Key="ToolPaneGapHeight">2</System:Double>
+    <Brush x:Key="ToolPaneContentBarBrush">AliceBlue</Brush>
+    <System:Double x:Key="ToolPaneContentBarHeight">2</System:Double>
 
     <Brush x:Key="ToolPaneActiveScrollIndicatorBrush">White</Brush>
     <Brush x:Key="ToolPaneInactiveScrollIndicatorBrush">Transparent</Brush>
@@ -304,9 +304,9 @@
     <Brush x:Key="DocumentPaneBorderBrush">Transparent</Brush>
     <Thickness x:Key="DocumentPaneBorderThickness">0</Thickness>
     <Brush x:Key="DocumentPaneBackground">#5d6b99</Brush>
-    <System:Double x:Key="DocumentPaneTabOffset">0</System:Double>
-    <Brush x:Key="DocumentPaneGapBrush">#f5cc84</Brush>
-    <System:Double x:Key="DocumentPaneGapHeight">2</System:Double>
+    <System:Double x:Key="DocumentPaneTabHeaderHeight">21</System:Double>
+    <Brush x:Key="DocumentPaneContentBarBrush">#f5cc84</Brush>
+    <System:Double x:Key="DocumentPaneContentBarHeight">2</System:Double>
 
     <Brush x:Key="DocumentPaneActiveScrollIndicatorBrush">White</Brush>
     <Brush x:Key="DocumentPaneInactiveScrollIndicatorBrush">Transparent</Brush>

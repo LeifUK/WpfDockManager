@@ -17,7 +17,6 @@ namespace OpenControls.Wpf.DockManager.Controls
 
             _listBox.ItemsChanged += _listBox_ItemsChanged;
             _listBox.FloatTabRequest += _listBox_FloatTabRequest;
-            _listBox.Padding = new Thickness(-1);
 
             CloseTabCommand = new Command((parameter) => _buttonCloseTab_Click(parameter, null), delegate { return true; });
         }
@@ -328,38 +327,38 @@ namespace OpenControls.Wpf.DockManager.Controls
 
         #endregion
 
-        #region ArrowTemplate dependency property
+        #region ArrowStyle dependency property
 
         [Bindable(true)]
         [DesignerSerializationVisibility(DesignerSerializationVisibility.Hidden)]
-        public static readonly DependencyProperty ArrowTemplateProperty = DependencyProperty.Register("ArrowTemplate", typeof(ControlTemplate), typeof(TabHeaderControl), new FrameworkPropertyMetadata(null, new PropertyChangedCallback(OnArrowTemplateChanged)));
+        public static readonly DependencyProperty ArrowStyleProperty = DependencyProperty.Register("ArrowStyle", typeof(Style), typeof(TabHeaderControl), new FrameworkPropertyMetadata(null, new PropertyChangedCallback(OnArrowStyleChanged)));
 
-        public ControlTemplate ArrowTemplate
+        public Style ArrowStyle
         {
             get
             {
-                return (ControlTemplate)GetValue(ArrowTemplateProperty);
+                return (Style)GetValue(ArrowStyleProperty);
             }
             set
             {
-                if (value != ArrowTemplate)
+                if (value != ArrowStyle)
                 {
-                    SetValue(ArrowTemplateProperty, value);
+                    SetValue(ArrowStyleProperty, value);
                 }
             }
         }
 
-        private static void OnArrowTemplateChanged(DependencyObject d, DependencyPropertyChangedEventArgs e)
+        private static void OnArrowStyleChanged(DependencyObject d, DependencyPropertyChangedEventArgs e)
         {
-            ((TabHeaderControl)d).OnArrowTemplateChanged(e);
+            ((TabHeaderControl)d).OnArrowStyleChanged(e);
         }
 
-        protected virtual void OnArrowTemplateChanged(DependencyPropertyChangedEventArgs e)
+        protected virtual void OnArrowStyleChanged(DependencyPropertyChangedEventArgs e)
         {
             if (e.NewValue != null)
             {
-                _buttonRight.Template = (ControlTemplate)e.NewValue;
-                _buttonLeft.Template = (ControlTemplate)e.NewValue;
+                _buttonRight.Style = (Style)e.NewValue;
+                _buttonLeft.Style = (Style)e.NewValue;
             }
         }
 

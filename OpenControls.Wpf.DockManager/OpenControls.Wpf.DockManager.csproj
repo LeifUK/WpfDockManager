@@ -1,0 +1,174 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<Project ToolsVersion="15.0" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
+  <Import Project="$(MSBuildExtensionsPath)\$(MSBuildToolsVersion)\Microsoft.Common.props" Condition="Exists('$(MSBuildExtensionsPath)\$(MSBuildToolsVersion)\Microsoft.Common.props')" />
+  <PropertyGroup>
+    <Configuration Condition=" '$(Configuration)' == '' ">Debug</Configuration>
+    <Platform Condition=" '$(Platform)' == '' ">AnyCPU</Platform>
+    <ProjectGuid>{C4D43E50-84B0-47FF-888E-7C8351368BD6}</ProjectGuid>
+    <OutputType>library</OutputType>
+    <RootNamespace>OpenControls.Wpf.DockManager</RootNamespace>
+    <AssemblyName>OpenControls.Wpf.DockManager</AssemblyName>
+    <TargetFrameworkVersion>v4.7.2</TargetFrameworkVersion>
+    <FileAlignment>512</FileAlignment>
+    <ProjectTypeGuids>{60dc8134-eba5-43b8-bcc9-bb4bc16c2548};{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}</ProjectTypeGuids>
+    <WarningLevel>4</WarningLevel>
+    <Deterministic>true</Deterministic>
+  </PropertyGroup>
+  <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Debug|AnyCPU' ">
+    <DebugSymbols>true</DebugSymbols>
+    <DebugType>full</DebugType>
+    <Optimize>false</Optimize>
+    <OutputPath>bin\Debug\</OutputPath>
+    <DefineConstants>DEBUG;TRACE</DefineConstants>
+    <ErrorReport>prompt</ErrorReport>
+    <WarningLevel>4</WarningLevel>
+  </PropertyGroup>
+  <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Release|AnyCPU' ">
+    <DebugType>pdbonly</DebugType>
+    <Optimize>true</Optimize>
+    <OutputPath>bin\Release\</OutputPath>
+    <DefineConstants>TRACE</DefineConstants>
+    <ErrorReport>prompt</ErrorReport>
+    <WarningLevel>4</WarningLevel>
+  </PropertyGroup>
+  <ItemGroup>
+    <Reference Include="System" />
+    <Reference Include="System.Data" />
+    <Reference Include="System.Drawing" />
+    <Reference Include="System.Windows.Forms" />
+    <Reference Include="System.Xml" />
+    <Reference Include="Microsoft.CSharp" />
+    <Reference Include="System.Core" />
+    <Reference Include="System.Xml.Linq" />
+    <Reference Include="System.Data.DataSetExtensions" />
+    <Reference Include="System.Net.Http" />
+    <Reference Include="System.Xaml">
+      <RequiredTargetFramework>4.0</RequiredTargetFramework>
+    </Reference>
+    <Reference Include="WindowsBase" />
+    <Reference Include="PresentationCore" />
+    <Reference Include="PresentationFramework" />
+  </ItemGroup>
+  <ItemGroup>
+    <Page Include="DockManager\Controls\TabHeaderControl.xaml">
+      <Generator>MSBuild:Compile</Generator>
+      <SubType>Designer</SubType>
+    </Page>
+    <Page Include="DockManager\Controls\ToolListBox.xaml">
+      <Generator>MSBuild:Compile</Generator>
+      <SubType>Designer</SubType>
+    </Page>
+    <Page Include="DockManager\Dictionary.xaml">
+      <Generator>MSBuild:Compile</Generator>
+      <SubType>Designer</SubType>
+    </Page>
+    <Page Include="DockManager\FloatingPane.xaml">
+      <Generator>MSBuild:Compile</Generator>
+      <SubType>Designer</SubType>
+    </Page>
+    <Page Include="DockManager\SideLocationPane.xaml">
+      <Generator>MSBuild:Compile</Generator>
+      <SubType>Designer</SubType>
+    </Page>
+    <Page Include="DockManager\UnpinnedToolPane.xaml">
+      <Generator>MSBuild:Compile</Generator>
+      <SubType>Designer</SubType>
+    </Page>
+    <Page Include="DockManager\WindowLocationPane.xaml">
+      <Generator>MSBuild:Compile</Generator>
+      <SubType>Designer</SubType>
+    </Page>
+    <Compile Include="DockManager\Controls\TabHeader.cs" />
+    <Compile Include="DockManager\Controls\TabHeaderControl.xaml.cs">
+      <DependentUpon>TabHeaderControl.xaml</DependentUpon>
+    </Compile>
+    <Compile Include="DockManager\Converters\BrushToColourConverter.cs" />
+    <Compile Include="DockManager\Converters\CornerRadiusToStringConverter.cs" />
+    <Compile Include="DockManager\Command.cs" />
+    <Compile Include="DockManager\Controls\IToolListBox.cs" />
+    <Compile Include="DockManager\Controls\IToolListBoxItem.cs" />
+    <Compile Include="DockManager\Controls\ToolListBox.xaml.cs">
+      <DependentUpon>ToolListBox.xaml</DependentUpon>
+    </Compile>
+    <Compile Include="DockManager\DockPane.cs" />
+    <Compile Include="DockManager\DockPaneManager.cs" />
+    <Compile Include="DockManager\DocumentContainer.cs" />
+    <Compile Include="DockManager\DocumentPaneGroup.cs" />
+    <Compile Include="DockManager\DocumentPanel.cs" />
+    <Compile Include="DockManager\Events\FloatEventArgs.cs" />
+    <Compile Include="DockManager\Events\FloatEventHandler.cs" />
+    <Compile Include="DockManager\Events\ItemClickEventArgs.cs" />
+    <Compile Include="DockManager\Events\ItemClickEventHandler.cs" />
+    <Compile Include="DockManager\Events\TabClosedEventArgs.cs" />
+    <Compile Include="DockManager\Events\TabClosedEventHandler.cs" />
+    <Compile Include="DockManager\ExtensionMethods.cs" />
+    <Compile Include="DockManager\FloatingDocumentPaneGroup.cs" />
+    <Compile Include="DockManager\FloatingPane.xaml.cs">
+      <DependentUpon>FloatingPane.xaml</DependentUpon>
+    </Compile>
+    <Compile Include="DockManager\FloatingPaneManager.cs" />
+    <Compile Include="DockManager\FloatingToolPaneGroup.cs" />
+    <Compile Include="DockManager\FloatingViewModel.cs" />
+    <Compile Include="DockManager\Helpers.cs" />
+    <Compile Include="DockManager\IDockPaneHost.cs" />
+    <Compile Include="DockManager\IDockPaneManager.cs" />
+    <Compile Include="DockManager\IFloatingPane.cs" />
+    <Compile Include="DockManager\IFloatingPaneHost.cs" />
+    <Compile Include="DockManager\IFloatingPaneManager.cs" />
+    <Compile Include="DockManager\ILayoutFactory.cs" />
+    <Compile Include="DockManager\InsertionIndicatorManager.cs" />
+    <Compile Include="DockManager\IUnpinnedToolHost.cs" />
+    <Compile Include="DockManager\IUnpinnedToolManager.cs" />
+    <Compile Include="DockManager\IViewContainer.cs" />
+    <Compile Include="DockManager\IViewModel.cs" />
+    <Compile Include="DockManager\LayoutManager.cs" />
+    <Compile Include="DockManager\SelectablePane.cs" />
+    <Compile Include="DockManager\Serialisation\LayoutReader.cs" />
+    <Compile Include="DockManager\Serialisation\LayoutWriter.cs" />
+    <Compile Include="DockManager\SideLocationPane.xaml.cs">
+      <DependentUpon>SideLocationPane.xaml</DependentUpon>
+    </Compile>
+    <Compile Include="DockManager\SplitterPane.cs" />
+    <Compile Include="DockManager\Converters\ThicknessToStringConverter.cs" />
+    <Compile Include="DockManager\Theme.cs" />
+    <Compile Include="DockManager\ToolContainer.cs" />
+    <Compile Include="DockManager\ToolListBoxItem.cs" />
+    <Compile Include="DockManager\ToolPaneGroup.cs" />
+    <Compile Include="DockManager\UnpinnedToolData.cs" />
+    <Compile Include="DockManager\UnpinnedToolManager.cs" />
+    <Compile Include="DockManager\UnpinnedToolPane.xaml.cs">
+      <DependentUpon>UnpinnedToolPane.xaml</DependentUpon>
+    </Compile>
+    <Compile Include="DockManager\User32.cs" />
+    <Compile Include="DockManager\Utilities.cs" />
+    <Compile Include="DockManager\ViewContainer.cs" />
+    <Compile Include="DockManager\WindowLocation.cs" />
+    <Compile Include="DockManager\WindowLocationPane.xaml.cs">
+      <DependentUpon>WindowLocationPane.xaml</DependentUpon>
+    </Compile>
+  </ItemGroup>
+  <ItemGroup>
+    <Compile Include="Properties\AssemblyInfo.cs">
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Include="Properties\Resources.Designer.cs">
+      <AutoGen>True</AutoGen>
+      <DesignTime>True</DesignTime>
+      <DependentUpon>Resources.resx</DependentUpon>
+    </Compile>
+    <Compile Include="Properties\Settings.Designer.cs">
+      <AutoGen>True</AutoGen>
+      <DependentUpon>Settings.settings</DependentUpon>
+      <DesignTimeSharedInput>True</DesignTimeSharedInput>
+    </Compile>
+    <EmbeddedResource Include="Properties\Resources.resx">
+      <Generator>ResXFileCodeGenerator</Generator>
+      <LastGenOutput>Resources.Designer.cs</LastGenOutput>
+    </EmbeddedResource>
+    <None Include="Properties\Settings.settings">
+      <Generator>SettingsSingleFileGenerator</Generator>
+      <LastGenOutput>Settings.Designer.cs</LastGenOutput>
+    </None>
+  </ItemGroup>
+  <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
+</Project>
