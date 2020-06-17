@@ -117,6 +117,7 @@
     <Compile Include="DockManager\IFloatingPaneManager.cs" />
     <Compile Include="DockManager\ILayoutFactory.cs" />
     <Compile Include="DockManager\InsertionIndicatorManager.cs" />
+    <Compile Include="DockManager\ISelectablePane.cs" />
     <Compile Include="DockManager\IUnpinnedToolHost.cs" />
     <Compile Include="DockManager\IUnpinnedToolManager.cs" />
     <Compile Include="DockManager\IViewContainer.cs" />
