@@ -20,6 +20,7 @@ namespace OpenControls.Wpf.DockManager
             _parentContainer.Children.Add(iViewContainer as UIElement);
             Grid.SetRow(iViewContainer as UIElement, 1);
             IViewContainer = iViewContainer;
+            IViewContainer.FloatTabRequest += IViewContainer_FloatTabRequest;
 
             _gridHeader.SetResourceReference(Grid.BackgroundProperty, "FloatingPaneTitleBarBackground");
             _textBlockTitle.SetResourceReference(TextBlock.StyleProperty, "FloatingPaneTitleStyle");
@@ -47,6 +48,11 @@ namespace OpenControls.Wpf.DockManager
             {
                 _buttonRestore.Style = style;
             }
+        }
+
+        private void IViewContainer_FloatTabRequest(object sender, EventArgs e)
+        {
+            FloatTabRequest?.Invoke(this, e);
         }
 
         // Can execute
@@ -101,6 +107,7 @@ namespace OpenControls.Wpf.DockManager
 
         }
 
+        public event EventHandler FloatTabRequest;
         public event EventHandler UngroupCurrent;
         public event EventHandler Ungroup;
         public event EventHandler EndDrag;

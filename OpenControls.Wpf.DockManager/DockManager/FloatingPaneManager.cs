@@ -450,12 +450,54 @@ namespace OpenControls.Wpf.DockManager
             floatingPane.Closed += FloatingPane_Closed;
             floatingPane.Ungroup += FloatingPane_Ungroup;
             floatingPane.UngroupCurrent += FloatingPane_UngroupCurrent;
+            floatingPane.FloatTabRequest += FloatingPane_FloatTabRequest;
             floatingPane.DataContext = new FloatingViewModel();
             (floatingPane.DataContext as FloatingViewModel).Title = floatingPane.Title;
             floatingPane.EndDrag += FloatingPane_EndDrag;
             // Ensure the window remains on top of the main window
             floatingPane.Owner = Application.Current.MainWindow;
             floatingPane.Show();
+        }
+
+        private void FloatingPane_FloatTabRequest(object sender, EventArgs e)
+        {
+            System.Diagnostics.Trace.Assert(sender is FloatingPane);
+            
+            FloatingPane floatingPane = sender as FloatingPane;
+            if (floatingPane.IViewContainer.GetUserControlCount() == 1)
+            {
+                return;
+            }
+
+            FloatingPane newFloatingPane = null;
+            if (sender is FloatingToolPaneGroup)
+            {
+                newFloatingPane = ILayoutFactory.MakeFloatingToolPaneGroup();
+            }
+            else
+            {
+                newFloatingPane = ILayoutFactory.MakeFloatingDocumentPaneGroup();
+            }
+
+            int index = floatingPane.IViewContainer.GetCurrentTabIndex();
+            UserControl userControl = floatingPane.IViewContainer.ExtractUserControl(index);
+            
+            System.Diagnostics.Trace.Assert(userControl != null);
+
+            newFloatingPane.IViewContainer.AddUserControl(userControl);
+
+            IntPtr hWnd = new System.Windows.Interop.WindowInteropHelper(Application.Current.MainWindow).EnsureHandle();
+            OpenControls.Wpf.DockManager.Controls.Utilities.SendLeftMouseButtonUp(hWnd);
+
+            // Ensure the floated window can be dragged by the user
+            hWnd = new System.Windows.Interop.WindowInteropHelper(newFloatingPane).EnsureHandle();
+            OpenControls.Wpf.DockManager.Controls.Utilities.SendLeftMouseButtonDown(hWnd);
+
+            Point cursorPositionOnScreen = OpenControls.Wpf.DockManager.Controls.Utilities.GetCursorPosition();
+            newFloatingPane.Left = cursorPositionOnScreen.X - 30;
+            newFloatingPane.Top = cursorPositionOnScreen.Y - 30;
+            newFloatingPane.Width = floatingPane.ActualWidth;
+            newFloatingPane.Height = floatingPane.ActualHeight;
         }
 
         #region IFloatingPaneManager

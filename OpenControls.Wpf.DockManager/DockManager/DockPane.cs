@@ -43,17 +43,6 @@ namespace OpenControls.Wpf.DockManager
 
         public Border Border;
 
-        /*
-         * Invoke after setting the border
-         */
-        public void ApplyLayout()
-        {
-            RowDefinitions[0].Height = new GridLength(Border.BorderThickness.Top, GridUnitType.Pixel);
-            RowDefinitions[RowDefinitions.Count - 1].Height = new GridLength(Border.BorderThickness.Bottom, GridUnitType.Pixel);
-            ColumnDefinitions[0].Width = new GridLength(Border.BorderThickness.Left, GridUnitType.Pixel);
-            ColumnDefinitions[ColumnDefinitions.Count - 1].Width = new GridLength(Border.BorderThickness.Right, GridUnitType.Pixel);
-        }
-
         protected void FireCloseRequest()
         {
             CloseRequest?.Invoke(this, null);
