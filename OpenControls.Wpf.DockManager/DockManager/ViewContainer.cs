@@ -64,6 +64,8 @@ namespace OpenControls.Wpf.DockManager
             _tabHeaderControl_SelectionChanged(this, null);
         }
 
+        protected abstract System.Windows.Forms.DialogResult UserConfirmClose(string documentTitle);
+
         protected void _tabHeaderControl_CloseTabRequest(object sender, EventArgs e)
         {
             if (sender == null)
@@ -76,16 +78,16 @@ namespace OpenControls.Wpf.DockManager
             {
                 if (item.Value.HasChanged)
                 {
-                    System.Windows.Forms.DialogResult dialogResult = System.Windows.Forms.MessageBox.Show("There are unsaved changes in the document. Do you wish to save the changes before closing?", "Close " + item.Value.Title, System.Windows.Forms.MessageBoxButtons.YesNoCancel);
-
-                    if (dialogResult == System.Windows.Forms.DialogResult.Yes)
-                    {
-                        item.Value.Save();
-                    }
+                    System.Windows.Forms.DialogResult dialogResult = UserConfirmClose(item.Value.Title);
 
                     if (dialogResult == System.Windows.Forms.DialogResult.Cancel)
                     {
                         return;
+                    }
+
+                    if (dialogResult == System.Windows.Forms.DialogResult.Yes)
+                    {
+                        item.Value.Save();
                     }
                 }
 

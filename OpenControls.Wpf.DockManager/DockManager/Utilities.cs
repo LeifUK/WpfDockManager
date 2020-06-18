@@ -13,7 +13,6 @@ namespace OpenControls.Wpf.DockManager.Controls
 
         public const int VK_LBUTTON = 0x01;
 
-
         public static bool IsLeftMouseButtonDown()
         {
             return (User32.GetAsyncKeyState(VK_LBUTTON) & 0x8000) != 0;

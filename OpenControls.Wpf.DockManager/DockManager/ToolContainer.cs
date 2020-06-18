@@ -62,6 +62,12 @@ namespace OpenControls.Wpf.DockManager
             TabHeaderControl.InactiveArrowBrush = FindResource("ToolPaneInactiveScrollIndicatorBrush") as Brush;
         }
 
+        protected override System.Windows.Forms.DialogResult UserConfirmClose(string documentTitle)
+        {
+            // Tools have nothing to save
+            return System.Windows.Forms.DialogResult.No;
+        }
+
         private RowDefinition _rowDefinition_UserControl;
         private RowDefinition _rowDefinition_Gap;
         private RowDefinition _rowDefinition_TabHeader;

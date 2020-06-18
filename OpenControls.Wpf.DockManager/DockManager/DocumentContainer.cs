@@ -57,6 +57,11 @@ namespace OpenControls.Wpf.DockManager
             TabHeaderControl.InactiveArrowBrush = FindResource("DocumentPaneInactiveScrollIndicatorBrush") as Brush;
         }
 
+        protected override System.Windows.Forms.DialogResult UserConfirmClose(string documentTitle)
+        {
+            return System.Windows.Forms.MessageBox.Show("There are unsaved changes in the document. Do you wish to save the changes before closing?", "Close " + documentTitle, System.Windows.Forms.MessageBoxButtons.YesNoCancel);
+        }
+
         public void HideCommandsButton()
         {
             _commandsButton.Visibility = Visibility.Collapsed;

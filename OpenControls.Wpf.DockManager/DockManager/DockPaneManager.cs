@@ -58,24 +58,53 @@ namespace OpenControls.Wpf.DockManager
 
         private void DockPane_CloseRequest(object sender, EventArgs e)
         {
+            System.Diagnostics.Trace.Assert(sender is DockPane);
+
             DockPane dockPane = sender as DockPane;
 
-            if (dockPane == null)
+            bool saveChanges = false;
+            if (dockPane is DocumentPaneGroup)
             {
-                return;
+                bool hasChanged = false;
+                int index = 0; 
+                while (true)
+                {
+                    UserControl userControl = dockPane.IViewContainer.GetUserControl(index);
+                    System.Diagnostics.Trace.Assert(userControl.DataContext is IViewModel);
+                    if ((userControl.DataContext as IViewModel).HasChanged)
+                    {
+                        hasChanged = true;
+                        break;
+                    }
+                    ++index;
+                }
+                if (hasChanged)
+                {
+                    System.Windows.Forms.DialogResult dialogResult = System.Windows.Forms.MessageBox.Show("There are unsaved changes in one or more documents. Do you wish to save the changes before closing?", "Close Document(s)", System.Windows.Forms.MessageBoxButtons.YesNoCancel);
+                    if (dialogResult == System.Windows.Forms.DialogResult.Cancel)
+                    {
+                        return;
+                    }
+
+                    saveChanges = (dialogResult == System.Windows.Forms.DialogResult.Yes);
+                }
             }
 
             ExtractDockPane(dockPane, out FrameworkElement frameworkElement);
 
-            IViewContainer iViewContainer = dockPane.IViewContainer;
             while (true)
             {
-                UserControl userControl = iViewContainer.ExtractUserControl(0);
+                UserControl userControl = dockPane.IViewContainer.ExtractUserControl(0);
                 if (userControl == null)
                 {
                     break;
                 }
                 System.Diagnostics.Trace.Assert(userControl.DataContext is IViewModel);
+                IViewModel iViewModel = userControl.DataContext as IViewModel;
+                if (saveChanges && iViewModel.HasChanged)
+                {
+                    iViewModel.Save();
+                }
                 IDockPaneHost.RemoveViewModel(userControl.DataContext as IViewModel);
             }
         }
