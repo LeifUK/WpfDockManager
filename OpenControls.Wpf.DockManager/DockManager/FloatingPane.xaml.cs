@@ -21,6 +21,7 @@ namespace OpenControls.Wpf.DockManager
             Grid.SetRow(iViewContainer as UIElement, 1);
             IViewContainer = iViewContainer;
             IViewContainer.FloatTabRequest += IViewContainer_FloatTabRequest;
+            IViewContainer.TabClosed += IViewContainer_TabClosed;
 
             _gridHeader.SetResourceReference(Grid.BackgroundProperty, "FloatingPaneTitleBarBackground");
             _textBlockTitle.SetResourceReference(TextBlock.StyleProperty, "FloatingPaneTitleStyle");
@@ -48,6 +49,11 @@ namespace OpenControls.Wpf.DockManager
             {
                 _buttonRestore.Style = style;
             }
+        }
+
+        private void IViewContainer_TabClosed(object sender, Events.TabClosedEventArgs e)
+        {
+            TabClosed?.Invoke(this, e);
         }
 
         private void IViewContainer_FloatTabRequest(object sender, EventArgs e)
@@ -107,6 +113,7 @@ namespace OpenControls.Wpf.DockManager
 
         }
 
+        public event Events.TabClosedEventHandler TabClosed;
         public event EventHandler FloatTabRequest;
         public event EventHandler UngroupCurrent;
         public event EventHandler Ungroup;

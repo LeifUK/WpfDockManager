@@ -10,13 +10,13 @@ namespace OpenControls.Wpf.DockManager
 
     internal interface IDockPaneManager
     {
+        void RegisterDockPane(DockPane dockPane);
+        
         SelectablePane FindElementOfType(Type type, Grid parentGrid);
 
         DockPane ExtractDockPane(DockPane dockPane, out FrameworkElement frameworkElement);
 
         bool UngroupDockPane(DockPane dockPane, int index, double paneWidth);
-
-        void Float(DockPane dockPane, bool drag, bool selectedTabOnly);
 
         ISelectablePane FindSelectablePane(Grid grid, Point pointOnScreen);
 

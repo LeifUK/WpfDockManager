@@ -69,6 +69,14 @@ namespace OpenControls.Wpf.DockManager
             {
                 FloatingDocumentPaneGroups.Remove(sender as FloatingDocumentPaneGroup);
             }
+            CancelSelection();
+        }
+
+        private void FloatingPane_TabClosed(object sender, Events.TabClosedEventArgs e)
+        {
+            System.Diagnostics.Trace.Assert(e.UserControl.DataContext is IViewModel);
+
+            IFloatingPaneHost.RemoveViewModel(e.UserControl.DataContext as IViewModel);
         }
 
         private FloatingPane UnGroupFloatingPane(FloatingPane floatingPane, int index, double left, double top)
@@ -130,7 +138,7 @@ namespace OpenControls.Wpf.DockManager
 
             FloatingPane floatingPane = sender as FloatingPane;
 
-            int index = floatingPane.IViewContainer.GetCurrentTabIndex();
+            int index = floatingPane.IViewContainer.SelectedIndex;
             if (index > -1)
             {
                 UnGroupFloatingPane(floatingPane, index, floatingPane.Left + 10, floatingPane.Top + 10);
@@ -155,84 +163,80 @@ namespace OpenControls.Wpf.DockManager
             return intPtr;
         }
 
+        private void CloseWindowLocationPane()
+        {
+            _windowLocationPane?.Close();
+            _windowLocationPane = null;
+        }
+
         private void FloatingWindow_LocationChanged(object sender, EventArgs e)
         {
-            System.Diagnostics.Trace.Assert(sender is Window);
+            System.Diagnostics.Trace.Assert(sender is FloatingPane);
 
             Window floatingWindow = sender as Window;
             Point cursorPositionOnScreen = OpenControls.Wpf.DockManager.Controls.Utilities.GetCursorPosition();
             ISelectablePane previousPane = SelectedPane;
             bool foundSelectedPane = false;
 
-            if ((sender is FloatingToolPaneGroup) || (sender is FloatingDocumentPaneGroup))
-            {
-                int windowCount = 0;
-                List<IntPtr> hWnds = new List<IntPtr>();
-                Dictionary<IntPtr, IFloatingPane> dict = new Dictionary<IntPtr, IFloatingPane>();
+            int windowCount = 0;
+            List<IntPtr> hWnds = new List<IntPtr>();
+            Dictionary<IntPtr, IFloatingPane> dict = new Dictionary<IntPtr, IFloatingPane>();
 
-                List<IFloatingPane> floatingPanes = (sender is FloatingToolPaneGroup) ? FloatingToolPaneGroups : FloatingDocumentPaneGroups;
-                foreach (IFloatingPane iFloatingPane in floatingPanes)
+            List<IFloatingPane> floatingPanes = (sender is FloatingToolPaneGroup) ? FloatingToolPaneGroups : FloatingDocumentPaneGroups;
+            foreach (IFloatingPane iFloatingPane in floatingPanes)
+            {
+                if (iFloatingPane != sender)
                 {
-                    if (iFloatingPane != sender)
+                    Point cursorPositionInFloatingPane = (iFloatingPane as FloatingPane).PointFromScreen(cursorPositionOnScreen);
+                    ViewContainer viewContainer = (iFloatingPane.IViewContainer as ViewContainer);
+                    if (
+                        (cursorPositionInFloatingPane.X >= 0) &&
+                        (cursorPositionInFloatingPane.X <= iFloatingPane.ActualWidth) &&
+                        (cursorPositionInFloatingPane.Y >= 0) &&
+                        (cursorPositionInFloatingPane.Y <= iFloatingPane.ActualHeight)
+                    )
                     {
-                        Point cursorPositionInFloatingPane = (iFloatingPane as FloatingPane).PointFromScreen(cursorPositionOnScreen);
-                        ViewContainer viewContainer = (iFloatingPane.IViewContainer as ViewContainer);
-                        if (
-                            (cursorPositionInFloatingPane.X >= 0) &&
-                            (cursorPositionInFloatingPane.X <= iFloatingPane.ActualWidth) &&
-                            (cursorPositionInFloatingPane.Y >= 0) &&
-                            (cursorPositionInFloatingPane.Y <= iFloatingPane.ActualHeight)
-                        )
-                        {
-                            var wih = new System.Windows.Interop.WindowInteropHelper((iFloatingPane as FloatingPane));
-                            hWnds.Add(wih.Handle);
-                            dict.Add(wih.Handle, iFloatingPane);
-                            windowCount++;
-                        }
+                        var wih = new System.Windows.Interop.WindowInteropHelper((iFloatingPane as FloatingPane));
+                        hWnds.Add(wih.Handle);
+                        dict.Add(wih.Handle, iFloatingPane);
+                        windowCount++;
                     }
                 }
+            }
 
-                if (windowCount > 0)
+            if (windowCount > 0)
+            {
+                IntPtr intPtr = GetTopmostWindow(hWnds);
+                if (dict.ContainsKey(intPtr))
                 {
-                    IntPtr intPtr = GetTopmostWindow(hWnds);
-                    if (dict.ContainsKey(intPtr))
+                    foundSelectedPane = true;
+                    IFloatingPane iFloatingPane = dict[intPtr];
+
+                    if (SelectedPane != null)
                     {
-                        foundSelectedPane = true;
-                        IFloatingPane iFloatingPane = dict[intPtr];
-
-                        if (SelectedPane != null)
-                        {
-                            SelectedPane.IsHighlighted = false;
-                        }
-
-                        if (SelectedPane != iFloatingPane)
-                        {
-                            if (_windowLocationPane != null)
-                            {
-                                _windowLocationPane.Close();
-                                _windowLocationPane = null;
-                            }
-
-                            SelectedPane = iFloatingPane;
-                            iFloatingPane.IsHighlighted = true;
-
-                            _windowLocationPane = new WindowLocationPane();
-                            _windowLocationPane.AllowsTransparency = true;
-                            _windowLocationPane.ShowIcons(WindowLocation.Middle);
-                            ViewContainer viewContainer = (iFloatingPane.IViewContainer as ViewContainer);
-                            Point topLeftPanePoint = viewContainer.PointToScreen(new Point(0, 0));
-                            _windowLocationPane.Left = topLeftPanePoint.X;
-                            _windowLocationPane.Top = topLeftPanePoint.Y;
-                            _windowLocationPane.Width = viewContainer.ActualWidth;
-                            _windowLocationPane.Height = viewContainer.ActualHeight;
-                            _windowLocationPane.Show();
-                        }
-                        if (_sideLocationPane != null)
-                        {
-                            _sideLocationPane.Close();
-                            _sideLocationPane = null;
-                        }
+                        SelectedPane.IsHighlighted = false;
                     }
+
+                    if (SelectedPane != iFloatingPane)
+                    {
+                        CloseWindowLocationPane();
+
+                        SelectedPane = iFloatingPane;
+                        iFloatingPane.IsHighlighted = true;
+
+                        _windowLocationPane = new WindowLocationPane();
+                        _windowLocationPane.AllowsTransparency = true;
+                        _windowLocationPane.ShowIcons(WindowLocation.Middle);
+                        ViewContainer viewContainer = (iFloatingPane.IViewContainer as ViewContainer);
+                        Point topLeftPanePoint = viewContainer.PointToScreen(new Point(0, 0));
+                        _windowLocationPane.Left = topLeftPanePoint.X;
+                        _windowLocationPane.Top = topLeftPanePoint.Y;
+                        _windowLocationPane.Width = viewContainer.ActualWidth;
+                        _windowLocationPane.Height = viewContainer.ActualHeight;
+                        _windowLocationPane.Show();
+                    }
+                    _sideLocationPane?.Close();
+                    _sideLocationPane = null;
                 }
             }
 
@@ -258,11 +262,7 @@ namespace OpenControls.Wpf.DockManager
 
                         pane.IsHighlighted = true;
                         SelectedPane = pane;
-                        if (_windowLocationPane != null)
-                        {
-                            _windowLocationPane.Close();
-                            _windowLocationPane = null;
-                        }
+                        CloseWindowLocationPane();
 
                         if ((paneType == pane.GetType()) || ((pane is DocumentPanel) && (sender is FloatingDocumentPaneGroup)))
                         {
@@ -302,11 +302,7 @@ namespace OpenControls.Wpf.DockManager
             if (!foundSelectedPane)
             {
                 SelectedPane = null;
-                if (_windowLocationPane != null)
-                {
-                    _windowLocationPane.Close();
-                    _windowLocationPane = null;
-                }
+                CloseWindowLocationPane();
             }
 
             if ((previousPane != null) && (SelectedPane != previousPane))
@@ -451,6 +447,7 @@ namespace OpenControls.Wpf.DockManager
             floatingPane.Ungroup += FloatingPane_Ungroup;
             floatingPane.UngroupCurrent += FloatingPane_UngroupCurrent;
             floatingPane.FloatTabRequest += FloatingPane_FloatTabRequest;
+            floatingPane.TabClosed += FloatingPane_TabClosed;
             floatingPane.DataContext = new FloatingViewModel();
             (floatingPane.DataContext as FloatingViewModel).Title = floatingPane.Title;
             floatingPane.EndDrag += FloatingPane_EndDrag;
@@ -479,7 +476,7 @@ namespace OpenControls.Wpf.DockManager
                 newFloatingPane = ILayoutFactory.MakeFloatingDocumentPaneGroup();
             }
 
-            int index = floatingPane.IViewContainer.GetCurrentTabIndex();
+            int index = floatingPane.IViewContainer.SelectedIndex;
             UserControl userControl = floatingPane.IViewContainer.ExtractUserControl(index);
             
             System.Diagnostics.Trace.Assert(userControl != null);

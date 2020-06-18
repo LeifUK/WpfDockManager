@@ -56,7 +56,143 @@ namespace OpenControls.Wpf.DockManager
             newGrid.AddChild(dockPaneToInsert, false);
         }
 
+        private void DockPane_CloseRequest(object sender, EventArgs e)
+        {
+            DockPane dockPane = sender as DockPane;
+
+            if (dockPane == null)
+            {
+                return;
+            }
+
+            ExtractDockPane(dockPane, out FrameworkElement frameworkElement);
+
+            IViewContainer iViewContainer = dockPane.IViewContainer;
+            while (true)
+            {
+                UserControl userControl = iViewContainer.ExtractUserControl(0);
+                if (userControl == null)
+                {
+                    break;
+                }
+                System.Diagnostics.Trace.Assert(userControl.DataContext is IViewModel);
+                IDockPaneHost.RemoveViewModel(userControl.DataContext as IViewModel);
+            }
+        }
+
+        private void DockPane_TabClosed(object sender, Events.TabClosedEventArgs e)
+        {
+            System.Diagnostics.Trace.Assert(e.UserControl.DataContext is IViewModel);
+            IDockPaneHost.RemoveViewModel(e.UserControl.DataContext as IViewModel);
+        }
+
+        private void DockPane_Ungroup(object sender, EventArgs e)
+        {
+            DockPane dockPane = sender as DockPane;
+            var parentGrid = dockPane.Parent as Grid;
+
+            double paneWidth = dockPane.ActualWidth / dockPane.IViewContainer.GetUserControlCount();
+            while (UngroupDockPane(dockPane, 1, paneWidth))
+            {
+                // Nothing here
+            }
+        }
+
+        private void DockPane_UngroupCurrent(object sender, EventArgs e)
+        {
+            System.Diagnostics.Trace.Assert(sender is DockPane);
+
+            DockPane dockPane = sender as DockPane;
+
+            double paneWidth = dockPane.ActualWidth / 2;
+            int index = dockPane.IViewContainer.SelectedIndex;
+            if (index > -1)
+            {
+                UngroupDockPane(dockPane, index, paneWidth);
+            }
+        }
+
+        private void Float(DockPane dockPane, bool drag, bool selectedTabOnly)
+        {
+            if (!selectedTabOnly || (dockPane.IViewContainer.GetUserControlCount() == 1))
+            {
+                ExtractDockPane(dockPane, out FrameworkElement frameworkElement);
+            }
+
+            Point mainWindowLocation = Application.Current.MainWindow.PointToScreen(new Point(0, 0));
+
+            FloatingPane floatingPane = null;
+            if (dockPane is ToolPaneGroup)
+            {
+                floatingPane = ILayoutFactory.MakeFloatingToolPaneGroup();
+            }
+            else
+            {
+                floatingPane = ILayoutFactory.MakeFloatingDocumentPaneGroup();
+            }
+
+            int index = selectedTabOnly ? dockPane.IViewContainer.SelectedIndex : 0;
+            while (true)
+            {
+                UserControl userControl = dockPane.IViewContainer.ExtractUserControl(index);
+                if (userControl == null)
+                {
+                    break;
+                }
+
+                floatingPane.IViewContainer.AddUserControl(userControl);
+
+                if (selectedTabOnly)
+                {
+                    floatingPane.IViewContainer.SelectedIndex = 0;
+                    break;
+                }
+            }
+
+            if (drag)
+            {
+                IntPtr hWnd = new System.Windows.Interop.WindowInteropHelper(Application.Current.MainWindow).EnsureHandle();
+                OpenControls.Wpf.DockManager.Controls.Utilities.SendLeftMouseButtonUp(hWnd);
+
+                // Ensure the floated window can be dragged by the user
+                hWnd = new System.Windows.Interop.WindowInteropHelper(floatingPane).EnsureHandle();
+                OpenControls.Wpf.DockManager.Controls.Utilities.SendLeftMouseButtonDown(hWnd);
+            }
+
+            Point cursorPositionOnScreen = OpenControls.Wpf.DockManager.Controls.Utilities.GetCursorPosition();
+            floatingPane.Left = cursorPositionOnScreen.X - 30;
+            floatingPane.Top = cursorPositionOnScreen.Y - 30;
+            floatingPane.Width = dockPane.ActualWidth;
+            floatingPane.Height = dockPane.ActualHeight;
+        }
+
+        private void DockPane_FloatTabRequest(object sender, EventArgs e)
+        {
+            System.Diagnostics.Trace.Assert(sender is DockPane);
+
+            Float(sender as DockPane, true, true);
+        }
+
+        private void DockPane_Float(object sender, Events.FloatEventArgs e)
+        {
+            System.Diagnostics.Trace.Assert(sender is DockPane);
+
+            Float(sender as DockPane, e.Drag, false);
+        }
+
         #region IDockPaneManager
+
+        public void RegisterDockPane(DockPane dockPane)
+        {
+            System.Diagnostics.Trace.Assert(dockPane != null);
+
+            dockPane.CloseRequest += DockPane_CloseRequest;
+            dockPane.Float += DockPane_Float;
+            dockPane.FloatTabRequest += DockPane_FloatTabRequest;
+            dockPane.UngroupCurrent += DockPane_UngroupCurrent;
+            dockPane.Ungroup += DockPane_Ungroup;
+            dockPane.TabClosed += DockPane_TabClosed;
+        }
 
         public SelectablePane FindElementOfType(Type type, Grid grid)
         {
@@ -208,59 +344,6 @@ namespace OpenControls.Wpf.DockManager
             InsertDockPane(parentSplitterPane, dockPane, newDockPane, false);
 
             return true;
-        }
-
-        public void Float(DockPane dockPane, bool drag, bool selectedTabOnly)
-        {
-            if (!selectedTabOnly || (dockPane.IViewContainer.GetUserControlCount() == 1))
-            {
-                ExtractDockPane(dockPane, out FrameworkElement frameworkElement);
-            }
-
-            Point mainWindowLocation = Application.Current.MainWindow.PointToScreen(new Point(0, 0));
-
-            FloatingPane floatingPane = null;
-            if (dockPane is ToolPaneGroup)
-            {
-                floatingPane = ILayoutFactory.MakeFloatingToolPaneGroup();
-            }
-            else
-            {
-                floatingPane = ILayoutFactory.MakeFloatingDocumentPaneGroup();
-            }
-
-            int index = selectedTabOnly ? dockPane.IViewContainer.GetCurrentTabIndex() : 0;
-            while (true)
-            {
-                UserControl userControl = dockPane.IViewContainer.ExtractUserControl(index);
-                if (userControl == null)
-                {
-                    break;
-                }
-
-                floatingPane.IViewContainer.AddUserControl(userControl);
-
-                if (selectedTabOnly)
-                {
-                    break;
-                }
-            }
-
-            if (drag)
-            {
-                IntPtr hWnd = new System.Windows.Interop.WindowInteropHelper(Application.Current.MainWindow).EnsureHandle();
-                OpenControls.Wpf.DockManager.Controls.Utilities.SendLeftMouseButtonUp(hWnd);
-
-                // Ensure the floated window can be dragged by the user
-                hWnd = new System.Windows.Interop.WindowInteropHelper(floatingPane).EnsureHandle();
-                OpenControls.Wpf.DockManager.Controls.Utilities.SendLeftMouseButtonDown(hWnd);
-            }
-
-            Point cursorPositionOnScreen = OpenControls.Wpf.DockManager.Controls.Utilities.GetCursorPosition();
-            floatingPane.Left = cursorPositionOnScreen.X - 30;
-            floatingPane.Top = cursorPositionOnScreen.Y - 30;
-            floatingPane.Width = dockPane.ActualWidth;
-            floatingPane.Height = dockPane.ActualHeight;
         }
 
         public ISelectablePane FindSelectablePane(Grid grid, Point pointOnScreen)

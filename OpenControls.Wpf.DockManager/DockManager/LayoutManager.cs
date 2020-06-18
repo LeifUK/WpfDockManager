@@ -100,9 +100,6 @@ namespace OpenControls.Wpf.DockManager
         public DataTemplate DocumentPaneTitleTemplate { get; set; }
         public DataTemplate DocumentPaneHeaderTemplate { get; set; }
 
-        public event EventHandler DocumentClosed;
-        public event EventHandler ToolClosed;
-
         private Dictionary<WindowLocation, Controls.ToolListBox> _dictToolListBoxes;
 
         private Grid _root;
@@ -463,29 +460,17 @@ namespace OpenControls.Wpf.DockManager
             return new SplitterPane(isHorizontal);
         }
 
-        private void RegisterDockPane(DockPane dockPane)
-        {
-            System.Diagnostics.Trace.Assert(dockPane != null);
-
-            dockPane.CloseRequest += DockPane_CloseRequest;
-            dockPane.Float += DockPane_Float;
-            dockPane.FloatTabRequest += DockPane_FloatTabRequest;
-            dockPane.UngroupCurrent += DockPane_UngroupCurrent;
-            dockPane.Ungroup += DockPane_Ungroup;
-            dockPane.TabClosed += DockPane_TabClosed;
-        }
-
         DocumentPaneGroup ILayoutFactory.MakeDocumentPaneGroup()
         {
             DocumentPaneGroup documentPaneGroup = new DocumentPaneGroup();
-            RegisterDockPane(documentPaneGroup);
+            IDockPaneManager.RegisterDockPane(documentPaneGroup);
             return documentPaneGroup;
         }
 
         ToolPaneGroup ILayoutFactory.MakeToolPaneGroup()
         {
             ToolPaneGroup toolPaneGroup = new ToolPaneGroup();
-            RegisterDockPane(toolPaneGroup);
+            IDockPaneManager.RegisterDockPane(toolPaneGroup);
             toolPaneGroup.UnPinClick += ToolPane_UnPinClick;
             return toolPaneGroup;
         }
@@ -528,6 +513,11 @@ namespace OpenControls.Wpf.DockManager
         void IDockPaneHost.FrameworkElementRemoved(FrameworkElement frameworkElement)
         {
             IUnpinnedToolManager.FrameworkElementRemoved(frameworkElement);
+        }
+
+        void IDockPaneHost.RemoveViewModel(IViewModel iViewModel)
+        {
+            (this as IFloatingPaneHost).RemoveViewModel(iViewModel);
         }
 
         Grid IDockPaneHost.RootPane
@@ -699,96 +689,6 @@ namespace OpenControls.Wpf.DockManager
             XmlDocument xmlDocument = new XmlDocument();
             xmlDocument.Load(fileNameAndPath);
             return Load(xmlDocument);
-        }
-
-        private void DockPane_Ungroup(object sender, EventArgs e)
-        {
-            DockPane dockPane = sender as DockPane;
-            var parentGrid = dockPane.Parent as Grid;
-
-            double paneWidth = dockPane.ActualWidth / dockPane.IViewContainer.GetUserControlCount();
-            while (IDockPaneManager.UngroupDockPane(dockPane, 1, paneWidth))
-            {
-                // Nothing here
-            }
-        }
-
-        private void DockPane_UngroupCurrent(object sender, EventArgs e)
-        {
-            System.Diagnostics.Trace.Assert(sender is DockPane);
-
-            DockPane dockPane = sender as DockPane;
-
-            double paneWidth = dockPane.ActualWidth / 2;
-            int index = dockPane.IViewContainer.GetCurrentTabIndex();
-            if (index > -1)
-            {
-                IDockPaneManager.UngroupDockPane(dockPane, index, paneWidth);
-            }
-        }
-
-        private void DockPane_Float(object sender, Events.FloatEventArgs e)
-        {
-            System.Diagnostics.Trace.Assert(sender is DockPane);
-
-            IDockPaneManager.Float(sender as DockPane, e.Drag, false);
-        }
-
-        private void DockPane_FloatTabRequest(object sender, EventArgs e)
-        {
-            System.Diagnostics.Trace.Assert(sender is DockPane);
-
-            IDockPaneManager.Float(sender as DockPane, true, true);
-        }
-
-        private void DockPane_TabClosed(object sender, Events.TabClosedEventArgs e)
-        {
-            System.Diagnostics.Trace.Assert(e.UserControl.DataContext is IViewModel);
-            if (sender is DocumentPaneGroup)
-            {
-                System.Diagnostics.Trace.Assert(DocumentsSource.Contains(e.UserControl.DataContext as IViewModel));
-                DocumentsSource.Remove(e.UserControl.DataContext as IViewModel);
-            }
-            else if (sender is ToolPaneGroup)
-            {
-                System.Diagnostics.Trace.Assert(ToolsSource.Contains(e.UserControl.DataContext as IViewModel));
-                ToolsSource.Remove(e.UserControl.DataContext as IViewModel);
-            }
-        }
-
-        private void DockPane_CloseRequest(object sender, EventArgs e)
-        {
-            DockPane dockPane = sender as DockPane;
-
-            if (dockPane == null)
-            {
-                return;
-            }
-
-            IDockPaneManager.ExtractDockPane(dockPane, out FrameworkElement frameworkElement);
-
-            IViewContainer iViewContainer = dockPane.IViewContainer;
-            while (true)
-            {
-                UserControl userControl = iViewContainer.ExtractUserControl(0);
-                if (userControl == null)
-                {
-                    break;
-                }
-                IViewModel iViewModel = (userControl.DataContext as IViewModel);
-                if (dockPane is DocumentPaneGroup)
-                {
-                    System.Diagnostics.Trace.Assert(DocumentsSource.Contains(iViewModel));
-                    DocumentsSource.Remove(iViewModel);
-                    DocumentClosed?.Invoke(iViewModel, null);
-                }
-                else if (dockPane is ToolPaneGroup)
-                {
-                    System.Diagnostics.Trace.Assert(ToolsSource.Contains(iViewModel));
-                    ToolsSource.Remove(iViewModel);
-                    ToolClosed?.Invoke(iViewModel, null);
-                }
-            }
         }
     }
 }

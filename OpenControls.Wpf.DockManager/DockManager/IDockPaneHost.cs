@@ -9,6 +9,7 @@ namespace OpenControls.Wpf.DockManager
     {
         void Clear();
         void FrameworkElementRemoved(FrameworkElement frameworkElement);
+        void RemoveViewModel(IViewModel iViewModel);
         Grid RootPane { get; set; }
         Grid RootGrid { get; }
         UIElementCollection Children { get; }

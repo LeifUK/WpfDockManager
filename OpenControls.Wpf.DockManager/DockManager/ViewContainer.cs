@@ -199,9 +199,16 @@ namespace OpenControls.Wpf.DockManager
             return _items.Count;
         }
 
-        public int GetCurrentTabIndex()
+        public int SelectedIndex
         {
-            return TabHeaderControl.SelectedIndex;
+            get
+            {
+                return TabHeaderControl.SelectedIndex;
+            }
+            set
+            {
+                TabHeaderControl.SelectedIndex = value;
+            }
         }
 
         public UserControl GetUserControl(int index)

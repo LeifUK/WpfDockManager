@@ -11,7 +11,7 @@ namespace OpenControls.Wpf.DockManager
         void InsertUserControl(int index, UserControl userControl);
         UserControl ExtractUserControl(int index);
         int GetUserControlCount();
-        int GetCurrentTabIndex();
+        int SelectedIndex { get; set; }
         UserControl GetUserControl(int index);
         IViewModel GetIViewModel(int index);
         void ExtractDocuments(IViewContainer sourceViewContainer);
