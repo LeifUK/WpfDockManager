@@ -359,6 +359,8 @@
         </Setter>
     </Style>
 
+    <System:String x:Key="CloseDocumentsDialogPrompt">There are unsaved changes in the document. Do you wish to save the changes before closing?</System:String>
+
     <!-- Floating pane specific styles -->
 
     <Style x:Key="FloatingPaneTitleStyle" TargetType="TextBlock">

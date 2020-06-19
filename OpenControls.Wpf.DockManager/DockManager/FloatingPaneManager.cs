@@ -163,12 +163,6 @@ namespace OpenControls.Wpf.DockManager
             return intPtr;
         }
 
-        private void CloseWindowLocationPane()
-        {
-            _windowLocationPane?.Close();
-            _windowLocationPane = null;
-        }
-
         private void FloatingWindow_LocationChanged(object sender, EventArgs e)
         {
             System.Diagnostics.Trace.Assert(sender is FloatingPane);
@@ -219,8 +213,8 @@ namespace OpenControls.Wpf.DockManager
 
                     if (SelectedPane != iFloatingPane)
                     {
-                        CloseWindowLocationPane();
-
+                        _windowLocationPane?.Close();
+                        _windowLocationPane = null;
                         SelectedPane = iFloatingPane;
                         iFloatingPane.IsHighlighted = true;
 
@@ -262,7 +256,8 @@ namespace OpenControls.Wpf.DockManager
 
                         pane.IsHighlighted = true;
                         SelectedPane = pane;
-                        CloseWindowLocationPane();
+                        _windowLocationPane?.Close();
+                        _windowLocationPane = null;
 
                         if ((paneType == pane.GetType()) || ((pane is DocumentPanel) && (sender is FloatingDocumentPaneGroup)))
                         {
@@ -302,7 +297,8 @@ namespace OpenControls.Wpf.DockManager
             if (!foundSelectedPane)
             {
                 SelectedPane = null;
-                CloseWindowLocationPane();
+                _windowLocationPane?.Close();
+                _windowLocationPane = null;
             }
 
             if ((previousPane != null) && (SelectedPane != previousPane))
@@ -357,9 +353,9 @@ namespace OpenControls.Wpf.DockManager
 
                 _insertionIndicatorManager.ShowInsertionIndicator(windowLocation);
             }
-            else if (_insertionIndicatorManager != null)
+            else 
             {
-                _insertionIndicatorManager.HideInsertionIndicator();
+                _insertionIndicatorManager?.HideInsertionIndicator();
                 _insertionIndicatorManager = null;
             }
         }

@@ -13,6 +13,7 @@ namespace OpenControls.Wpf.DockManager
         {
             ILayoutFactory = iLayoutFactory;
             IDockPaneHost = iDockPaneHost;
+
         }
 
         private readonly IDockPaneHost IDockPaneHost;
@@ -62,34 +63,6 @@ namespace OpenControls.Wpf.DockManager
 
             DockPane dockPane = sender as DockPane;
 
-            bool saveChanges = false;
-            if (dockPane is DocumentPaneGroup)
-            {
-                bool hasChanged = false;
-                int index = 0; 
-                while (true)
-                {
-                    UserControl userControl = dockPane.IViewContainer.GetUserControl(index);
-                    System.Diagnostics.Trace.Assert(userControl.DataContext is IViewModel);
-                    if ((userControl.DataContext as IViewModel).HasChanged)
-                    {
-                        hasChanged = true;
-                        break;
-                    }
-                    ++index;
-                }
-                if (hasChanged)
-                {
-                    System.Windows.Forms.DialogResult dialogResult = System.Windows.Forms.MessageBox.Show("There are unsaved changes in one or more documents. Do you wish to save the changes before closing?", "Close Document(s)", System.Windows.Forms.MessageBoxButtons.YesNoCancel);
-                    if (dialogResult == System.Windows.Forms.DialogResult.Cancel)
-                    {
-                        return;
-                    }
-
-                    saveChanges = (dialogResult == System.Windows.Forms.DialogResult.Yes);
-                }
-            }
-
             ExtractDockPane(dockPane, out FrameworkElement frameworkElement);
 
             while (true)
@@ -101,10 +74,6 @@ namespace OpenControls.Wpf.DockManager
                 }
                 System.Diagnostics.Trace.Assert(userControl.DataContext is IViewModel);
                 IViewModel iViewModel = userControl.DataContext as IViewModel;
-                if (saveChanges && iViewModel.HasChanged)
-                {
-                    iViewModel.Save();
-                }
                 IDockPaneHost.RemoveViewModel(userControl.DataContext as IViewModel);
             }
         }
@@ -257,7 +226,6 @@ namespace OpenControls.Wpf.DockManager
             {
                 for (int i = 0; (i < list_N.Count) && (viewIndex < views.Count); ++i)
                 {
-                    // Warning warning => use insert dock pane method
                     SplitterPane splitterPane = ILayoutFactory.MakeSplitterPane(isHorizontal);
 
                     var node = list_N[i];
