@@ -281,7 +281,7 @@ namespace OpenControls.Wpf.DockManager
                         }
                     }
 
-                    if (sender is IFloatingPane)
+                    if (sender is FloatingToolPaneGroup)
                     {
                         if (_sideLocationPane == null)
                         {

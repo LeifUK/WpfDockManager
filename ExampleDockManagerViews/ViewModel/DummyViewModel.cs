@@ -20,14 +20,6 @@
             }
         }
 
-        public bool CanFloat
-        {
-            get
-            {
-                return true;
-            }
-        }
-
         public bool HasChanged
         {
             get

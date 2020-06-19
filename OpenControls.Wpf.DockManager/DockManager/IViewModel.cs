@@ -15,7 +15,6 @@
         string URL { get; }
 
         bool CanClose { get; }
-        bool CanFloat { get; }
 
         /*
          * Return true if there are edits that need to be saved
@@ -23,6 +22,5 @@
          */
         bool HasChanged { get; }
         void Save();
-        void Close();
     }
 }
