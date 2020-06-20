@@ -53,7 +53,7 @@
                 </Setter>
             </Style>
             <ResourceDictionary.MergedDictionaries>
-                <ResourceDictionary Source="pack://application:,,,/OpenControls.Wpf.DockManager;component/DockManager/Dictionary.xaml"/>
+                <ResourceDictionary Source="pack://application:,,,/OpenControls.Wpf.DockManager;component/Dictionary.xaml"/>
             </ResourceDictionary.MergedDictionaries>
         </ResourceDictionary>
     </Window.Resources>

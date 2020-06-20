@@ -50,105 +50,54 @@
     <Reference Include="PresentationFramework" />
   </ItemGroup>
   <ItemGroup>
-    <Page Include="DockManager\Controls\TabHeaderControl.xaml">
-      <Generator>MSBuild:Compile</Generator>
-      <SubType>Designer</SubType>
-    </Page>
-    <Page Include="DockManager\Controls\ToolListBox.xaml">
-      <Generator>MSBuild:Compile</Generator>
-      <SubType>Designer</SubType>
-    </Page>
-    <Page Include="DockManager\Dictionary.xaml">
-      <Generator>MSBuild:Compile</Generator>
-      <SubType>Designer</SubType>
-    </Page>
-    <Page Include="DockManager\FloatingPane.xaml">
-      <Generator>MSBuild:Compile</Generator>
-      <SubType>Designer</SubType>
-    </Page>
-    <Page Include="DockManager\SideLocationPane.xaml">
-      <Generator>MSBuild:Compile</Generator>
-      <SubType>Designer</SubType>
-    </Page>
-    <Page Include="DockManager\UnpinnedToolPane.xaml">
-      <Generator>MSBuild:Compile</Generator>
-      <SubType>Designer</SubType>
-    </Page>
-    <Page Include="DockManager\WindowLocationPane.xaml">
-      <Generator>MSBuild:Compile</Generator>
-      <SubType>Designer</SubType>
-    </Page>
-    <Compile Include="DockManager\Controls\TabHeader.cs" />
-    <Compile Include="DockManager\Controls\TabHeaderControl.xaml.cs">
+    <Compile Include="Command.cs" />
+    <Compile Include="Controls\IToolListBox.cs" />
+    <Compile Include="Controls\IToolListBoxItem.cs" />
+    <Compile Include="Controls\TabHeader.cs" />
+    <Compile Include="Controls\TabHeaderControl.xaml.cs">
       <DependentUpon>TabHeaderControl.xaml</DependentUpon>
     </Compile>
-    <Compile Include="DockManager\Converters\BrushToColourConverter.cs" />
-    <Compile Include="DockManager\Converters\CornerRadiusToStringConverter.cs" />
-    <Compile Include="DockManager\Command.cs" />
-    <Compile Include="DockManager\Controls\IToolListBox.cs" />
-    <Compile Include="DockManager\Controls\IToolListBoxItem.cs" />
-    <Compile Include="DockManager\Controls\ToolListBox.xaml.cs">
+    <Compile Include="Controls\ToolListBox.xaml.cs">
       <DependentUpon>ToolListBox.xaml</DependentUpon>
     </Compile>
-    <Compile Include="DockManager\DockPane.cs" />
-    <Compile Include="DockManager\DockPaneManager.cs" />
-    <Compile Include="DockManager\DocumentContainer.cs" />
-    <Compile Include="DockManager\DocumentPaneGroup.cs" />
-    <Compile Include="DockManager\DocumentPanel.cs" />
-    <Compile Include="DockManager\Events\FloatEventArgs.cs" />
-    <Compile Include="DockManager\Events\FloatEventHandler.cs" />
-    <Compile Include="DockManager\Events\ItemClickEventArgs.cs" />
-    <Compile Include="DockManager\Events\ItemClickEventHandler.cs" />
-    <Compile Include="DockManager\Events\TabClosedEventArgs.cs" />
-    <Compile Include="DockManager\Events\TabClosedEventHandler.cs" />
-    <Compile Include="DockManager\ExtensionMethods.cs" />
-    <Compile Include="DockManager\FloatingDocumentPaneGroup.cs" />
-    <Compile Include="DockManager\FloatingPane.xaml.cs">
+    <Compile Include="Converters\BrushToColourConverter.cs" />
+    <Compile Include="Converters\CornerRadiusToStringConverter.cs" />
+    <Compile Include="Converters\ThicknessToStringConverter.cs" />
+    <Compile Include="DockPane.cs" />
+    <Compile Include="DockPaneManager.cs" />
+    <Compile Include="DocumentContainer.cs" />
+    <Compile Include="DocumentPaneGroup.cs" />
+    <Compile Include="DocumentPanel.cs" />
+    <Compile Include="Events\FloatEventArgs.cs" />
+    <Compile Include="Events\FloatEventHandler.cs" />
+    <Compile Include="Events\ItemClickEventArgs.cs" />
+    <Compile Include="Events\ItemClickEventHandler.cs" />
+    <Compile Include="Events\TabClosedEventArgs.cs" />
+    <Compile Include="Events\TabClosedEventHandler.cs" />
+    <Compile Include="ExtensionMethods.cs" />
+    <Compile Include="FloatEventArgs.cs" />
+    <Compile Include="FloatEventHandler.cs" />
+    <Compile Include="FloatingDocumentPaneGroup.cs" />
+    <Compile Include="FloatingPane.xaml.cs">
       <DependentUpon>FloatingPane.xaml</DependentUpon>
     </Compile>
-    <Compile Include="DockManager\FloatingPaneManager.cs" />
-    <Compile Include="DockManager\FloatingToolPaneGroup.cs" />
-    <Compile Include="DockManager\FloatingViewModel.cs" />
-    <Compile Include="DockManager\Helpers.cs" />
-    <Compile Include="DockManager\IDockPaneHost.cs" />
-    <Compile Include="DockManager\IDockPaneManager.cs" />
-    <Compile Include="DockManager\IFloatingPane.cs" />
-    <Compile Include="DockManager\IFloatingPaneHost.cs" />
-    <Compile Include="DockManager\IFloatingPaneManager.cs" />
-    <Compile Include="DockManager\ILayoutFactory.cs" />
-    <Compile Include="DockManager\InsertionIndicatorManager.cs" />
-    <Compile Include="DockManager\ISelectablePane.cs" />
-    <Compile Include="DockManager\IUnpinnedToolHost.cs" />
-    <Compile Include="DockManager\IUnpinnedToolManager.cs" />
-    <Compile Include="DockManager\IViewContainer.cs" />
-    <Compile Include="DockManager\IViewModel.cs" />
-    <Compile Include="DockManager\LayoutManager.cs" />
-    <Compile Include="DockManager\SelectablePane.cs" />
-    <Compile Include="DockManager\Serialisation\LayoutReader.cs" />
-    <Compile Include="DockManager\Serialisation\LayoutWriter.cs" />
-    <Compile Include="DockManager\SideLocationPane.xaml.cs">
-      <DependentUpon>SideLocationPane.xaml</DependentUpon>
-    </Compile>
-    <Compile Include="DockManager\SplitterPane.cs" />
-    <Compile Include="DockManager\Converters\ThicknessToStringConverter.cs" />
-    <Compile Include="DockManager\Theme.cs" />
-    <Compile Include="DockManager\ToolContainer.cs" />
-    <Compile Include="DockManager\ToolListBoxItem.cs" />
-    <Compile Include="DockManager\ToolPaneGroup.cs" />
-    <Compile Include="DockManager\UnpinnedToolData.cs" />
-    <Compile Include="DockManager\UnpinnedToolManager.cs" />
-    <Compile Include="DockManager\UnpinnedToolPane.xaml.cs">
-      <DependentUpon>UnpinnedToolPane.xaml</DependentUpon>
-    </Compile>
-    <Compile Include="DockManager\User32.cs" />
-    <Compile Include="DockManager\Utilities.cs" />
-    <Compile Include="DockManager\ViewContainer.cs" />
-    <Compile Include="DockManager\WindowLocation.cs" />
-    <Compile Include="DockManager\WindowLocationPane.xaml.cs">
-      <DependentUpon>WindowLocationPane.xaml</DependentUpon>
-    </Compile>
-  </ItemGroup>
-  <ItemGroup>
+    <Compile Include="FloatingPaneManager.cs" />
+    <Compile Include="FloatingToolPaneGroup.cs" />
+    <Compile Include="FloatingViewModel.cs" />
+    <Compile Include="Helpers.cs" />
+    <Compile Include="IDockPaneHost.cs" />
+    <Compile Include="IDockPaneManager.cs" />
+    <Compile Include="IFloatingPane.cs" />
+    <Compile Include="IFloatingPaneHost.cs" />
+    <Compile Include="IFloatingPaneManager.cs" />
+    <Compile Include="ILayoutFactory.cs" />
+    <Compile Include="InsertionIndicatorManager.cs" />
+    <Compile Include="ISelectablePane.cs" />
+    <Compile Include="IUnpinnedToolHost.cs" />
+    <Compile Include="IUnpinnedToolManager.cs" />
+    <Compile Include="IViewContainer.cs" />
+    <Compile Include="IViewModel.cs" />
+    <Compile Include="LayoutManager.cs" />
     <Compile Include="Properties\AssemblyInfo.cs">
       <SubType>Code</SubType>
     </Compile>
@@ -162,6 +111,29 @@
       <DependentUpon>Settings.settings</DependentUpon>
       <DesignTimeSharedInput>True</DesignTimeSharedInput>
     </Compile>
+    <Compile Include="SelectablePane.cs" />
+    <Compile Include="Serialisation\LayoutReader.cs" />
+    <Compile Include="Serialisation\LayoutWriter.cs" />
+    <Compile Include="SideLocationPane.xaml.cs">
+      <DependentUpon>SideLocationPane.xaml</DependentUpon>
+    </Compile>
+    <Compile Include="SplitterPane.cs" />
+    <Compile Include="Theme.cs" />
+    <Compile Include="ToolContainer.cs" />
+    <Compile Include="ToolListBoxItem.cs" />
+    <Compile Include="ToolPaneGroup.cs" />
+    <Compile Include="UnpinnedToolData.cs" />
+    <Compile Include="UnpinnedToolManager.cs" />
+    <Compile Include="UnpinnedToolPane.xaml.cs">
+      <DependentUpon>UnpinnedToolPane.xaml</DependentUpon>
+    </Compile>
+    <Compile Include="User32.cs" />
+    <Compile Include="Utilities.cs" />
+    <Compile Include="ViewContainer.cs" />
+    <Compile Include="WindowLocation.cs" />
+    <Compile Include="WindowLocationPane.xaml.cs">
+      <DependentUpon>WindowLocationPane.xaml</DependentUpon>
+    </Compile>
     <EmbeddedResource Include="Properties\Resources.resx">
       <Generator>ResXFileCodeGenerator</Generator>
       <LastGenOutput>Resources.Designer.cs</LastGenOutput>
@@ -170,6 +142,37 @@
       <Generator>SettingsSingleFileGenerator</Generator>
       <LastGenOutput>Settings.Designer.cs</LastGenOutput>
     </None>
+  </ItemGroup>
+  <ItemGroup />
+  <ItemGroup>
+    <Page Include="Controls\TabHeaderControl.xaml">
+      <Generator>MSBuild:Compile</Generator>
+      <SubType>Designer</SubType>
+    </Page>
+    <Page Include="Controls\ToolListBox.xaml">
+      <Generator>MSBuild:Compile</Generator>
+      <SubType>Designer</SubType>
+    </Page>
+    <Page Include="Dictionary.xaml">
+      <Generator>MSBuild:Compile</Generator>
+      <SubType>Designer</SubType>
+    </Page>
+    <Page Include="FloatingPane.xaml">
+      <Generator>MSBuild:Compile</Generator>
+      <SubType>Designer</SubType>
+    </Page>
+    <Page Include="SideLocationPane.xaml">
+      <Generator>MSBuild:Compile</Generator>
+      <SubType>Designer</SubType>
+    </Page>
+    <Page Include="UnpinnedToolPane.xaml">
+      <Generator>MSBuild:Compile</Generator>
+      <SubType>Designer</SubType>
+    </Page>
+    <Page Include="WindowLocationPane.xaml">
+      <Generator>MSBuild:Compile</Generator>
+      <SubType>Designer</SubType>
+    </Page>
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
 </Project>
