@@ -75,8 +75,6 @@
     <Compile Include="Events\TabClosedEventArgs.cs" />
     <Compile Include="Events\TabClosedEventHandler.cs" />
     <Compile Include="ExtensionMethods.cs" />
-    <Compile Include="FloatEventArgs.cs" />
-    <Compile Include="FloatEventHandler.cs" />
     <Compile Include="FloatingDocumentPaneGroup.cs" />
     <Compile Include="FloatingPane.xaml.cs">
       <DependentUpon>FloatingPane.xaml</DependentUpon>
