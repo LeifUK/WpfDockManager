@@ -1,0 +1,39 @@
+<?xml version="1.0"?>
+<package  xmlns="http://schemas.microsoft.com/packaging/2013/05/nuspec.xsd">
+  <metadata>    
+    <id>OpenControls.Wpf.DockManager</id>
+    <version>1.0.0</version>
+    <title>OpenControls.Wpf.DockManager Wpf Docking Window Manager</title>
+    <authors>Leif Goodwin</authors>
+    <owners>Leif Goodwin</owners>
+	<license type="expression">CPOL-1.02</license>
+    <projectUrl>https://www.codeproject.com/Articles/5270871/A-WPF-Docking-Windows-Management-Library?msg=5733560#xx5733560xx</projectUrl>
+    <requireLicenseAcceptance>false</requireLicenseAcceptance>
+    <description>OpenControls.Wpf.DockManager is a WPF docking window manager library</description>
+    <releaseNotes>First version</releaseNotes>
+    <copyright>Copyright 2020 Leif Goodwin</copyright>
+    <tags>WPF C# docking window manager</tags>
+    <frameworkAssemblies>
+      <frameworkAssembly assemblyName="Microsoft.CSharp"/>
+      <frameworkAssembly assemblyName="PresentationCore"/>
+      <frameworkAssembly assemblyName="PresentationFramework"/>
+      <frameworkAssembly assemblyName="System"/>
+      <frameworkAssembly assemblyName="System.Core"/>
+      <frameworkAssembly assemblyName="System.Data"/>
+      <frameworkAssembly assemblyName="System.Drawing"/>
+      <frameworkAssembly assemblyName="System.Windows.Forms"/>
+      <frameworkAssembly assemblyName="System.Xaml"/>
+      <frameworkAssembly assemblyName="System.Xml"/>
+      <frameworkAssembly assemblyName="System.Xml.Linq"/>
+      <frameworkAssembly assemblyName="WindowsBase"/>
+      <frameworkAssembly assemblyName="System.ServiceModel"/>
+    </frameworkAssemblies>
+    <dependencies>
+      <group targetFramework=".NETFramework4.7.2" />
+    </dependencies>  </metadata>
+  <files>
+    <file src="OpenControls.Wpf.DockManager.dll" target="lib\net472" />
+    <file src="OpenControls.Wpf.DockManager.Themes.Modern.dll" target="lib\net472" />
+    <file src="OpenControls.Wpf.DockManager.Themes.VS2019.dll" target="lib\net472" />
+  </files>
+</package>
