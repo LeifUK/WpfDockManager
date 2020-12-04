@@ -190,6 +190,18 @@ namespace OpenControls.Wpf.DockManager
             dockPane.UngroupCurrent += DockPane_UngroupCurrent;
             dockPane.Ungroup += DockPane_Ungroup;
             dockPane.TabClosed += DockPane_TabClosed;
+            dockPane.DockPaneActive += DockPane_DockPaneActive;
+            dockPane.GotFocus += DockPane_GotFocus;
+        }
+
+        private void DockPane_DockPaneActive(object sender, EventArgs e)
+        {
+            IDockPaneHost.ActiveDockPaneChanged(sender as DockPane);
+        }
+
+        private void DockPane_GotFocus(object sender, RoutedEventArgs e)
+        {
+            IDockPaneHost.ActiveDockPaneChanged(sender as DockPane);
         }
 
         public SelectablePane FindElementOfType(Type type, Grid grid)

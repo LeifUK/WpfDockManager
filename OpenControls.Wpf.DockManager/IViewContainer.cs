@@ -19,5 +19,6 @@ namespace OpenControls.Wpf.DockManager
         event EventHandler SelectionChanged;
         event Events.TabClosedEventHandler TabClosed;
         event EventHandler FloatTabRequest;
+        event EventHandler TabMouseDown;
     }
 }

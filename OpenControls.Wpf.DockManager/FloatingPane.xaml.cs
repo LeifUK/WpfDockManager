@@ -4,6 +4,7 @@ using System.Windows;
 using System.Windows.Controls;
 using System.Windows.Input;
 using System.Windows.Media;
+using System.Windows.Interop;
 
 namespace OpenControls.Wpf.DockManager
 {
@@ -22,6 +23,7 @@ namespace OpenControls.Wpf.DockManager
             IViewContainer = iViewContainer;
             IViewContainer.FloatTabRequest += IViewContainer_FloatTabRequest;
             IViewContainer.TabClosed += IViewContainer_TabClosed;
+            IViewContainer.TabMouseDown += IViewContainer_TabMouseDown;
 
             _gridHeader.SetResourceReference(Grid.BackgroundProperty, "FloatingPaneTitleBarBackground");
             _textBlockTitle.SetResourceReference(TextBlock.StyleProperty, "FloatingPaneTitleStyle");
@@ -49,6 +51,36 @@ namespace OpenControls.Wpf.DockManager
             {
                 _buttonRestore.Style = style;
             }
+
+            PreviewMouseDown += FloatingPane_PreviewMouseDown;
+        }
+
+        private const int WM_NCLBUTTONDOWN = 0x00A1;
+
+        private IntPtr WndProc(IntPtr hWnd, int msg, IntPtr wParam, IntPtr lParam, ref bool handled)
+            {
+                if (msg == WM_NCLBUTTONDOWN)
+                {
+                    TabMouseDown?.Invoke(this, null);
+                }
+                return IntPtr.Zero;
+            }
+
+        protected override void OnSourceInitialized(EventArgs e)
+        {
+            base.OnSourceInitialized(e);
+            HwndSource source = HwndSource.FromHwnd(new WindowInteropHelper(this).Handle);
+            source.AddHook(new HwndSourceHook(WndProc));
+        }
+
+        private void FloatingPane_PreviewMouseDown(object sender, MouseButtonEventArgs e)
+        {
+            TabMouseDown?.Invoke(this, null);
+        }
+
+        private void IViewContainer_TabMouseDown(object sender, EventArgs e)
+        {
+            TabMouseDown?.Invoke(this, null);
         }
 
         private void IViewContainer_TabClosed(object sender, Events.TabClosedEventArgs e)
@@ -115,6 +147,7 @@ namespace OpenControls.Wpf.DockManager
 
         public event Events.TabClosedEventHandler TabClosed;
         public event EventHandler FloatTabRequest;
+        public event EventHandler TabMouseDown;
         public event EventHandler UngroupCurrent;
         public event EventHandler Ungroup;
         public event EventHandler EndDrag;

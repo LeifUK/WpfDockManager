@@ -436,6 +436,8 @@ namespace OpenControls.Wpf.DockManager
             floatingPane.UngroupCurrent += FloatingPane_UngroupCurrent;
             floatingPane.FloatTabRequest += FloatingPane_FloatTabRequest;
             floatingPane.TabClosed += FloatingPane_TabClosed;
+            floatingPane.TabMouseDown += FloatingPane_TabMouseDown;
+            floatingPane.GotFocus += FloatingPane_GotFocus;
             floatingPane.DataContext = new FloatingViewModel();
             (floatingPane.DataContext as FloatingViewModel).Title = floatingPane.Title;
             floatingPane.StartDrag += FloatingPane_StartDrag;
@@ -444,6 +446,16 @@ namespace OpenControls.Wpf.DockManager
             // Ensure the window remains on top of the main window
             floatingPane.Owner = Application.Current.MainWindow;
             floatingPane.Show();
+        }
+
+        private void FloatingPane_GotFocus(object sender, RoutedEventArgs e)
+        {
+            IFloatingPaneHost.ActiveDockPaneChanged(sender as FloatingPane);
+        }
+
+        private void FloatingPane_TabMouseDown(object sender, EventArgs e)
+        {
+            IFloatingPaneHost.ActiveDockPaneChanged(sender as FloatingPane);        
         }
 
         private void FloatingPane_FloatTabRequest(object sender, EventArgs e)

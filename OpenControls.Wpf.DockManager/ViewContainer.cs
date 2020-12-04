@@ -20,11 +20,17 @@ namespace OpenControls.Wpf.DockManager
             TabHeaderControl.CloseTabRequest += _tabHeaderControl_CloseTabRequest;
             TabHeaderControl.FloatTabRequest += _tabHeaderControl_FloatTabRequest;
             TabHeaderControl.ItemsChanged += _tabHeaderControl_ItemsChanged;
+            TabHeaderControl.TabMouseDown += TabHeaderControl_TabMouseDown;
             TabHeaderControl.ItemsSource = _items;
             TabHeaderControl.DisplayMemberPath = "Value.Title";
             Children.Add(TabHeaderControl);
             Grid.SetRow(TabHeaderControl, row);
             Grid.SetColumn(TabHeaderControl, column);
+        }
+
+        private void TabHeaderControl_TabMouseDown(object sender, EventArgs e)
+        {
+            TabMouseDown?.Invoke(this, null);
         }
 
         protected abstract void SetSelectedUserControlGridPosition();
@@ -46,6 +52,7 @@ namespace OpenControls.Wpf.DockManager
             CheckTabCount();
 
             SelectionChanged?.Invoke(sender, e);
+            TabMouseDown?.Invoke(this, null);
         }
 
         protected void _tabHeaderControl_ItemsChanged(object sender, System.EventArgs e)
@@ -128,6 +135,7 @@ namespace OpenControls.Wpf.DockManager
         public event EventHandler SelectionChanged;
         public event Events.TabClosedEventHandler TabClosed;
         public event EventHandler FloatTabRequest;
+        public event EventHandler TabMouseDown;
 
         public string Title
         {

@@ -79,6 +79,7 @@ namespace OpenControls.Wpf.DockManager
                 return this;
             }
         }
+
         private IDockPaneHost IDockPaneHost
         {
             get
@@ -86,6 +87,7 @@ namespace OpenControls.Wpf.DockManager
                 return this;
             }
         }
+
         private readonly IDockPaneManager IDockPaneManager;
         private readonly IUnpinnedToolManager IUnpinnedToolManager;
         private readonly IFloatingPaneManager IFloatingPaneManager;
@@ -99,6 +101,12 @@ namespace OpenControls.Wpf.DockManager
         public DataTemplate ToolPaneHeaderTemplate { get; set; }
         public DataTemplate DocumentPaneTitleTemplate { get; set; }
         public DataTemplate DocumentPaneHeaderTemplate { get; set; }
+
+        private object ActiveDocumentView;
+        public event EventHandler DocumentGotFocus;
+        private object ActiveToolView;
+        public event EventHandler ToolGotFocus;
+        public object CurrentToolViewModel;
 
         private Dictionary<WindowLocation, Controls.ToolListBox> _dictToolListBoxes;
 
@@ -406,6 +414,37 @@ namespace OpenControls.Wpf.DockManager
             return views;
         }
 
+        void HandleActiveDockPaneChanged(IViewContainer iViewContainer)
+        {
+            int index = iViewContainer.SelectedIndex;
+            if (index == -1)
+            {
+                return;
+            }
+            UserControl userControl = iViewContainer.GetUserControl(index);
+
+            if (iViewContainer is DocumentContainer)
+            {
+                if (ActiveDocumentView != userControl)
+                {
+                    DocumentGotFocus?.Invoke(userControl, null);
+                    ActiveDocumentView = userControl;
+                    ActiveToolView = null;
+                    System.Diagnostics.Debug.WriteLine("Active view: " + userControl.ToString());
+                }
+            }
+            else if (iViewContainer is ToolContainer)
+            {
+                if (ActiveToolView != userControl)
+                {
+                    ToolGotFocus?.Invoke(userControl, null);
+                    ActiveToolView = userControl;
+                    ActiveDocumentView = null;
+                    System.Diagnostics.Debug.WriteLine("Active view: " + userControl.ToString());
+                }
+            }
+        }
+
         #region IFloatingPaneHost
 
         Grid IFloatingPaneHost.RootPane 
@@ -444,6 +483,11 @@ namespace OpenControls.Wpf.DockManager
         void IFloatingPaneHost.Unfloat(FloatingPane floatingPane, SelectablePane selectedPane, WindowLocation windowLocation)
         {
             IDockPaneManager.Unfloat(floatingPane, selectedPane, windowLocation);
+        }
+
+        void IFloatingPaneHost.ActiveDockPaneChanged(FloatingPane floatingPane)
+        {
+            HandleActiveDockPaneChanged(floatingPane.IViewContainer);
         }
 
         #endregion IFloatingPaneHost
@@ -556,6 +600,11 @@ namespace OpenControls.Wpf.DockManager
         List<UserControl> IDockPaneHost.LoadDocumentViews(ObservableCollection<IViewModel> viewModels)
         {
             return LoadViewsFromTemplates(DocumentTemplates, viewModels);
+        }
+        
+        void IDockPaneHost.ActiveDockPaneChanged(DockPane dockPane)
+        {
+            HandleActiveDockPaneChanged(dockPane.IViewContainer);
         }
 
         #endregion IDockPaneTree

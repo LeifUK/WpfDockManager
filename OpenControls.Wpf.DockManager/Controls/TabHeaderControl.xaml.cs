@@ -4,7 +4,6 @@ using System.Windows;
 using System.Windows.Controls;
 using System.ComponentModel;
 using System.Windows.Media;
-using OpenControls.Wpf.DockManager;
 
 namespace OpenControls.Wpf.DockManager.Controls
 {
@@ -17,8 +16,14 @@ namespace OpenControls.Wpf.DockManager.Controls
 
             _listBox.ItemsChanged += _listBox_ItemsChanged;
             _listBox.FloatTabRequest += _listBox_FloatTabRequest;
+            _listBox.PreviewMouseDown += _listBox_MouseDown;
 
             CloseTabCommand = new Command((parameter) => _buttonCloseTab_Click(parameter, null), delegate { return true; });
+        }
+
+        private void _listBox_MouseDown(object sender, System.Windows.Input.MouseButtonEventArgs e)
+        {
+            TabMouseDown?.Invoke(this, null);
         }
 
         private void _listBox_FloatTabRequest(object sender, EventArgs e)
@@ -36,6 +41,7 @@ namespace OpenControls.Wpf.DockManager.Controls
         public event EventHandler SelectionChanged;
         public event EventHandler ItemsChanged;
         public event EventHandler FloatTabRequest;
+        public event EventHandler TabMouseDown;
 
         public ListBox ListBox { get { return _listBox; } }
 

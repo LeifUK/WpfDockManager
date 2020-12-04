@@ -12,6 +12,8 @@ namespace OpenControls.Wpf.DockManager
             IViewContainer = iViewContainer;
             IViewContainer.TabClosed += IViewContainer_TabClosed;
             IViewContainer.FloatTabRequest += IViewContainer_FloatTabRequest;
+            PreviewMouseDown += DockPane_PreviewMouseDown;
+            IViewContainer.TabMouseDown += IViewContainer_TabMouseDown;
             Children.Add(iViewContainer as UIElement);
             Border = new Border();
             Border.Background = Brushes.Transparent;
@@ -22,6 +24,16 @@ namespace OpenControls.Wpf.DockManager
             Grid.SetColumnSpan(Border, 99);
             Grid.SetZIndex(Border, -1);
             Children.Add(Border);
+        }
+
+        private void DockPane_PreviewMouseDown(object sender, System.Windows.Input.MouseButtonEventArgs e)
+        {
+            DockPaneActive?.Invoke(this, null);
+        }
+
+        private void IViewContainer_TabMouseDown(object sender, EventArgs e)
+        {
+            DockPaneActive?.Invoke(this, null);
         }
 
         private void IViewContainer_FloatTabRequest(object sender, EventArgs e)
@@ -40,6 +52,7 @@ namespace OpenControls.Wpf.DockManager
         public event EventHandler FloatTabRequest;
         public event EventHandler UngroupCurrent;
         public event EventHandler Ungroup;
+        public event EventHandler DockPaneActive;
 
         public Border Border;
 

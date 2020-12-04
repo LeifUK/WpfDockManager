@@ -188,9 +188,13 @@ namespace OpenControls.Wpf.DockManager
 
         protected override void OnMouseLeftButtonDown(MouseButtonEventArgs e)
         {
-            _mouseDownPosition = e.GetPosition(this);
+            Point pt = e.GetPosition(this);
+            if (pt.Y <= HeaderBorder.ActualHeight)
+            {
+                _mouseDownPosition = pt;
+                System.Windows.Input.Mouse.Capture(this);
+            }
             base.OnMouseLeftButtonDown(e);
-            System.Windows.Input.Mouse.Capture(this);
         }
 
         protected override void OnMouseLeftButtonUp(MouseButtonEventArgs e)
