@@ -104,9 +104,6 @@ namespace OpenControls.Wpf.DockManager
 
         private object ActiveDocumentView;
         public event EventHandler DocumentGotFocus;
-        private object ActiveToolView;
-        public event EventHandler ToolGotFocus;
-        public object CurrentToolViewModel;
 
         private Dictionary<WindowLocation, Controls.ToolListBox> _dictToolListBoxes;
 
@@ -416,24 +413,6 @@ namespace OpenControls.Wpf.DockManager
             return views;
         }
 
-        void HandleActiveUnpinnedPaneChanged(UserControl userControl)
-        {
-            System.Diagnostics.Debug.Assert(userControl != null);
-            if (userControl == null)
-            {
-                // Should never happen! 
-                return;
-            }
-
-            if (ActiveToolView != userControl)
-            {
-                ToolGotFocus?.Invoke(userControl, null);
-                ActiveToolView = userControl;
-                ActiveDocumentView = null;
-                System.Diagnostics.Debug.WriteLine("Active view: " + userControl.ToString());
-            }
-        }
-
         void HandleActiveDockPaneChanged(IViewContainer iViewContainer, int index)
         {
             System.Diagnostics.Debug.Assert(iViewContainer != null);
@@ -456,18 +435,7 @@ namespace OpenControls.Wpf.DockManager
                 {
                     DocumentGotFocus?.Invoke(userControl, null);
                     ActiveDocumentView = userControl;
-                    ActiveToolView = null;
-                    System.Diagnostics.Debug.WriteLine("Active view: " + userControl.ToString());
-                }
-            }
-            else if (iViewContainer is ToolContainer)
-            {
-                if (ActiveToolView != userControl)
-                {
-                    ToolGotFocus?.Invoke(userControl, null);
-                    ActiveToolView = userControl;
-                    ActiveDocumentView = null;
-                    System.Diagnostics.Debug.WriteLine("Active view: " + userControl.ToString());
+                    System.Diagnostics.Debug.WriteLine("Active document view: " + userControl.ToString());
                 }
             }
         }
@@ -668,11 +636,6 @@ namespace OpenControls.Wpf.DockManager
         void IUnpinnedToolHost.UnpinToolPane(ToolPaneGroup toolPaneGroup, out UnpinnedToolData unpinnedToolData, out WindowLocation toolListBoxLocation)
         {
             IDockPaneManager.UnpinToolPane(toolPaneGroup, out unpinnedToolData, out toolListBoxLocation);
-        }
-
-        void IUnpinnedToolHost.PaneActive(UserControl userControl)
-        {
-            HandleActiveUnpinnedPaneChanged(userControl);
         }
 
         #endregion IUnpinnedToolPaneOwner

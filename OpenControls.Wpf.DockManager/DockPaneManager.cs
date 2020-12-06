@@ -190,8 +190,11 @@ namespace OpenControls.Wpf.DockManager
             dockPane.UngroupCurrent += DockPane_UngroupCurrent;
             dockPane.Ungroup += DockPane_Ungroup;
             dockPane.TabClosed += DockPane_TabClosed;
-            dockPane.DockPaneActive += DockPane_DockPaneActive;
-            dockPane.GotFocus += DockPane_GotFocus;
+            if (dockPane is DocumentPaneGroup)
+            {
+                dockPane.DockPaneActive += DockPane_DockPaneActive;
+                dockPane.GotFocus += DockPane_GotFocus;
+            }
         }
 
         private void DockPane_DockPaneActive(object sender, EventArgs e)
@@ -515,9 +518,6 @@ namespace OpenControls.Wpf.DockManager
                 sibling = FindElement(unpinnedToolData.SiblingGuid, IDockPaneHost.RootGrid);
             }
 
-            // We don't want pane active events
-            unpinnedToolData.ToolPaneGroup.DockPaneActiveEventsDisabled = true;
-
             // This can happen when loading a layout
             bool isHorizontal = unpinnedToolData.IsHorizontal;
             bool isFirst = unpinnedToolData.IsFirst;
@@ -588,9 +588,6 @@ namespace OpenControls.Wpf.DockManager
                 grid = grid.Parent as SplitterPane;
                 documentPanelAncestors.Add(grid);
             }
-
-            // We do want pane active events
-            toolPaneGroup.DockPaneActiveEventsDisabled = false;
 
             /*
              * Find the first common ancestor for the document panel and the tool pane group

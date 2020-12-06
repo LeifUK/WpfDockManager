@@ -9,6 +9,5 @@ namespace OpenControls.Wpf.DockManager
         Controls.IToolListBox GetToolListBox(WindowLocation windowLocation);
         void PinToolPane(UnpinnedToolData unpinnedToolData, WindowLocation defaultWindowLocation);
         void UnpinToolPane(ToolPaneGroup toolPaneGroup, out UnpinnedToolData unpinnedToolData, out WindowLocation toolListBoxLocation);
-        void PaneActive(UserControl userControl);
     }
 }
