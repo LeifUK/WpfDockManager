@@ -325,13 +325,15 @@ namespace OpenControls.Wpf.DockManager
         {
             IUnpinnedToolManager.ProcessMoveResize();
         }
-
+        
         private void ToolListBox_ItemClick(object sender, Events.ItemClickEventArgs e)
         {
-            System.Diagnostics.Trace.Assert(sender is ToolListBoxItem);
+            ToolListBoxItem toolListBoxItem = (sender as ToolListBoxItem);
+
+            System.Diagnostics.Trace.Assert(toolListBoxItem != null);
             System.Diagnostics.Trace.Assert((e != null) && (e.ToolListBox != null));
 
-            IUnpinnedToolManager.ShowUnpinnedToolPane(sender as ToolListBoxItem, e.ToolListBox);
+            IUnpinnedToolManager.ShowUnpinnedToolPane(toolListBoxItem, e.ToolListBox);
         }
 
         private void ToolPane_UnPinClick(object sender, EventArgs e)
@@ -414,14 +416,39 @@ namespace OpenControls.Wpf.DockManager
             return views;
         }
 
-        void HandleActiveDockPaneChanged(IViewContainer iViewContainer)
+        void HandleActiveUnpinnedPaneChanged(UserControl userControl)
         {
-            int index = iViewContainer.SelectedIndex;
+            System.Diagnostics.Debug.Assert(userControl != null);
+            if (userControl == null)
+            {
+                // Should never happen! 
+                return;
+            }
+
+            if (ActiveToolView != userControl)
+            {
+                ToolGotFocus?.Invoke(userControl, null);
+                ActiveToolView = userControl;
+                ActiveDocumentView = null;
+                System.Diagnostics.Debug.WriteLine("Active view: " + userControl.ToString());
+            }
+        }
+
+        void HandleActiveDockPaneChanged(IViewContainer iViewContainer, int index)
+        {
+            System.Diagnostics.Debug.Assert(iViewContainer != null);
             if (index == -1)
             {
                 return;
             }
+            System.Diagnostics.Debug.Assert(index != -1);
+
             UserControl userControl = iViewContainer.GetUserControl(index);
+            if (userControl == null)
+            {
+                // Should never happen! 
+                return;
+            }
 
             if (iViewContainer is DocumentContainer)
             {
@@ -487,7 +514,7 @@ namespace OpenControls.Wpf.DockManager
 
         void IFloatingPaneHost.ActiveDockPaneChanged(FloatingPane floatingPane)
         {
-            HandleActiveDockPaneChanged(floatingPane.IViewContainer);
+            HandleActiveDockPaneChanged(floatingPane.IViewContainer, floatingPane.IViewContainer.SelectedIndex);
         }
 
         #endregion IFloatingPaneHost
@@ -604,7 +631,7 @@ namespace OpenControls.Wpf.DockManager
         
         void IDockPaneHost.ActiveDockPaneChanged(DockPane dockPane)
         {
-            HandleActiveDockPaneChanged(dockPane.IViewContainer);
+            HandleActiveDockPaneChanged(dockPane.IViewContainer, dockPane.IViewContainer.SelectedIndex);
         }
 
         #endregion IDockPaneTree
@@ -641,6 +668,11 @@ namespace OpenControls.Wpf.DockManager
         void IUnpinnedToolHost.UnpinToolPane(ToolPaneGroup toolPaneGroup, out UnpinnedToolData unpinnedToolData, out WindowLocation toolListBoxLocation)
         {
             IDockPaneManager.UnpinToolPane(toolPaneGroup, out unpinnedToolData, out toolListBoxLocation);
+        }
+
+        void IUnpinnedToolHost.PaneActive(UserControl userControl)
+        {
+            HandleActiveUnpinnedPaneChanged(userControl);
         }
 
         #endregion IUnpinnedToolPaneOwner

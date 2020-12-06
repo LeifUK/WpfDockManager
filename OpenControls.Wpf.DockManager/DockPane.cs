@@ -24,16 +24,23 @@ namespace OpenControls.Wpf.DockManager
             Grid.SetColumnSpan(Border, 99);
             Grid.SetZIndex(Border, -1);
             Children.Add(Border);
+            DockPaneActiveEventsDisabled = false;
         }
 
         private void DockPane_PreviewMouseDown(object sender, System.Windows.Input.MouseButtonEventArgs e)
         {
-            DockPaneActive?.Invoke(this, null);
+            if (!DockPaneActiveEventsDisabled)
+            {
+                DockPaneActive?.Invoke(this, null);
+            }
         }
 
         private void IViewContainer_TabMouseDown(object sender, EventArgs e)
         {
-            DockPaneActive?.Invoke(this, null);
+            if (!DockPaneActiveEventsDisabled)
+            {
+                DockPaneActive?.Invoke(this, null);
+            }
         }
 
         private void IViewContainer_FloatTabRequest(object sender, EventArgs e)
@@ -53,6 +60,8 @@ namespace OpenControls.Wpf.DockManager
         public event EventHandler UngroupCurrent;
         public event EventHandler Ungroup;
         public event EventHandler DockPaneActive;
+
+        public bool DockPaneActiveEventsDisabled { get; set; }
 
         public Border Border;
 

@@ -515,6 +515,9 @@ namespace OpenControls.Wpf.DockManager
                 sibling = FindElement(unpinnedToolData.SiblingGuid, IDockPaneHost.RootGrid);
             }
 
+            // We don't want pane active events
+            unpinnedToolData.ToolPaneGroup.DockPaneActiveEventsDisabled = true;
+
             // This can happen when loading a layout
             bool isHorizontal = unpinnedToolData.IsHorizontal;
             bool isFirst = unpinnedToolData.IsFirst;
@@ -585,6 +588,9 @@ namespace OpenControls.Wpf.DockManager
                 grid = grid.Parent as SplitterPane;
                 documentPanelAncestors.Add(grid);
             }
+
+            // We do want pane active events
+            toolPaneGroup.DockPaneActiveEventsDisabled = false;
 
             /*
              * Find the first common ancestor for the document panel and the tool pane group

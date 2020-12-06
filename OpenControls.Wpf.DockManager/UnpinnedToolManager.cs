@@ -72,6 +72,8 @@ namespace OpenControls.Wpf.DockManager
 
             unpinnedToolPane.Show();
 
+            IUnpinnedToolHost.PaneActive(userControl);
+
             return unpinnedToolPane;
         }
 
