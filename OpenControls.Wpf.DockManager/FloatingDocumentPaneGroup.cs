@@ -1,10 +1,9 @@
 ﻿using System;
 using System.Windows;
-using System.Windows.Media;
 
 namespace OpenControls.Wpf.DockManager
 {
-    internal class FloatingDocumentPaneGroup : FloatingPane
+    internal class FloatingDocumentPaneGroup : FloatingPane, IActiveDocument
     {
         internal FloatingDocumentPaneGroup() : base(new DocumentContainer())
         {
@@ -18,6 +17,18 @@ namespace OpenControls.Wpf.DockManager
             System.Diagnostics.Trace.Assert(floatingViewModel != null);
 
             floatingViewModel.Title = Application.Current.MainWindow.Title + " - " + IViewContainer.URL;
+        }
+
+        bool IActiveDocument.IsActive
+        {
+            get
+            {
+                return IViewContainer.IsActive;
+            }
+            set
+            {
+                IViewContainer.IsActive = value;
+            }
         }
     }
 }

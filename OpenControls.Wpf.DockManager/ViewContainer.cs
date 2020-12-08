@@ -163,6 +163,18 @@ namespace OpenControls.Wpf.DockManager
             }
         }
 
+        public bool IsActive 
+        { 
+            get
+            {
+                return TabHeaderControl.IsActive;
+            }
+            set
+            {
+                TabHeaderControl.IsActive = value;
+            }
+        }
+
         protected abstract void CheckTabCount();
 
         public void AddUserControl(UserControl userControl)

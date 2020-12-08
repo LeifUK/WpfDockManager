@@ -199,12 +199,12 @@ namespace OpenControls.Wpf.DockManager
 
         private void DockPane_DockPaneActive(object sender, EventArgs e)
         {
-            IDockPaneHost.ActiveDockPaneChanged(sender as DockPane);
+            IDockPaneHost.ActiveDocumentChanged(sender as DocumentPaneGroup);
         }
 
         private void DockPane_GotFocus(object sender, RoutedEventArgs e)
         {
-            IDockPaneHost.ActiveDockPaneChanged(sender as DockPane);
+            IDockPaneHost.ActiveDocumentChanged(sender as DocumentPaneGroup);
         }
 
         public SelectablePane FindElementOfType(Type type, Grid grid)

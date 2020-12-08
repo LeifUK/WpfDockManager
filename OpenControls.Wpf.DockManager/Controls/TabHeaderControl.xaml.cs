@@ -52,6 +52,29 @@ namespace OpenControls.Wpf.DockManager.Controls
 
         #region Dependency properties
 
+        #region IsActive dependency property
+
+        [Bindable(true)]
+        [DesignerSerializationVisibility(DesignerSerializationVisibility.Hidden)]
+        public static readonly DependencyProperty IsActiveProperty = DependencyProperty.Register("IsActive", typeof(bool), typeof(TabHeaderControl), null);
+
+        public bool IsActive
+        {
+            get
+            {
+                return (bool)GetValue(IsActiveProperty);
+            }
+            set
+            {
+                if (value != IsActive)
+                {
+                    SetValue(IsActiveProperty, value);
+                }
+            }
+        }
+
+        #endregion
+
         #region DisplayMemberPath dependency property
 
         [Bindable(true)]

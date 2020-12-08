@@ -81,6 +81,7 @@
     <Compile Include="FloatingToolPaneGroup.cs" />
     <Compile Include="FloatingViewModel.cs" />
     <Compile Include="Helpers.cs" />
+    <Compile Include="IActiveDocument.cs" />
     <Compile Include="IDockPaneHost.cs" />
     <Compile Include="IDockPaneManager.cs" />
     <Compile Include="IFloatingPane.cs" />

@@ -102,6 +102,7 @@ namespace OpenControls.Wpf.DockManager
         public DataTemplate DocumentPaneTitleTemplate { get; set; }
         public DataTemplate DocumentPaneHeaderTemplate { get; set; }
 
+        private IActiveDocument _iActiveDocument;
         private object ActiveDocumentView;
         public event EventHandler DocumentGotFocus;
 
@@ -413,7 +414,7 @@ namespace OpenControls.Wpf.DockManager
             return views;
         }
 
-        void HandleActiveDockPaneChanged(IViewContainer iViewContainer, int index)
+        void HandleActiveDocumentChanged(IActiveDocument iActiveDocument, IViewContainer iViewContainer, int index)
         {
             System.Diagnostics.Debug.Assert(iViewContainer != null);
             if (index == -1)
@@ -433,6 +434,12 @@ namespace OpenControls.Wpf.DockManager
             {
                 if (ActiveDocumentView != userControl)
                 {
+                    if (_iActiveDocument != null)
+                    {
+                        _iActiveDocument.IsActive = false;
+                    }
+                    _iActiveDocument = iActiveDocument;
+                    _iActiveDocument.IsActive = true;
                     DocumentGotFocus?.Invoke(userControl, null);
                     ActiveDocumentView = userControl;
                     System.Diagnostics.Debug.WriteLine("Active document view: " + userControl.ToString());
@@ -480,9 +487,9 @@ namespace OpenControls.Wpf.DockManager
             IDockPaneManager.Unfloat(floatingPane, selectedPane, windowLocation);
         }
 
-        void IFloatingPaneHost.ActiveDockPaneChanged(FloatingPane floatingPane)
+        void IFloatingPaneHost.ActiveDocumentChanged(FloatingDocumentPaneGroup floatingDocumentPaneGroup)
         {
-            HandleActiveDockPaneChanged(floatingPane.IViewContainer, floatingPane.IViewContainer.SelectedIndex);
+            HandleActiveDocumentChanged(floatingDocumentPaneGroup, floatingDocumentPaneGroup.IViewContainer, floatingDocumentPaneGroup.IViewContainer.SelectedIndex);
         }
 
         #endregion IFloatingPaneHost
@@ -597,9 +604,9 @@ namespace OpenControls.Wpf.DockManager
             return LoadViewsFromTemplates(DocumentTemplates, viewModels);
         }
         
-        void IDockPaneHost.ActiveDockPaneChanged(DockPane dockPane)
+        void IDockPaneHost.ActiveDocumentChanged(DocumentPaneGroup documentPaneGroup)
         {
-            HandleActiveDockPaneChanged(dockPane.IViewContainer, dockPane.IViewContainer.SelectedIndex);
+            HandleActiveDocumentChanged(documentPaneGroup, documentPaneGroup.IViewContainer, documentPaneGroup.IViewContainer.SelectedIndex);
         }
 
         #endregion IDockPaneTree

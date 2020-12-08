@@ -346,6 +346,8 @@
 
     <!-- Document Pane Styles -->
 
+    <Brush x:Key="ActiveDocumentBrush">Blue</Brush>
+
     <CornerRadius x:Key="DocumentPaneCornerRadius">4</CornerRadius>
     <Brush x:Key="DocumentPaneBorderBrush">Gainsboro</Brush>
     <Thickness x:Key="DocumentPaneBorderThickness">3</Thickness>
@@ -389,13 +391,28 @@
                         </Grid>
                     </Border>
                     <ControlTemplate.Triggers>
-                        <Trigger Property="IsSelected" Value="true">
+                        <MultiDataTrigger>
+                            <MultiDataTrigger.Conditions>
+                                <Condition Binding="{Binding Path=IsSelected, RelativeSource={RelativeSource Self}}" Value="True" />
+                                <Condition Binding="{Binding Path=IsActive, RelativeSource={RelativeSource Mode=FindAncestor, AncestorType=woc:TabHeaderControl}}" Value="True" />
+                            </MultiDataTrigger.Conditions>
+                            <Setter TargetName="_label" Property="Foreground" Value="Black"/>
+                            <Setter TargetName="_border" Property="Background" Value="White"/>
+                            <Setter TargetName="_label" Property="Padding" Value="2,0,2,0"/>
+                            <Setter TargetName="_buttonCloseTab" Property="Background" Value="Gainsboro"/>
+                            <Setter TargetName="_buttonCloseTab" Property="Foreground" Value="Black"/>
+                        </MultiDataTrigger>
+                        <MultiDataTrigger>
+                            <MultiDataTrigger.Conditions>
+                                <Condition Binding="{Binding Path=IsSelected, RelativeSource={RelativeSource Self}}" Value="True" />
+                                <Condition Binding="{Binding Path=IsActive, RelativeSource={RelativeSource Mode=FindAncestor, AncestorType=woc:TabHeaderControl}}" Value="False" />
+                            </MultiDataTrigger.Conditions>
                             <Setter TargetName="_label" Property="Foreground" Value="Black"/>
                             <Setter TargetName="_border" Property="Background" Value="Gainsboro"/>
                             <Setter TargetName="_label" Property="Padding" Value="2,0,2,0"/>
                             <Setter TargetName="_buttonCloseTab" Property="Background" Value="Gainsboro"/>
                             <Setter TargetName="_buttonCloseTab" Property="Foreground" Value="Black"/>
-                        </Trigger>
+                        </MultiDataTrigger>
                         <Trigger Property="IsSelected" Value="false">
                             <Setter TargetName="_label" Property="Foreground" Value="White"/>
                             <Setter TargetName="_border" Property="Background" Value="#505050"/>

@@ -15,6 +15,6 @@ namespace OpenControls.Wpf.DockManager
         UIElementCollection Children { get; }
         List<UserControl> LoadToolViews(ObservableCollection<IViewModel> viewModels);
         List<UserControl> LoadDocumentViews(ObservableCollection<IViewModel> viewModels);
-        void ActiveDockPaneChanged(DockPane dockPane);
+        void ActiveDocumentChanged(DocumentPaneGroup documentPaneGroup);
     }
 }

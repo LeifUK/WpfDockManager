@@ -4,7 +4,7 @@ using System.Windows.Controls;
 
 namespace OpenControls.Wpf.DockManager
 {
-    internal class DocumentPaneGroup : DockPane
+    internal class DocumentPaneGroup : DockPane, IActiveDocument
     {
         public DocumentPaneGroup() : base(new DocumentContainer())
         {
@@ -43,6 +43,7 @@ namespace OpenControls.Wpf.DockManager
             Grid.SetColumnSpan(IViewContainer as System.Windows.UIElement, ColumnDefinitions.Count - 2);
 
             IsHighlighted = false;
+            IsActive = false;
         }
 
         private bool _isHighlighted;
@@ -63,6 +64,18 @@ namespace OpenControls.Wpf.DockManager
                 {
                     Border.SetResourceReference(Border.BackgroundProperty, "DocumentPaneBackground");
                 }
+            }
+        }
+
+        public bool IsActive
+        {
+            get
+            {
+                return IViewContainer.IsActive;
+            }
+            set
+            {
+                IViewContainer.IsActive = value;
             }
         }
 

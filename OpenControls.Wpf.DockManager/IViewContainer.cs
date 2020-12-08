@@ -7,6 +7,7 @@ namespace OpenControls.Wpf.DockManager
     {
         string Title { get; }
         string URL { get; }
+        bool IsActive { get; set; }
         void AddUserControl(UserControl userControl);
         void InsertUserControl(int index, UserControl userControl);
         UserControl ExtractUserControl(int index);
