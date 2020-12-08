@@ -367,6 +367,7 @@ namespace OpenControls.Wpf.DockManager
                         (_insertionIndicatorManager.WindowLocation == WindowLocation.None)
                    )
                 {
+                    CancelSelection();
                     return;
                 }
 
@@ -561,6 +562,7 @@ namespace OpenControls.Wpf.DockManager
             _windowLocationPane = null;
             _sideLocationPane?.Close();
             _sideLocationPane = null;
+            System.Diagnostics.Debug.WriteLine("CancelSelection()");
         }
 
         public void Show(FloatingDocumentPaneGroup floatingDocumentPaneGroup)

@@ -8,7 +8,6 @@ namespace OpenControls.Wpf.DockManager
     {
         public DocumentPaneGroup() : base(new DocumentContainer())
         {
-            IsHighlighted = false;
             Border.SetResourceReference(Border.CornerRadiusProperty, "DocumentPaneCornerRadius");
             Border.SetResourceReference(Border.BorderBrushProperty, "DocumentPaneBorderBrush");
             Border.SetResourceReference(Border.BorderThicknessProperty, "DocumentPaneBorderThickness");
