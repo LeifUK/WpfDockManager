@@ -10,6 +10,6 @@ namespace OpenControls.Wpf.DockManager
         void RemoveViewModel(IViewModel iViewModel);
         ISelectablePane FindSelectablePane(Point pointOnScreen);
         void Unfloat(FloatingPane floatingPane, SelectablePane selectedPane, WindowLocation windowLocation);
-        void ActiveDockPaneChanged(FloatingPane floatingPane);
+        void ActiveDocumentChanged(FloatingDocumentPaneGroup floatingDocumentPaneGroup);
     }
 }
