@@ -2,6 +2,7 @@
 using System.Xml;
 using System.Windows.Controls;
 using System.Windows;
+using System.Globalization;
 using System;
 
 namespace OpenControls.Wpf.DockManager.Serialisation
@@ -17,7 +18,7 @@ namespace OpenControls.Wpf.DockManager.Serialisation
 
         private static double GetDoubleAttribute(XmlElement xmlElement, string name)
         {
-            return System.Convert.ToDouble(GetStringAttribute(xmlElement, name));
+            return Double.Parse(GetStringAttribute(xmlElement, name), CultureInfo.InvariantCulture);
         }
 
         private static bool GetBooleanAttribute(XmlElement xmlElement, string name)
